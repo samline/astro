@@ -1,0 +1,212 @@
+---
+import { SITE_INDEXABLE } from 'astro:env/server'
+import { getAbsoluteLocaleUrl } from 'astro:i18n'
+import { getDictionary, resolveLocale } from '@/i18n'
+import { defaultLocale, locales, type Locale } from '@/i18n/config'
+import {
+  seoConfig,
+  isNoindexPath,
+  type SocialImage,
+  type StructuredData
+} from '@/config/seo'
+
+export interface Props {
+  /** Route without its locale prefix, query string or hash. */
+  path: string
+  /** Translated page title. The site name is appended automatically. */
+  title?: string
+  /** Already complete translated title, without the title template. */
+  titleAbsolute?: string
+  description?: string
+  type?: 'website' | 'article'
+  noindex?: boolean
+  nofollow?: boolean
+  /** Only list locales in which this particular page exists. */
+  alternateLocales?: Locale[]
+  /** null disables the default image. alt must come from translations. */
+  image?: SocialImage | null
+  canonical?: string | URL
+  structuredData?: StructuredData | StructuredData[]
+}
+
+const {
+  path,
+  title,
+  titleAbsolute,
+  description,
+  type = 'website',
+  noindex = false,
+  nofollow = false,
+  alternateLocales = locales,
+  image,
+  canonical,
+  structuredData = []
+} = Astro.props
+const locale = resolveLocale(Astro.currentLocale)
+const dictionary = getDictionary(locale)
+const origin = Astro.site!
+const route = path.split(/[?#]/)[0] || '/'
+const absoluteURL = (value: string | URL) => {
+  const url = new URL(value, origin)
+  if (!['http:', 'https:'].includes(url.protocol))
+    throw new Error('SEO URLs must use HTTP(S).')
+  url.hash = ''
+  return url.href
+}
+const pageURL = absoluteURL(canonical ?? getAbsoluteLocaleUrl(locale, route))
+const pageTitle =
+  titleAbsolute ??
+  (title && title !== dictionary.site.title && title !== dictionary.site.name
+    ? dictionary.seo.titleTemplate
+        .replaceAll('{title}', () => title)
+        .replaceAll('{siteName}', () => dictionary.site.name)
+    : (title ?? dictionary.site.title))
+const pageDescription = description ?? dictionary.site.description
+const indexable = SITE_INDEXABLE && !noindex && !isNoindexPath(route)
+const robots = [
+  indexable ? 'index' : 'noindex',
+  nofollow ? 'nofollow' : 'follow',
+  ...(indexable ? ['max-image-preview:large'] : [])
+].join(', ')
+const translations = [...new Set(alternateLocales)].filter((language) =>
+  locales.includes(language)
+)
+const ogLocale = (language: string) => {
+  const [code, region] = language.split('-')
+  return region ? `${code.toLowerCase()}_${region.toUpperCase()}` : code
+}
+const socialImage =
+  image === undefined && seoConfig.image
+    ? { ...seoConfig.image, alt: dictionary.seo.imageAlt }
+    : image
+const imageURL = socialImage ? absoluteURL(socialImage.src) : undefined
+const websiteURL = getAbsoluteLocaleUrl(defaultLocale, '/')
+const websiteId = `${websiteURL}#website`
+const graph: StructuredData[] = [
+  ...(route === '/' && locale === defaultLocale
+    ? [
+        {
+          '@type': 'WebSite',
+          '@id': websiteId,
+          url: websiteURL,
+          name: dictionary.site.name,
+          description: dictionary.site.description,
+          inLanguage: locales
+        }
+      ]
+    : []),
+  {
+    '@type': 'WebPage',
+    '@id': `${pageURL}#webpage`,
+    url: pageURL,
+    name: pageTitle,
+    description: pageDescription,
+    inLanguage: locale,
+    isPartOf: { '@id': websiteId },
+    ...(imageURL
+      ? {
+          primaryImageOfPage: {
+            '@type': 'ImageObject',
+            url: imageURL,
+            caption: socialImage!.alt
+          }
+        }
+      : {})
+  },
+  ...(Array.isArray(structuredData) ? structuredData : [structuredData])
+]
+// Prevent a translated value or CMS payload from closing the script element.
+const jsonLD = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@graph': graph
+})
+  .replace(/</g, '\\u003c')
+  .replace(/\u2028/g, '\\u2028')
+  .replace(/\u2029/g, '\\u2029')
+---
+
+<meta charset='utf-8' />
+<meta name='viewport' content='width=device-width, initial-scale=1' />
+<meta name='generator' content={Astro.generator} />
+<title>{pageTitle}</title>
+<meta name='description' content={pageDescription} />
+<meta name='robots' content={robots} />
+<meta name='theme-color' content={seoConfig.themeColor} />
+{indexable && <link rel='canonical' href={pageURL} />}
+{indexable &&
+  translations.map((language) => (
+    <link
+      rel='alternate'
+      hreflang={language}
+      href={getAbsoluteLocaleUrl(language, route)}
+    />
+  ))}
+{indexable && translations.includes(defaultLocale) && (
+  <link
+    rel='alternate'
+    hreflang='x-default'
+    href={getAbsoluteLocaleUrl(defaultLocale, route)}
+  />
+)}
+{SITE_INDEXABLE && (
+  <link
+    rel='sitemap'
+    type='application/xml'
+    href={new URL('/sitemap-index.xml', origin).href}
+  />
+)}
+
+<meta property='og:type' content={type} />
+<meta property='og:site_name' content={dictionary.site.name} />
+<meta property='og:title' content={pageTitle} />
+<meta property='og:description' content={pageDescription} />
+<meta property='og:url' content={pageURL} />
+<meta property='og:locale' content={ogLocale(locale)} />
+{indexable &&
+  translations
+    .filter((language) => language !== locale)
+    .map((language) => (
+      <meta property='og:locale:alternate' content={ogLocale(language)} />
+    ))}
+{socialImage && (
+  <>
+    <meta property='og:image' content={imageURL} />
+    <meta property='og:image:alt' content={socialImage.alt} />
+    {socialImage.width && (
+      <meta property='og:image:width' content={String(socialImage.width)} />
+    )}
+    {socialImage.height && (
+      <meta property='og:image:height' content={String(socialImage.height)} />
+    )}
+    {socialImage.type && (
+      <meta property='og:image:type' content={socialImage.type} />
+    )}
+  </>
+)}
+
+<meta
+  name='twitter:card'
+  content={imageURL ? 'summary_large_image' : 'summary'}
+/>
+<meta name='twitter:title' content={pageTitle} />
+<meta name='twitter:description' content={pageDescription} />
+{seoConfig.twitter.site && (
+  <meta name='twitter:site' content={seoConfig.twitter.site} />
+)}
+{seoConfig.twitter.creator && (
+  <meta name='twitter:creator' content={seoConfig.twitter.creator} />
+)}
+{socialImage && (
+  <>
+    <meta name='twitter:image' content={imageURL} />
+    <meta name='twitter:image:alt' content={socialImage.alt} />
+  </>
+)}
+
+<link rel='icon' type='image/svg+xml' href='/favicon.svg' />
+<link rel='icon' href='/favicon.ico' sizes='any' />
+{seoConfig.appleTouchIcon && (
+  <link rel='apple-touch-icon' href={seoConfig.appleTouchIcon} />
+)}
+{seoConfig.manifest && <link rel='manifest' href={seoConfig.manifest} />}
+{indexable && <script is:inline type='application/ld+json' set:html={jsonLD} />}

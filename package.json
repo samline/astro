@@ -1,7 +1,7 @@
 {
   "name": "astro-kit",
   "type": "module",
-  "version": "7.0.0",
+  "version": "7.3.2",
   "private": true,
   "packageManager": "pnpm@12.9.1",
   "engines": {
@@ -15,9 +15,10 @@
     "preview": "bun --bun ./node_modules/astro/bin/astro.mjs preview",
     "astro": "bun --bun ./node_modules/astro/bin/astro.mjs",
     "check": "bun --bun ./node_modules/astro/bin/astro.mjs check",
+    "check:i18n": "bun scripts/check-i18n.mjs",
     "format": "bun --bun ./node_modules/prettier/bin/prettier.cjs . --write",
     "format:check": "bun --bun ./node_modules/prettier/bin/prettier.cjs . --check",
-    "verify": "bun run format:check && bun run check && bun run test && bun run build",
+    "verify": "bun run format:check && bun run check:i18n && bun run check && bun run test && bun run build",
     "test": "bun run kit:prepare && bun test tests",
     "kit:prepare": "bun scripts/prepare-package.mjs",
     "kit:pack": "bun run kit:prepare && pnpm --dir packages/cli pack --pack-destination ../../artifacts",

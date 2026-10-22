@@ -65,7 +65,7 @@ for (const pnpm of [true, false]) {
       )
       assert.equal(
         pkg.scripts.verify,
-        `${runner} run format:check && ${runner} run check && ${runner} run build`
+        `${runner} run format:check && ${runner} run check:i18n && ${runner} run check && ${runner} run build`
       )
       assert.equal(
         vercel.installCommand,
@@ -73,7 +73,7 @@ for (const pnpm of [true, false]) {
       )
       assert.equal(
         vercel.buildCommand,
-        `${runner} run check && ${runner} run build`
+        `${runner} run check:i18n && ${runner} run check && ${runner} run build`
       )
       assert.equal(vercel.bunVersion, bun ? '1.x' : undefined)
       assert.equal(pkg.engines.bun, bun ? '>=1.3.14' : undefined)
@@ -195,10 +195,14 @@ test(
         }
         const destination = path.join(scenario, 'project with spaces')
         const cli = path.join(root, 'packages/cli/bin/astro-kit.mjs')
-        const result = spawnSync(process.execPath, [cli, destination], {
-          env: { ...process.env, PATH: bin },
-          encoding: 'utf8'
-        })
+        const result = spawnSync(
+          process.execPath,
+          [cli, destination, '--deploy', 'vercel'],
+          {
+            env: { ...process.env, PATH: bin },
+            encoding: 'utf8'
+          }
+        )
         assert.equal(result.status, 0, result.stdout + result.stderr)
         assert.equal(
           await readFile(path.join(destination, 'commands.log'), 'utf8'),
@@ -210,7 +214,7 @@ test(
         )
         const retry = spawnSync(
           process.execPath,
-          [cli, destination, '--no-install'],
+          [cli, destination, '--no-install', '--deploy', 'vercel'],
           { env: { ...process.env, PATH: bin }, encoding: 'utf8' }
         )
         assert.equal(retry.status, 1)
@@ -232,5 +236,172 @@ test('CLI rejects bad arguments and prints version without requiring tools', () 
       stdio: ['pipe', 'pipe', 'pipe']
     })
     assert.equal(invalid.status, 1)
+  }
+})
+
+for (const deployment of [
+  'static',
+  'vercel',
+  'netlify',
+  'cloudflare',
+  'custom'
+]) {
+  for (const pnpm of [true, false]) {
+    for (const bun of [true, false]) {
+      test(`${deployment}: pnpm=${pnpm}, bun=${bun} has a coherent deployment`, async (t) => {
+        const directory = await temporary(t)
+        const destination = path.join(directory, 'project.with-dots')
+        const tools = selectTools({
+          npm: '11.2.0',
+          ...(pnpm ? { pnpm: '12.9.1' } : {}),
+          ...(bun ? { bun: '1.3.14' } : {})
+        })
+        await createProject({
+          template,
+          readme,
+          destination,
+          tools,
+          kitVersion,
+          deployment,
+          site: 'https://example.com/'
+        })
+        const pkg = await readJSON(path.join(destination, 'package.json'))
+        const config = await readFile(
+          path.join(destination, 'astro.config.mjs'),
+          'utf8'
+        )
+        const files = await readdir(destination)
+        const adapter = {
+          vercel: '@astrojs/vercel',
+          netlify: '@astrojs/netlify',
+          cloudflare: '@astrojs/cloudflare',
+          custom: '@astrojs/node'
+        }[deployment]
+        assert.deepEqual(
+          Object.keys(pkg.dependencies).filter((key) =>
+            [
+              '@astrojs/vercel',
+              '@astrojs/netlify',
+              '@astrojs/cloudflare',
+              '@astrojs/node'
+            ].includes(key)
+          ),
+          adapter ? [adapter] : []
+        )
+        assert.equal(pkg.astroKit.deployment, deployment)
+        assert.ok(config.includes("output: 'static'"))
+        assert.equal(config.includes('adapter:'), deployment !== 'static')
+        if (adapter) assert.ok(config.includes(`from '${adapter}'`))
+        assert.equal(files.includes('vercel.json'), deployment === 'vercel')
+        assert.equal(files.includes('netlify.toml'), deployment === 'netlify')
+        assert.equal(
+          files.includes('wrangler.jsonc'),
+          deployment === 'cloudflare'
+        )
+        assert.equal(
+          pkg.devDependencies.wrangler !== undefined,
+          deployment === 'cloudflare'
+        )
+        assert.equal(
+          pkg.scripts.deploy !== undefined,
+          deployment === 'cloudflare'
+        )
+        assert.equal(pkg.scripts.start !== undefined, deployment === 'custom')
+        const production = await readFile(
+          path.join(destination, '.env.production'),
+          'utf8'
+        )
+        assert.ok(production.includes('SITE_URL=https://example.com\n'))
+        const docs = await readFile(path.join(destination, 'README.md'), 'utf8')
+        assert.doesNotMatch(docs, /\{\{[A-Z_]+\}\}/)
+        const env = await readFile(
+          path.join(destination, '.env.example'),
+          'utf8'
+        )
+        assert.equal(env.includes('ASTRO_KEY'), deployment !== 'static')
+        assert.equal(env.includes('HOST=0.0.0.0'), deployment === 'custom')
+        assert.equal(
+          config.includes('VERCEL_PROJECT_PRODUCTION_URL'),
+          deployment === 'vercel'
+        )
+        if (deployment === 'netlify') {
+          const toml = await readFile(
+            path.join(destination, 'netlify.toml'),
+            'utf8'
+          )
+          assert.ok(toml.includes(`${tools.runner} run build`))
+          assert.equal(toml.includes('BUN_VERSION'), bun)
+          assert.ok(config.includes('env.URL'))
+        }
+        if (deployment === 'cloudflare') {
+          const wrangler = await readJSON(
+            path.join(destination, 'wrangler.jsonc')
+          )
+          assert.equal(
+            pkg.scripts.build,
+            'node ./node_modules/astro/bin/astro.mjs build'
+          )
+          assert.ok(
+            pkg.scripts.deploy.includes(
+              'node ./node_modules/wrangler/bin/wrangler.js deploy'
+            )
+          )
+          assert.ok(
+            (
+              await readFile(path.join(destination, 'bunfig.toml'), 'utf8')
+            ).includes('bun = false')
+          )
+          assert.equal(wrangler.name, 'project-with-dots')
+          assert.equal(wrangler.main, '@astrojs/cloudflare/entrypoints/server')
+          assert.ok(config.includes("imageService: 'compile'"))
+          assert.ok(files.includes('.dev.vars.example'))
+          assert.ok(
+            (
+              await readFile(path.join(destination, '.gitignore'), 'utf8')
+            ).includes('.dev.vars*')
+          )
+        }
+      })
+    }
+  }
+}
+
+test('invalid deployment and site fail before writing any files', async (t) => {
+  const directory = await temporary(t)
+  for (const options of [
+    { deployment: 'wrong' },
+    { deployment: '__proto__' },
+    { site: 'https://example.com/path' },
+    { site: 'javascript:alert(1)' },
+    { site: 'https://user:pass@example.com' }
+  ]) {
+    await assert.rejects(
+      createProject({
+        template,
+        readme,
+        destination: path.join(directory, 'project'),
+        tools: selectTools({ npm: '11.2.0' }),
+        kitVersion,
+        ...options
+      })
+    )
+  }
+  assert.deepEqual(await readdir(directory), [])
+})
+
+test('CLI requires a deployment without a TTY and rejects invalid choices before creating files', async (t) => {
+  const directory = await temporary(t)
+  const destination = path.join(directory, 'project')
+  const cli = path.join(root, 'packages/cli/bin/astro-kit.mjs')
+  for (const flags of [
+    [],
+    ['--deploy', 'other'],
+    ['--deploy', 'vercel', '--site', 'https://example.com/path']
+  ]) {
+    const result = spawnSync(process.execPath, [cli, destination, ...flags], {
+      encoding: 'utf8'
+    })
+    assert.equal(result.status, 1)
+    assert.deepEqual(await readdir(directory), [])
   }
 })

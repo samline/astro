@@ -11,7 +11,7 @@ const manifests = await Promise.all(
 )
 const version = process.argv[2]
 if (!/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(version ?? ''))
-  throw new Error('Uso: bun run kit:version 7.0.1')
+  throw new Error('Uso: bun run kit:version <major.minor.patch>')
 const major = manifests[0].dependencies.astro.match(/\d+/)?.[0]
 if (version.split('.')[0] !== major)
   throw new Error(`La versión debe pertenecer a la serie ${major}.x de Astro.`)

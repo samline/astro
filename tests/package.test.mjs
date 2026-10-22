@@ -7,6 +7,7 @@ import {
   readdir,
   readFile,
   rm,
+  symlink,
   writeFile
 } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
@@ -75,6 +76,30 @@ test(
     assert.ok(files.includes('package/template/_gitignore'))
     assert.ok(files.includes('package/template/.env.example'))
     assert.ok(files.includes('package/template/.vscode/settings.json'))
+    assert.ok(files.includes('package/template/src/components/SEO.astro'))
+    assert.ok(files.includes('package/template/src/pages/robots.txt.ts'))
+    for (const folder of ['img', 'docs', 'video'])
+      assert.ok(files.includes(`package/template/public/${folder}/.gitkeep`))
+    for (const locale of ['en-us', 'en-mx']) {
+      assert.ok(
+        files.includes(
+          `package/template/src/i18n/dictionaries/${locale}/common/index.ts`
+        )
+      )
+      assert.ok(
+        files.includes(
+          `package/template/src/i18n/dictionaries/${locale}/common/types.ts`
+        )
+      )
+      assert.ok(
+        files.includes(
+          `package/template/src/i18n/dictionaries/${locale}/buttons/index.ts`
+        )
+      )
+      assert.ok(
+        !files.includes(`package/template/src/i18n/dictionaries/${locale}.ts`)
+      )
+    }
     for (const file of files) {
       assert.ok(
         !/(?:^|\/)(?:node_modules|\.git|\.astro|\.vercel|\.local|dist|artifacts|AGENTS\.md)(?:\/|$)/.test(
@@ -107,6 +132,8 @@ test(
       [
         path.join(unpacked, 'package/bin/astro-kit.mjs'),
         destination,
+        '--deploy',
+        'static',
         '--no-install'
       ],
       { env: { ...process.env, PATH: bin }, encoding: 'utf8' }
@@ -124,5 +151,37 @@ test(
     )
     assert.ok(!(await readdir(destination)).includes('_gitignore'))
     assert.ok(!(await readdir(destination)).includes('node_modules'))
+    // Build from the extracted tarball: the generator's config rewrite and
+    // distribution boundary must preserve the entire SEO feature without Vercel.
+    await symlink(
+      path.join(root, 'node_modules'),
+      path.join(destination, 'node_modules')
+    )
+    const build = spawnSync(
+      process.execPath,
+      [path.join(destination, 'node_modules/astro/bin/astro.mjs'), 'build'],
+      {
+        cwd: destination,
+        env: {
+          ...process.env,
+          NODE_ENV: 'production',
+          SITE_URL: 'https://generated.example',
+          SITE_INDEXABLE: 'true'
+        },
+        encoding: 'utf8',
+        timeout: 20000
+      }
+    )
+    assert.equal(build.status, 0, build.stdout + build.stderr)
+    assert.ok(
+      (
+        await readFile(path.join(destination, 'dist/index.html'), 'utf8')
+      ).includes('property="og:locale" content="en_US"')
+    )
+    assert.ok(
+      (
+        await readFile(path.join(destination, 'dist/robots.txt'), 'utf8')
+      ).includes('Sitemap: https://generated.example/sitemap-index.xml')
+    )
   }
 )

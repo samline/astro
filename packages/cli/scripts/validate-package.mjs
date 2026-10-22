@@ -24,11 +24,14 @@ async function inspect(directory) {
         '.git',
         '.astro',
         '.vercel',
+        '.netlify',
+        '.wrangler',
         'dist',
         '.local',
         'AGENTS.md'
       ].includes(entry) ||
-      (entry.startsWith('.env') && entry !== '.env.example')
+      (entry.startsWith('.env') && entry !== '.env.example') ||
+      (entry.startsWith('.dev.vars') && entry !== '.dev.vars.example')
     ) {
       throw new Error(`Archivo no publicable en plantilla: ${entry}`)
     }

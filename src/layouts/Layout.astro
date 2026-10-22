@@ -1,19 +1,43 @@
+---
+import SEO, { type Props as SEOProps } from '@/components/SEO.astro'
+import { getDictionary, resolveLocale } from '@/i18n'
+
+type Props = SEOProps
+
+const locale = resolveLocale(Astro.currentLocale)
+const dictionary = getDictionary(locale)
+---
+
 <!doctype html>
-<html lang='en'>
+<html lang={locale}>
   <head>
-    <meta charset='utf-8' />
-    <meta name='viewport' content='width=device-width' />
-    <link rel='icon' type='image/svg+xml' href='/favicon.svg' />
-    <link rel='icon' href='/favicon.ico' />
-    <meta name='generator' content={Astro.generator} />
-    <title>Astro Basics</title>
+    <SEO {...Astro.props} />
+    <slot name='head' />
   </head>
   <body>
+    <a class='skip-link' href='#main-content'>
+      {dictionary.common.skipToContent}
+    </a>
     <slot />
   </body>
 </html>
 
 <style>
+  .skip-link {
+    position: fixed;
+    top: 0.5rem;
+    left: 0.5rem;
+    padding: 0.75rem;
+    background: white;
+    color: black;
+    z-index: 10;
+    transform: translateY(-200%);
+  }
+
+  .skip-link:focus {
+    transform: none;
+  }
+
   html,
   body {
     margin: 0;

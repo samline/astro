@@ -7,8 +7,16 @@ import {
   writeFile
 } from 'node:fs/promises'
 import path from 'node:path'
+import {
+  buildCommand,
+  configureDeployment,
+  deploymentGuide,
+  deploymentManifest,
+  deploymentProfile,
+  siteOrigin
+} from './deployment.mjs'
 
-export function projectName(destination) {
+function projectName(destination) {
   const name = path.basename(destination).toLowerCase().replace(/\s+/g, '-')
   if (!/^[a-z0-9][a-z0-9._-]*$/.test(name) || name.length > 214) {
     throw new Error(
@@ -18,9 +26,21 @@ export function projectName(destination) {
   return name
 }
 
-export function projectManifest(source, name, tools, kitVersion) {
+function projectManifest(
+  source,
+  name,
+  tools,
+  kitVersion,
+  deployment = 'vercel'
+) {
   const bun = tools.runtime === 'bun'
-  const astro = bun ? 'bun --bun ./node_modules/astro/bin/astro.mjs' : 'astro'
+  // Miniflare/workerd prerendering hangs under Bun; the script runner may stay Bun.
+  const astro =
+    deployment === 'cloudflare'
+      ? 'node ./node_modules/astro/bin/astro.mjs'
+      : bun
+        ? 'bun --bun ./node_modules/astro/bin/astro.mjs'
+        : 'astro'
   const prettier = bun
     ? 'bun --bun ./node_modules/prettier/bin/prettier.cjs'
     : 'prettier'
@@ -41,9 +61,10 @@ export function projectManifest(source, name, tools, kitVersion) {
       preview: `${astro} preview`,
       astro,
       check: `${astro} check`,
+      'check:i18n': `${bun ? 'bun' : 'node'} scripts/check-i18n.mjs`,
       format: `${prettier} . --write`,
       'format:check': `${prettier} . --check`,
-      verify: `${tools.runner} run format:check && ${tools.runner} run check && ${tools.runner} run build`
+      verify: `${tools.runner} run format:check && ${buildCommand(tools)}`
     },
     dependencies: source.dependencies,
     devDependencies: source.devDependencies,
@@ -51,12 +72,12 @@ export function projectManifest(source, name, tools, kitVersion) {
   }
 }
 
-export function deploymentConfig(source, tools) {
+function vercelConfig(source, tools) {
   const config = {
     ...source,
     installCommand:
       tools.manager === 'pnpm' ? 'pnpm install --frozen-lockfile' : 'npm ci',
-    buildCommand: `${tools.runner} run check && ${tools.runner} run build`,
+    buildCommand: buildCommand(tools),
     devCommand: `${tools.runner} run astro dev`
   }
   if (tools.runtime !== 'bun') delete config.bunVersion
@@ -68,8 +89,12 @@ export async function createProject({
   readme,
   destination,
   tools,
-  kitVersion
+  kitVersion,
+  deployment = 'vercel',
+  site
 }) {
+  const profile = deploymentProfile(deployment)
+  const origin = siteOrigin(site)
   const name = projectName(destination)
   // Reject symlinks as well as nonempty folders. Never offer a destructive --force.
   const existing = await lstat(destination).catch((error) => {
@@ -105,9 +130,21 @@ export async function createProject({
     )
   await save(
     'package.json',
-    projectManifest(await json('package.json'), name, tools, kitVersion)
+    deploymentManifest(
+      projectManifest(
+        await json('package.json'),
+        name,
+        tools,
+        kitVersion,
+        deployment
+      ),
+      deployment,
+      tools
+    )
   )
-  await save('vercel.json', deploymentConfig(await json('vercel.json'), tools))
+  if (deployment === 'vercel')
+    await save('vercel.json', vercelConfig(await json('vercel.json'), tools))
+  await configureDeployment(destination, deployment, tools, name, origin)
   const launch = await json('.vscode/launch.json')
   launch.configurations[0].command = `${tools.runner} run dev`
   await save('.vscode/launch.json', launch)
@@ -117,15 +154,13 @@ export async function createProject({
     path.join(destination, 'scripts/check-package-manager.mjs'),
     hook
   )
-  await cp(
-    path.join(destination, '.env.example'),
-    path.join(destination, '.env.development')
-  )
   const instructions = (await readFile(readme, 'utf8'))
     .replaceAll('{{NAME}}', name)
     .replaceAll('{{VERSION}}', kitVersion)
     .replaceAll('{{INSTALL}}', tools.manager)
     .replaceAll('{{RUN}}', tools.runner)
+    .replaceAll('{{DEPLOYMENT}}', profile.label)
+    .replaceAll('{{DEPLOYMENT_GUIDE}}', deploymentGuide(deployment, tools))
     .replaceAll(
       '{{RUNTIME}}',
       tools.runtime === 'bun' ? 'Bun' : 'Node.js (comandos con npm)'

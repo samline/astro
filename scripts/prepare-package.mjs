@@ -48,6 +48,10 @@ for (const file of files) {
   })
 }
 await mkdir(path.join(template, 'scripts'))
+await cp(
+  path.join(root, 'scripts/check-i18n.mjs'),
+  path.join(template, 'scripts/check-i18n.mjs')
+)
 await writeFile(
   path.join(template, 'package.json'),
   `${JSON.stringify(pkg, null, 2)}\n`

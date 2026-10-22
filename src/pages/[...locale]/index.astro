@@ -1,0 +1,15 @@
+---
+import type { GetStaticPaths } from 'astro'
+import Welcome from '@/components/Welcome.astro'
+import Layout from '@/layouts/Layout.astro'
+import { defaultLocale, locales } from '@/i18n/config'
+
+export const getStaticPaths = (() =>
+  locales.map((locale) => ({
+    params: { locale: locale === defaultLocale ? undefined : locale }
+  }))) satisfies GetStaticPaths
+---
+
+<Layout path='/'>
+  <Welcome />
+</Layout>
