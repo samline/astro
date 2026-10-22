@@ -1,0 +1,26 @@
+{
+  "name": "@samline/astro-kit",
+  "version": "7.0.0",
+  "description": "Crea sitios Astro 7 con SSG, Server Islands y Vercel.",
+  "type": "module",
+  "bin": {
+    "astro-kit": "bin/astro-kit.mjs"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "scripts/",
+    "template/",
+    "project-readme.md"
+  ],
+  "engines": {
+    "node": ">=22.23.4"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "prepack": "node scripts/validate-package.mjs",
+    "prepublishOnly": "node scripts/validate-package.mjs"
+  }
+}

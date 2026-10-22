@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.astro/
+.vercel/
+.local/
+AGENTS.md
+.env*
+pnpm-lock.yaml
+public/
+artifacts/
+packages/cli/template/

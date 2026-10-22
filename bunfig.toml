@@ -1,0 +1,9 @@
+# Astro/Vite loads .env files for the selected mode. Avoid Bun loading
+# development variables before Astro selects production during a build.
+env = false
+
+[install]
+auto = "disable"
+
+[run]
+bun = true

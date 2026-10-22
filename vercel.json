@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "astro",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "buildCommand": "bun run check && bun run build",
+  "devCommand": "bun run astro dev",
+  "bunVersion": "1.x",
+  "trailingSlash": false
+}
