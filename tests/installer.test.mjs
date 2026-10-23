@@ -97,6 +97,37 @@ for (const pnpm of [true, false]) {
         await readFile(path.join(destination, '.env.development'), 'utf8'),
         await readFile(path.join(destination, '.env.example'), 'utf8')
       )
+      const context = await readFile(
+        path.join(destination, '.agents/AGENTS.md'),
+        'utf8'
+      )
+      assert.ok(
+        context.includes(`Install dependencies with ${manager} install`)
+      )
+      assert.ok(context.includes(`Run scripts with ${runner} run`))
+      assert.ok(!context.includes('kit:pack'))
+      const memory = await readFile(
+        path.join(destination, '.agents/memory/project.md'),
+        'utf8'
+      )
+      assert.ok(memory.includes('Project: my-project'))
+      assert.ok(memory.includes(`Astro Kit ${kitVersion}`))
+      assert.ok(!memory.includes('{{'))
+      assert.ok(!memory.includes('2059917'))
+      assert.ok(
+        (await readFile(path.join(destination, 'AGENTS.md'), 'utf8')).includes(
+          '.agents/README.md'
+        )
+      )
+      assert.ok(
+        (
+          await readFile(path.join(destination, '.agents/todos.md'), 'utf8')
+        ).includes('No pending project-specific work')
+      )
+      const skills = await readJSON(path.join(destination, 'skills-lock.json'))
+      assert.ok(skills.skills.astro)
+      assert.ok(!skills.skills['nodejs-backend-patterns'])
+      assert.ok(!skills.skills['nodejs-best-practices'])
       const hook = path.join(destination, 'scripts/check-package-manager.mjs')
       for (const candidate of ['pnpm', 'npm']) {
         const result = spawnSync(process.execPath, [hook], {
@@ -110,7 +141,6 @@ for (const pnpm of [true, false]) {
         '.astro',
         '.vercel',
         '.local',
-        'AGENTS.md',
         'packages',
         'pnpm-lock.yaml',
         'package-lock.json'
@@ -271,6 +301,36 @@ for (const deployment of [
           'utf8'
         )
         const files = await readdir(destination)
+        const memory = await readFile(
+          path.join(destination, '.agents/memory/project.md'),
+          'utf8'
+        )
+        assert.ok(memory.includes(`Deployment target: ${deployment}`))
+        assert.ok(memory.includes(`Package manager: ${tools.manager}`))
+        assert.ok(memory.includes(`Script runner: ${tools.runner}`))
+        assert.ok(
+          memory.includes(
+            deployment === 'static'
+              ? 'Server Islands require adding'
+              : 'Server Islands are available'
+          )
+        )
+        assert.ok(!memory.includes('{{'))
+        const agentSkills = await readdir(
+          path.join(destination, '.agents/skills')
+        )
+        assert.equal(
+          agentSkills.includes('deploy-to-vercel'),
+          deployment === 'vercel'
+        )
+        const skillMetadata = await readJSON(
+          path.join(destination, 'skills-lock.json')
+        )
+        assert.equal(
+          Boolean(skillMetadata.skills['deploy-to-vercel']),
+          deployment === 'vercel'
+        )
+
         const adapter = {
           vercel: '@astrojs/vercel',
           netlify: '@astrojs/netlify',

@@ -75,6 +75,42 @@ test(
     const files = list.stdout.trim().split('\n')
     assert.ok(files.includes('package/template/_gitignore'))
     assert.ok(files.includes('package/template/.env.example'))
+    for (const file of [
+      'AGENTS.md',
+      '.agents/README.md',
+      '.agents/AGENTS.md',
+      '.agents/memory/project.md',
+      '.agents/memory/decisions.md',
+      '.agents/lessons.md',
+      '.agents/todos.md',
+      '.agents/skills/README.md',
+      'skills-lock.json'
+    ])
+      assert.ok(files.includes(`package/template/${file}`), file)
+    for (const name of [
+      'astro',
+      'tailwind-css-patterns',
+      'typescript-advanced-types',
+      'bun',
+      'vite',
+      'seo',
+      'accessibility',
+      'frontend-design',
+      'codebase-memory',
+      'deploy-to-vercel'
+    ])
+      assert.ok(
+        files.includes(`package/template/.agents/skills/${name}/SKILL.md`),
+        name
+      )
+    assert.ok(
+      !files.some(
+        (file) =>
+          file.includes('nodejs-backend-patterns') ||
+          file.includes('nodejs-best-practices')
+      )
+    )
+
     assert.ok(files.includes('package/template/.vscode/settings.json'))
     assert.ok(files.includes('package/template/src/components/SEO/index.astro'))
     for (const name of ['Box', 'Section', 'Link', 'SEO', 'LanguagePicker']) {
@@ -180,7 +216,7 @@ test(
     }
     for (const file of files) {
       assert.ok(
-        !/(?:^|\/)(?:node_modules|\.git|\.astro|\.vercel|\.local|dist|artifacts|AGENTS\.md)(?:\/|$)/.test(
+        !/(?:^|\/)(?:node_modules|\.git|\.astro|\.vercel|\.local|dist|artifacts)(?:\/|$)/.test(
           file
         ),
         file
@@ -188,6 +224,12 @@ test(
       assert.ok(!/(?:^|\/)\.env(?!\.example$)/.test(file), file)
       assert.ok(!file.endsWith('pnpm-lock.yaml'), file)
     }
+    for (const file of [
+      'frontend-design/LICENSE.txt',
+      'tailwind-css-patterns/references/configuration.md',
+      'accessibility/references/WCAG.md'
+    ])
+      assert.ok(files.includes(`package/template/.agents/skills/${file}`))
     const unpacked = path.join(directory, 'unpacked')
     await mkdir(unpacked)
     const extract = spawnSync('tar', ['-xf', archive, '-C', unpacked])
@@ -229,11 +271,52 @@ test(
     )
     assert.ok(!(await readdir(destination)).includes('_gitignore'))
     assert.ok(!(await readdir(destination)).includes('node_modules'))
+    const agentMemory = await readFile(
+      path.join(destination, '.agents/memory/project.md'),
+      'utf8'
+    )
+    assert.ok(agentMemory.includes('Project: generated'))
+    assert.ok(agentMemory.includes('Deployment target: static'))
+    assert.ok(agentMemory.includes('Server Islands require adding'))
+    assert.ok(!agentMemory.includes('{{'))
+    assert.ok(
+      !/2059917|d9f3d8f|\/Users\/sam|git@github.com:samline/.test(agentMemory)
+    )
+    const skillLock = JSON.parse(
+      await readFile(path.join(destination, 'skills-lock.json'), 'utf8')
+    )
+    assert.ok(!skillLock.skills['deploy-to-vercel'])
+    assert.ok(
+      !(await readdir(path.join(destination, '.agents/skills'))).includes(
+        'deploy-to-vercel'
+      )
+    )
+    assert.ok(
+      (await readFile(path.join(destination, 'AGENTS.md'), 'utf8')).includes(
+        '.agents/README.md'
+      )
+    )
+
     // Build from the extracted tarball: the generator's config rewrite and
     // distribution boundary must preserve the entire SEO feature without Vercel.
     await symlink(
       path.join(root, 'node_modules'),
       path.join(destination, 'node_modules')
+    )
+    const contextFormat = spawnSync(
+      process.execPath,
+      [
+        path.join(root, 'node_modules/prettier/bin/prettier.cjs'),
+        '.agents',
+        'skills-lock.json',
+        '--check'
+      ],
+      { cwd: destination, encoding: 'utf8', timeout: 20000 }
+    )
+    assert.equal(
+      contextFormat.status,
+      0,
+      contextFormat.stdout + contextFormat.stderr
     )
     const build = spawnSync(
       process.execPath,
@@ -263,3 +346,35 @@ test(
     )
   }
 )
+
+test('package validation rejects unexpected agent history and unselected skills', async (t) => {
+  const directory = await mkdtemp(
+    path.join(tmpdir(), 'astro-kit-agent-boundary-')
+  )
+  t.after(() => rm(directory, { recursive: true, force: true }))
+  const fixture = path.join(directory, 'cli')
+  await cp(path.join(root, 'packages/cli'), fixture, { recursive: true })
+  const validate = () =>
+    spawnSync(
+      process.execPath,
+      [path.join(fixture, 'scripts/validate-package.mjs')],
+      { encoding: 'utf8' }
+    )
+  assert.equal(validate().status, 0)
+  for (const file of [
+    '.agents/memory/private-history.md',
+    '.agents/skills/unselected/SKILL.md',
+    'src/.agents/private.md'
+  ]) {
+    const target = path.join(fixture, 'template', file)
+    await mkdir(path.dirname(target), { recursive: true })
+    await writeFile(target, 'Private maintainer context must not ship.')
+    const result = validate()
+    assert.notEqual(result.status, 0)
+    assert.match(result.stderr, /Archivo no publicable/)
+    const relativeDirectory = path.dirname(file)
+    if (relativeDirectory === '.agents/memory') await rm(target)
+    else await rm(path.dirname(target), { recursive: true })
+  }
+  assert.equal(validate().status, 0)
+})

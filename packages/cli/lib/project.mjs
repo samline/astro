@@ -7,6 +7,7 @@ import {
   writeFile
 } from 'node:fs/promises'
 import path from 'node:path'
+import { configureAgents } from './agents.mjs'
 import {
   buildCommand,
   configureDeployment,
@@ -84,7 +85,7 @@ function vercelConfig(source, tools) {
   return config
 }
 
-export async function createProject({
+export const createProject = async ({
   template,
   readme,
   destination,
@@ -92,7 +93,7 @@ export async function createProject({
   kitVersion,
   deployment = 'vercel',
   site
-}) {
+}) => {
   const profile = deploymentProfile(deployment)
   const origin = siteOrigin(site)
   const name = projectName(destination)
@@ -145,6 +146,7 @@ export async function createProject({
   if (deployment === 'vercel')
     await save('vercel.json', vercelConfig(await json('vercel.json'), tools))
   await configureDeployment(destination, deployment, tools, name, origin)
+  await configureAgents(destination, { name, tools, kitVersion, deployment })
   const launch = await json('.vscode/launch.json')
   launch.configurations[0].command = `${tools.runner} run dev`
   await save('.vscode/launch.json', launch)

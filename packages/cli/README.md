@@ -42,3 +42,22 @@ El layout mantiene un único `<main>` y las páginas no contienen markup de UI.
 
 Incluye GTM opcional y CookieConsent con carga diferida por interacción,
 Consent Mode v2 y categorías independientes. Sin GTM_ID no se activa.
+
+## Bundled agent context
+
+Generated projects include root AGENTS.md and a portable .agents directory with
+coding conventions, an initial project summary, architecture notes, and fresh
+lessons/todos files. The summary reflects the selected deployment, package manager,
+and runtime. It contains no maintainer commit history, local references, or kit
+publication tasks.
+
+Bundled skills cover Astro, Tailwind, TypeScript, Bun, Vite, SEO, accessibility,
+frontend design, and codebase/source exploration. Vercel deployments also receive
+the Vercel deployment skill. The root skills-lock.json retains provenance for
+registry skills, and skill references and license files are preserved.
+
+No extra network request or global skill installation is needed when creating a
+project: these files are included in the generator. Keep the context versioned
+with the new project and update it as work progresses. Skills are guidance and
+do not override project rules or authorize deployment by themselves. Graph-based
+exploration needs its MCP service; source inspection is the fallback when absent.

@@ -62,12 +62,12 @@ debe conservarse antes de desplegar con instalación congelada.
 
 El proyecto generado es privado, inicia en `0.0.1`, registra la versión de Astro
 Kit que lo creó y es independiente: futuras publicaciones del kit no lo alteran.
-No se distribuyen los archivos de entorno reales, contexto local, dependencias,
+No se distribuyen los archivos de entorno reales, historial privado del kit, dependencias,
 cachés, configuración del workspace ni resultados de compilación.
 
 ## Preparar una publicación
 
-La versión de la raíz y la del instalador es `7.13.0`. La serie `7.x.y` está
+La versión de la raíz y la del instalador es `7.14.0`. La serie `7.x.y` está
 reservada para Astro 7: parches para correcciones y menores para nuevas funciones.
 La serie 8 empieza cuando se adapte la base a Astro 8; las versiones menores
 no necesitan coincidir con las del framework. Mantén compatible el CLI dentro
@@ -78,17 +78,17 @@ bun run verify
 bun run kit:pack
 ```
 
-El tarball se escribe en `artifacts/samline-astro-kit-7.13.0.tgz`. Se puede probar
+El tarball se escribe en `artifacts/samline-astro-kit-7.14.0.tgz`. Se puede probar
 antes de publicar:
 
 ```sh
-npm exec --yes --package ./artifacts/samline-astro-kit-7.13.0.tgz -- astro-kit mi-prueba
+npm exec --yes --package ./artifacts/samline-astro-kit-7.14.0.tgz -- astro-kit mi-prueba
 ```
 
 Para una siguiente versión:
 
 ```sh
-bun run kit:version 7.13.1
+bun run kit:version 7.14.1
 bun run verify
 bun run kit:pack
 ```
@@ -727,3 +727,22 @@ README, and any supporting files. Single-entry components expose index.astro;
 related components such as Theme's Init/Switch share their feature folder.
 Developer documentation is written in English and included in generated projects.
 Tailwind excludes these Markdown files so example classes do not add website CSS.
+
+## Bundled agent context
+
+Generated projects include root AGENTS.md and a portable .agents directory with
+coding conventions, an initial project summary, architecture notes, and fresh
+lessons/todos files. The summary reflects the selected deployment, package manager,
+and runtime. It contains no maintainer commit history, local references, or kit
+publication tasks.
+
+Bundled skills cover Astro, Tailwind, TypeScript, Bun, Vite, SEO, accessibility,
+frontend design, and codebase/source exploration. Vercel deployments also receive
+the Vercel deployment skill. The root skills-lock.json retains provenance for
+registry skills, and skill references and license files are preserved.
+
+No extra network request or global skill installation is needed when creating a
+project: these files are included in the generator. Keep the context versioned
+with the new project and update it as work progresses. Skills are guidance and
+do not override project rules or authorize deployment by themselves. Graph-based
+exploration needs its MCP service; source inspection is the fallback when absent.

@@ -1,6 +1,11 @@
 import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
+import {
+  agentContextFiles,
+  agentSkillNames,
+  agentSkillIndex
+} from '../packages/cli/lib/agents.mjs'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
 const pkg = JSON.parse(await readFile(path.join(root, 'package.json'), 'utf8'))
@@ -55,6 +60,37 @@ await cp(
 await writeFile(
   path.join(template, 'package.json'),
   `${JSON.stringify(pkg, null, 2)}\n`
+)
+// Ship a portable seed, never this repository's development memory.
+for (const file of agentContextFiles) {
+  const target = path.join(template, file)
+  await mkdir(path.dirname(target), { recursive: true })
+  await cp(path.join(root, 'scripts/agent-context', file), target)
+}
+const skillLock = JSON.parse(
+  await readFile(path.join(root, 'skills-lock.json'), 'utf8')
+)
+skillLock.skills = Object.fromEntries(
+  Object.entries(skillLock.skills).filter(([name]) =>
+    agentSkillNames.includes(name)
+  )
+)
+for (const name of agentSkillNames) {
+  if (name !== 'codebase-memory' && !skillLock.skills[name])
+    throw new Error(`Missing skill provenance: ${name}`)
+  await cp(
+    path.join(root, '.agents/skills', name),
+    path.join(template, '.agents/skills', name),
+    { recursive: true }
+  )
+}
+await writeFile(
+  path.join(template, 'skills-lock.json'),
+  `${JSON.stringify(skillLock, null, 2)}\n`
+)
+await writeFile(
+  path.join(template, '.agents/skills/README.md'),
+  agentSkillIndex(agentSkillNames, skillLock.skills)
 )
 console.log(
   `Plantilla ${pkg.version} preparada desde la raíz (${files.length} entradas).`

@@ -1,0 +1,39 @@
+# Astro Kit agent context
+
+This directory is the persistent project memory and local skill library.
+Read it when starting work or recovering context after a chat reset.
+
+## Reading order
+
+1. [AGENTS.md](./AGENTS.md): project conventions and working rules.
+2. [memory/project.md](./memory/project.md): purpose, current state, commands, and validation limits.
+3. [lessons.md](./lessons.md): confirmed user preferences and corrections.
+4. [todos.md](./todos.md): explicitly requested pending or deferred work.
+5. [memory/decisions.md](./memory/decisions.md): architectural decisions relevant to the task.
+6. [skills/README.md](./skills/README.md): choose relevant skills, then read their SKILL.md.
+
+## Maintenance
+
+Update the relevant file when a user establishes a convention, a correction
+produces a lesson, or an explicit request creates or completes a pending item.
+Record evidence and remaining limits without claiming unperformed validation.
+Do not invent backlog items from suggestions or possible improvements.
+
+Human and task instructions take precedence over installed skill advice. Check
+installed dependency versions and official documentation when guidance depends
+on framework versions. Skills do not authorize deployment or publication.
+
+Maintainer context stays in this repository's .agents directory. Generated
+projects receive a portable seed from scripts/agent-context plus selected skills.
+Their lessons and todos start fresh, and tools/deployment settings are rendered
+by the installer. Agent files are developer context, not public site assets.
+Component API documentation belongs in src/components/<Name>/README.md and is
+included in generated projects.
+
+## Skill provenance
+
+Autoskills 0.4.1 was run with npx on 2026-10-23. It installed 11 project-scoped
+skills under .agents/skills. The root skills-lock.json is maintained by the
+installer and records their sources and hashes; keep it at its standard path.
+The existing codebase-memory skill is also copied here for structural queries.
+Do not reformat upstream skill files when updating project documentation.
