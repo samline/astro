@@ -39,7 +39,7 @@ Astro's minor number. No npm publication is authorized yet.
 - Modular en-us dictionaries; en-mx is prepared but commented out (English for Mexico).
 - SEO, social metadata, JSON-LD, robots, sitemap, and shared indexing policy.
 - Public img, docs, and video directories retained with .gitkeep.
-- Section, Box, Link, Button, H, LanguagePicker, SEO, Theme, GTM, and PageLoader components.
+- Section, Box, Link, Button, H, FaIcon, LanguagePicker, SEO, Theme, GTM, and PageLoader components.
 - CSS-first Tailwind configuration, local Fontsource Inter, and a focused normalize.
 - Astro-site accent colors: blue #3245ff, purple #bc52ee, pink #f041ff, with light/dark derivatives.
 - Deferred CookieConsent and independent analytics/marketing permissions.
@@ -123,3 +123,20 @@ render time. Forward native HTML and Astro scope attributes, use a default slot,
 and keep content in dictionaries. No children:any, client script, empty CSS,
 automatic outline inference, or imposed typography. Choose semantic level from
 the document hierarchy and visual styles with class. Welcome and NotFound use H.
+
+## Font Awesome primitive
+
+FaIcon owns src/components/FaIcon and renders imported IconDefinition data as
+native SVG during Astro rendering. Import individual free Solid/Regular/Brands
+definitions, preferably deep imports; do not register full packs, use dom.watch,
+or ship Font Awesome runtime/font/CDN assets to the browser. The four installed
+Font Awesome packages were checked against registry latest: 7.3.1 on 2026-10-23.
+The common-types dependency is type-only; SVG Core is unnecessary here.
+
+Use icon={faArrowLeft}, not a name string or lib prop. Default icons are
+decorative; optional nonempty translated label exposes role=img and aria-label.
+Name icon-only controls on the control itself and keep their child icon hidden.
+Geometry comes from the definition; default height is 1em with proportional width,
+currentColor fill, and native dimension overrides. CSS utilities style the SVG.
+Multiple paths render with one fill; FA transforms/animation and commercial
+duotone styling are outside this primitive. NotFound uses a decorative arrow.

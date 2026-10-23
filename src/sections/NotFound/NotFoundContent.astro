@@ -1,6 +1,8 @@
 ---
 import Button from '@/components/Button/index.astro'
 import H from '@/components/H/index.astro'
+import FaIcon from '@/components/FaIcon/index.astro'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft'
 import { getDictionary } from '@/i18n'
 
 const dictionary = getDictionary(Astro.currentLocale)
@@ -11,4 +13,7 @@ const dictionary = getDictionary(Astro.currentLocale)
   {dictionary.errors.notFound.title}
 </H>
 <p>{dictionary.errors.notFound.description}</p>
-<Button href='/'>{dictionary.buttons.backHome}</Button>
+<Button href='/'>
+  <FaIcon icon={faArrowLeft} />
+  {dictionary.buttons.backHome}
+</Button>
