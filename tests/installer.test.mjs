@@ -301,6 +301,37 @@ for (const deployment of [
           'utf8'
         )
         const files = await readdir(destination)
+        const inactiveActions = ['static', 'cloudflare'].includes(deployment)
+        const actionRegistration = await readFile(
+          path.join(
+            destination,
+            inactiveActions
+              ? 'src/actions/index.ts.example'
+              : 'src/actions/index.ts'
+          ),
+          'utf8'
+        )
+        if (['static', 'cloudflare'].includes(deployment)) {
+          assert.match(
+            actionRegistration,
+            /^\/\/ import \{ contact \} from '\.\/contact'$/m
+          )
+          assert.match(
+            actionRegistration,
+            /^\/\/ export const server = \{ contact \}$/m
+          )
+          assert.doesNotMatch(actionRegistration, /^export const server/m)
+          assert.ok(
+            !(await readdir(path.join(destination, 'src/actions'))).includes(
+              'index.ts'
+            )
+          )
+        } else {
+          assert.match(
+            actionRegistration,
+            /^export const server = \{ contact \}$/m
+          )
+        }
         const memory = await readFile(
           path.join(destination, '.agents/memory/project.md'),
           'utf8'
@@ -379,6 +410,18 @@ for (const deployment of [
           'utf8'
         )
         assert.equal(env.includes('ASTRO_KEY'), deployment !== 'static')
+        assert.ok(env.includes('# MAIL_ENABLED=false'))
+        assert.ok(env.includes('# SMTP_PASSWORD='))
+        assert.ok(pkg.dependencies.nodemailer)
+        assert.ok(config.includes('SMTP_PASSWORD: envField.string'))
+        assert.ok(
+          (
+            await readFile(
+              path.join(destination, 'src/server/mail/index.ts'),
+              'utf8'
+            )
+          ).includes('astro:env/server')
+        )
         assert.equal(env.includes('HOST=0.0.0.0'), deployment === 'custom')
         assert.equal(
           config.includes('VERCEL_PROJECT_PRODUCTION_URL'),

@@ -70,6 +70,46 @@ export default defineConfig({
 
   env: {
     schema: {
+      MAIL_ENABLED: envField.boolean({
+        context: 'server',
+        access: 'secret',
+        optional: true
+      }),
+      MAIL_FROM: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true
+      }),
+      MAIL_TO: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true
+      }),
+      SMTP_HOST: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true
+      }),
+      SMTP_PORT: envField.number({
+        context: 'server',
+        access: 'secret',
+        optional: true
+      }),
+      SMTP_SECURE: envField.boolean({
+        context: 'server',
+        access: 'secret',
+        optional: true
+      }),
+      SMTP_USER: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true
+      }),
+      SMTP_PASSWORD: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true
+      }),
       GTM_ID: envField.string({
         context: 'server',
         access: 'public',

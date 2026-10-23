@@ -57,3 +57,8 @@ This is project context, not a speculative improvement backlog.
 - The user requires reusable skills and agent guidance to ship with the base.
 - Generate a portable project seed with fresh memory, adapting package manager, runtime, and deployment; retain the kit's maintainer history separately.
 - Preserve skill source metadata and supporting files. Skill guidance must respect project conventions and the user's authorized scope.
+
+- Keep inactive Action registration as commented code so developers can enable it
+  without recreating the entry point. Use index.ts.example while inactive; a
+  commented-only index.ts causes a missing server export error in Astro 7.4.
+  Activation requires renaming and uncommenting. Pure static builds must remain valid.

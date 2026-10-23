@@ -746,3 +746,11 @@ project: these files are included in the generator. Keep the context versioned
 with the new project and update it as work progresses. Skills are guidance and
 do not override project rules or authorize deployment by themselves. Graph-based
 exploration needs its MCP service; source inspection is the fallback when absent.
+
+## Server mail
+
+SMTP delivery and localized form notifications live in
+[src/server/mail](src/server/mail/README.md). Configure the private mail settings
+in your hosting runtime, then call sendFormMail or sendMail from server code.
+Sending is disabled by default. A demo [contact Action](src/actions/contact/README.md)
+connects form validation to the service; no contact page or form UI is installed.

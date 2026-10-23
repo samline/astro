@@ -23,6 +23,10 @@ independently of the generator and starts at its own version 0.0.1.
 - SEO, robots, sitemap, social metadata, and structured data.
 - Tailwind CSS 4, local Fontsource fonts, and light/dark theme controls.
 - Optional GTM consent and an ldrs-based PageLoader.
+- Disabled-by-default SMTP service under src/server/mail with localized templates;
+  request-time delivery needs server execution and configured credentials.
+- Contact Action demo under src/actions/contact; registration depends on the
+  deployment profile. Read its README before connecting a form.
 - Public img, docs, and video directories for uncompiled resources.
 - Bundled skills with source metadata in skills-lock.json.
 

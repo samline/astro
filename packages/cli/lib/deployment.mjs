@@ -130,18 +130,30 @@ export function deploymentManifest(manifest, deployment, tools) {
   return manifest
 }
 
-export async function configureDeployment(
+export const configureDeployment = async (
   destination,
   deployment,
   tools,
   name,
   site
-) {
+) => {
   const profile = deploymentProfile(deployment)
   const file = (name) => path.join(destination, name)
   const write = (name, content) => writeFile(file(name), content)
   const json = (name, value) =>
     write(name, JSON.stringify(value, null, 2) + '\n')
+  const baseEnv = await readFile(file('.env.example'), 'utf8')
+  const mailStart = baseEnv.indexOf('# Optional SMTP mail.')
+  if (mailStart < 0)
+    throw new Error('Missing mail environment example in the base.')
+  const mailEnv = '\n' + baseEnv.slice(mailStart)
+  if (['static', 'cloudflare'].includes(deployment)) {
+    await write(
+      'src/actions/index.ts.example',
+      "// Enable after configuring a server adapter and a compatible mail transport.\n// import { contact } from './contact'\n\n// export const server = { contact }\n"
+    )
+    await rm(file('src/actions/index.ts'))
+  }
   await write(
     'astro.config.mjs',
     astroDeploymentConfig(
@@ -206,8 +218,8 @@ export async function configureDeployment(
         : 'localhost'
   const server = deployment !== 'static'
   const env = `# ${profile.label}\n# Local development origin. Set SITE_URL to your production origin when building.\n# Without SITE_URL, Astro falls back to ${fallback}.\nSITE_URL=http://localhost:4321\n\n# Optional indexing override. Default: production, non-local origin, no detected preview.\n# Set false for staging (including Cloudflare previews and custom hosting).\n# SITE_INDEXABLE=false\n\n# Optional Google Tag Manager. Unset means no GTM or consent UI.\n# GTM_ID=GTM-XXXXXXX\n# GTM_ENABLED=false\n${server ? '\n# Optional persistent Server Islands key. Generate with: ' + tools.runner + ' run astro create-key\n# Supply the same key to builds and runtime through your hosting environment.\n# ASTRO_KEY=\n' : ''}${deployment === 'custom' ? '\n# Standalone server runtime; start loads .env.production.\nHOST=0.0.0.0\nPORT=4321\n' : ''}`
-  await write('.env.example', env)
-  await write('.env.development', env)
+  await write('.env.example', env + mailEnv)
+  await write('.env.development', env + mailEnv)
   await write(
     '.env.production',
     `# Set SITE_URL to your final production origin before deploying.\n${site ? `SITE_URL=${site}\n` : '# SITE_URL=https://example.com\n'}${deployment === 'custom' ? 'HOST=0.0.0.0\nPORT=4321\n' : ''}`

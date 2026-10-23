@@ -530,3 +530,16 @@ project: these files are included in the generator. Keep the context versioned
 with the new project and update it as work progresses. Skills are guidance and
 do not override project rules or authorize deployment by themselves. Graph-based
 exploration needs its MCP service; source inspection is the fallback when absent.
+
+## Server mail
+
+The generated project includes a server-only SMTP service and a localized HTML
+and plain-text form template. See [src/server/mail/README.md](src/server/mail/README.md)
+for setup and API examples. Mail is disabled until configured and requires server
+execution. Pure static sites need an external backend; Workers need a compatible
+transport. The [contact Action demo](src/actions/contact/README.md) is registered
+for Vercel, Netlify and custom Node/Bun profiles. Static and Cloudflare retain
+the example with registration commented out in src/actions/index.ts.example.
+After configuring a server adapter and compatible transport, remove the .example
+suffix and uncomment its import and export. No form UI or
+credentials are generated.

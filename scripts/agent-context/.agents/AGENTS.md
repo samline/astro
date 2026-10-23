@@ -71,3 +71,18 @@ Read and maintain this directory's project memory. Keep project-specific lessons
 and todos accurate; do not invent backlog tasks or claim unperformed validation.
 
 Reference documentation: https://docs.astro.build
+
+## Server mail
+
+Keep mail under src/server/mail and import its public entry only from server code.
+Read src/server/mail/README.md and src/actions/contact/README.md before
+connecting forms. The contact Action demo is registered only where the selected
+profile supports the bundled SMTP service; static and Workers keep its source
+with the registration commented out in src/actions/index.ts.example. Preserve
+that suffix for inactive Actions so static builds work. Remove .example and
+uncomment only after configuring an adapter and compatible transport. Sending is disabled by
+default. Use private runtime settings, fixed sender/recipient addresses, and
+validated replyTo. Keep email copy and field labels in dictionaries. Add input
+validation and abuse controls at the form boundary; do not expose a generic
+mail relay or send during prerendering. Static hosting needs an external backend;
+Workers needs a compatible transport. Never claim mocked tests prove delivery.

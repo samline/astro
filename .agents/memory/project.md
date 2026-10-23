@@ -140,3 +140,69 @@ Geometry comes from the definition; default height is 1em with proportional widt
 currentColor fill, and native dimension overrides. CSS utilities style the SVG.
 Multiple paths render with one fill; FA transforms/animation and commercial
 duotone styling are outside this primitive. NotFound uses a decorative arrow.
+
+## Server mail
+
+SMTP mail lives in src/server/mail, not components. The public index imports
+astro:env/server and exposes sendMail, sendFormMail, renderFormMail and their
+types. mailer.ts owns lazy SMTP validation/delivery; template.ts owns escaped,
+localized HTML and plain text. Nodemailer was installed with latest (10.2.1).
+No network connection is opened by importing the service or during normal SSG.
+
+MAIL_ENABLED must be exactly true. MAIL_FROM/MAIL_TO are fixed single addresses;
+visitor email is replyTo only. Secrets use getSecret at each send and optional
+server-secret schema fields. Authenticated SMTP requires TLS (implicit on 465,
+STARTTLS otherwise), bounded connection timeouts, no pool or automatic retries,
+and no filesystem/URL-backed content. Provider failures are sanitized; SMTP
+acceptance does not prove delivery. Preserve commented mail settings when the
+installer generates profile-specific .env files.
+
+The form renderer uses an explicit ordered field list with translated labels,
+never dumps arbitrary submitted keys. The mail dictionary is modular in both
+locales. Its neutral inline email styling is independent of website Tailwind.
+The base adds no contact page, form UI, or real credentials. A contact Action
+now connects request validation to this mail service; see the next section. Keep
+SSG; opt individual endpoints out of prerendering or use Actions with an adapter.
+Pure static hosting needs an external backend; Workers needs a compatible HTTP
+API/binding transport implemented in that project. SMTP in Workers is unverified.
+
+Tests use fake settings and in-memory transports, including Nodemailer MIME
+composition. No external test message has been sent and provider delivery has
+not been validated.
+
+## Contact Action
+
+The Astro 5 contact demo is replaced by src/actions/contact (schema, index, README)
+and registered as server.contact from src/actions/index.ts. Use Astro 7
+astro:actions and astro/zod, accept=form, and arrow handlers. Input: locale
+(default active locale), name, email, optional phone, message, website honeypot.
+Trim and bound input, validate enabled locale/email/phone, strip unknown keys,
+and return dictionary messages for validation/success/failure. Use an explicit
+mail field allowlist; visitor email is replyTo, never sender or destination.
+
+Require same-origin Origin, including rejecting missing headers. Filled honeypots
+return success without delivery. These checks are basic, not complete abuse
+protection; project-specific distributed limits/challenge belong at deployment.
+No generic relay, obsolete collection demos, commented CAPTCHA, form UI, or
+provider error details are migrated. Use actions.contact(FormData) in an SSG
+section's browser script; no request-specific Astro.getActionResult during SSG.
+
+Pages remain output=static and prerendered; registration requires an adapter and
+adds a server function. Default Vercel plus generated Netlify/custom register it.
+The installer leaves the import and server export commented out in
+src/actions/index.ts.example for static and Cloudflare, while retaining the demo source/docs; a Worker-compatible transport is still
+required there. The static generated-package build verifies no server dependency.
+With registered actions, Vercel's final static assets are under
+.vercel/output/static; SSG feature tests inspect that deployment directory.
+
+HTTP tests run an Astro dev fixture with mocked mail, validating real action
+submission, errors, origin checks and honeypot behavior. No real messages sent.
+Local HTTP tests require permission to listen on loopback under restricted
+sandboxes; use a strict port to avoid Vite endlessly retrying denied binds.
+
+For inactive integrations, preserve ready-to-uncomment registration instead of
+deleting it. Keep the inactive entry named index.ts.example, with both import and export
+commented. Astro 7.4 checks actual exports for route registration, but its Vite
+entry resolution still imports server from an existing index.ts; a commented-only
+index.ts fails static bundling with MISSING_EXPORT. Activation requires removing
+the .example suffix, uncommenting, and configuring adapter/transport support.

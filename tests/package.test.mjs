@@ -84,7 +84,17 @@ test(
       '.agents/lessons.md',
       '.agents/todos.md',
       '.agents/skills/README.md',
-      'skills-lock.json'
+      'skills-lock.json',
+      'src/server/mail/index.ts',
+      'src/server/mail/mailer.ts',
+      'src/server/mail/template.ts',
+      'src/server/mail/README.md',
+      'src/actions/index.ts',
+      'src/actions/contact/index.ts',
+      'src/actions/contact/schema.ts',
+      'src/actions/contact/README.md',
+      'src/i18n/dictionaries/en-us/mail/index.ts',
+      'src/i18n/dictionaries/en-mx/mail/index.ts'
     ])
       assert.ok(files.includes(`package/template/${file}`), file)
     for (const name of [

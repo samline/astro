@@ -318,12 +318,18 @@ test(
       assert.equal(result.status, 0, result.stdout + result.stderr)
     }
     build({ GTM_ID: 'GTM-TEST12345', GTM_ENABLED: 'false' })
-    let home = await readFile(path.join(fixture, 'dist/index.html'), 'utf8')
+    let home = await readFile(
+      path.join(fixture, '.vercel/output/static/index.html'),
+      'utf8'
+    )
     assert.ok(!home.includes('googletagmanager.com'))
     assert.ok(!home.includes('data-gtm-consent'))
     assert.ok(!home.includes('data-cookie-preferences'))
     build({ GTM_ID: 'GTM-TEST12345', GTM_ENABLED: 'true' })
-    home = await readFile(path.join(fixture, 'dist/index.html'), 'utf8')
+    home = await readFile(
+      path.join(fixture, '.vercel/output/static/index.html'),
+      'utf8'
+    )
     assert.ok(home.includes('GTM-TEST12345'))
     assert.ok(home.includes('data-gtm-consent'))
     assert.ok(home.includes('data-cookie-preferences'))
@@ -331,7 +337,7 @@ test(
     assert.ok(home.indexOf('window.astroKitGTM') < home.indexOf('<body'))
     assert.ok(home.includes('data-locale="en-us"'))
     const regional = await readFile(
-      path.join(fixture, 'dist/en-mx/index.html'),
+      path.join(fixture, '.vercel/output/static/en-mx/index.html'),
       'utf8'
     )
     assert.ok(regional.includes('data-locale="en-mx"'))
@@ -345,14 +351,18 @@ test(
         await Promise.all(
           styles.map((href) =>
             readFile(
-              path.join(fixture, 'dist', href.replace(/^\//, '')),
+              path.join(
+                fixture,
+                '.vercel/output/static',
+                href.replace(/^\//, '')
+              ),
               'utf8'
             )
           )
         )
       ).join('')
     assert.ok(!initialCSS.includes('#cc-main'))
-    const assets = path.join(fixture, 'dist/_astro')
+    const assets = path.join(fixture, '.vercel/output/static/_astro')
     const allCSS = (
       await Promise.all(
         (await readdir(assets))
@@ -363,9 +373,12 @@ test(
     assert.ok(allCSS.includes('#cc-main'))
     build({ GTM_ID: '' })
     assert.ok(
-      !(await readFile(path.join(fixture, 'dist/index.html'), 'utf8')).includes(
-        'data-gtm-consent'
-      )
+      !(
+        await readFile(
+          path.join(fixture, '.vercel/output/static/index.html'),
+          'utf8'
+        )
+      ).includes('data-gtm-consent')
     )
   }
 )

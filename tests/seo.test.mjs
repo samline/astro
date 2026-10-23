@@ -160,7 +160,8 @@ const dictionary=getDictionary(Astro.currentLocale)
       )
       assert.equal(result.status, 0, result.stdout + result.stderr)
     }
-    const output = (file) => readFile(path.join(fixture, 'dist', file), 'utf8')
+    const output = (file) =>
+      readFile(path.join(fixture, '.vercel/output/static', file), 'utf8')
     const schema = (html) =>
       JSON.parse(
         html.match(
@@ -241,7 +242,10 @@ const dictionary=getDictionary(Astro.currentLocale)
         assert.ok(!head.includes(marker), `${file}: ${marker}`)
     }
     for (const [file, bytes] of Object.entries(resources))
-      assert.deepEqual(await readFile(path.join(fixture, 'dist', file)), bytes)
+      assert.deepEqual(
+        await readFile(path.join(fixture, '.vercel/output/static', file)),
+        bytes
+      )
     for (const directory of ['img', 'docs', 'video']) {
       assert.equal(
         await readFile(
@@ -258,8 +262,8 @@ const dictionary=getDictionary(Astro.currentLocale)
     assert.ok(!blocked.includes('application/ld+json'))
     assert.equal(await output('robots.txt'), 'User-agent: *\nDisallow: /\n')
     assert.ok(
-      !(await readdir(path.join(fixture, 'dist'))).some((file) =>
-        file.startsWith('sitemap')
+      !(await readdir(path.join(fixture, '.vercel/output/static'))).some(
+        (file) => file.startsWith('sitemap')
       )
     )
   }

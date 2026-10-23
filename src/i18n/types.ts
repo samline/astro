@@ -10,8 +10,10 @@ import type { SEO } from './dictionaries/en-us/seo/types'
 import type { Themes } from './dictionaries/en-us/themes/types'
 
 import type { Cookies } from './dictionaries/en-us/cookies/types'
+import type { Mail } from './dictionaries/en-us/mail/types'
 
 export interface Dictionary {
+  mail: Mail
   cookies: Cookies
   themes: Themes
   seo: SEO

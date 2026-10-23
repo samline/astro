@@ -33,7 +33,8 @@ test('each locale separates translation modules into index and types files', asy
     'errors',
     'seo',
     'themes',
-    'cookies'
+    'cookies',
+    'mail'
   ]
   for (const locale of ['en-us', 'en-mx']) {
     const directory = path.join(root, 'src/i18n/dictionaries', locale)
@@ -205,9 +206,12 @@ export const getStaticPaths = () => locales.map((locale) => ({
       about
     )
     build()
-    const home = await readFile(path.join(fixture, 'dist/index.html'), 'utf8')
+    const home = await readFile(
+      path.join(fixture, '.vercel/output/static/index.html'),
+      'utf8'
+    )
     assert.match(home, /lang="en-us"/)
-    const cssDirectory = path.join(fixture, 'dist/_astro')
+    const cssDirectory = path.join(fixture, '.vercel/output/static/_astro')
     const css =
       (home.match(/<style[^>]*>[\s\S]*?<\/style>/g)?.join('') ?? '') +
       (
@@ -296,7 +300,7 @@ export const getStaticPaths = () => locales.map((locale) => ({
     assert.match(home, /<title>Astro Kit<\/title>/)
     assert.ok(!home.includes('hreflang="en-mx"'))
     await assert.rejects(
-      readFile(path.join(fixture, 'dist/en-mx/index.html')),
+      readFile(path.join(fixture, '.vercel/output/static/en-mx/index.html')),
       /ENOENT/
     )
     const config = path.join(fixture, 'src/i18n/config.ts')
@@ -320,7 +324,7 @@ export const getStaticPaths = () => locales.map((locale) => ({
     )
     build()
     const regional = await readFile(
-      path.join(fixture, 'dist/en-mx/index.html'),
+      path.join(fixture, '.vercel/output/static/en-mx/index.html'),
       'utf8'
     )
     assert.match(regional, /lang="en-mx"/)
@@ -333,7 +337,7 @@ export const getStaticPaths = () => locales.map((locale) => ({
     assert.ok(regional.includes('hreflang="en-mx"'))
     assert.ok(regional.includes('aria-label="Select language"'))
     const regionalAbout = await readFile(
-      path.join(fixture, 'dist/en-mx/about/index.html'),
+      path.join(fixture, '.vercel/output/static/en-mx/about/index.html'),
       'utf8'
     )
     assert.match(regionalAbout, /lang="en-mx"/)
@@ -347,7 +351,7 @@ export const getStaticPaths = () => locales.map((locale) => ({
     assert.match(regionalAbout, /href="\/en-mx\/about"[^>]*aria-current="page"/)
     assert.ok(!regionalAbout.includes('/en-mx/en-mx/'))
     const defaultAbout = await readFile(
-      path.join(fixture, 'dist/about/index.html'),
+      path.join(fixture, '.vercel/output/static/about/index.html'),
       'utf8'
     )
     assert.match(defaultAbout, /lang="en-us"/)
@@ -404,11 +408,14 @@ export const getStaticPaths = () => locales.map((locale) => ({
     assert.ok(
       defaultAbout.includes('rel="canonical" href="https://i18n.example/about"')
     )
-    const notFound = await readFile(path.join(fixture, 'dist/404.html'), 'utf8')
+    const notFound = await readFile(
+      path.join(fixture, '.vercel/output/static/404.html'),
+      'utf8'
+    )
     assert.equal((notFound.match(/<main\b/g) || []).length, 1)
     assert.ok(notFound.includes('id="not-found"'))
     const sitemap = await readFile(
-      path.join(fixture, 'dist/sitemap-0.xml'),
+      path.join(fixture, '.vercel/output/static/sitemap-0.xml'),
       'utf8'
     )
     assert.ok(sitemap.includes('hreflang="en-mx"'))
