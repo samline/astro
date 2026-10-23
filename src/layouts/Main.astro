@@ -1,5 +1,6 @@
 ---
-import SEO, { type Props as SEOProps } from '@/components/SEO.astro'
+import PageLoader from '@/components/PageLoader/index.astro'
+import SEO, { type Props as SEOProps } from '@/components/SEO/index.astro'
 import { resolveLocale } from '@/i18n'
 import ThemeInit from '@/components/Theme/Init.astro'
 import { themeConfig } from '@/config/theme'
@@ -20,12 +21,13 @@ const locale = resolveLocale(Astro.currentLocale)
 >
   <head>
     <SEO {...Astro.props} />
-    <meta name='theme-color' content='#067df7' />
+    <meta name='theme-color' content='#3245ff' />
     <ThemeInit />
     <GTMHead />
     <slot name='head' />
   </head>
   <body>
+    <PageLoader />
     {GTM_ENABLED && GTM_ID?.trim() && <GTMConsent />}
     <main>
       <slot />

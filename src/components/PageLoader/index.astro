@@ -1,0 +1,42 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import { getDictionary } from '@/i18n'
+
+type Props = Omit<HTMLAttributes<'div'>, 'hidden' | 'role' | 'aria-live'>
+
+const { class: className, ...attributes } = Astro.props
+const dictionary = getDictionary(Astro.currentLocale)
+---
+
+<div
+  {...attributes}
+  class:list={[
+    'pointer-events-none fixed inset-0 z-50 flex items-center justify-center bg-white/20 backdrop-blur-sm dark:bg-black/20',
+    className
+  ]}
+  data-page-loader
+  role='status'
+  aria-live='polite'
+  hidden
+>
+  <l-ping
+    class='motion-reduce:hidden'
+    size='160'
+    speed='1.75'
+    bg-opacity='1'
+    color='var(--color-accent)'
+    aria-hidden='true'
+  />
+  <span
+    class='hidden size-40 rounded-full border-[0.125rem] border-accent bg-accent/20 motion-reduce:block'
+    aria-hidden='true'
+  ></span>
+  <span class='sr-only'>{dictionary.common.loading}</span>
+</div>
+
+<script>
+  import { ping } from 'ldrs'
+  import './scripts'
+
+  ping.register()
+</script>

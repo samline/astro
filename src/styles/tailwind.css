@@ -1,4 +1,5 @@
 @import 'tailwindcss' source('../');
+@source not '../components/**/*.md';
 
 @custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
 @custom-variant light (&:where([data-theme='light'], [data-theme='light'] *));
@@ -20,15 +21,15 @@
   --color-white: #fff;
   --color-placeholder: #999;
 
-  --color-accent: #067df7;
-  --color-accent-light: #3897f9;
-  --color-accent-dark: #0564c6;
-  --color-accent-sec: #7c3aed;
-  --color-accent-sec-light: #9661f1;
-  --color-accent-sec-dark: #632ebe;
-  --color-accent-third: #f97316;
-  --color-accent-third-light: #fa8f45;
-  --color-accent-third-dark: #c75c12;
+  --color-accent: #3245ff;
+  --color-accent-light: #5b6aff;
+  --color-accent-dark: #2837cc;
+  --color-accent-sec: #bc52ee;
+  --color-accent-sec-light: #c975f1;
+  --color-accent-sec-dark: #9642be;
+  --color-accent-third: #f041ff;
+  --color-accent-third-light: #f367ff;
+  --color-accent-third-dark: #c034cc;
 
   --color-state-success: #00a854;
   --color-state-warning: #ffbf00;

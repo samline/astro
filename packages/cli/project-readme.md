@@ -60,14 +60,15 @@ src/
 │       ├── index.astro
 │       └── NotFoundContent.astro
 └── components/
-    ├── Section.astro
-    ├── Box.astro
-    ├── Link.astro
-    ├── LanguagePicker.astro
-    ├── SEO.astro
+    ├── README.md
+    ├── Box/
+    ├── Section/
+    ├── Link/
+    ├── LanguagePicker/
+    ├── SEO/
+    ├── PageLoader/
+    ├── GTM/
     └── Theme/
-        ├── Init.astro
-        └── Switch.astro
 ```
 
 Las páginas declaran las rutas y componen un layout con sus secciones, sin
@@ -94,7 +95,7 @@ SEO es un componente compartido del documento que se utiliza desde el layout.
 Cada sección tiene su carpeta en `sections`, con `index.astro` como entrada y
 sus componentes específicos junto a ella. `components` contiene exclusivamente
 piezas reutilizables entre secciones o layouts. Usa
-`Section.astro` como contenedor semántico: reenvía atributos HTML tipados,
+`Section/index.astro` como contenedor semántico: reenvía atributos HTML tipados,
 clases y atributos accesibles a `<section>`. El contenido, el comportamiento y
 los estilos de las piezas reutilizables viven en `components`; el contenido y
 los componentes exclusivos de una sección viven dentro de su carpeta. Los estilos
@@ -119,8 +120,8 @@ El patrón habitual dentro de un archivo de `sections` es:
 
 ```astro
 ---
-import Section from '@/components/Section.astro'
-import Box from '@/components/Box.astro'
+import Section from '@/components/Section/index.astro'
+import Box from '@/components/Box/index.astro'
 import NotFoundContent from '@/sections/NotFound/NotFoundContent.astro'
 ---
 
@@ -154,13 +155,13 @@ asociadas a encabezados reales.
 
 ### Link
 
-`src/components/Link.astro` es el enlace de navegación común, sin estilos propios
+`src/components/Link/index.astro` es el enlace de navegación común, sin estilos propios
 ni JavaScript cliente. Requiere `href`, acepta atributos nativos de `<a>` y
 conserva clases, slots y estilos scoped del padre.
 
 ```astro
 ---
-import Link from '@/components/Link.astro'
+import Link from '@/components/Link/index.astro'
 import { getDictionary } from '@/i18n'
 const dictionary = getDictionary(Astro.currentLocale)
 ---
@@ -194,7 +195,7 @@ las carpetas en Git y en el paquete. Sus recursos se sirven como `/img/archivo`,
 `/docs/archivo` y `/video/archivo`, conservando nombre y bytes, sin procesamiento
 por Astro. Los recursos que necesiten optimización se importan desde `src/assets`.
 
-`Main.astro` delega los metadatos en `src/components/SEO.astro`. Las páginas
+`Main.astro` delega los metadatos en `src/components/SEO/index.astro`. Las páginas
 reciben título, descripción, canonical y alternates por idioma, Open Graph,
 Twitter Cards, favicon, color del navegador y JSON-LD. El título de una página
 usa `seo.titleTemplate`; la portada conserva `site.title`. `titleAbsolute`
@@ -320,18 +321,21 @@ La paleta se define directamente en `src/styles/tailwind.css`, dentro de `@theme
 - `black`, `white`, `placeholder` (#999), `state-success`, `state-warning` y `state-error`.
 - `accent`, `accent-light`, `accent-dark` (azul).
 - `accent-sec`, `accent-sec-light`, `accent-sec-dark` (violeta).
-- `accent-third`, `accent-third-light`, `accent-third-dark` (naranja).
+- `accent-third`, `accent-third-light`, `accent-third-dark` (rosa).
 
 `placeholder` se aplica por defecto a inputs y textareas; se puede usar también
 con `placeholder:text-placeholder`.
 
+Los tonos principales vienen de la [paleta del sitio de Astro](https://github.com/withastro/astro.build/blob/main/tailwind.config.ts):
+azul `#3245ff`, violeta `#bc52ee` y rosa `#f041ff`. Los tonos light y dark
+son derivados propios, mezclados un 20% con blanco y negro respectivamente.
 Cada tono tiene su propio valor hexadecimal y puede ajustarse de forma independiente.
 No hay configuración de colores en TypeScript ni variables inyectadas en `<html>`.
 La paleta predeterminada de Tailwind está desactivada. Usa, por ejemplo, `bg-accent`,
 `hover:bg-accent-sec-dark`, `text-accent-third` o `bg-accent/10`.
 
 La meta `theme-color` del head de `Main.astro` tiene el valor del acento principal
-(#067df7). Cuando cambies ese acento, actualiza también el valor de la meta:
+(#3245ff). Cuando cambies ese acento, actualiza también el valor de la meta:
 HTML necesita un color concreto y no resuelve `var()` de CSS en ese atributo.
 
 `font-primary` y `font-secondary` se definen directamente en `@theme` como
@@ -457,3 +461,53 @@ las etiquetas personalizadas deben respetar también sus requisitos de consentim
 
 Referencias: [CookieConsent](https://cookieconsent.orestbida.com/) y
 [Consent Mode](https://developers.google.com/tag-platform/security/guides/consent).
+
+## PageLoader
+
+`Main` incluye `src/components/PageLoader/index.astro` dentro del body. El
+indicador cubre la pantalla con un fondo translúcido y un pulso en color accent;
+usa `ping` de ldrs para la animación y Tailwind para el overlay. Respeta el tema
+y muestra un indicador estático cuando el usuario pide reducir el movimiento.
+Su etiqueta accesible procede de `common.loading` en el idioma de Astro.
+
+Empieza oculto, incluso sin JavaScript. Se muestra cuando una navegación interna
+o un envío nativo de formulario tarda más de 250ms. Ignora anclas de la página,
+descargas, destinos externos, pestañas nuevas y eventos cancelados. Usa
+`data-page-loader-skip` en un enlace o formulario para omitirlo. No intercepta
+la navegación ni bloquea los controles.
+
+Al volver con el historial se oculta inmediatamente. Un límite de seguridad de
+10 segundos evita que el indicador permanezca activo por una navegación cancelada.
+También funciona con los eventos de ClientRouter si un proyecto lo incorpora;
+esta base conserva la navegación normal. No depende de beforeunload.
+
+Para cambiar la animación, edita `index.astro`: sustituye el import de `ping`,
+su llamada `register()` y la etiqueta `l-ping` por el loader de ldrs elegido
+(por ejemplo, `ring` y `l-ring`). Solo se incluye la animación importada.
+
+Para una operación asíncrona propia, importa las funciones desde el mismo módulo:
+
+```ts
+import { showLoader, hideLoader } from '@/components/PageLoader/scripts'
+
+const save = async () => {
+  showLoader()
+  try {
+    await saveData()
+  } finally {
+    hideLoader()
+  }
+}
+```
+
+El loader indica navegación o trabajo explícito; no espera a las Server Islands,
+que deben tener su propio contenido de fallback.
+
+## Component documentation
+
+See [src/components/README.md](src/components/README.md) for each component's API,
+props, events, and examples. Every component owns a folder containing its source,
+README, and any supporting files. Single-entry components expose index.astro;
+related components such as Theme's Init/Switch share their feature folder.
+Developer documentation is written in English and included in generated projects.
+Tailwind excludes these Markdown files so example classes do not add website CSS.

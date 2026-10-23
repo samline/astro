@@ -151,10 +151,10 @@ test(
     await writeFile(
       path.join(fixture, 'src/sections/About.astro'),
       `---
-import Section from '@/components/Section.astro'
-import Box from '@/components/Box.astro'
-import LanguagePicker from '@/components/LanguagePicker.astro'
-import Link from '@/components/Link.astro'
+import Section from '@/components/Section/index.astro'
+import Box from '@/components/Box/index.astro'
+import LanguagePicker from '@/components/LanguagePicker/index.astro'
+import Link from '@/components/Link/index.astro'
 import { getDictionary } from '@/i18n'
 const dictionary = getDictionary(Astro.currentLocale)
 const links = [
@@ -253,11 +253,11 @@ export const getStaticPaths = () => locales.map((locale) => ({
       '90rem'
     ])
       assert.ok(css.includes(width), width)
-    assert.match(home, /<meta name="theme-color" content="#067df7"/)
+    assert.match(home, /<meta name="theme-color" content="#3245ff"/)
     assert.doesNotMatch(home + css, /site-accent/)
-    assert.match(css, /--color-accent:\s*#067df7/)
-    assert.match(css, /--color-accent-sec:\s*#7c3aed/)
-    assert.match(css, /--color-accent-third:\s*#f97316/)
+    assert.match(css, /--color-accent:\s*#3245ff/)
+    assert.match(css, /--color-accent-sec:\s*#bc52ee/)
+    assert.match(css, /--color-accent-third:\s*#f041ff/)
     assert.doesNotMatch(css, /--color-(?:brand-|misc-|red-500)/)
     assert.match(css, /--color-state-success:\s*#00a854/)
     assert.match(css, /--color-placeholder:\s*#999/)
@@ -289,6 +289,10 @@ export const getStaticPaths = () => locales.map((locale) => ({
     assert.ok(home.includes('Dark mode'))
     assert.ok(home.indexOf('window.astroKitTheme') < home.indexOf('<body'))
     assert.doesNotMatch(home, /aria-label="link"/)
+    assert.match(home, /data-page-loader/)
+    assert.match(home, /role="status" aria-live="polite" hidden/)
+    assert.ok(home.indexOf('data-page-loader') > home.indexOf('<body'))
+    assert.ok(home.includes(enUS.common.loading))
     assert.match(home, /<title>Astro Kit<\/title>/)
     assert.ok(!home.includes('hreflang="en-mx"'))
     await assert.rejects(
@@ -383,7 +387,10 @@ export const getStaticPaths = () => locales.map((locale) => ({
       assert.doesNotMatch(link('route'), /localize=/)
       assert.match(link('named-download'), /download="guide.pdf"/)
       assert.doesNotMatch(link('no-download'), /\bdownload=/)
-      assert.doesNotMatch(html.slice(html.indexOf('<body')), /<script\b/)
+      assert.doesNotMatch(
+        html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)[1],
+        /<script\b/
+      )
     }
 
     const sectionTag = defaultAbout.match(/<section\b[^>]*id="about"[^>]*>/)[0]

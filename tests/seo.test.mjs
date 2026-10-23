@@ -104,9 +104,9 @@ test(
     await writeFile(
       path.join(fixture, 'src/sections/About.astro'),
       `---
-import Section from '@/components/Section.astro'
-import Box from '@/components/Box.astro'
-import LanguagePicker from '@/components/LanguagePicker.astro'
+import Section from '@/components/Section/index.astro'
+import Box from '@/components/Box/index.astro'
+import LanguagePicker from '@/components/LanguagePicker/index.astro'
 ---
 <Section id='about' padded={false} class='about-section' data-section='about'>
   <Box size='narrow' class='about-box' data-box='about' style='--box-gutter: 2rem;'>
@@ -170,7 +170,7 @@ const dictionary=getDictionary(Astro.currentLocale)
     build()
     const home = await output('index.html')
     assert.equal((home.match(/name="theme-color"/g) || []).length, 1)
-    assert.match(home, /<meta name="theme-color" content="#067df7"/)
+    assert.match(home, /<meta name="theme-color" content="#3245ff"/)
 
     assert.equal((home.match(/<title>/g) || []).length, 1)
     assert.match(home, /<title>Astro Kit<\/title>/)

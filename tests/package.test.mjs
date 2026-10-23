@@ -76,11 +76,36 @@ test(
     assert.ok(files.includes('package/template/_gitignore'))
     assert.ok(files.includes('package/template/.env.example'))
     assert.ok(files.includes('package/template/.vscode/settings.json'))
-    assert.ok(files.includes('package/template/src/components/SEO.astro'))
+    assert.ok(files.includes('package/template/src/components/SEO/index.astro'))
+    for (const name of ['Box', 'Section', 'Link', 'SEO', 'LanguagePicker']) {
+      assert.ok(
+        !files.includes(`package/template/src/components/${name}.astro`)
+      )
+      assert.ok(!files.includes(`package/template/src/components/${name}.md`))
+    }
+    for (const doc of [
+      'README.md',
+      'PageLoader/README.md',
+      'Theme/README.md',
+      'GTM/README.md',
+      'Box/README.md',
+      'Section/README.md',
+      'Link/README.md',
+      'SEO/README.md',
+      'LanguagePicker/README.md'
+    ])
+      assert.ok(files.includes(`package/template/src/components/${doc}`))
+
     assert.ok(files.includes('package/template/src/styles/global.css'))
     assert.ok(files.includes('package/template/src/styles/tailwind.css'))
-    assert.ok(files.includes('package/template/src/components/Box.astro'))
-    assert.ok(files.includes('package/template/src/components/Link.astro'))
+    assert.ok(files.includes('package/template/src/components/Box/index.astro'))
+    for (const file of ['index.astro', 'scripts.ts'])
+      assert.ok(
+        files.includes(`package/template/src/components/PageLoader/${file}`)
+      )
+    assert.ok(
+      files.includes('package/template/src/components/Link/index.astro')
+    )
     assert.ok(
       files.includes('package/template/src/components/Theme/Switch.astro')
     )
@@ -106,7 +131,9 @@ test(
             `package/template/src/i18n/dictionaries/${locale}/cookies/${file}`
           )
         )
-    assert.ok(files.includes('package/template/src/components/Section.astro'))
+    assert.ok(
+      files.includes('package/template/src/components/Section/index.astro')
+    )
     assert.ok(files.includes('package/template/src/layouts/Main.astro'))
     assert.ok(
       files.includes('package/template/src/sections/Welcome/index.astro')
