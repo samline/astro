@@ -8,10 +8,10 @@ const dictionary = getDictionary(Astro.currentLocale)
 ---
 
 <img id='background' src={background.src} alt='' fetchpriority='high' />
-<div id='hero'>
+<div id='hero' class='light:text-black dark:text-white'>
   <Link href='https://astro.build'>
     <img
-      class='astro-logo'
+      class='dark:brightness-0 dark:invert'
       src={astroLogo.src}
       width='115'
       height='48'
@@ -46,10 +46,6 @@ const dictionary = getDictionary(Astro.currentLocale)
 </div>
 
 <style>
-  :global([data-theme='dark']) .astro-logo {
-    filter: brightness(0) invert(1);
-  }
-
   #background {
     position: fixed;
     top: 0;

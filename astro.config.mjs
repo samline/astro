@@ -7,6 +7,7 @@ import tailwindcss from '@tailwindcss/vite'
 import { loadEnv } from 'vite'
 import { defaultLocale, locales } from './src/i18n/config.ts'
 import { seoConfig, resolveIndexing } from './src/config/seo.ts'
+import { defaultTrackingEnabled } from './src/config/gtm.ts'
 
 const root = fileURLToPath(new URL('.', import.meta.url))
 const env = loadEnv(process.env.NODE_ENV ?? 'development', root, '')
@@ -69,6 +70,20 @@ export default defineConfig({
 
   env: {
     schema: {
+      GTM_ID: envField.string({
+        context: 'server',
+        access: 'public',
+        optional: true
+      }),
+      GTM_ENABLED: envField.boolean({
+        context: 'server',
+        access: 'public',
+        default: defaultTrackingEnabled(
+          env,
+          site,
+          process.env.NODE_ENV === 'production'
+        )
+      }),
       SITE_INDEXABLE: envField.boolean({
         context: 'server',
         access: 'public',

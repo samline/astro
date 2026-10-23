@@ -39,3 +39,6 @@ indexación al compilar staging. Los textos SEO están en los diccionarios.
 La interfaz se organiza como layout → section → component. Las páginas componen
 `Main` con bloques de `src/sections`, y estos se construyen con `src/components`.
 El layout mantiene un único `<main>` y las páginas no contienen markup de UI.
+
+Incluye GTM opcional y CookieConsent con carga diferida por interacción,
+Consent Mode v2 y categorías independientes. Sin GTM_ID no se activa.

@@ -67,7 +67,7 @@ cachés, configuración del workspace ni resultados de compilación.
 
 ## Preparar una publicación
 
-La versión de la raíz y la del instalador es `7.11.0`. La serie `7.x.y` está
+La versión de la raíz y la del instalador es `7.12.0`. La serie `7.x.y` está
 reservada para Astro 7: parches para correcciones y menores para nuevas funciones.
 La serie 8 empieza cuando se adapte la base a Astro 8; las versiones menores
 no necesitan coincidir con las del framework. Mantén compatible el CLI dentro
@@ -78,17 +78,17 @@ bun run verify
 bun run kit:pack
 ```
 
-El tarball se escribe en `artifacts/samline-astro-kit-7.11.0.tgz`. Se puede probar
+El tarball se escribe en `artifacts/samline-astro-kit-7.12.0.tgz`. Se puede probar
 antes de publicar:
 
 ```sh
-npm exec --yes --package ./artifacts/samline-astro-kit-7.11.0.tgz -- astro-kit mi-prueba
+npm exec --yes --package ./artifacts/samline-astro-kit-7.12.0.tgz -- astro-kit mi-prueba
 ```
 
 Para una siguiente versión:
 
 ```sh
-bun run kit:version 7.11.1
+bun run kit:version 7.12.1
 bun run verify
 bun run kit:pack
 ```
@@ -126,8 +126,9 @@ src/
     ├── Link.astro
     ├── LanguagePicker.astro
     ├── SEO.astro
-    ├── ThemeInit.astro
-    └── ThemeSwitch.astro
+    └── Theme/
+        ├── Init.astro
+        └── Switch.astro
 ```
 
 Las páginas declaran las rutas y componen un layout con sus secciones, sin
@@ -329,6 +330,9 @@ componentes reutilizables mantienen sus contratos y variables de personalizació
 `Main.astro` incluye `ThemeInit` en el head. El tema se aplica antes de mostrar la
 página, usa `data-theme` en `<html>` y activa las variantes `dark:` y `light:` de
 Tailwind. `global.css` define el fondo, texto y `color-scheme` de cada modo.
+El ejemplo en `WelcomeContent.astro` usa `light:text-black dark:text-white`
+para el contenido y `dark:brightness-0 dark:invert` para el logo: aplica las
+variantes directamente en las clases del elemento, sin selectores CSS de tema.
 Los colores y las variables visuales siguen definidos en `tailwind.css`.
 
 `src/config/theme.ts` solo configura comportamiento: `defaultPreference` puede
@@ -340,7 +344,7 @@ Para integrar el control en cualquier sección o componente compartido:
 
 ```astro
 ---
-import ThemeSwitch from '@/components/ThemeSwitch.astro'
+import ThemeSwitch from '@/components/Theme/Switch.astro'
 ---
 
 <ThemeSwitch class='my-theme-switch' />
@@ -626,3 +630,46 @@ requiere recompilar las páginas, robots y sitemap.
 - [Open Graph](https://ogp.me/)
 - [Robots meta](https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag)
 - [WebSite y nombre del sitio](https://developers.google.com/search/docs/appearance/site-names)
+
+## Google Tag Manager y consentimiento
+
+`Main` integra `GTM/Head` y `GTM/Consent`. Sin `GTM_ID` no se muestra el aviso ni
+se carga GTM. Configura `GTM_ID=GTM-XXXXXXX` en el entorno antes de compilar.
+`GTM_ENABLED` permite activarlo o desactivarlo explícitamente; por defecto solo
+se activa en producción con origen no local, fuera de previews Vercel/Netlify.
+Esta decisión es independiente de `SITE_INDEXABLE`.
+
+`src/config/gtm.ts` configura el comportamiento. El modo predeterminado es
+`basic`: las cuatro señales de Consent Mode v2 empiezan denegadas y GTM no se
+descarga hasta aceptar analytics o advertising. Las categorías son independientes:
+analytics no concede permisos publicitarios. Rechazar mantiene GTM bloqueado;
+retirar un permiso ya concedido actualiza las señales y recarga la página para
+interrumpir los scripts cargados. Los patrones de limpieza cubren cookies comunes;
+cada proyecto debe ajustarlos a las herramientas que configure en su contenedor.
+
+Con `consentTrigger: 'interaction'`, el JavaScript y el CSS de CookieConsent se
+cargan al intentar desplazar la página, interactuar por teclado o abrir Cookie
+settings. No se distingue entre visitantes y herramientas de auditoría. Si ya
+existe una cookie de elección, el SDK se carga al entrar y valida esa elección
+antes de restaurar permisos. `immediate` permite mostrar el aviso al entrar.
+No se incluye iframe noscript porque no puede aplicar esta elección.
+
+Los textos viven en el dominio `cookies` de cada idioma. Los estilos del aviso
+usan los tokens Tailwind y respetan el tema. La presentación toma dinkbit.com
+como referencia: caja inferior centrada, botones neutros, preferencias en una
+fila y rechazar/aceptar debajo, con fondo oscurecido mientras se decide. `privacyPolicyPath` acepta la ruta
+local de una política existente; `null` omite el enlace. Cambia `revision` cuando
+necesites pedir una nueva elección. La cookie de preferencias dura 180 días.
+`CookiePreferences.astro` permite añadir otro botón de ajustes en cualquier sección;
+lee el idioma de Astro y permanece oculto si la integración no está activa.
+
+El modo `advanced` es opcional y carga GTM antes de aceptar, con las señales
+inicialmente denegadas; puede permitir pings sin cookies según las etiquetas.
+Con ClientRouter, el evento `astro_page_view` comunica cambios de ruta después
+de aceptar una categoría opcional. Configura ese disparador en GTM si lo necesitas
+y evita duplicarlo con medición automática del historial. No hay un page_view
+manual adicional al de tus etiquetas. Verifica el contenedor real con Tag Assistant:
+las etiquetas personalizadas deben respetar también sus requisitos de consentimiento.
+
+Referencias: [CookieConsent](https://cookieconsent.orestbida.com/) y
+[Consent Mode](https://developers.google.com/tag-platform/security/guides/consent).

@@ -178,6 +178,9 @@ importers:
       astro:
         specifier: ^7.4.2
         version: 7.4.2(@types/node@24.19.2)(@vercel/functions@3.10.2)(jiti@2.7.0)(yaml@2.9.1)
+      vanilla-cookieconsent:
+        specifier: ^3.1.0
+        version: 3.1.0
     devDependencies:
       '@astrojs/check':
         specifier: 0.9.12
@@ -2192,6 +2195,9 @@ packages:
 
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
+
+  vanilla-cookieconsent@3.1.0:
+    resolution: {integrity: sha512-/McNRtm/3IXzb9dhqMIcbquoU45SzbN2VB+To4jxEPqMmp7uVniP6BhGLjU8MC7ZCDsNQVOp27fhQTM/ruIXAA==}
 
   verkit@0.5.0:
     resolution: {integrity: sha512-u4J1hr6Y+C/hit34GwL3eIcUf3wngT8TlYUjK7tk0jxydKLAq3sYvifjdTDA6U3KCKRcQCQDGf/srjxfZF3l7g==}
@@ -4240,6 +4246,8 @@ snapshots:
     dependencies:
       punycode: 2.3.1
     optional: true
+
+  vanilla-cookieconsent@3.1.0: {}
 
   verkit@0.5.0: {}
 

@@ -1,0 +1,82 @@
+---
+import { GTM_ID, GTM_ENABLED } from 'astro:env/server'
+import { gtmConfig, normalizeContainerId } from '@/config/gtm'
+
+const containerId = normalizeContainerId(GTM_ID)
+const mode = gtmConfig.consentMode
+---
+
+{GTM_ENABLED && containerId && <script
+  is:inline
+  define:vars={{ containerId, mode }}
+  data-astro-rerun
+>
+  ;(() => {
+    if (window.astroKitGTM) return
+    window.dataLayer = window.dataLayer || []
+    window.gtag =
+      window.gtag ||
+      // Google commands use an Arguments object in the dataLayer queue.
+      function () {
+        window.dataLayer.push(arguments)
+      }
+    window.gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500
+    })
+
+    let loaded = false
+    let consent = { analytics: false, marketing: false }
+    let lastPage = location.pathname + location.search
+    const load = () => {
+      if (loaded) return
+      loaded = true
+      window.dataLayer.push({ 'gtm.start': Date.now(), event: 'gtm.js' })
+      const script = document.createElement('script')
+      script.async = true
+      script.src =
+        'https://www.googletagmanager.com/gtm.js?id=' +
+        encodeURIComponent(containerId)
+      document.head.appendChild(script)
+    }
+
+    window.astroKitGTM = Object.freeze({
+      updateConsent: (choice) => {
+        const next = {
+          analytics: choice.analytics === true,
+          marketing: choice.marketing === true
+        }
+        const revoked =
+          loaded &&
+          ((consent.analytics && !next.analytics) ||
+            (consent.marketing && !next.marketing))
+        consent = next
+        window.gtag('consent', 'update', {
+          analytics_storage: next.analytics ? 'granted' : 'denied',
+          ad_storage: next.marketing ? 'granted' : 'denied',
+          ad_user_data: next.marketing ? 'granted' : 'denied',
+          ad_personalization: next.marketing ? 'granted' : 'denied'
+        })
+        if (next.analytics || next.marketing) load()
+        return revoked
+      }
+    })
+
+    document.addEventListener('astro:page-load', () => {
+      const page = location.pathname + location.search
+      if (page === lastPage) return
+      lastPage = page
+      if (!loaded || (!consent.analytics && !consent.marketing)) return
+      window.dataLayer.push({
+        event: 'astro_page_view',
+        page_location: location.href,
+        page_path: page,
+        page_title: document.title
+      })
+    })
+    if (mode === 'advanced') load()
+  })()
+</script>}

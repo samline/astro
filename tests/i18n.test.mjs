@@ -32,7 +32,8 @@ test('each locale separates translation modules into index and types files', asy
     'welcome',
     'errors',
     'seo',
-    'themes'
+    'themes',
+    'cookies'
   ]
   for (const locale of ['en-us', 'en-mx']) {
     const directory = path.join(root, 'src/i18n/dictionaries', locale)

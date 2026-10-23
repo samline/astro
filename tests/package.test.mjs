@@ -82,10 +82,30 @@ test(
     assert.ok(files.includes('package/template/src/components/Box.astro'))
     assert.ok(files.includes('package/template/src/components/Link.astro'))
     assert.ok(
-      files.includes('package/template/src/components/ThemeSwitch.astro')
+      files.includes('package/template/src/components/Theme/Switch.astro')
     )
-    assert.ok(files.includes('package/template/src/components/ThemeInit.astro'))
+    assert.ok(
+      files.includes('package/template/src/components/Theme/Init.astro')
+    )
     assert.ok(files.includes('package/template/src/config/theme.ts'))
+    for (const file of [
+      'Head.astro',
+      'Consent.astro',
+      'CookiePreferences.astro',
+      'consent-sdk.ts',
+      'consent.ts',
+      'consent.css'
+    ])
+      assert.ok(files.includes(`package/template/src/components/GTM/${file}`))
+    assert.ok(files.includes('package/template/src/config/gtm.ts'))
+    assert.ok(!files.includes('package/template/src/components/GTM/Body.astro'))
+    for (const locale of ['en-us', 'en-mx'])
+      for (const file of ['index.ts', 'types.ts'])
+        assert.ok(
+          files.includes(
+            `package/template/src/i18n/dictionaries/${locale}/cookies/${file}`
+          )
+        )
     assert.ok(files.includes('package/template/src/components/Section.astro'))
     assert.ok(files.includes('package/template/src/layouts/Main.astro'))
     assert.ok(

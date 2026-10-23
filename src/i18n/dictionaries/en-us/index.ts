@@ -9,6 +9,7 @@ import forms from './forms'
 import errors from './errors'
 import seo from './seo'
 import themes from './themes'
+import cookies from './cookies'
 
 export default {
   site,
@@ -20,5 +21,6 @@ export default {
   forms,
   errors,
   seo,
-  themes
+  themes,
+  cookies
 } satisfies Dictionary

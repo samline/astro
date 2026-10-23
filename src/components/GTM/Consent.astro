@@ -1,0 +1,136 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n'
+import { getDictionary, resolveLocale } from '@/i18n'
+import { gtmConfig } from '@/config/gtm'
+import CookiePreferences from './CookiePreferences.astro'
+
+const locale = resolveLocale(Astro.currentLocale)
+const dictionary = getDictionary(locale)
+const policyHref = gtmConfig.privacyPolicyPath
+  ? getRelativeLocaleUrl(locale, gtmConfig.privacyPolicyPath)
+  : undefined
+---
+
+<CookiePreferences
+  class='cookie-preferences'
+  data-gtm-consent
+  data-locale={locale}
+  data-translations={JSON.stringify(dictionary.cookies)}
+  data-policy-href={policyHref}
+/>
+
+<script>
+  import { gtmConfig } from '@/config/gtm'
+  import type { Cookies } from '@/i18n/dictionaries/en-us/cookies/types'
+
+  type ConsentAPI = typeof import('./consent-sdk')
+  let current: HTMLElement | null = null
+  let requested: HTMLElement | null = null
+  let pending: Promise<ConsentAPI | undefined> = Promise.resolve(undefined)
+  let cancelWait = () => {}
+
+  const activate = (): Promise<ConsentAPI | undefined> => {
+    const element = current
+    if (!element) return Promise.resolve(undefined)
+    if (requested === element) return pending
+    requested = element
+    cancelWait()
+    pending = pending
+      .then(async () => {
+        if (current !== element || !element.isConnected) return
+        const consent = await import('./consent-sdk')
+        await consent.loadStyles()
+        if (current !== element || !element.isConnected) return
+        consent.reset(false)
+        const sync = () => {
+          const reload = window.astroKitGTM?.updateConsent({
+            analytics: consent.acceptedCategory('analytics'),
+            marketing: consent.acceptedCategory('marketing')
+          })
+          if (reload) window.location.reload()
+        }
+        await consent.run(
+          consent.createConsentConfig(
+            element.dataset.locale!,
+            JSON.parse(element.dataset.translations!) as Cookies,
+            sync,
+            element.dataset.policyHref
+          )
+        )
+        return consent
+      })
+      .catch((error) => {
+        if (requested === element) requested = null
+        console.error('CookieConsent initialization failed.', error)
+        return undefined
+      })
+    return pending
+  }
+
+  const mount = () => {
+    const element = document.querySelector<HTMLElement>('[data-gtm-consent]')
+    if (!element || element === current) return
+    cancelWait()
+    current = element
+    document
+      .querySelectorAll<HTMLButtonElement>('[data-cookie-preferences]')
+      .forEach((button) => {
+        button.hidden = false
+      })
+    let returning = false
+    try {
+      returning = document.cookie
+        .split(';')
+        .some((entry) => entry.trim().startsWith(gtmConfig.cookieName + '='))
+    } catch {}
+    if (
+      returning ||
+      gtmConfig.consentTrigger === 'immediate' ||
+      window.scrollY > 0
+    ) {
+      void activate()
+      return
+    }
+    const start = () => {
+      void activate()
+    }
+    const scrollEvents = ['scroll', 'wheel', 'touchmove'] as const
+    for (const event of scrollEvents)
+      window.addEventListener(event, start, { passive: true, once: true })
+    document.addEventListener('keydown', start, { once: true })
+    cancelWait = () => {
+      for (const event of scrollEvents) window.removeEventListener(event, start)
+      document.removeEventListener('keydown', start)
+    }
+  }
+  document.addEventListener('click', (event) => {
+    if (!(event.target instanceof Element) || event.defaultPrevented) return
+    const button = event.target.closest<HTMLButtonElement>(
+      'button[data-cookie-preferences]'
+    )
+    if (button && !button.disabled)
+      void activate().then((consent) => consent?.showPreferences())
+  })
+  mount()
+  document.addEventListener('astro:page-load', mount)
+</script>
+
+<style>
+  .cookie-preferences {
+    position: fixed;
+    inset-inline-start: 1rem;
+    inset-block-end: 1rem;
+    z-index: 10;
+    padding: 0.5rem 0.75rem;
+    border: 0.0625rem solid currentColor;
+    border-radius: 0.5rem;
+    background-color: var(--color-white);
+    color: var(--color-black);
+    font-size: 0.875rem;
+  }
+
+  :global([data-theme='dark']) .cookie-preferences {
+    background-color: var(--color-black);
+    color: var(--color-white);
+  }
+</style>

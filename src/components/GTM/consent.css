@@ -1,0 +1,122 @@
+html #cc-main {
+  --cc-font-family: var(--font-primary);
+  --cc-bg: var(--color-white);
+  --cc-primary-color: color-mix(
+    in srgb,
+    var(--color-black) 82%,
+    var(--color-white)
+  );
+  --cc-secondary-color: color-mix(
+    in srgb,
+    var(--color-black) 65%,
+    var(--color-white)
+  );
+  --cc-btn-primary-bg: color-mix(
+    in srgb,
+    var(--color-black) 80%,
+    var(--color-white)
+  );
+  --cc-btn-primary-color: var(--color-white);
+  --cc-btn-primary-border-color: var(--cc-btn-primary-bg);
+  --cc-btn-primary-hover-bg: var(--color-black);
+  --cc-btn-primary-hover-color: var(--color-white);
+  --cc-btn-primary-hover-border-color: var(--color-black);
+  --cc-btn-secondary-bg: color-mix(
+    in srgb,
+    var(--color-black) 7%,
+    var(--color-white)
+  );
+  --cc-btn-secondary-color: var(--cc-primary-color);
+  --cc-btn-secondary-border-color: var(--cc-btn-secondary-bg);
+  --cc-btn-secondary-hover-bg: color-mix(
+    in srgb,
+    var(--color-black) 13%,
+    var(--color-white)
+  );
+  --cc-btn-secondary-hover-color: var(--cc-primary-color);
+  --cc-btn-secondary-hover-border-color: var(--cc-btn-secondary-hover-bg);
+  --cc-toggle-on-bg: var(--cc-btn-primary-bg);
+  --cc-toggle-off-bg: color-mix(
+    in srgb,
+    var(--color-black) 55%,
+    var(--color-white)
+  );
+  --cc-toggle-on-knob-bg: var(--cc-bg);
+  --cc-toggle-off-knob-bg: var(--cc-bg);
+  --cc-toggle-readonly-bg: color-mix(
+    in srgb,
+    var(--color-black) 18%,
+    var(--color-white)
+  );
+  --cc-toggle-readonly-knob-bg: var(--cc-bg);
+  --cc-cookie-category-block-bg: var(--cc-btn-secondary-bg);
+  --cc-cookie-category-block-border: var(--cc-btn-secondary-bg);
+  --cc-cookie-category-block-hover-bg: var(--cc-btn-secondary-hover-bg);
+  --cc-cookie-category-block-hover-border: var(--cc-btn-secondary-hover-bg);
+  --cc-cookie-category-expanded-block-bg: var(--cc-bg);
+  --cc-cookie-category-expanded-block-hover-bg: var(--cc-bg);
+  --cc-separator-border-color: color-mix(
+    in srgb,
+    var(--color-black) 10%,
+    var(--color-white)
+  );
+  --cc-link-color: var(--cc-primary-color);
+  --cc-footer-bg: var(--cc-btn-secondary-bg);
+  --cc-footer-color: var(--cc-secondary-color);
+  --cc-footer-border-color: var(--cc-separator-border-color);
+  --cc-toggle-enabled-icon-color: var(--cc-btn-primary-bg);
+  --cc-toggle-disabled-icon-color: var(--cc-toggle-off-bg);
+  --cc-toggle-readonly-knob-icon-color: var(--cc-secondary-color);
+  --cc-section-category-border: var(--cc-separator-border-color);
+  --cc-overlay-bg: color-mix(in srgb, var(--color-black) 65%, transparent);
+  --cc-btn-border-radius: 0.4rem;
+  --cc-modal-border-radius: 0.5rem;
+}
+
+html[data-theme='dark'] #cc-main {
+  --cc-bg: var(--color-black);
+  --cc-primary-color: color-mix(
+    in srgb,
+    var(--color-white) 90%,
+    var(--color-black)
+  );
+  --cc-secondary-color: color-mix(
+    in srgb,
+    var(--color-white) 72%,
+    var(--color-black)
+  );
+  --cc-btn-primary-bg: color-mix(
+    in srgb,
+    var(--color-white) 90%,
+    var(--color-black)
+  );
+  --cc-btn-primary-color: var(--color-black);
+  --cc-btn-primary-hover-bg: var(--color-white);
+  --cc-btn-primary-hover-color: var(--color-black);
+  --cc-btn-primary-hover-border-color: var(--color-white);
+  --cc-btn-secondary-bg: color-mix(
+    in srgb,
+    var(--color-white) 12%,
+    var(--color-black)
+  );
+  --cc-btn-secondary-hover-bg: color-mix(
+    in srgb,
+    var(--color-white) 20%,
+    var(--color-black)
+  );
+  --cc-toggle-off-bg: color-mix(
+    in srgb,
+    var(--color-white) 45%,
+    var(--color-black)
+  );
+  --cc-toggle-readonly-bg: color-mix(
+    in srgb,
+    var(--color-white) 25%,
+    var(--color-black)
+  );
+  --cc-separator-border-color: color-mix(
+    in srgb,
+    var(--color-white) 18%,
+    var(--color-black)
+  );
+}

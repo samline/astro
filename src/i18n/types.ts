@@ -9,7 +9,10 @@ import type { Errors } from './dictionaries/en-us/errors/types'
 import type { SEO } from './dictionaries/en-us/seo/types'
 import type { Themes } from './dictionaries/en-us/themes/types'
 
+import type { Cookies } from './dictionaries/en-us/cookies/types'
+
 export interface Dictionary {
+  cookies: Cookies
   themes: Themes
   seo: SEO
   site: Site
