@@ -1,0 +1,68 @@
+@import '@fontsource-variable/inter/wght.css';
+@import '@fontsource-variable/inter/wght-italic.css';
+@import './tailwind.css';
+
+@layer base {
+  html {
+    min-height: 100%;
+    font-family: var(--font-primary);
+    background-color: var(--color-white);
+    color: var(--color-black);
+    color-scheme: light;
+  }
+
+  html[data-theme='dark'] {
+    background-color: var(--color-black);
+    color: var(--color-white);
+    color-scheme: dark;
+  }
+
+  body {
+    min-height: 100svh;
+  }
+
+  :where(h1, h2, h3, h4, h5, h6) {
+    text-wrap: balance;
+  }
+
+  :where(h1, h2, h3, h4, h5, h6, p) {
+    overflow-wrap: anywhere;
+  }
+
+  svg {
+    max-inline-size: 100%;
+  }
+
+  :focus-visible {
+    outline: 0.125rem solid currentColor;
+    outline-offset: 0.1875rem;
+  }
+
+  :where(
+    button,
+    input[type='button'],
+    input[type='submit'],
+    input[type='reset']
+  ):not(:disabled) {
+    cursor: pointer;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-placeholder);
+  }
+
+  ::selection {
+    background-color: var(--color-accent-dark);
+    color: var(--color-white);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    a[href] {
+      transition-property:
+        color, background-color, border-color, text-decoration-color;
+      transition-duration: var(--default-transition-duration);
+      transition-timing-function: ease;
+    }
+  }
+}

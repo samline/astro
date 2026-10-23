@@ -1,7 +1,7 @@
 ---
 import type { GetStaticPaths } from 'astro'
-import Welcome from '@/components/Welcome.astro'
-import Layout from '@/layouts/Layout.astro'
+import Welcome from '@/sections/Welcome/index.astro'
+import Main from '@/layouts/Main.astro'
 import { defaultLocale, locales } from '@/i18n/config'
 
 export const getStaticPaths = (() =>
@@ -10,6 +10,6 @@ export const getStaticPaths = (() =>
   }))) satisfies GetStaticPaths
 ---
 
-<Layout path='/'>
+<Main path='/'>
   <Welcome />
-</Layout>
+</Main>

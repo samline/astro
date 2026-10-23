@@ -1,0 +1,60 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import { getRelativeLocaleUrl } from 'astro:i18n'
+import { resolveLocale } from '@/i18n'
+import { locales } from '@/i18n/config'
+
+export interface Props extends HTMLAttributes<'a'> {
+  href: string
+  localize?: boolean
+}
+
+const {
+  href,
+  localize = true,
+  target,
+  rel,
+  download,
+  class: className,
+  ...attributes
+} = Astro.props
+
+let destination = href
+if (
+  localize &&
+  (download === undefined || download === false) &&
+  href.startsWith('/') &&
+  !href.startsWith('//')
+) {
+  const boundary = href.search(/[?#]/)
+  const pathname = boundary === -1 ? href : href.slice(0, boundary)
+  const suffix = boundary === -1 ? '' : href.slice(boundary)
+  const firstSegment = pathname.split('/')[1]
+  const hasLocale = locales.some((locale) => locale === firstSegment)
+
+  if (!hasLocale) {
+    destination =
+      getRelativeLocaleUrl(resolveLocale(Astro.currentLocale), pathname) +
+      suffix
+  }
+}
+
+const relationships = rel?.split(/\s+/).filter(Boolean) ?? []
+if (
+  target?.toLowerCase() === '_blank' &&
+  !relationships.some((value) => value.toLowerCase() === 'noopener')
+) {
+  relationships.push('noopener')
+}
+---
+
+<a
+  href={destination}
+  target={target}
+  rel={relationships.length ? relationships.join(' ') : undefined}
+  download={download}
+  class:list={[className]}
+  {...attributes}
+>
+  <slot />
+</a>

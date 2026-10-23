@@ -11,7 +11,6 @@ export type JsonValue =
 export type StructuredData = { [key: string]: JsonValue }
 
 interface SEOConfig {
-  themeColor: string
   image: Omit<SocialImage, 'alt'> | null
   twitter: { site?: string; creator?: string }
   appleTouchIcon?: string
@@ -21,7 +20,6 @@ interface SEOConfig {
 }
 
 export const seoConfig: SEOConfig = {
-  themeColor: '#171123',
   image: null,
   twitter: {},
   noindexPaths: ['/404']

@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url'
 import { defineConfig, envField } from 'astro/config'
 import sitemap from '@astrojs/sitemap'
 import vercel from '@astrojs/vercel'
+import tailwindcss from '@tailwindcss/vite'
 import { loadEnv } from 'vite'
 import { defaultLocale, locales } from './src/i18n/config.ts'
 import { seoConfig, resolveIndexing } from './src/config/seo.ts'
@@ -26,6 +27,9 @@ export default defineConfig({
   adapter: vercel({ imageService: false }),
   site,
   trailingSlash: 'never',
+  vite: {
+    plugins: [tailwindcss()]
+  },
   integrations: [
     ...(indexable
       ? [

@@ -1,0 +1,29 @@
+---
+import SEO, { type Props as SEOProps } from '@/components/SEO.astro'
+import { resolveLocale } from '@/i18n'
+import ThemeInit from '@/components/ThemeInit.astro'
+import { themeConfig } from '@/config/theme'
+import '@/styles/global.css'
+
+type Props = SEOProps
+
+const locale = resolveLocale(Astro.currentLocale)
+---
+
+<!doctype html>
+<html
+  lang={locale}
+  data-theme={themeConfig.defaultPreference === 'dark' ? 'dark' : 'light'}
+>
+  <head>
+    <SEO {...Astro.props} />
+    <meta name='theme-color' content='#067df7' />
+    <ThemeInit />
+    <slot name='head' />
+  </head>
+  <body>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>

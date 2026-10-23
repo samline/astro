@@ -1,0 +1,36 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+
+interface Props extends HTMLAttributes<'div'> {
+  size?: 'default' | 'narrow' | 'wide' | 'fluid'
+}
+
+const { class: className, size = 'default', ...attributes } = Astro.props
+---
+
+<div class:list={['box', `box--${size}`, className]} {...attributes}>
+  <slot />
+</div>
+
+<style>
+  .box {
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-inline-size: 0;
+    max-inline-size: var(--box-max-width, 90rem);
+    margin-inline: auto;
+    padding-inline: var(--box-gutter, 1.25rem);
+  }
+
+  .box--narrow {
+    max-inline-size: var(--box-max-width, 48rem);
+  }
+
+  .box--wide {
+    max-inline-size: var(--box-max-width, 120rem);
+  }
+
+  .box--fluid {
+    max-inline-size: var(--box-max-width, none);
+  }
+</style>

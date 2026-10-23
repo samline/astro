@@ -1,17 +1,11 @@
 ---
-import { getRelativeLocaleUrl } from 'astro:i18n'
-import Layout from '@/layouts/Layout.astro'
-import { getDictionary, resolveLocale } from '@/i18n'
+import Main from '@/layouts/Main.astro'
+import NotFound from '@/sections/NotFound/index.astro'
+import { getDictionary } from '@/i18n'
 
-const locale = resolveLocale(Astro.currentLocale)
-const dictionary = getDictionary(locale)
+const dictionary = getDictionary(Astro.currentLocale)
 ---
 
-<Layout path='/404' title={dictionary.errors.notFound.title} noindex>
-  <main id='main-content' tabindex='-1'>
-    <p>{dictionary.errors.notFound.code}</p>
-    <h1>{dictionary.errors.notFound.title}</h1>
-    <p>{dictionary.errors.notFound.description}</p>
-    <a href={getRelativeLocaleUrl(locale)}>{dictionary.buttons.backHome}</a>
-  </main>
-</Layout>
+<Main path='/404' title={dictionary.errors.notFound.title} noindex>
+  <NotFound />
+</Main>

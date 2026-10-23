@@ -1,0 +1,85 @@
+---
+import { themeConfig } from '@/config/theme'
+---
+
+<script is:inline define:vars={{ themeConfig }} data-astro-rerun>
+  ;(() => {
+    if (window.astroKitTheme) {
+      window.astroKitTheme.refresh()
+      return
+    }
+
+    const media = window.matchMedia('(prefers-color-scheme: dark)')
+    let storage
+    try {
+      storage = window.localStorage
+    } catch {}
+
+    const valid = (value) => ['light', 'dark', 'system'].includes(value)
+    const read = () => {
+      try {
+        const saved = storage?.getItem(themeConfig.storageKey)
+        if (valid(saved)) return saved
+      } catch {}
+      return themeConfig.defaultPreference
+    }
+    let preference = read()
+    const resolve = () =>
+      preference === 'system' ? (media.matches ? 'dark' : 'light') : preference
+
+    const apply = (page = document) => {
+      const theme = resolve()
+      page.documentElement.dataset.theme = theme
+      page.querySelectorAll('button[data-theme-switch]').forEach((button) => {
+        button.setAttribute('aria-checked', String(theme === 'dark'))
+        button.hidden = false
+      })
+      if (page === document) {
+        window.dispatchEvent(
+          new CustomEvent('themechange', {
+            detail: { theme, preference }
+          })
+        )
+      }
+    }
+
+    const setPreference = (value) => {
+      if (!valid(value)) return
+      preference = value
+      try {
+        storage?.setItem(themeConfig.storageKey, value)
+      } catch {}
+      apply()
+    }
+
+    window.astroKitTheme = Object.freeze({
+      getTheme: resolve,
+      getPreference: () => preference,
+      setPreference,
+      refresh: () => apply()
+    })
+
+    document.addEventListener('click', (event) => {
+      if (!(event.target instanceof Element) || event.defaultPrevented) return
+      const button = event.target.closest('button[data-theme-switch]')
+      if (button && !button.disabled) {
+        setPreference(resolve() === 'dark' ? 'light' : 'dark')
+      }
+    })
+    document.addEventListener('DOMContentLoaded', () => apply(), { once: true })
+    document.addEventListener('astro:before-swap', (event) =>
+      apply(event.newDocument)
+    )
+    document.addEventListener('astro:page-load', () => apply())
+    media.addEventListener('change', () => {
+      if (preference === 'system') apply()
+    })
+    window.addEventListener('storage', (event) => {
+      if (event.storageArea !== storage) return
+      if (event.key !== themeConfig.storageKey && event.key !== null) return
+      preference = read()
+      apply()
+    })
+    apply()
+  })()
+</script>

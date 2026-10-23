@@ -1,0 +1,11 @@
+---
+import Link from '@/components/Link.astro'
+import { getDictionary } from '@/i18n'
+
+const dictionary = getDictionary(Astro.currentLocale)
+---
+
+<p>{dictionary.errors.notFound.code}</p>
+<h1 id='not-found-title'>{dictionary.errors.notFound.title}</h1>
+<p>{dictionary.errors.notFound.description}</p>
+<Link href='/'>{dictionary.buttons.backHome}</Link>

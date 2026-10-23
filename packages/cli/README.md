@@ -35,3 +35,7 @@ Incluye SEO multilingüe, Open Graph, Twitter Cards, JSON-LD, robots y sitemap
 con una política compartida de indexación. `SITE_INDEXABLE=false` desactiva la
 indexación al compilar staging. Los textos SEO están en los diccionarios.
 `public/img`, `public/docs` y `public/video` se distribuyen con `.gitkeep`.
+
+La interfaz se organiza como layout → section → component. Las páginas componen
+`Main` con bloques de `src/sections`, y estos se construyen con `src/components`.
+El layout mantiene un único `<main>` y las páginas no contienen markup de UI.

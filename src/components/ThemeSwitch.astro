@@ -1,0 +1,75 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import { getDictionary } from '@/i18n'
+
+type Props = Omit<
+  HTMLAttributes<'button'>,
+  'type' | 'role' | 'aria-checked' | 'hidden'
+>
+
+const { class: className, ...attributes } = Astro.props
+const dictionary = getDictionary(Astro.currentLocale)
+---
+
+<button
+  {...attributes}
+  class:list={['theme-switch', className]}
+  type='button'
+  role='switch'
+  aria-checked='false'
+  data-theme-switch
+  hidden
+>
+  <span class='theme-switch__track' aria-hidden='true'>
+    <span class='theme-switch__thumb'></span>
+  </span>
+  <span>
+    <slot>{dictionary.themes.darkMode}</slot>
+  </span>
+</button>
+
+<style>
+  .theme-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: inherit;
+  }
+
+  .theme-switch__track {
+    display: inline-flex;
+    inline-size: 2.5rem;
+    block-size: 1.5rem;
+    padding: 0.125rem;
+    border: 0.0625rem solid currentColor;
+    border-radius: 1rem;
+    flex-shrink: 0;
+  }
+
+  .theme-switch__thumb {
+    inline-size: 1.125rem;
+    block-size: 1.125rem;
+    border-radius: 50%;
+    background-color: currentColor;
+  }
+
+  .theme-switch[aria-checked='true'] .theme-switch__track {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-white);
+  }
+
+  .theme-switch[aria-checked='true'] .theme-switch__thumb {
+    transform: translateX(1rem);
+  }
+
+  .theme-switch:disabled {
+    opacity: 0.5;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .theme-switch__thumb {
+      transition: transform var(--default-transition-duration) ease;
+    }
+  }
+</style>

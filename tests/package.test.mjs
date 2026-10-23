@@ -77,6 +77,37 @@ test(
     assert.ok(files.includes('package/template/.env.example'))
     assert.ok(files.includes('package/template/.vscode/settings.json'))
     assert.ok(files.includes('package/template/src/components/SEO.astro'))
+    assert.ok(files.includes('package/template/src/styles/global.css'))
+    assert.ok(files.includes('package/template/src/styles/tailwind.css'))
+    assert.ok(files.includes('package/template/src/components/Box.astro'))
+    assert.ok(files.includes('package/template/src/components/Link.astro'))
+    assert.ok(
+      files.includes('package/template/src/components/ThemeSwitch.astro')
+    )
+    assert.ok(files.includes('package/template/src/components/ThemeInit.astro'))
+    assert.ok(files.includes('package/template/src/config/theme.ts'))
+    assert.ok(files.includes('package/template/src/components/Section.astro'))
+    assert.ok(files.includes('package/template/src/layouts/Main.astro'))
+    assert.ok(
+      files.includes('package/template/src/sections/Welcome/index.astro')
+    )
+    assert.ok(
+      files.includes('package/template/src/sections/NotFound/index.astro')
+    )
+    for (const section of ['Welcome', 'NotFound']) {
+      assert.ok(
+        files.includes(
+          `package/template/src/sections/${section}/${section}Content.astro`
+        )
+      )
+      assert.ok(
+        !files.includes(
+          `package/template/src/components/${section}Content.astro`
+        )
+      )
+    }
+    assert.ok(!files.includes('package/template/src/layouts/Layout.astro'))
+    assert.ok(!files.includes('package/template/src/components/Welcome.astro'))
     assert.ok(files.includes('package/template/src/pages/robots.txt.ts'))
     for (const folder of ['img', 'docs', 'video'])
       assert.ok(files.includes(`package/template/public/${folder}/.gitkeep`))

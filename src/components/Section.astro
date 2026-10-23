@@ -1,0 +1,40 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+
+interface Props extends HTMLAttributes<'section'> {
+  id: string
+  padded?: boolean
+}
+
+const { class: className, padded = true, ...attributes } = Astro.props
+---
+
+<section
+  class:list={['section', { 'section--padded': padded }, className]}
+  {...attributes}
+>
+  <slot />
+</section>
+
+<style>
+  .section {
+    box-sizing: border-box;
+    scroll-margin-block-start: var(--section-scroll-offset, 0);
+  }
+
+  .section--padded {
+    padding-block: var(--section-padding-block, 2.5rem);
+  }
+
+  @media (min-width: 48rem) {
+    .section--padded {
+      padding-block: var(--section-padding-block, 4rem);
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .section--padded {
+      padding-block: var(--section-padding-block, 5rem);
+    }
+  }
+</style>

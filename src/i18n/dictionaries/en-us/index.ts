@@ -8,6 +8,7 @@ import welcome from './welcome'
 import forms from './forms'
 import errors from './errors'
 import seo from './seo'
+import themes from './themes'
 
 export default {
   site,
@@ -18,5 +19,6 @@ export default {
   welcome,
   forms,
   errors,
-  seo
+  seo,
+  themes
 } satisfies Dictionary

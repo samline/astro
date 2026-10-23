@@ -1,4 +1,5 @@
 ---
+import Link from '@/components/Link.astro'
 import { getRelativeLocaleUrl } from 'astro:i18n'
 import { getDictionary, resolveLocale } from '@/i18n'
 import { locales } from '@/i18n/config'
@@ -17,14 +18,15 @@ const dictionary = getDictionary(locale)
     <ul>
       {locales.map((language) => (
         <li>
-          <a
+          <Link
             href={getRelativeLocaleUrl(language, path)}
+            localize={false}
             lang={language}
             hreflang={language}
             aria-current={language === locale ? 'page' : undefined}
           >
             {dictionary.languages[language]}
-          </a>
+          </Link>
         </li>
       ))}
     </ul>

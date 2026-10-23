@@ -6,10 +6,11 @@ import type { Navigation } from './dictionaries/en-us/navigation/types'
 import type { Welcome } from './dictionaries/en-us/welcome/types'
 import type { Forms } from './dictionaries/en-us/forms/types'
 import type { Errors } from './dictionaries/en-us/errors/types'
-
 import type { SEO } from './dictionaries/en-us/seo/types'
+import type { Themes } from './dictionaries/en-us/themes/types'
 
 export interface Dictionary {
+  themes: Themes
   seo: SEO
   site: Site
   common: Common

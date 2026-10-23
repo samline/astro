@@ -101,16 +101,30 @@ test(
       "'Astro Kit website preview'",
       JSON.stringify(hostileAlt)
     )
+    await writeFile(
+      path.join(fixture, 'src/sections/About.astro'),
+      `---
+import Section from '@/components/Section.astro'
+import Box from '@/components/Box.astro'
+import LanguagePicker from '@/components/LanguagePicker.astro'
+---
+<Section id='about' padded={false} class='about-section' data-section='about'>
+  <Box size='narrow' class='about-box' data-box='about' style='--box-gutter: 2rem;'>
+    <LanguagePicker path='/about' />
+  </Box>
+</Section>`
+    )
     const about = `---
-import Layout from '@/layouts/Layout.astro'
+import Main from '@/layouts/Main.astro'
+import AboutSection from '@/sections/About.astro'
 import { getDictionary } from '@/i18n'
 import { locales, defaultLocale } from '@/i18n/config'
 export const getStaticPaths = () => locales.map(locale=>({params:{locale:locale===defaultLocale?undefined:locale}}))
 const dictionary=getDictionary(Astro.currentLocale)
 ---
-<Layout path='/about?campaign=test#section' title={dictionary.navigation.home} image={{src:'/img/share.png',alt:dictionary.seo.imageAlt,width:1,height:1,type:'image/png'}} structuredData={{'@type':'Thing',name:dictionary.seo.imageAlt}}>
-<main>{dictionary.navigation.home}</main>
-</Layout>`
+<Main path='/about?campaign=test#section' title={dictionary.navigation.home} image={{src:'/img/share.png',alt:dictionary.seo.imageAlt,width:1,height:1,type:'image/png'}} structuredData={{'@type':'Thing',name:dictionary.seo.imageAlt}}>
+<AboutSection />
+</Main>`
     await writeFile(
       path.join(fixture, 'src/pages/[...locale]/about.astro'),
       about
@@ -155,6 +169,9 @@ const dictionary=getDictionary(Astro.currentLocale)
       )
     build()
     const home = await output('index.html')
+    assert.equal((home.match(/name="theme-color"/g) || []).length, 1)
+    assert.match(home, /<meta name="theme-color" content="#067df7"/)
+
     assert.equal((home.match(/<title>/g) || []).length, 1)
     assert.match(home, /<title>Astro Kit<\/title>/)
     assert.ok(home.includes('content="index, follow, max-image-preview:large"'))
@@ -215,12 +232,13 @@ const dictionary=getDictionary(Astro.currentLocale)
     ]) {
       const html = await output(file)
       assert.ok(html.includes('content="noindex, follow"'), file)
+      const head = html.match(/<head\b[^>]*>([\s\S]*?)<\/head>/)[1]
       for (const marker of [
         'rel="canonical"',
         'hreflang=',
         'application/ld+json'
       ])
-        assert.ok(!html.includes(marker), `${file}: ${marker}`)
+        assert.ok(!head.includes(marker), `${file}: ${marker}`)
     }
     for (const [file, bytes] of Object.entries(resources))
       assert.deepEqual(await readFile(path.join(fixture, 'dist', file)), bytes)
