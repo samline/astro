@@ -1,0 +1,53 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import Link from '@/components/Link/index.astro'
+import type { Props as LinkProps } from '@/components/Link/index.astro'
+
+type Appearance = {
+  variant?: 'primary' | 'secondary'
+  size?: 'sm' | 'md' | 'lg'
+}
+
+export type Props = Appearance &
+  (
+    | (HTMLAttributes<'button'> & { href?: never; localize?: never })
+    | (LinkProps & { disabled?: never })
+  )
+
+const {
+  variant = 'primary',
+  size = 'md',
+  class: className,
+  ...attributes
+} = Astro.props
+
+const variants = {
+  primary:
+    'border-accent bg-accent text-white hover:border-accent-dark hover:bg-accent-dark',
+  secondary:
+    'border-current bg-transparent text-accent hover:bg-accent/10 dark:text-accent-light dark:hover:bg-accent-light/10'
+}
+
+const sizes = {
+  sm: 'min-h-10 gap-2 px-4 py-2 text-sm',
+  md: 'min-h-11 gap-2 px-5 py-3 text-base',
+  lg: 'min-h-12 gap-3 px-6 py-4 text-lg'
+}
+
+const classes = [
+  'inline-flex items-center justify-center rounded-md border-[0.0625rem] text-center leading-snug font-medium no-underline focus-visible:outline-[0.125rem] focus-visible:outline-offset-[0.1875rem] focus-visible:outline-accent disabled:pointer-events-none disabled:opacity-50 motion-safe:transition-colors',
+  variants[variant],
+  sizes[size],
+  className
+]
+---
+
+{typeof attributes.href === 'string' ? (
+  <Link {...attributes} class:list={classes}>
+    <slot />
+  </Link>
+) : (
+  <button type='button' {...attributes} class:list={classes}>
+    <slot />
+  </button>
+)}

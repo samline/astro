@@ -1,5 +1,6 @@
 ---
 import Link from '@/components/Link/index.astro'
+import H from '@/components/H/index.astro'
 import astroLogo from '@/assets/astro.svg'
 import background from '@/assets/background.svg'
 import { getDictionary } from '@/i18n'
@@ -18,13 +19,13 @@ const dictionary = getDictionary(Astro.currentLocale)
       alt={dictionary.welcome.logoAlt}
     />
   </Link>
-  <h1 id='welcome-title'>
+  <H level={1} id='welcome-title'>
     {dictionary.welcome.titleBeforeCode}{' '}
     <code>
       <pre>{dictionary.welcome.directoryPath}</pre>
     </code>{' '}
     {dictionary.welcome.titleAfterCode}
-  </h1>
+  </H>
   <div id='links'>
     <Link class='button' href='https://docs.astro.build'>
       {dictionary.navigation.documentation}

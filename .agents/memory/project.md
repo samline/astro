@@ -39,7 +39,7 @@ Astro's minor number. No npm publication is authorized yet.
 - Modular en-us dictionaries; en-mx is prepared but commented out (English for Mexico).
 - SEO, social metadata, JSON-LD, robots, sitemap, and shared indexing policy.
 - Public img, docs, and video directories retained with .gitkeep.
-- Section, Box, Link, LanguagePicker, SEO, Theme, GTM, and PageLoader components.
+- Section, Box, Link, Button, H, LanguagePicker, SEO, Theme, GTM, and PageLoader components.
 - CSS-first Tailwind configuration, local Fontsource Inter, and a focused normalize.
 - Astro-site accent colors: blue #3245ff, purple #bc52ee, pink #f041ff, with light/dark derivatives.
 - Deferred CookieConsent and independent analytics/marketing permissions.
@@ -104,3 +104,22 @@ build passed, and tarball generation preserved the selected upstream skill files
 Tests covered all provider/tool combinations, fresh project memory, provenance,
 Vercel-only skill selection, and rejection of unexpected agent history/skills.
 The extracted tarball also generated a buildable project with formatted context.
+
+## Button primitive
+
+Button owns src/components/Button with an English README. It is a minimal
+Tailwind primitive: primary/secondary variants, sm/md/lg sizes, and no client
+runtime or built-in label. Without href it renders a native button, defaulting
+to type=button; with href it delegates to Link for locale and rel handling.
+Native disabled is button-only; typed props separate actions from navigation.
+Labels come from the calling section dictionary. NotFound uses its link mode.
+Keep this API small so future projects can establish their own design.
+
+## Heading primitive
+
+H owns src/components/H with an English README. Require level 1 through 6,
+render a native heading through a typed tag map, and reject invalid levels at
+render time. Forward native HTML and Astro scope attributes, use a default slot,
+and keep content in dictionaries. No children:any, client script, empty CSS,
+automatic outline inference, or imposed typography. Choose semantic level from
+the document hierarchy and visual styles with class. Welcome and NotFound use H.

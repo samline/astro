@@ -1,11 +1,14 @@
 ---
-import Link from '@/components/Link/index.astro'
+import Button from '@/components/Button/index.astro'
+import H from '@/components/H/index.astro'
 import { getDictionary } from '@/i18n'
 
 const dictionary = getDictionary(Astro.currentLocale)
 ---
 
 <p>{dictionary.errors.notFound.code}</p>
-<h1 id='not-found-title'>{dictionary.errors.notFound.title}</h1>
+<H level={1} id='not-found-title'>
+  {dictionary.errors.notFound.title}
+</H>
 <p>{dictionary.errors.notFound.description}</p>
-<Link href='/'>{dictionary.buttons.backHome}</Link>
+<Button href='/'>{dictionary.buttons.backHome}</Button>
