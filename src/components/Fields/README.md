@@ -119,7 +119,7 @@ on mount. Native HTML constraints still run. Explicit library validators are
 separate from required/type/pattern HTML attributes. Supply translated messages
 for every rule; use `setErrors({ field: [translatedMessage] })` rather than the
 array overload with its library fallback. Formatted fields/masks are optional;
-this base does not install @samline/formatter.
+this base includes @samline/formatter, used through the controller API.
 
 State subscriptions safely render errors under each matching field in that form
 and expose `aria-busy` during async handlers. Initial server-rendered errors are
@@ -185,3 +185,50 @@ prefer the public controls above. Field has a default control slot and an
 accessory slot. Tailwind variables/configuration stay in src/styles/tailwind.css;
 component selectors live here. No global form reset, framework hydration,
 calendar, country defaults, provider autocomplete or payment integration is added.
+
+## SAM formatting
+
+Formatting and raw-value synchronization belong to `@samline/forms` and
+`@samline/formatter`. This feature contains no Astro 5 formatter/controller code,
+local masks, cursor trackers, phone parser or regex dictionary.
+
+Use text/tel inputs for masks, not type=number (formatted separators are not valid
+native number input values). In the consuming section's processed script:
+
+```ts
+import { createForm } from '@/components/Fields/scripts'
+
+const controller = createForm('contact-form', {
+  formats: {
+    phone: { type: 'phone', field: 'phone', options: { country: 'US' } },
+    amount: {
+      type: 'numeral',
+      field: 'amount',
+      options: {
+        delimiter: ',',
+        numeralDecimalMark: '.',
+        numeralDecimalScale: 2
+      }
+    }
+  }
+})
+```
+
+The country/currency/format is a consuming project's choice. There is no global
+Mexico default or automatic mask for every input. Date/time/general formats are
+also available through the SAM API; formatting is not calendar/date validation.
+
+SAM renames the visible `phone` input to `phone_displayed` and inserts a hidden
+canonical `phone` raw mirror. IDs and associated labels remain on the visible
+control. Validators for `phone` operate on raw data. `getValue('phone')` returns
+raw; `getValue('phone_displayed')` returns display text. Both names appear in
+FormData; the backend must accept only its schema/allowlist. Existing contact
+validation strips unrelated display names.
+
+`controller.setValue('phone', raw)` reformats the visible value.
+`controller.format({ type, field, options })` configures/rebinds an individual
+field; `formatAll` is the package alias. Binding is asynchronous while the ESM
+formatter loads: initialize before the user can submit a masked form when raw
+values are mandatory. Native HTML validation still applies to the display input.
+Reset synchronizes the mirrors; destroy removes owned mirrors and restores names.
+Do not manually rename these inputs or create a second raw mirror.

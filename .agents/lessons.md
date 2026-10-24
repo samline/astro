@@ -71,3 +71,11 @@ This is project context, not a speculative improvement backlog.
   every subscription can loop; use a persistent Text node and change its data.
 - Target disabled inputs/selects/textareas explicitly. A disabled placeholder or
   option must not make the entire select appear disabled through :has(:disabled).
+
+## Helpers and branch adoption boundary
+
+- Do not migrate helpers: the user will create individual packages later.
+- Astro 5 is reference intent. Forms and input formatting belong to the SAM Forms
+  and Formatter packages; do not revive the legacy raw/mask/phone/controller scripts.
+- Keep component migrations paused. Adapt only branch capabilities useful to the
+  SSG starter, with current Astro contracts and no product-specific auth defaults.

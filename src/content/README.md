@@ -106,6 +106,13 @@ live data that must refresh per request. Pass locale explicitly across a Server
 Island boundary. Pure static hosting cannot refresh a live collection at request
 time. No experimental flag, custom virtual content module, or global SSR is added.
 
+## Reusable API Live Loader
+
+`live/api.ts` owns `apiLiveLoader`, a typed Astro LiveLoader factory. It separates
+upstream input validation, mapping and local output validation, and is already
+used by postsLiveLoader. See [its API](./live/README.md). A malformed item or
+duplicate/mismatched ID fails the result rather than silently dropping records.
+
 ## Actions versus collections
 
 The optional [content Actions](../actions/content-demo/README.md) read or write a

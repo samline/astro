@@ -12,11 +12,21 @@ Read it when starting work or recovering context after a chat reset.
 5. [memory/decisions.md](./memory/decisions.md): architectural decisions relevant to the task.
 6. [skills/README.md](./skills/README.md): choose relevant skills, then read their SKILL.md.
 
-## Current feature analysis
+## Reference analyses
 
 - [Fields migration analysis](./memory/fields-analysis.md): EasyTrip and Astro 5
   findings, Astro boundaries and validation requirements. Migration implemented in
   src/components/Fields; see its README for the current API.
+
+- [Migration inventory](./memory/migration-inventory.md): comparison with current
+  Astro 5 source, covered capabilities and remaining candidates. Analysis only.
+
+- [Helpers and branch review](./memory/helpers-branches-review.md): Astro 5 main
+  helpers and breaking-changes findings, tested defects and candidate decisions.
+  The user paused component migrations; this is analysis, not a new backlog.
+
+- [Branch adoption](./memory/branch-adoption.md): selected 7.17.0 integrations,
+  package ownership, exclusions and validation evidence.
 
 ## Maintenance
 

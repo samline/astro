@@ -199,12 +199,25 @@ export const getStaticPaths = () => locales.map((locale) => ({
   params: { locale: locale === defaultLocale ? undefined : locale }
 }))
 ---
-<Main path='/about'>
+<Main path='/about' clientTranslations={['forms', 'forms']}>
   <AboutSection />
 </Main>`
     await writeFile(
       path.join(fixture, 'src/pages/[...locale]/about.astro'),
       about
+    )
+    const hostileCopy =
+      '</script><script>throw new Error("must stay inert")</script> Café'
+    const formsPath = path.join(
+      fixture,
+      'src/i18n/dictionaries/en-us/forms/index.ts'
+    )
+    await writeFile(
+      formsPath,
+      (await readFile(formsPath, 'utf8')).replace(
+        "'Clear files'",
+        JSON.stringify(hostileCopy)
+      )
     )
     build()
     const home = await readFile(
@@ -212,6 +225,22 @@ export const getStaticPaths = () => locales.map((locale) => ({
       'utf8'
     )
     assert.match(home, /lang="en-us"/)
+    assert.doesNotMatch(home, /id="kit-translations"/)
+    const translatedAbout = await readFile(
+      path.join(fixture, '.vercel/output/static/about/index.html'),
+      'utf8'
+    )
+    const payload = translatedAbout.match(
+      /<script[^>]*id="kit-translations"[^>]*>([\s\S]*?)<\/script>/
+    )?.[1]
+    assert.ok(payload)
+    const copy = JSON.parse(payload)
+    assert.equal(copy.locale, 'en-us')
+    assert.deepEqual(Object.keys(copy.translations), ['forms'])
+    assert.equal(copy.translations.forms.labels.email, 'Email')
+    assert.equal(copy.translations.forms.controls.clearFile, hostileCopy)
+    assert.ok(!payload.includes('</script>'))
+    assert.ok(!payload.includes('<script>'))
     const cssDirectory = path.join(fixture, '.vercel/output/static/_astro')
     const css =
       (home.match(/<style[^>]*>[\s\S]*?<\/style>/g)?.join('') ?? '') +
@@ -342,6 +371,16 @@ export const getStaticPaths = () => locales.map((locale) => ({
       'utf8'
     )
     assert.match(regionalAbout, /lang="en-mx"/)
+    const regionalCopy = JSON.parse(
+      regionalAbout.match(
+        /<script[^>]*id="kit-translations"[^>]*>([\s\S]*?)<\/script>/
+      )[1]
+    )
+    assert.equal(regionalCopy.locale, 'en-mx')
+    assert.equal(
+      regionalCopy.translations.forms.controls.clearFile,
+      'Clear files'
+    )
     assert.ok(
       regionalAbout.includes(
         'rel="canonical" href="https://i18n.example/en-mx/about"'

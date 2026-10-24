@@ -1,7 +1,8 @@
 ---
 import PageLoader from '@/components/PageLoader/index.astro'
 import SEO, { type Props as SEOProps } from '@/components/SEO/index.astro'
-import { resolveLocale } from '@/i18n'
+import { getDictionary, resolveLocale } from '@/i18n'
+import type { Dictionary } from '@/i18n/types'
 import ThemeInit from '@/components/Theme/Init.astro'
 import { themeConfig } from '@/config/theme'
 import GTMHead from '@/components/GTM/Head.astro'
@@ -9,9 +10,25 @@ import GTMConsent from '@/components/GTM/Consent.astro'
 import { GTM_ENABLED, GTM_ID } from 'astro:env/server'
 import '@/styles/global.css'
 
-type Props = SEOProps
+type Props = SEOProps & {
+  /** Public dictionary domains required by this page's browser scripts. */
+  clientTranslations?: readonly (keyof Dictionary)[]
+}
 
+const { clientTranslations = [], ...seo } = Astro.props
 const locale = resolveLocale(Astro.currentLocale)
+const dictionary = getDictionary(locale)
+const translations = Object.fromEntries(
+  [...new Set(clientTranslations)].map((domain) => {
+    if (!Object.hasOwn(dictionary, domain))
+      throw new Error('Unknown client translation domain.')
+    return [domain, dictionary[domain]]
+  })
+)
+const clientCopy = JSON.stringify({ locale, translations }).replace(
+  /</g,
+  '\\u003c'
+)
 ---
 
 <!doctype html>
@@ -20,13 +37,21 @@ const locale = resolveLocale(Astro.currentLocale)
   data-theme={themeConfig.defaultPreference === 'dark' ? 'dark' : 'light'}
 >
   <head>
-    <SEO {...Astro.props} />
+    <SEO {...seo} />
     <meta name='theme-color' content='#3245ff' />
     <ThemeInit />
     <GTMHead />
     <slot name='head' />
   </head>
   <body>
+    {clientTranslations.length > 0 && (
+      <script
+        id='kit-translations'
+        type='application/json'
+        is:inline
+        set:html={clientCopy}
+      />
+    )}
     <PageLoader />
     {GTM_ENABLED && GTM_ID?.trim() && <GTMConsent />}
     <main>

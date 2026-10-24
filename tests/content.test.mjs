@@ -291,3 +291,98 @@ test('live loaders return explicit errors and missing entries without rewriting 
     'Unable to load live posts.'
   )
 })
+
+test('API methods preserve explicit JSON values, repeated queries, no-content responses and cancellation', async () => {
+  const requests = []
+  for (const method of ['POST', 'PUT', 'PATCH', 'DELETE']) {
+    const result = await requestJson(
+      {
+        ...options,
+        fetcher: async (url, init) => {
+          requests.push({ url, init })
+          return new Response(null, { status: 204 })
+        }
+      },
+      'items/1',
+      z.undefined(),
+      { method, query: { tag: ['a', 'b'] }, body: false }
+    )
+    assert.equal(result, undefined)
+    assert.equal(requests.at(-1).init.method, method)
+    assert.equal(requests.at(-1).init.body, 'false')
+    assert.deepEqual(requests.at(-1).url.searchParams.getAll('tag'), ['a', 'b'])
+  }
+  const forbidden = {
+    ...options,
+    fetcher: async () => assert.fail('No request expected')
+  }
+  await assert.rejects(
+    requestJson(forbidden, 'posts', z.unknown(), { method: 'GET', body: {} })
+  )
+  await assert.rejects(
+    requestJson(forbidden, 'posts', z.unknown(), { method: 'TRACE' })
+  )
+  for (const route of [
+    'posts?token=secret',
+    'posts#fragment',
+    'posts%2fprivate'
+  ])
+    await assert.rejects(requestJson(forbidden, route, z.unknown()))
+  const abort = new AbortController()
+  abort.abort('private abort reason')
+  await assert.rejects(
+    requestJson(forbidden, 'posts', z.unknown(), { signal: abort.signal }),
+    { message: 'Content API request was aborted.' }
+  )
+  const pending = new AbortController()
+  let cancelled = false
+  await assert.rejects(
+    requestJson(
+      {
+        ...options,
+        fetcher: async () => {
+          setTimeout(() => pending.abort(), 1)
+          return new Response(
+            new ReadableStream({
+              cancel: () => {
+                cancelled = true
+              }
+            })
+          )
+        }
+      },
+      'posts',
+      z.unknown(),
+      { signal: pending.signal }
+    )
+  )
+  assert.equal(cancelled, true)
+})
+
+test('API response limits and explicit failure envelopes cannot become empty successful content', async () => {
+  const limit = 2 * 1024 * 1024
+  for (const response of [
+    new Response('{}', { headers: { 'content-length': String(limit + 1) } }),
+    new Response('x'.repeat(limit + 1)),
+    Response.json({ success: true, data: [] }, { status: 500 }),
+    Response.json({
+      success: false,
+      data: [],
+      message: 'private upstream failure'
+    })
+  ]) {
+    await assert.rejects(
+      createContentApi({ ...options, fetcher: async () => response }).listPosts(
+        'en-us'
+      ),
+      (error) => !error.message.includes('private upstream')
+    )
+  }
+  assert.deepEqual(
+    await createContentApi({
+      ...options,
+      fetcher: async () => Response.json({ success: true, data: [] })
+    }).listPosts('en-us'),
+    []
+  )
+})

@@ -19,7 +19,8 @@ independently of the generator and starts at its own version 0.0.1.
 
 - Page -> layout -> section -> reusable component ownership.
 - Folder-based components with English API documentation.
-- Modular locale/domain dictionaries with en-us active and en-mx prepared.
+- Modular locale/domain dictionaries with en-us active and en-mx prepared; Main
+  can expose selected public domains as inert JSON for section browser scripts.
 - SEO, robots, sitemap, social metadata, and structured data.
 - A localized local Content Collection, optional API/Strapi build loaders, Live
   Collection and unregistered API Actions; see src/content/README.md.
@@ -27,7 +28,7 @@ independently of the generator and starts at its own version 0.0.1.
 - Optional GTM consent and an ldrs-based PageLoader.
 - Disabled-by-default SMTP service under src/server/mail with localized templates;
   request-time delivery needs server execution and configured credentials.
-- Native reusable Fields with local API docs, optional @samline/forms controller,
+- Native reusable Fields with local API docs, SAM Forms/Formatter integration,
   password/file enhancements, and transport-independent submission.
 - Contact Action demo under src/actions/contact; registration depends on the
   deployment profile. Read its README before connecting a form.

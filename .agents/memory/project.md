@@ -15,7 +15,7 @@ Section-only pieces stay beside their owning section.
 
 ## Versions and distribution
 
-- Root and CLI version: 7.16.0.
+- Root and CLI version: 7.17.0.
 - Astro dependency: ^7.4.2; use Astro 7.4 behavior and current official docs.
 - Tailwind CSS 4 via its Vite plugin; TypeScript 6 and Vite 8.
 - Install with pnpm; execute project scripts with Bun.
@@ -312,3 +312,38 @@ before removing those manual-only hooks. Removed obsolete ignored local archives
 Action/Content examples and documented public APIs remain intentional starter
 capabilities. Prettier uses the repository exclusions to preserve upstream skills,
 generated files, binary/public assets and the pnpm-managed lockfile.
+
+## Branch integrations (7.17.0)
+
+Helpers remain excluded: the user plans independent packages. Components remain
+paused. Astro 5, including breaking-changes/new, is reference intent only.
+Forms keeps SAM Forms 2.7.2 and now installs SAM Formatter 2.0.3; declarative
+formats and format/formatAll own masks, raw mirrors and cursor behavior. Local
+Fields code is only Astro UI/lifecycle glue. No legacy formatter files were added.
+
+The existing requestJson API supports explicit GET/POST/PUT/PATCH/DELETE, repeated
+query values, caller cancellation plus timeout, bounded 2 MiB JSON streams and
+204/schema contracts. Failed HTTP status always fails; example success:false
+fails validation; valid empty arrays remain successful. No dynamic relay or
+public mutation endpoint was added. Authorization remains at each consumer.
+
+content/live/api.ts exposes apiLiveLoader: separate upstream and output Zod
+schemas, stable ID mapping, duplicate and requested-ID checks, unchanged Astro
+contexts for both callbacks, atomic result success and safe error results.
+postsLiveLoader consumes it. Empty, missing and failed are distinct. No global
+user session, random IDs, silent partial records or snapshot mutation.
+
+Main adds opt-in clientTranslations with typed domain keys. It emits selected
+active-locale dictionaries in inert escaped JSON under kit-translations. Default
+is no payload; section scripts reread current DOM on page-load. No Base64,
+window cache, client helper or custom router was added. Docs: src/i18n/README.md.
+
+Auth-astro/login/roles/profile/registration/password recovery/membership business
+models from the experiment were intentionally excluded: a generic SSG starter
+has no identity authority or provider contract for them. Keep public pages SSG
+and integrate verified private authorization in a future project as needed.
+
+Validation for 7.17.0: 80 tests passed with formatting/i18n, no Astro/TypeScript
+diagnostics and successful SSG build. Local kit:pack validated the 7.17.0 archive.
+Chromium exercised real SAM packages for masks, raw/display submission, errors,
+reset and mirror cleanup/remount. No deployed API or real delivery was tested.

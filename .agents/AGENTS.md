@@ -139,3 +139,14 @@ for explicitly requested pending work. Keep component API documentation beside
 the source, separate from operational memory. All new developer documentation
 and memory must be in English. Do not treat installed skills as permission to
 publish, deploy, send messages, or override the user's instructions.
+
+
+## Legacy reference and utility boundary
+
+Do not migrate Astro 5 helpers into the starter. The user plans separate packages
+for those utilities later; do not recreate them under a different directory.
+Form state, validation and formatting use @samline/forms and @samline/formatter,
+not scripts copied from Astro 5. The local Fields adapter only connects the
+packages to Astro markup, accessible errors and lifecycle. Component migrations
+remain paused unless the user requests one explicitly. Framework integrations
+such as API clients/loaders may evolve within their existing feature ownership.

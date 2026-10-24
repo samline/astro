@@ -1,3 +1,4 @@
+import type { Locale } from './config'
 import type { Site } from './dictionaries/en-us/site/types'
 import type { Common } from './dictionaries/en-us/common/types'
 import type { Buttons } from './dictionaries/en-us/buttons/types'
@@ -27,4 +28,10 @@ export interface Dictionary {
   welcome: Welcome
   forms: Forms
   errors: Errors
+}
+
+/** Public, page-scoped data emitted by Main when clientTranslations is enabled. */
+export type ClientTranslations<Domain extends keyof Dictionary> = {
+  locale: Locale
+  translations: Pick<Dictionary, Domain>
 }
