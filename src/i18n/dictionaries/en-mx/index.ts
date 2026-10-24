@@ -11,6 +11,7 @@ import seo from './seo'
 import themes from './themes'
 import cookies from './cookies'
 import mail from './mail'
+import content from './content'
 
 export default {
   site,
@@ -24,5 +25,6 @@ export default {
   seo,
   themes,
   cookies,
-  mail
+  mail,
+  content
 } satisfies Dictionary

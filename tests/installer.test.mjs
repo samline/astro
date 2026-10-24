@@ -412,6 +412,11 @@ for (const deployment of [
         assert.equal(env.includes('ASTRO_KEY'), deployment !== 'static')
         assert.ok(env.includes('# MAIL_ENABLED=false'))
         assert.ok(env.includes('# SMTP_PASSWORD='))
+        assert.ok(
+          env.includes('# CONTENT_API_URL=https://cms.example.com/api/')
+        )
+        assert.ok(env.includes('# CONTENT_API_TOKEN='))
+        assert.ok(config.includes('CONTENT_API_TOKEN: envField.string'))
         assert.ok(pkg.dependencies.nodemailer)
         assert.ok(config.includes('SMTP_PASSWORD: envField.string'))
         assert.ok(

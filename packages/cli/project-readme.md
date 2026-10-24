@@ -543,3 +543,11 @@ the example with registration commented out in src/actions/index.ts.example.
 After configuring a server adapter and compatible transport, remove the .example
 suffix and uncomment its import and export. No form UI or
 credentials are generated.
+
+## Content examples
+
+See [src/content/README.md](src/content/README.md) for the local collection,
+optional API/Strapi loaders and Live Collection. Only the local collection is
+enabled; demo text lives in the content dictionary. The optional
+[content Actions](src/actions/content-demo/README.md) need explicit registration
+and API configuration. Mutation remains denied until real authorization is added.

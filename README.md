@@ -754,3 +754,11 @@ SMTP delivery and localized form notifications live in
 in your hosting runtime, then call sendFormMail or sendMail from server code.
 Sending is disabled by default. A demo [contact Action](src/actions/contact/README.md)
 connects form validation to the service; no contact page or form UI is installed.
+
+## Content examples
+
+[Content Collections](src/content/README.md) includes a local localized collection,
+optional API/Strapi build loaders and an optional Astro 7 Live Collection.
+[Content Actions](src/actions/content-demo/README.md) demonstrate validated API
+reads and writes; they remain unregistered and writes deny access by default.
+No remote request or new demo page is enabled by default.

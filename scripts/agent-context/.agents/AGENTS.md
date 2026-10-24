@@ -86,3 +86,16 @@ validated replyTo. Keep email copy and field labels in dictionaries. Add input
 validation and abuse controls at the form boundary; do not expose a generic
 mail relay or send during prerendering. Static hosting needs an external backend;
 Workers needs a compatible transport. Never claim mocked tests prove delivery.
+
+## Content and API examples
+
+Read src/content/README.md before changing collection behavior. Build collections
+use src/content.config.ts, astro/loaders and astro/zod; local demo copy belongs in
+dictionaries. Filter enabled locale and drafts at the consumer. Remote loaders
+are opt-in and must fail visibly on invalid data rather than erase the snapshot.
+Live collection definitions belong directly in src/live.config.ts, with reusable
+loader logic in src/content/live. Live reads need an on-demand consumer and an
+adapter, not global SSR. Optional content Actions operate on an upstream API,
+not Astro's build store. Keep mutation authorization denied until real session
+checks exist. Changes to a CMS do not refresh previously generated SSG pages.
+Keep API credentials private at the correct build/runtime boundary.

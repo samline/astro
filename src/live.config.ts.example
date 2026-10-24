@@ -1,0 +1,12 @@
+/* Enable only with an adapter and an on-demand consumer. See src/content/README.md. */
+// import { defineLiveCollection } from 'astro:content'
+// import { postsLiveLoader } from './content/live'
+// import { getContentApi } from './server/content-api'
+// import { postSchema } from './server/content-api/client'
+//
+// export const collections = {
+//   livePosts: defineLiveCollection({
+//     schema: postSchema,
+//     loader: postsLiveLoader(getContentApi)
+//   })
+// }

@@ -70,6 +70,17 @@ export default defineConfig({
 
   env: {
     schema: {
+      CONTENT_API_URL: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true,
+        url: true
+      }),
+      CONTENT_API_TOKEN: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true
+      }),
       MAIL_ENABLED: envField.boolean({
         context: 'server',
         access: 'secret',

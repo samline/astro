@@ -11,8 +11,10 @@ import type { Themes } from './dictionaries/en-us/themes/types'
 
 import type { Cookies } from './dictionaries/en-us/cookies/types'
 import type { Mail } from './dictionaries/en-us/mail/types'
+import type { Content } from './dictionaries/en-us/content/types'
 
 export interface Dictionary {
+  content: Content
   mail: Mail
   cookies: Cookies
   themes: Themes

@@ -15,7 +15,7 @@ Section-only pieces stay beside their owning section.
 
 ## Versions and distribution
 
-- Root and CLI version: 7.14.0.
+- Root and CLI version: 7.15.0.
 - Astro dependency: ^7.4.2; use Astro 7.4 behavior and current official docs.
 - Tailwind CSS 4 via its Vite plugin; TypeScript 6 and Vite 8.
 - Install with pnpm; execute project scripts with Bun.
@@ -206,3 +206,60 @@ commented. Astro 7.4 checks actual exports for route registration, but its Vite
 entry resolution still imports server from an existing index.ts; a commented-only
 index.ts fails static bundling with MISSING_EXPORT. Activation requires removing
 the .example suffix, uncommenting, and configuring adapter/transport support.
+
+## Astro 7 collection and API examples
+
+Version 7.15.0 adds src/content.config.ts with a local posts JSON/glob example.
+Feature code is under src/content/posts, remote, and live; docs are in
+src/content/README.md. Local demo entries store locale, copyKey, publishedAt and
+draft; all visible demo text lives in modular content dictionaries for en-us
+and en-mx. Query active locale/draft explicitly and sort deterministically. IDs
+come from file paths; there is no legacy slug or entry.render() assumption. No
+public demo routes or UI were installed. Future Markdown uses render(entry).
+
+Optional remote definitions are commented in content.config.ts. apiPosts shows
+a bounded normalized JSON API page; strapiStores demonstrates explicit Strapi 5
+documentId/locale mapping and pagination (100 rows/page, at most 100 pages).
+Build loaders read private build environment via loadEnv rooted at config.root.
+They validate the entire snapshot and reject duplicate IDs before store.clear;
+errors fail the build instead of silently yielding empty collections.
+
+The pure request client is src/server/content-api/client.ts; its public server
+entry reads CONTENT_API_URL/TOKEN lazily through getSecret. Use HTTPS or loopback
+HTTP, keep paths below the configured base, reject redirects, bound timeouts,
+check HTTP status/JSON/Zod, strip unknown response fields and filter draft/locale
+data. Never accept a browser-supplied destination or token/header override.
+
+Live Collections are optional via src/live.config.ts.example. Remove .example
+and uncomment only with an adapter/on-demand consumer. defineLiveCollection
+must be called directly in live.config.ts; reusable loadCollection/loadEntry
+logic stays in content/live/index.ts. getLiveCollection/getLiveEntry are distinct
+from build-time getCollection/getEntry. No experimental flags or global SSR.
+Test fixtures use canonical real paths because Astro's live-config resolution
+compares the exact importer path; /var vs /private/var aliases can break it.
+
+Optional contentDemo.list/create Actions stay unregistered. The read Action
+makes a GET upstream but Astro RPC itself remains POST. Mutation requires a
+project-specific server session/role check: canCreatePost denies all by default,
+and Origin must match before a write. These examples operate on a remote source,
+not the immutable build-time collection store; SSG output needs a rebuild after
+changes or an intentionally live consumer. No auth framework, CMS mutation,
+public API relay, secret credential, or provider-specific live endpoint is imposed.
+
+Installer optional environment examples are preserved for all profiles, with
+Worker runtime API secrets documented in .dev.vars.example. Inactive Actions
+retain contact/contentDemo registration recipes in index.ts.example.
+Generated projects ship all collection/API/docs examples. Exclude all README.md
+files from Tailwind scanning so developer examples do not generate site CSS.
+
+Tests cover schema/HTTP errors, URL boundaries, credential redirects policy,
+read filtering, Strapi pagination, snapshot replacement, live error semantics,
+and real local Astro collection/Action queries using fake upstream data. No
+external CMS was contacted or modified.
+
+Validation for 7.15.0: bun run verify passed (74 tests, no Astro/TypeScript
+diagnostics, i18n guard, formatting, SSG build with the existing Action backend).
+bun run kit:pack produced the local 7.15.0 archive and validated its distribution.
+The extracted package also built the pure-static profile. Live config activation
+and API Action reads were exercised over loopback with fake upstream content;
+mutation remained denied and no external service was contacted.

@@ -21,6 +21,8 @@ independently of the generator and starts at its own version 0.0.1.
 - Folder-based components with English API documentation.
 - Modular locale/domain dictionaries with en-us active and en-mx prepared.
 - SEO, robots, sitemap, social metadata, and structured data.
+- A localized local Content Collection, optional API/Strapi build loaders, Live
+  Collection and unregistered API Actions; see src/content/README.md.
 - Tailwind CSS 4, local Fontsource fonts, and light/dark theme controls.
 - Optional GTM consent and an ldrs-based PageLoader.
 - Disabled-by-default SMTP service under src/server/mail with localized templates;

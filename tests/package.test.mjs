@@ -93,6 +93,18 @@ test(
       'src/actions/contact/index.ts',
       'src/actions/contact/schema.ts',
       'src/actions/contact/README.md',
+      'src/content.config.ts',
+      'src/content/README.md',
+      'src/content/posts/index.ts',
+      'src/content/posts/data/en-us/getting-started.json',
+      'src/content/posts/data/en-mx/getting-started.json',
+      'src/content/remote/loaders.ts',
+      'src/content/live/index.ts',
+      'src/live.config.ts.example',
+      'src/server/content-api/client.ts',
+      'src/server/content-api/README.md',
+      'src/actions/content-demo/index.ts',
+      'src/actions/content-demo/README.md',
       'src/i18n/dictionaries/en-us/mail/index.ts',
       'src/i18n/dictionaries/en-mx/mail/index.ts'
     ])

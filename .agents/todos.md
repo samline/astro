@@ -9,8 +9,8 @@ status when work is completed; do not turn possible improvements into tasks.
 
 ## Active feature backlog
 
-No additional feature request is currently pending after the memory/skills
-organization task. Wait for the user's next request rather than inventing work.
+No additional feature request is currently pending after the Content Collections
+and optional API Action migration. Wait for the user's next request rather than inventing work.
 
 ## Intentional defaults, not unfinished tasks
 
@@ -29,3 +29,6 @@ organization task. Wait for the user's next request rather than inventing work.
 - [x] Run autoskills and consolidate project context under .agents.
 
 - [x] Include a portable .agents seed and relevant skills in generated projects, with deployment/tool-specific instructions and fresh project memory.
+
+- [x] Migrate local/API/Strapi collection examples and optional API Actions to
+      Astro 7, with localized demo data, Live Collections and private configuration.
