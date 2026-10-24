@@ -146,6 +146,7 @@ test(
       'PageLoader/README.md',
       'Theme/README.md',
       'GTM/README.md',
+      'Fields/README.md',
       'Box/README.md',
       'Section/README.md',
       'Link/README.md',
@@ -154,6 +155,23 @@ test(
     ])
       assert.ok(files.includes(`package/template/src/components/${doc}`))
 
+    for (const file of [
+      'Form.astro',
+      'Input.astro',
+      'Select.astro',
+      'Textarea.astro',
+      'Checkbox.astro',
+      'Radio.astro',
+      'File.astro',
+      'Fieldset.astro',
+      'scripts.ts',
+      'enhancements.ts',
+      'types.ts',
+      'styles.css'
+    ])
+      assert.ok(
+        files.includes(`package/template/src/components/Fields/${file}`)
+      )
     assert.ok(files.includes('package/template/src/styles/global.css'))
     assert.ok(files.includes('package/template/src/styles/tailwind.css'))
     assert.ok(files.includes('package/template/src/components/Box/index.astro'))

@@ -1,0 +1,13 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+export type Props = HTMLAttributes<'fieldset'> & { legend: string }
+const { legend, class: className, ...attributes } = Astro.props
+---
+
+<fieldset
+  {...attributes}
+  class:list={['min-w-0 space-y-3 border-0 p-0 disabled:opacity-50', className]}
+>
+  <legend class='mb-3 font-medium'>{legend}</legend>
+  <slot />
+</fieldset>

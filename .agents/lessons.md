@@ -62,3 +62,12 @@ This is project context, not a speculative improvement backlog.
   without recreating the entry point. Use index.ts.example while inactive; a
   commented-only index.ts causes a missing server export error in Astro 7.4.
   Activation requires renaming and uncommenting. Pure static builds must remain valid.
+
+## Fields integration
+
+- Declare Tailwind layer order in separately imported component CSS: Astro asset
+  ordering can otherwise let Preflight override component padding and borders.
+- SAM Forms observes child-list changes. Updating error element textContent on
+  every subscription can loop; use a persistent Text node and change its data.
+- Target disabled inputs/selects/textareas explicitly. A disabled placeholder or
+  option must not make the entire select appear disabled through :has(:disabled).

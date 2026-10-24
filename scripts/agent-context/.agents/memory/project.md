@@ -27,6 +27,8 @@ independently of the generator and starts at its own version 0.0.1.
 - Optional GTM consent and an ldrs-based PageLoader.
 - Disabled-by-default SMTP service under src/server/mail with localized templates;
   request-time delivery needs server execution and configured credentials.
+- Native reusable Fields with local API docs, optional @samline/forms controller,
+  password/file enhancements, and transport-independent submission.
 - Contact Action demo under src/actions/contact; registration depends on the
   deployment profile. Read its README before connecting a form.
 - Public img, docs, and video directories for uncompiled resources.

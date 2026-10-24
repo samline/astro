@@ -59,3 +59,18 @@ Live dinkbit.com reference: bottom-center box, flipped groups (settings row, rej
 ## PAGELOADER
 
 PageLoader/index.astro in Main body. Keep ldrs by user preference for easy animation swaps: ping import/register/l-ping together. Tailwind overlay with accent/dark and static reduced-motion fallback. common.loading label, hidden without JS. scripts.ts arrow exports showLoader/hideLoader, delay250ms and safety10s, clears timers. Native internal links/forms; ignore hashes/downloads/modifiers/new-tab/external/cancelled/opt-out. data-page-loader-skip opt-out. pageshow/pagehide clear BFCache; no beforeunload. Astro preparation wraps loader in finally; navigation token prevents old completion hiding newer state. page-load clears; no router added. Does not block controls/wait for Server Islands. Tests cover timers/filtering/forms/errors/races; remove temporary preview fixtures.
+
+## Fields (7.16.0)
+
+Keep related native form primitives together under components/Fields with one
+English README. Preserve native behavior and attributes; separate wrapper props
+from control props. Floating labels remain visible, and value-filled is not a
+success state. Select consumes typed option/group data, never parses slot HTML.
+All authored UI text comes from modular dictionaries; native browser control
+strings follow browser localization. Fieldset supplies real legend semantics.
+
+Optional SAM Forms ESM handles controller state; Form itself stays transport-free.
+Sections connect Actions/API/external backends and render general statuses.
+No Alpine or product-specific calendar/country/payment/provider dependencies.
+Do not mutate error element child lists on every subscription: SAM observes the
+form subtree and would recursively notify. Update persistent Text nodes instead.

@@ -12,6 +12,12 @@ Read it when starting work or recovering context after a chat reset.
 5. [memory/decisions.md](./memory/decisions.md): architectural decisions relevant to the task.
 6. [skills/README.md](./skills/README.md): choose relevant skills, then read their SKILL.md.
 
+## Current feature analysis
+
+- [Fields migration analysis](./memory/fields-analysis.md): EasyTrip and Astro 5
+  findings, Astro boundaries and validation requirements. Migration implemented in
+  src/components/Fields; see its README for the current API.
+
 ## Maintenance
 
 Update the relevant file when a user establishes a convention, a correction

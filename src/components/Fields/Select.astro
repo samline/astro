@@ -1,0 +1,101 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import type { FieldAppearance, SelectEntry, SelectOption } from './types'
+import Field from './Field.astro'
+import { fieldAttributes } from './attributes'
+import FaIcon from '@/components/FaIcon/index.astro'
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons/faChevronDown'
+
+export type Props = Omit<HTMLAttributes<'select'>, 'name'> &
+  FieldAppearance & {
+    name: string
+    options: readonly SelectEntry[]
+    value?: string | number | readonly (string | number)[] | null
+    placeholder?: string
+  }
+const {
+  id,
+  name,
+  label,
+  help,
+  error,
+  variant,
+  fieldSize,
+  fieldClass,
+  options,
+  value,
+  placeholder,
+  multiple,
+  class: className,
+  required,
+  'aria-describedby': describedBy,
+  'aria-invalid': invalid,
+  ...attributes
+} = Astro.props
+const control = fieldAttributes(id, help, describedBy)
+const selectedValues = new Set(
+  (Array.isArray(value) ? value : value == null ? [] : [value]).map(String)
+)
+const firstEnabled = options
+  .flatMap((entry) =>
+    'options' in entry ? (entry.disabled ? [] : entry.options) : [entry]
+  )
+  .find((entry) => !entry.disabled)
+const isSelected = (option: SelectOption) =>
+  selectedValues.has(String(option.value)) ||
+  (value == null &&
+    placeholder === undefined &&
+    !multiple &&
+    option === firstEnabled)
+---
+
+<Field
+  {...{ name, label, help, error, variant, fieldSize, fieldClass, required }}
+  id={control.id}
+>
+  <select
+    {...attributes}
+    {...control}
+    {name}
+    {required}
+    {multiple}
+    aria-invalid={error ? 'true' : invalid}
+    class:list={['field-input', { 'field-select': !multiple }, className]}
+  >
+    {placeholder !== undefined && !multiple && (
+      <option
+        value=''
+        disabled={required}
+        selected={value == null || selectedValues.has('')}
+      >
+        {placeholder}
+      </option>
+    )}
+    {options.map((entry) =>
+      'options' in entry ? (
+        <optgroup label={entry.label} disabled={entry.disabled}>
+          {entry.options.map((option) => (
+            <option
+              value={option.value}
+              disabled={option.disabled}
+              selected={isSelected(option)}
+            >
+              {option.label}
+            </option>
+          ))}
+        </optgroup>
+      ) : (
+        <option
+          value={entry.value}
+          disabled={entry.disabled}
+          selected={isSelected(entry)}
+        >
+          {entry.label}
+        </option>
+      )
+    )}
+  </select>
+  {!multiple && (
+    <FaIcon slot='accessory' icon={faChevronDown} class='field-chevron' />
+  )}
+</Field>

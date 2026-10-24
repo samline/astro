@@ -1,0 +1,42 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import type { FieldAppearance } from './types'
+import Field from './Field.astro'
+import { fieldAttributes } from './attributes'
+
+export type Props = Omit<HTMLAttributes<'textarea'>, 'name' | 'value'> &
+  FieldAppearance & { name: string; value?: string | null }
+const {
+  id,
+  name,
+  label,
+  help,
+  error,
+  variant,
+  fieldSize,
+  fieldClass,
+  value = '',
+  rows = 4,
+  class: className,
+  required,
+  'aria-describedby': describedBy,
+  'aria-invalid': invalid,
+  ...attributes
+} = Astro.props
+const control = fieldAttributes(id, help, describedBy)
+---
+
+<Field
+  {...{ name, label, help, error, variant, fieldSize, fieldClass, required }}
+  id={control.id}
+>
+  <textarea
+    {...attributes}
+    {...control}
+    {name}
+    {required}
+    {rows}
+    aria-invalid={error ? 'true' : invalid}
+    class:list={['field-input field-textarea', className]}
+  >{value}</textarea>
+</Field>

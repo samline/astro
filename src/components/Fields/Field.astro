@@ -1,0 +1,69 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import type { FieldAppearance } from './types'
+import { getDictionary } from '@/i18n'
+import './styles.css'
+
+interface Props extends FieldAppearance {
+  id: string
+  name: string
+  required?: HTMLAttributes<'input'>['required']
+  kind?: 'control' | 'choice'
+}
+
+const {
+  id,
+  name,
+  label,
+  help,
+  error,
+  required,
+  variant = 'floating',
+  fieldSize = 'md',
+  fieldClass,
+  kind = 'control'
+} = Astro.props
+const { forms } = getDictionary(Astro.currentLocale)
+const isRequired =
+  required !== undefined && required !== null && required !== false
+---
+
+<div
+  data-field
+  data-field-name={name}
+  data-variant={variant}
+  data-size={fieldSize}
+  data-kind={kind}
+  class:list={['field', fieldClass]}
+>
+  <div class='field-body'>
+    <label for={id} class='field-label'>
+      {label}
+      {isRequired && (
+        <span class='text-state-error' aria-hidden='true'>
+          {forms.controls.requiredIndicator}
+        </span>
+      )}
+      {isRequired && <span class='sr-only'>{forms.controls.required}</span>}
+    </label>
+    <div class='field-control'>
+      <slot />
+      <slot name='accessory' />
+    </div>
+  </div>
+  {help && (
+    <p id={`${id}-help`} class='field-help'>
+      {help}
+    </p>
+  )}
+  <p
+    id={`${id}-error`}
+    data-field-error
+    class='field-error'
+    aria-live='polite'
+    aria-atomic='true'
+    hidden={!error}
+  >
+    {error}
+  </p>
+</div>

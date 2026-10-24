@@ -1,6 +1,13 @@
 import type { Forms } from './types'
 
 export default {
+  controls: {
+    requiredIndicator: '*',
+    required: 'Required',
+    showPassword: 'Show password',
+    hidePassword: 'Hide password',
+    clearFile: 'Clear files'
+  },
   labels: {
     name: 'Name',
     email: 'Email',

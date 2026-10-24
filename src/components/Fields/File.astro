@@ -1,0 +1,58 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import type { FieldAppearance } from './types'
+import Field from './Field.astro'
+import { fieldAttributes } from './attributes'
+import { getDictionary } from '@/i18n'
+
+export type Props = Omit<HTMLAttributes<'input'>, 'type' | 'name' | 'value'> &
+  Omit<FieldAppearance, 'variant'> & { name: string }
+const {
+  id,
+  name,
+  label,
+  help,
+  error,
+  fieldSize,
+  fieldClass,
+  class: className,
+  required,
+  'aria-describedby': describedBy,
+  'aria-invalid': invalid,
+  ...attributes
+} = Astro.props
+const control = fieldAttributes(id, help, describedBy)
+const { forms } = getDictionary(Astro.currentLocale)
+---
+
+<Field
+  {...{ name, label, help, error, fieldSize, fieldClass, required }}
+  id={control.id}
+  variant='basic'
+>
+  <input
+    {...attributes}
+    {...control}
+    {name}
+    type='file'
+    {required}
+    aria-invalid={error ? 'true' : invalid}
+    class:list={['field-input field-file', className]}
+  />
+  <button
+    slot='accessory'
+    type='button'
+    class='field-accessory'
+    data-file-clear={control.id}
+    aria-controls={control.id}
+    aria-label={[forms.controls.clearFile, label].join(': ')}
+    hidden
+  >
+    {forms.controls.clearFile}
+  </button>
+</Field>
+
+<script>
+  import { mountFields } from './enhancements'
+  mountFields()
+</script>

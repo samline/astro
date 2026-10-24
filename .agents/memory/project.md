@@ -1,6 +1,6 @@
 # Project state
 
-Last reconciled: 2026-10-23.
+Last reconciled: 2026-10-24.
 
 ## Purpose and layout
 
@@ -15,12 +15,12 @@ Section-only pieces stay beside their owning section.
 
 ## Versions and distribution
 
-- Root and CLI version: 7.15.0.
+- Root and CLI version: 7.16.0.
 - Astro dependency: ^7.4.2; use Astro 7.4 behavior and current official docs.
 - Tailwind CSS 4 via its Vite plugin; TypeScript 6 and Vite 8.
 - Install with pnpm; execute project scripts with Bun.
 - Repository: git@github.com:samline/astro-kit.git; current branch main.
-- Latest source commit before memory migration: 2059917.
+- Latest committed source before Fields: 3df244c (Content Collections/API examples).
 - Prior feature commits: d9f3d8f (GTM/consent/themes), cb62214 (UI primitives/themes).
 
 The public generator is @samline/astro-kit and must run through npx with Node.
@@ -263,3 +263,52 @@ bun run kit:pack produced the local 7.15.0 archive and validated its distributio
 The extracted package also built the pure-static profile. Live config activation
 and API Action reads were exercised over loopback with fake upstream content;
 mutation remained denied and no external service was contacted.
+
+## Fields
+
+Version 7.16.0 adds reusable native controls in src/components/Fields: Form,
+Input, Textarea, Select, Checkbox, Radio, File and Fieldset, with internal
+Field/Choice shells, types, CSS, enhancements and English README. EasyTrip is
+reference intent only; Laravel/Alpine state, country/gender defaults, HERE,
+Stripe, Drawer/Cally and product regex were not migrated. No demo page is added.
+See memory/fields-analysis.md for the source analysis requested before migration.
+
+Floating labels remain visible; basic/compact variants, supplied/generated IDs,
+merged descriptions, escaped help/errors, optgroups/multiple/zero and native
+attributes are supported. Inputs keep browser keyboard/autocomplete/date/file
+behavior. Do not prefill passwords. Control class is separate from fieldClass.
+Configuration stays in Tailwind; component CSS declares layer order so Preflight
+cannot override its padding/borders when Astro reorders stylesheet imports.
+
+@samline/forms 2.7.2 is an explicit dependency. Form alone neither initializes
+nor bundles the optional controller. scripts.ts exports createForm/destroyForm/
+destroyForms; default autoValidate=false, ESM without globals. Consumers provide
+translated validators and own transport/status/repeat-submit behavior. SAM schemas
+are separate from native required/type/pattern. Safe error text nodes avoid a
+MutationObserver loop; errors are scoped to their form and async state sets
+aria-busy. Native reset is bridged; API reset suppresses recursive scheduling.
+Avoid control names/IDs shadowing native reset/submit/requestSubmit methods.
+
+Password/file enhancements delegate once, refresh on page-load, and support an
+explicit mountFields/refreshFields API for inserted markup. File clear emits
+input/change; native reset restores password type. Controllers clean up on
+before-swap and non-persisted pagehide, or explicit destruction before removal.
+
+Validation: bun run verify passed 76 tests, clean Astro diagnostics, i18n,
+formatting and SSG build; local installer packaging includes all Fields files
+and docs. Temporary Chromium checks covered JS/no-JS, keyboard, error escaping
+and form isolation, native values/FormData, password/file/reset, async pending,
+repeated mounting/destruction and themes/mobile. No provider delivery, production
+deployment or complete WCAG conformance is inferred from these checks.
+
+## Cleanup before Fields commit
+
+Reviewed source, support scripts, tests and distribution boundaries after Fields.
+Removed the temporary browser-harness globals and async submit hooks from the
+permanent SSG test fixture; the automated fixture now contains only what its
+rendering/asset assertions exercise. The real Chromium checks above were performed
+before removing those manual-only hooks. Removed obsolete ignored local archives
+7.14.0/7.15.0 and a redundant intermediate array in the form adapter. Optional
+Action/Content examples and documented public APIs remain intentional starter
+capabilities. Prettier uses the repository exclusions to preserve upstream skills,
+generated files, binary/public assets and the pnpm-managed lockfile.

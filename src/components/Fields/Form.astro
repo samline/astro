@@ -1,0 +1,12 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+export type Props = HTMLAttributes<'form'> & { layout?: 'stack' | 'none' }
+const { layout = 'stack', class: className, ...attributes } = Astro.props
+---
+
+<form
+  {...attributes}
+  class:list={[{ 'grid gap-5': layout === 'stack' }, className]}
+>
+  <slot />
+</form>

@@ -1,0 +1,94 @@
+@reference '../../styles/tailwind.css';
+
+@layer theme, base, components, utilities;
+
+@layer components {
+  .field {
+    @apply min-w-0 text-left;
+  }
+  .field-body {
+    @apply relative min-w-0;
+  }
+  .field-label {
+    @apply block text-sm font-medium;
+  }
+  .field-control {
+    @apply flex min-w-0 items-center gap-2 rounded-[0.625rem] border-[0.125rem] border-black/25 bg-white text-black dark:border-white/30 dark:bg-black dark:text-white;
+  }
+  .field-control:focus-within {
+    @apply outline-[0.125rem] outline-offset-[0.1875rem] outline-accent dark:outline-accent-light;
+  }
+  .field-control:has([aria-invalid='true']) {
+    @apply border-state-error bg-state-error/5;
+  }
+  .field:has(:is(input, select, textarea):disabled) {
+    @apply opacity-50;
+  }
+  .field-input {
+    @apply block min-h-12 w-full min-w-0 rounded-[0.5rem] bg-transparent px-4 py-3 text-base leading-normal outline-none disabled:cursor-not-allowed;
+  }
+  .field-input:read-only:not(select):not([type='file']) {
+    @apply cursor-default;
+  }
+  .field[data-variant='basic'] .field-label {
+    @apply mb-2;
+  }
+  .field[data-variant='floating'] .field-label {
+    @apply pointer-events-none absolute start-4 top-2 z-1 max-w-[calc(100%-2rem)] truncate text-xs;
+  }
+  .field[data-variant='floating'] .field-input {
+    @apply min-h-15 pt-6 pb-2;
+  }
+  .field[data-size='sm'] .field-input {
+    @apply min-h-10 px-3 py-2;
+  }
+  .field[data-size='sm'][data-variant='floating'] .field-input {
+    @apply min-h-13 pt-5 pb-1;
+  }
+  .field[data-size='sm'][data-variant='floating'] .field-label {
+    @apply start-3 top-1;
+  }
+  .field-textarea {
+    @apply resize-y self-stretch;
+  }
+  .field-select {
+    @apply appearance-none pe-10;
+  }
+  .field-chevron {
+    @apply pointer-events-none absolute end-4 size-3;
+  }
+  .field-accessory {
+    @apply me-3 shrink-0 rounded-sm px-2 py-2 text-sm font-medium text-accent disabled:opacity-50 dark:text-accent-light;
+  }
+  .field-accessory[hidden],
+  .field-error[hidden] {
+    display: none;
+  }
+  .field-help {
+    @apply mt-2 text-sm text-black/70 dark:text-white/75;
+  }
+  .field-error {
+    @apply mt-2 border-s-[0.125rem] border-state-error ps-2 text-sm font-medium text-black dark:text-white;
+  }
+  .field[data-kind='choice'] .field-body {
+    @apply flex items-start gap-3;
+  }
+  .field[data-kind='choice'] .field-label {
+    @apply order-2 m-0 cursor-pointer text-base;
+  }
+  .field[data-kind='choice'] .field-control {
+    @apply mt-0.5 shrink-0 border-0 bg-transparent;
+  }
+  .field-choice {
+    @apply size-5 shrink-0 cursor-pointer accent-accent disabled:cursor-not-allowed dark:accent-accent-light;
+  }
+  .field[data-kind='choice'][data-size='sm'] .field-label {
+    @apply min-h-6 text-sm;
+  }
+  .field[data-kind='choice'][data-size='sm'] .field-choice {
+    @apply size-4;
+  }
+  .field-file {
+    @apply file:me-3 file:rounded-sm file:border-0 file:bg-accent/10 file:px-3 file:py-2 file:text-sm file:font-medium file:text-accent dark:file:text-accent-light;
+  }
+}

@@ -187,6 +187,9 @@ importers:
       '@fortawesome/free-solid-svg-icons':
         specifier: ^7.3.1
         version: 7.3.1
+      '@samline/forms':
+        specifier: ^2.7.2
+        version: 2.7.2
       astro:
         specifier: ^7.4.2
         version: 7.4.2(@types/node@24.19.2)(@vercel/functions@3.10.2)(jiti@2.7.0)(yaml@2.9.1)
@@ -876,6 +879,15 @@ packages:
       rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
     peerDependenciesMeta:
       rollup:
+        optional: true
+
+  '@samline/forms@2.7.2':
+    resolution: {integrity: sha512-6xz/WkIBlBS0DsrNWd6eGW2Kb7NcPeNwzihv1Yu+4PPjb+dB5wHu/wjxRIXfODg91J9+NIpyt+Ffp26PS3H/IQ==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      '@samline/formatter': ^2.0.3
+    peerDependenciesMeta:
+      '@samline/formatter':
         optional: true
 
   '@shikijs/core@4.5.0':
@@ -3052,6 +3064,8 @@ snapshots:
       '@types/estree': 1.0.9
       estree-walker: 2.0.2
       picomatch: 4.0.7
+
+  '@samline/forms@2.7.2': {}
 
   '@shikijs/core@4.5.0':
     dependencies:

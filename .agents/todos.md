@@ -9,8 +9,7 @@ status when work is completed; do not turn possible improvements into tasks.
 
 ## Active feature backlog
 
-No additional feature request is currently pending after the Content Collections
-and optional API Action migration. Wait for the user's next request rather than inventing work.
+No feature migration is currently pending.
 
 ## Intentional defaults, not unfinished tasks
 
@@ -32,3 +31,6 @@ and optional API Action migration. Wait for the user's next request rather than 
 
 - [x] Migrate local/API/Strapi collection examples and optional API Actions to
       Astro 7, with localized demo data, Live Collections and private configuration.
+
+- [x] Analyze EasyTrip/legacy Fields and migrate generic native Astro controls with
+      translated UI, accessible help/errors, optional SAM controller and API docs.

@@ -1,0 +1,45 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import type { FieldAppearance } from './types'
+import Field from './Field.astro'
+import { fieldAttributes } from './attributes'
+
+export type ChoiceProps = Omit<HTMLAttributes<'input'>, 'type' | 'name'> &
+  Omit<FieldAppearance, 'variant'> & { name: string }
+interface Props extends ChoiceProps {
+  type: 'checkbox' | 'radio'
+}
+const {
+  id,
+  name,
+  label,
+  help,
+  error,
+  fieldSize,
+  fieldClass,
+  type,
+  class: className,
+  required,
+  'aria-describedby': describedBy,
+  'aria-invalid': invalid,
+  ...attributes
+} = Astro.props
+const control = fieldAttributes(id, help, describedBy)
+---
+
+<Field
+  {...{ name, label, help, error, fieldSize, fieldClass, required }}
+  id={control.id}
+  kind='choice'
+  variant='basic'
+>
+  <input
+    {...attributes}
+    {...control}
+    {name}
+    {type}
+    {required}
+    aria-invalid={error ? 'true' : invalid}
+    class:list={['field-choice', className]}
+  />
+</Field>

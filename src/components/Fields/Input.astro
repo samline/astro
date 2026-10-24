@@ -1,0 +1,71 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import type { FieldAppearance, InputType } from './types'
+import Field from './Field.astro'
+import { fieldAttributes } from './attributes'
+import { getDictionary } from '@/i18n'
+
+export type Props = Omit<HTMLAttributes<'input'>, 'type' | 'name' | 'value'> &
+  FieldAppearance & {
+    name: string
+    type?: InputType
+    value?: string | number | null
+    revealPassword?: boolean
+  }
+const {
+  id,
+  name,
+  label,
+  help,
+  error,
+  variant,
+  fieldSize,
+  fieldClass,
+  type = 'text',
+  value,
+  revealPassword = true,
+  class: className,
+  required,
+  'aria-describedby': describedBy,
+  'aria-invalid': invalid,
+  ...attributes
+} = Astro.props
+const control = fieldAttributes(id, help, describedBy)
+const { forms } = getDictionary(Astro.currentLocale)
+---
+
+<Field
+  {...{ name, label, help, error, variant, fieldSize, fieldClass, required }}
+  id={control.id}
+>
+  <input
+    {...attributes}
+    {...control}
+    {name}
+    {type}
+    {required}
+    value={type === 'password' ? undefined : (value ?? undefined)}
+    aria-invalid={error ? 'true' : invalid}
+    class:list={['field-input', className]}
+  />
+  {type === 'password' && revealPassword && (
+    <button
+      slot='accessory'
+      type='button'
+      class='field-accessory'
+      data-password-toggle={control.id}
+      data-show-label={forms.controls.showPassword}
+      data-hide-label={forms.controls.hidePassword}
+      aria-controls={control.id}
+      aria-pressed='false'
+      hidden
+    >
+      {forms.controls.showPassword}
+    </button>
+  )}
+</Field>
+
+<script>
+  import { mountFields } from './enhancements'
+  mountFields()
+</script>
