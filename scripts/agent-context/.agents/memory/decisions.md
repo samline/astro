@@ -22,8 +22,8 @@ before altering behavior; record new project decisions below as they are made.
 Before adding API/CMS content or translated slugs, follow
 src/i18n/localized-content.md. Astro handles URL formatting; equivalent content
 must be identified through a stable translation group or explicit provider
-relation. The inherited LanguagePicker and SEO currently reuse one path across
-locales; extend their contracts together when real paths differ. This guidance
+relation. If LanguagePicker is installed, coordinate its path contract with SEO when
+actual localized destinations differ. This guidance
 does not mean translated-slug resolution is already implemented.
 
 ## Authentication boundary

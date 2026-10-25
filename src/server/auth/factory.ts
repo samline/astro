@@ -11,7 +11,7 @@ import {
 
 import { authUserFields } from './schema.mjs'
 
-type CommonOptions = {
+export type CommonOptions = {
   secret: string
   baseURL: string
   sessionSeconds?: number

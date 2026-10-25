@@ -48,7 +48,8 @@ import Captcha from '@/components/Captcha/index.astro'
 | Native div attributes | —        | `id`, `class`, data attributes and Astro scope attributes.                 |
 
 The component reads `Astro.currentLocale` and modular `captcha` translations.
-Current locales both use the provider's English UI. Google fixes widget language
+The initial presets request the provider's English or Spanish UI from the resolved
+locale. Review the provider language mapping for additional language/script tags. Google fixes widget language
 when its SDK first loads; switching to another language through client navigation
 requires a full document navigation. Theme is fixed when each widget mounts;
 remount to apply a later site theme change. Provider iframe internals retain their

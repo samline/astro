@@ -1,0 +1,7 @@
+@layer base {
+  html[data-theme='dark'] {
+    background-color: var(--color-black);
+    color: var(--color-white);
+    color-scheme: dark;
+  }
+}

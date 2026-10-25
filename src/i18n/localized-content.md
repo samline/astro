@@ -53,8 +53,8 @@ type LocalizedContentRoutes = {
 
 `Locale` comes from the project's i18n configuration. Each value is the complete
 **locale-free site path**, including translated parent/category segments. For
-example, one item might map en-us to `/articles/hello` and en-mx to
-`/articles/hello-mexico`. Both are English; en-mx is not Spanish. These example
+example, one item might map en-us to `/articles/hello` and es-mx to
+`/articles/hello-mexico`. Both are English; es-mx is not Spanish. These example
 paths are not routes shipped by the starter and do not activate another locale.
 
 Only include configured active locales and published, accessible translations.

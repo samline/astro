@@ -1,7 +1,7 @@
 ---
 import type { HTMLAttributes } from 'astro/types'
 import { CAPTCHA_PROVIDER, CAPTCHA_SITE_KEY } from 'astro:env/server'
-import { getDictionary } from '../../i18n'
+import { getDictionary, resolveLocale } from '../../i18n'
 
 interface Props extends Omit<HTMLAttributes<'div'>, 'children'> {
   theme?: 'auto' | 'light' | 'dark'
@@ -29,7 +29,7 @@ if (CAPTCHA_PROVIDER !== 'none' && !CAPTCHA_SITE_KEY?.trim()) {
     data-sitekey={CAPTCHA_SITE_KEY}
     data-theme={theme}
     data-size={size}
-    data-language={(Astro.currentLocale ?? 'en-us').split('-')[0]}
+    data-language={resolveLocale(Astro.currentLocale).split('-')[0]}
     data-loading={copy.loading}
     data-expired={copy.expired}
     data-error={copy.error}

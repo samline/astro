@@ -9,8 +9,10 @@ Read it when starting work or recovering context after a chat reset.
 2. [memory/project.md](./memory/project.md): purpose, current state, commands, and validation limits.
 3. [lessons.md](./lessons.md): confirmed user preferences and corrections.
 4. [todos.md](./todos.md): explicitly requested pending or deferred work.
-5. [memory/decisions.md](./memory/decisions.md): architectural decisions relevant to the task.
-6. [skills/README.md](./skills/README.md): choose relevant skills, then read their SKILL.md.
+5. [memory/engineering-contract.md](./memory/engineering-contract.md): shared
+   philosophy, ownership, installer invariants and evidence requirements.
+6. [memory/decisions.md](./memory/decisions.md): architectural decisions relevant to the task.
+7. [skills/README.md](./skills/README.md): choose relevant skills, then read their SKILL.md.
 
 ## Reference analyses
 
@@ -27,6 +29,10 @@ Read it when starting work or recovering context after a chat reset.
 
 - [Branch adoption](./memory/branch-adoption.md): selected 7.17.0 integrations,
   package ownership, exclusions and validation evidence.
+
+- [Modular installer plan](./memory/modular-installer-plan.md): requested feature
+  selection, locales, later additions, dependency boundaries and validation.
+  Implemented in 7.20.0; read project.md for actual validation and limits.
 
 ## Maintenance
 

@@ -1,3 +1,4 @@
+import actions from './actions'
 import type { Dictionary } from '../../types'
 import site from './site'
 import common from './common'
@@ -16,6 +17,7 @@ import captcha from './captcha'
 import auth from './auth'
 
 export default {
+  actions,
   site,
   common,
   buttons,

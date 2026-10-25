@@ -208,7 +208,7 @@ test('advanced is explicit; Astro navigation avoids duplicate initial and hash p
 test('cookie configuration is opt-in, translated, escapes markup and handles saved or changed choices', () => {
   const callback = () => {}
   const config = createConsentConfig(
-    'en-mx',
+    'es-mx',
     { ...cookies, title: '<img src=x onerror=alert(1)>' },
     callback,
     '/privacy?x="unsafe"'
@@ -219,7 +219,7 @@ test('cookie configuration is opt-in, translated, escapes markup and handles sav
   assert.equal(config.onConsent, callback)
   assert.equal(config.onChange, callback)
   assert.equal(config.guiOptions.consentModal.equalWeightButtons, false)
-  const text = config.language.translations['en-mx']
+  const text = config.language.translations['es-mx']
   assert.equal(text.consentModal.title, '&lt;img src=x onerror=alert(1)&gt;')
   assert.ok(text.consentModal.footer.includes('&quot;unsafe&quot;'))
   assert.equal(text.consentModal.acceptNecessaryBtn, cookies.rejectOptional)
@@ -305,8 +305,8 @@ test(
     await writeFile(
       config,
       (await readFile(config, 'utf8')).replace(
-        "// locales.push('en-mx')",
-        "locales.push('en-mx')"
+        "// locales.push('es-mx')",
+        "locales.push('es-mx')"
       )
     )
     const build = (overrides) => {
@@ -349,10 +349,10 @@ test(
     assert.ok(home.indexOf('window.samlineAstroGTM') < home.indexOf('<body'))
     assert.ok(home.includes('data-locale="en-us"'))
     const regional = await readFile(
-      path.join(fixture, '.vercel/output/static/en-mx/index.html'),
+      path.join(fixture, '.vercel/output/static/es-mx/index.html'),
       'utf8'
     )
-    assert.ok(regional.includes('data-locale="en-mx"'))
+    assert.ok(regional.includes('data-locale="es-mx"'))
     const inline = home.match(/<style[^>]*>[\s\S]*?<\/style>/g)?.join('') ?? ''
     const styles = [
       ...home.matchAll(/<link\b[^>]*rel="stylesheet"[^>]*>/g)

@@ -1,63 +1,140 @@
-# @samline/astro
+# SAM Astro installer
 
-Generador de sitios Astro 7 con SSG y despliegue configurable.
+Creates Astro 7 projects from the maintained base and adds optional integrations
+later. This repository prepares a local package; it has not been published to npm.
+The CLI runs on Node and uses the TypeScript parser for static dictionary analysis
+and targeted configuration edits. It does not require Bun or pnpm to start.
 
-```sh
-npx @samline/astro@latest mi-proyecto
-```
+## Create a project
 
-Sin nombre, pregunta la carpeta. Con `--no-install`, crea los archivos sin
-descargar dependencias. Nunca sobrescribe un destino con contenido.
-
-Detecta pnpm y Bun por separado: prefiere pnpm para instalar y Bun para ejecutar;
-usa npm cuando falta la herramienta correspondiente. Los scripts, el gestor
-fijado y el despliegue se adaptan a esa combinación.
-
-Requiere Node.js >=22.23.4 y npm o pnpm. No instala herramientas globales.
-
-La serie 7.x corresponde a Astro 7. Los proyectos creados son privados y tienen
-su propia versión inicial 0.0.1; no se actualizan al publicar el generador.
-
-El asistente permite elegir static, vercel (predeterminado), netlify, cloudflare
-(Workers) o custom (Node standalone). La salida sigue siendo SSG; static no
-admite Server Islands. Instala solo el adaptador del destino elegido.
+After publication:
 
 ```sh
-npx @samline/astro@latest mi-proyecto --deploy cloudflare --site https://example.com
+npx @samline/astro my-site
 ```
 
-`--deploy` es obligatorio en ejecuciones sin terminal interactiva. `--site` es
-opcional y escribe el origen de producción en `.env.production`, ignorado por
-Git. `--no-install` genera sin instalar ni desplegar. Las instrucciones concretas
-se incluyen en el README del proyecto generado.
+The wizard asks for languages, deployment and optional integrations. Supplying a
+folder/deployment does not bypass the remaining questions. Built-in initial
+languages are en-us, es-mx and es-es; custom tags accept a native name/direction.
 
-Incluye SEO multilingüe, Open Graph, Twitter Cards, JSON-LD, robots y sitemap
-con una política compartida de indexación. `SITE_INDEXABLE=false` desactiva la
-indexación al compilar staging. Los textos SEO están en los diccionarios.
-`public/img`, `public/docs` y `public/video` se distribuyen con `.gitkeep`.
+```sh
+npx @samline/astro my-site --minimal --deploy vercel --locale es-mx
+npx @samline/astro my-site --yes --deploy vercel --features forms,fields,mail
+npx @samline/astro my-site --yes --deploy static --features content --source local
+npx @samline/astro shop --yes --deploy vercel --features content --source shopify --collection products
+```
 
-La interfaz se organiza como layout → section → component. Las páginas componen
-`Main` con bloques de `src/sections`, y estos se construyen con `src/components`.
-El layout mantiene un único `<main>` y las páginas no contienen markup de UI.
+Optional features: themes, auth, captcha, gtm (including CookieConsent),
+language-picker, forms, fields, actions, content, mail, pageloader, faicon, welcome.
+Core includes Astro/TypeScript, Tailwind, local typography, SEO/robots/sitemap,
+layout/section primitives, a minimal homepage and NotFound, resource folders,
+selected-language dictionaries and portable agent guidance/skills.
 
-Incluye GTM opcional y CookieConsent con carga diferida por interacción,
-Consent Mode v2 y categorías independientes. Sin GTM_ID no se activa.
+Forms always installs @samline/forms and @samline/formatter. Fields is a separate
+Astro template choice. Mail always includes the contact Action; it does not force
+Forms, Fields or CAPTCHA. Explicit Actions includes an independent basic example.
 
-## Bundled agent context
+## Add to an existing generated project
 
-Generated projects include root AGENTS.md and a portable .agents directory with
-coding conventions, an initial project summary, architecture notes, and fresh
-lessons/todos files. The summary reflects the selected deployment, package manager,
-and runtime. It contains no maintainer commit history, local references, or kit
-publication tasks.
+Run from the project or provide --cwd:
 
-Bundled skills cover Astro, Tailwind, TypeScript, Bun, Vite, SEO, accessibility,
-frontend design, and codebase/source exploration. Vercel deployments also receive
-the Vercel deployment skill. The root skills-lock.json retains provenance for
-registry skills, and skill references and license files are preserved.
+```sh
+npx @samline/astro add
+npx @samline/astro add fields
+npx @samline/astro add themes gtm
+npx @samline/astro add auth --auth-mode external
+npx @samline/astro add captcha --captcha-provider turnstile
+npx @samline/astro add content --source strapi --collection articles --content-mode build
+npx @samline/astro add content --source api --protocol rest --collection news --content-mode live
+npx @samline/astro add mail --dry-run
+npx @samline/astro status
+```
 
-No extra network request or global skill installation is needed when creating a
-project: these files are included in the generator. Keep the context versioned
-with the new project and update it as work progresses. Skills are guidance and
-do not override project rules or authorize deployment by themselves. Graph-based
-exploration needs its MCP service; source inspection is the fallback when absent.
+Both create and add use the same feature payloads and configuration operations.
+Repeated additions are no-ops; different named collections can coexist. Layout,
+Action, middleware and dictionary edits preserve unrelated source. A conflicting
+file or unsupported custom export stops the operation before writing anything.
+No --force overwrites, automatic Astro upgrades, provider changes or database
+migrations are performed. Older projects without modular metadata require an
+explicit manual adoption/review; add does not guess their installed capabilities.
+
+Themes, GTM and PageLoader receive layout mounts. Reusable controls such as
+Theme Switch, LanguagePicker, Fields and Captcha are available to compose in the
+owning section; add does not invent a header or replace a custom homepage.
+Selected controls appear in the optional Welcome presentation on initial creation.
+
+## Add languages
+
+```sh
+npx @samline/astro locale add es-es
+npx @samline/astro locale add fr-fr --locale-name Français
+npx @samline/astro locale add ar --locale-name العربية --direction rtl
+```
+
+Later additions inspect current dictionaries, including custom domains/keys,
+and create corresponding keys with empty translations. The user supplies the
+translations. No preset text, content entries, pages, products or guessed slugs
+are copied. Existing values are preserved. Type/shape drift and dynamic values
+need explicit review; the CLI never executes dictionary modules to inspect them.
+
+New locales stay out of the active list in src/i18n/config.ts until completed.
+Fill required copy and language labels, check formatting/types, then add the code
+to that list deliberately. Review provider locale maps and actual translated URL
+relationships before publishing. Locale inventory, direction and typed access
+are prepared; RTL styling and provider translations are project responsibilities.
+
+## Content sources
+
+Choose local files, a generic REST/GraphQL API, Strapi 5, Shopify Storefront, or
+another named custom service. Each source includes its schema, loader/query,
+configuration and a read example. Only that source's files are installed.
+Build-time remote collections can remain SSG; Live Collections need an adapter.
+
+```sh
+npx @samline/astro add content --source other --service "Custom CMS" --protocol graphql --collection stories
+```
+
+Remote examples remain unregistered until endpoints/credentials/schema and locale
+mapping are configured. Their README and registration example explain activation.
+No CMS/store is contacted during installation. Shopify starts with a read-only
+products query, not Admin API, checkout or account infrastructure. Other services
+get an explicit custom scaffold, not an invented native integration.
+
+## Compatibility and recovery
+
+New projects prefer pnpm for installation and Bun for scripts, independently
+falling back to npm/Node when either tool is missing. Add preserves the existing
+project's manager, lockfile and runtime. Never install global tools silently.
+Cloudflare's Astro/Wrangler execution retains its Node compatibility setting.
+
+Actions/auth/SMTP execution need a compatible backend. For pure static hosting,
+choose an adapter or explicitly use --scaffold for inactive source examples.
+SMTP and owned PostgreSQL on Workers require a verified project-specific transport;
+the installer only provides inactive scaffolding there. Public pages remain SSG.
+
+--dry-run reports planned paths without changing the project. --no-install applies
+files and reports dependency/format follow-up commands. --yes uses explicit flags
+and minimal defaults; noninteractive ambiguous feature choices fail visibly.
+Cancellation before application makes no changes. Files are preflighted and
+installer-owned writes are rolled back on application failure. If package install
+fails afterward, files remain and a retry command is reported; arbitrary package
+scripts cannot be rolled back by this CLI.
+
+Installed, configured and validated are different states. Status reports file
+and locale state; it never prints secret environment contents or claims provider
+connectivity. Follow each installed README before enabling real operations.
+
+## Local distribution checks
+
+From the repository root:
+
+```sh
+bun run verify
+bun run kit:pack
+npm exec --yes --package ./artifacts/samline-astro-7.20.0.tgz -- samline-astro my-site --minimal --no-install
+```
+
+The root is the source of truth. packages/cli/template is generated by the
+allowlist; never edit it manually. Selection copies only declared core/feature
+paths. Maintainer memory is excluded; selected portable skills and fresh agent
+context are included. Test the actual tarball and consumer generation/add flows.

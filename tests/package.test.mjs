@@ -118,7 +118,7 @@ test(
       'src/content/README.md',
       'src/content/posts/index.ts',
       'src/content/posts/data/en-us/getting-started.json',
-      'src/content/posts/data/en-mx/getting-started.json',
+      'src/content/posts/data/es-mx/getting-started.json',
       'src/content/remote/loaders.ts',
       'src/content/live/index.ts',
       'src/content/live/api.ts',
@@ -130,7 +130,7 @@ test(
       'src/actions/content-demo/index.ts',
       'src/actions/content-demo/README.md',
       'src/i18n/dictionaries/en-us/mail/index.ts',
-      'src/i18n/dictionaries/en-mx/mail/index.ts'
+      'src/i18n/dictionaries/es-mx/mail/index.ts'
     ])
       assert.ok(files.includes(`package/template/${file}`), file)
     for (const name of [
@@ -224,7 +224,7 @@ test(
       assert.ok(files.includes(`package/template/src/components/GTM/${file}`))
     assert.ok(files.includes('package/template/src/config/gtm.ts'))
     assert.ok(!files.includes('package/template/src/components/GTM/Body.astro'))
-    for (const locale of ['en-us', 'en-mx'])
+    for (const locale of ['en-us', 'es-mx'])
       for (const file of ['index.ts', 'types.ts'])
         assert.ok(
           files.includes(
@@ -258,7 +258,7 @@ test(
     assert.ok(files.includes('package/template/src/pages/robots.txt.ts'))
     for (const folder of ['img', 'docs', 'video'])
       assert.ok(files.includes(`package/template/public/${folder}/.gitkeep`))
-    for (const locale of ['en-us', 'en-mx']) {
+    for (const locale of ['en-us', 'es-mx']) {
       assert.ok(
         files.includes(
           `package/template/src/i18n/dictionaries/${locale}/common/index.ts`
@@ -303,8 +303,12 @@ test(
     )
     assert.equal(pkg.name, '@samline/astro')
     assert.equal(pkg.bin['samline-astro'], 'bin/samline-astro.mjs')
-    assert.equal(pkg.dependencies, undefined)
+    assert.deepEqual(pkg.dependencies, { typescript: '6.0.3' })
     assert.notEqual(pkg.private, true)
+    await symlink(
+      path.join(root, 'node_modules'),
+      path.join(unpacked, 'package/node_modules')
+    )
     const bin = path.join(directory, 'bin')
     await mkdir(bin)
     await writeFile(path.join(bin, 'npm'), '#!/bin/sh\necho 11.2.0\n', {

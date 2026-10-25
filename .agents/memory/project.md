@@ -15,12 +15,12 @@ Section-only pieces stay beside their owning section.
 
 ## Versions and distribution
 
-- Root and CLI version: 7.19.0.
+- Root and CLI version: 7.20.0 (modular installer; uncommitted source).
 - Astro dependency: ^7.4.2; use Astro 7.4 behavior and current official docs.
 - Tailwind CSS 4 via its Vite plugin; TypeScript 6 and Vite 8.
 - Install with pnpm; execute project scripts with Bun.
 - Repository: git@github.com:samline/astro-kit.git; current branch main.
-- Previous baseline commit: 549f430 (SAM integrations and API/client translations).
+- Previous baseline commit: b95e186 (SAM Astro rename, CAPTCHA and authentication).
 - Prior feature commits: d9f3d8f (GTM/consent/themes), cb62214 (UI primitives/themes).
 
 The public generator is @samline/astro and must run through npx with Node.
@@ -36,7 +36,8 @@ Astro's minor number. No npm publication is authorized yet.
 
 ## Implemented base
 
-- Modular en-us dictionaries; en-mx is prepared but commented out (English for Mexico).
+- Modular en-us/es-mx/es-es catalog dictionaries; only en-us is active in the
+  maintained demo. Generated projects include their selected locales/domains.
 - SEO, social metadata, JSON-LD, robots, sitemap, and shared indexing policy.
 - Public img, docs, and video directories retained with .gitkeep.
 - Section, Box, Link, Button, H, FaIcon, LanguagePicker, SEO, Theme, GTM, and PageLoader components.
@@ -468,3 +469,87 @@ SSG/Vercel build. The restricted test run timed out on local HTTP fixtures; the
 complete run passed with loopback permissions. bun run kit:pack also succeeded
 for artifacts/samline-astro-7.19.0.tgz. No real provider/database connection, push,
 deployment or npm publication was performed.
+
+## Modular installer planning
+
+Baseline source was committed as b95e186. The user requested a concrete plan for
+selective installation and later feature additions, with Forms+Formatter, optional
+Fields, Mail+contact Action, independent basic Actions/Content examples and locale
+presets en-us/es-mx/es-es plus custom entry. See modular-installer-plan.md.
+Current CLI remains unchanged; no feature-selection/add/status commands have
+been implemented. The plan identifies shared source/dependency coupling and
+safety/compatibility requirements, and separately labels additional recommended
+optional features. Only planning and persistent context were changed this turn.
+
+Planning refinement: Content asks local/API/Strapi/Shopify/other with a source-
+specific example and independent build/live choice. Later language addition
+inspects actual current dictionaries and produces empty translation values with
+the same keys, without content or automatic route activation. This supersedes
+the initial plan to copy preset text for later locales. Reference documentation
+from Ticker informed engineering-contract.md; no Ticker code or runtime rule was
+imported. Maintainer and portable agent conventions were updated as documents;
+installer/runtime behavior and package version remain unchanged.
+
+## Modular installer implementation (7.20.0)
+
+The user authorized implementation after reviewing the saved plan. CLI create is
+now a guided installer even when directory/deployment were provided. Optional
+features are themes, auth, captcha, gtm+consent, language-picker, forms+formatter,
+fields, actions, content, SMTP mail, pageloader, faicon and welcome. Minimal
+projects omit their source, packages, dictionary domains and environment fields.
+The root remains the full maintained catalog.
+
+Commands: create through the default CLI invocation, add with one or more names
+or a wizard, locale add, status, --dry-run, --no-install, --minimal and explicit
+noninteractive flags. Metadata schema/recipe version 1 records installed choices
+in package.json samlineAstro. Add respects current scripts/manager and custom
+code; unsupported exports/spreads, source changes, unsafe paths and conflicts
+stop before application. Caught write failures restore owned changes. Older
+metadata needs manual review/adoption; no automatic upgrade/remove command.
+
+Content asks local/API/Strapi/Shopify/other, collection name and build/live timing.
+Only its selected source is emitted; remote examples include setup/registration
+and stay inactive without real provider configuration. Local content works
+offline. Multiple named collections coexist. Forms always includes Formatter,
+Fields remains optional, Mail always includes contact, and explicit Actions has
+a harmless independent example. Workers SMTP/owned PostgreSQL remain explicit
+inactive scaffolds until a compatible transport is supplied.
+
+Later locale additions analyze the actual project's domains/keys/types and local
+index composition; text leaves are empty and no content entries are added.
+Pending locales stay out of active routing/sitemap/selector. check:i18n now also
+validates active translation values using the shared static dictionary reader.
+Initial presets contain real English/Spanish translations. No hidden en-us
+contract directory is required when Spanish is selected as the only language.
+
+Source cleanup removed obsolete en-mx dictionaries/data and the abandoned
+project-readme.md template. Shared JSON transport was separated from the legacy
+post-specific demo; auth driver settings and Theme CSS have explicit owners.
+Fields no longer forces Font Awesome. Existing intentional component/API examples,
+public .gitkeep folders and required skill/license files remain preserved.
+
+Validation ledger: the full suite has passed 112 tests with clean Astro/TypeScript
+diagnostics and an SSG/Vercel build during implementation. Focused HTTP checks
+execute the generated basic Action and activated API Live Collection against a
+local fake provider. Provider contract tests cover REST, Strapi and Shopify/custom
+GraphQL errors and pagination. A real Node CLI wizard exercised Spanish, Forms,
+Fields and Shopify build-source questions in a PTY. A separately installed
+Cloudflare minimal fixture passed translation/type checks and a real Node build.
+Final package smoke and cleanup results are recorded below. No real identity,
+SMTP, Shopify/Strapi account, production deployment or npm publication was used.
+
+Final verification (2026-10-25): `bun run format` and `bun run verify` passed
+on the final source: 112 tests across 20 files, zero failures, zero Astro errors,
+warnings or hints, and successful SSG/Vercel output. `bun run kit:pack` produced
+artifacts/samline-astro-7.20.0.tgz. The actual tarball was invoked with npm exec
+to create a pure-static es-es project, add Fields (including Forms + Formatter),
+and scaffold pt-br from current dictionaries. With an independent real pnpm
+installation, that consumer passed its format, check:i18n, Astro check and build.
+The pending pt-br locale stayed inactive. This complements the separately
+installed Cloudflare Node-build check; it does not validate external services.
+
+Cleanup removed the owned manual generation/build fixtures, temporary Spanish
+generator and superseded local 7.19.0 archive. No empty source directories or
+diff whitespace errors remain. Keep the final local 7.20.0 archive and required
+generated template. Source changes are uncommitted; no commit, push, npm
+publication, real provider request or deployment was performed for this task.

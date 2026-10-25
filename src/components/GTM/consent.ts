@@ -1,5 +1,6 @@
 import type { CookieConsentConfig } from 'vanilla-cookieconsent'
-import type { Cookies } from '@/i18n/dictionaries/en-us/cookies/types'
+import type { Dictionary } from '@/i18n/types'
+type Cookies = Dictionary['cookies']
 import { gtmConfig } from '@/config/gtm'
 
 const escapeConsentText = (value: string): string => {

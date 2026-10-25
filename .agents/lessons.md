@@ -91,3 +91,35 @@ This is project context, not a speculative improvement backlog.
 - Astro Action FormData conversion returns null for empty optional strings under
   wrappers/transforms. Normalize nullable optional phone, website and captchaToken
   to empty strings; test actual HTTP submissions rather than schema objects alone.
+
+## Modular installer requirements
+
+- Forms selection must install both @samline/forms and @samline/formatter; Fields
+  is a separate template choice, not a prerequisite for using the packages.
+- Mail always includes its contact Action example. Independent Actions and Content
+  selections must include basic examples without unrelated services.
+- Installer language presets are en-us, es-mx and es-es, plus custom locale entry
+  in the wizard. This supersedes en-mx as a default offered second locale; the
+  catalog now includes those three presets; the obsolete en-mx dictionary was
+  removed during implementation.
+- Selected features must be addable later; omitted integrations should not leave
+  unnecessary files, dependencies, imports, environment or translation domains.
+
+- Content Collections must ask whether data comes from local files, an API,
+  Strapi, Shopify or another service; generate the selected provider's example.
+  A remote source does not imply SSR; source and build/live timing are separate.
+- Adding a language later must inspect the current dictionaries, including custom
+  keys/domains, and create matching keys with empty translations. The user fills
+  translations. Do not copy preset text, content entries, posts or products.
+- Ticker is a user-authored reference for maintenance conventions, clear API
+  ownership, executable examples and evidence discipline only. Its runtime,
+  website architecture and runtime-only publication exclusions do not apply here.
+
+- Keep package/agent catalog metadata dependency-light. Distribution validation
+  must not require resolving the CLI parser through copied development symlinks.
+- Later additions inspect current core script commands for Bun/Node; do not let
+  creation-time metadata undo a deliberate project runtime change.
+- Keep inactive transport registrations separate: adding a working basic Action
+  must not accidentally enable SMTP contact on Workers.
+- A new locale index must compose its own empty domain files; copying an index
+  that points into another locale would silently reuse translated content.

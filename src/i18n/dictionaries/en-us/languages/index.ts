@@ -1,6 +1,6 @@
 import type { Languages } from './types'
-
 export default {
   'en-us': 'English (United States)',
-  'en-mx': 'English (Mexico)'
+  'es-mx': 'Spanish (Mexico)',
+  'es-es': 'Spanish (Spain)'
 } satisfies Languages

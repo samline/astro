@@ -1,0 +1,3 @@
+# Installed integrations
+
+{{INTEGRATIONS}}

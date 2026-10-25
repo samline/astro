@@ -42,11 +42,18 @@ and Astro scope attributes, consume custom props, and avoid unrestricted any.
 
 All visitor-facing copy belongs in src/i18n/dictionaries, including metadata,
 accessible labels, alt text, and client messages. Each locale has domain folders
-with index.ts and types.ts. Locale indexes compose those domains. The en-us
-contract is reexported by en-mx to avoid drift.
+with index.ts and types.ts. Locale indexes compose those domains. Reuse the
+existing domain type contracts rather than duplicating interfaces. Read
+src/i18n/config.ts for the actual default and active locales; never infer them
+from a preset or add an English dictionary only to satisfy a hardcoded import.
 
-Default locale is en-us. En-mx is prepared but inactive and means English for
-Mexico. Components read Astro.currentLocale directly; pass locale only across
+When adding a language, inspect the current dictionaries and domain contracts,
+including custom keys. Create matching structural keys with empty translation
+strings for the user to fill; do not translate, copy preset text, generate
+content entries or overwrite existing translations. Keep an unfinished locale
+out of active routes, sitemap, alternate links and the selector until explicitly
+completed and enabled. Report mismatched/dynamic shapes instead of guessing.
+Components read Astro.currentLocale directly; pass locale only across
 isolated boundaries such as Server Islands that cannot infer the parent locale.
 Use native astro:i18n URL helpers instead of a custom routing layer.
 
@@ -120,3 +127,30 @@ client-supplied roles. Private pages must opt out of prerendering; public SSG
 shells can contain guarded Server Islands with private, no-store responses.
 Database migrations are an explicit command, never an install/build side effect.
 Read the documented stateless revocation, token size and renewal limitations.
+
+## Engineering and example discipline
+
+Inventory current owners before creating new markup, controllers or helpers.
+Use public installed package APIs: dependencies own runtime behavior, while the
+project supplies thin integration and composition. Keep state instance-scoped,
+setup idempotent and cleanup explicit; preserve persisted pagehide behavior.
+Do not build class hierarchies, parallel lifecycle engines or generic command
+event layers where direct arrow-function calls suffice.
+
+Preserve existing layout widths, tokens, semantics, focus and reduced motion.
+Cleanup must inspect dynamic imports, generated entrypoints, exports and assets
+before deleting files. A low import count alone does not establish dead code.
+Run copied examples through their real entrypoints and selected runtime. Update
+source, types, translations, examples and docs together when contracts change.
+
+When adding Content Collections, select local files, API or the actual service
+provider and build-time/live loading separately. Include a useful example for
+that source only; do not install unrelated SDKs or invent endpoints. Keep
+credentials private, pagination bounded, stable IDs and publication/locale
+mapping explicit. Missing configuration and fetch/schema errors must not become
+fake successful empty collections.
+
+Use checks appropriate to the change and record actual results and limitations.
+Browser evidence is needed for relevant UI/lifecycle behavior; documentation-only
+edits need formatting/link review. Mock providers and local builds do not prove
+remote delivery or deployment. A package version is not publication evidence.

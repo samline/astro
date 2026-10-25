@@ -1,3 +1,4 @@
+import { checkTranslations } from './check-translations.mjs'
 import { readFile, readdir } from 'node:fs/promises'
 import path from 'node:path'
 import { pathToFileURL } from 'node:url'
@@ -13,7 +14,7 @@ const textAttributes = new Set([
   'summary'
 ])
 
-function hasLiteralText(node) {
+const hasLiteralText = (node) => {
   if (!node) return false
   if (node.type === 'Literal') return String(node.value ?? '').trim().length > 0
   if (node.type === 'JSXExpressionContainer')
@@ -29,7 +30,7 @@ function hasLiteralText(node) {
 }
 
 /** Check rendered markup, not developer comments, URLs or CSS strings. */
-export function findUntranslatedText(source) {
+export const findUntranslatedText = (source) => {
   const ast = parsers.astro.parse(source, {})
   const issues = []
   const seen = new WeakSet()
@@ -87,7 +88,7 @@ export function findUntranslatedText(source) {
   return issues
 }
 
-async function checkDirectory(directory) {
+const checkDirectory = async (directory) => {
   let failures = 0
   for (const entry of await readdir(directory, { withFileTypes: true })) {
     const file = path.join(directory, entry.name)
@@ -108,7 +109,10 @@ if (
   process.argv[1] &&
   import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href
 ) {
-  const failures = await checkDirectory(path.resolve('src'))
+  const translationIssues = await checkTranslations()
+  for (const issue of translationIssues) console.error(issue)
+  const failures =
+    translationIssues.length + (await checkDirectory(path.resolve('src')))
   if (failures) process.exitCode = 1
   else console.log('i18n: plantillas sin textos literales visibles.')
 }

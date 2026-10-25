@@ -121,3 +121,52 @@ Actions require independent permission/ownership checks. Route policies are not
 inferred from translation dictionaries, role order or broad path exceptions.
 Stateless cookies have bounded revocation/renewal limits documented with the API.
 No per-device/global revocation promise without the necessary backing authority.
+
+## Modular installer planning refinements
+
+The current installer is unchanged. The authoritative implementation plan is
+modular-installer-plan.md; engineering-contract.md captures cross-cutting rules.
+Content sources are local/API/Strapi/Shopify/other, each with a selected-source
+example; build-time/live timing is independent and providers can coexist in
+distinct named collections. Shopify starts as a read-only Storefront example,
+not a commerce application. Unsupported services get an explicit custom-source
+scaffold rather than invented native support.
+
+Later locale additions derive keys from current project dictionaries/contracts,
+preserve custom domains and structural shapes, and leave translation values
+empty. They add no content and do not expose incomplete routes or SEO entries.
+This replaces the earlier idea of seeding later locales with preset translations.
+Ticker supplied reference maintenance principles only; preserve this project's
+SSG ownership, selected-feature packaging and required portable agent guidance.
+
+## Modular installer implementation (7.20.0)
+
+CLI responsibilities are explicit: questions/argument handling, project staging,
+feature composition, dictionary analysis and transactional file application. The
+feature registry owns paths, prerequisites, dependencies and domain selection;
+create/add share those recipes. Root sources are the catalog, not a second
+hand-maintained template. The only new CLI runtime dependency is TypeScript 6.0.3
+for syntax analysis, never evaluation of project modules. Package validation
+continues to run independently of parser resolution.
+
+Auth provider settings are split so pg/types/migration ship only in database
+mode. Theme dark styling belongs to the Theme feature. Fields uses a native
+decorative chevron instead of forcing Font Awesome. GTM types derive from the
+composed Dictionary, avoiding hardcoded en-us imports in Spanish-only output.
+Shared bounded JSON transport remains server-only. Content source recipes use
+local files, REST/GraphQL, Strapi 5 or Shopify Storefront 2026-10; other services
+are explicitly custom examples. Remote registration stays inactive until setup.
+
+Locale additions preserve current project keys and types, scaffold empty text,
+validate local index composition and keep routes/SEO inactive. Active empty
+translations fail check:i18n; optionalTranslationKeys records deliberate empty
+keys rather than silently accepting missing copy. Source dicts are never imported
+for analysis. The deprecated en-mx catalog was removed, with regional regressions
+updated to real es-mx translations.
+
+Shared edits preserve custom imports/exports and compose middleware through
+Astro sequence. Ambiguous structures and binding collisions fail before writes.
+Captured source bytes detect changes during planning; caught filesystem errors
+restore installer-owned writes. Dependency installation remains a separate step
+with explicit retry behavior. Add honors actual package/core script choices and
+never promotes an inactive mail transport by adding another Action.

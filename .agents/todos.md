@@ -9,12 +9,16 @@ status when work is completed; do not turn possible improvements into tasks.
 
 ## Active feature backlog
 
-No feature migration is currently pending.
+- [x] Finalize validation and cleanup of the implemented 7.20.0 modular installer.
+      The source is implemented; see project.md for the current verification
+      ledger. No npm publication or deployment is part of this request.
 
 ## Intentional defaults, not unfinished tasks
 
 - SSG remains the default; full SSR is configured only in a future project that needs it.
-- en-mx remains prepared but inactive unless the user asks to enable it.
+- en-us is the maintained default; es-mx and es-es are the prepared presets.
+  Generated projects include their selected languages only; later additions
+  create empty dictionaries and stay inactive until completed.
 - A real GTM ID and deployed tracking validation are project-specific inputs, not a pretext to add credentials or deploy this base.
 
 ## Recent completed requests

@@ -24,9 +24,10 @@ with Astro helpers; it does not create pages or translate slugs.
 ## Locales and labels
 
 Renders nothing when only one locale is enabled. `src/i18n/config.ts` controls
-active locales: en-us is the default and en-mx is prepared but commented out.
-When enabling another locale, check its routes and dictionaries. `en-mx` means
-English for Mexico, not Spanish.
+active locales from src/i18n/config.ts. The default and available languages are
+chosen during installation.
+When enabling another locale, check its routes and dictionaries. `es-mx` means Spanish for Mexico; `es-es` means Spanish for Spain. Generated projects include only selected
+languages; read src/i18n/config.ts for the actual default and active list.
 
 Visible names come from dictionary.languages and the navigation label from
 common.language. The current locale link receives aria-current='page'; each

@@ -45,7 +45,7 @@ test('content API validates envelopes, filters public locale data and constrains
         data: [
           post,
           { ...post, id: 2, draft: true },
-          { ...post, id: 3, locale: 'en-mx' }
+          { ...post, id: 3, locale: 'es-mx' }
         ]
       })
     }
@@ -136,7 +136,7 @@ test('single API reads distinguish missing, private and failed content', async (
     undefined
   )
   assert.equal(
-    await api(Response.json({ data: { ...post, locale: 'en-mx' } })).getPost(
+    await api(Response.json({ data: { ...post, locale: 'es-mx' } })).getPost(
       post.id,
       'en-us'
     ),
@@ -179,8 +179,8 @@ test('API snapshot validates all entries before replacing the store and rejects 
 })
 
 test('Strapi snapshot follows bounded pagination per enabled locale with stable namespaced IDs', async (t) => {
-  locales.push('en-mx')
-  t.after(() => locales.splice(locales.indexOf('en-mx'), 1))
+  locales.push('es-mx')
+  t.after(() => locales.splice(locales.indexOf('es-mx'), 1))
   const calls = []
   const current = context(storeSchema)
   await strapiStoresLoader({
@@ -205,12 +205,12 @@ test('Strapi snapshot follows bounded pagination per enabled locale with stable 
   assert.deepEqual(calls, [
     ['en-US', 1],
     ['en-US', 2],
-    ['en-MX', 1],
-    ['en-MX', 2]
+    ['es-MX', 1],
+    ['es-MX', 2]
   ])
   assert.deepEqual(
     [...current.entries.keys()],
-    ['en-us/1', 'en-us/2', 'en-mx/1', 'en-mx/2']
+    ['en-us/1', 'en-us/2', 'es-mx/1', 'es-mx/2']
   )
 })
 

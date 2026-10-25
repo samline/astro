@@ -24,7 +24,9 @@ states. Do not hardcode UI text or put translated copy in environment variables.
 Split every locale into domain directories (common, forms, buttons, site, etc.).
 Every domain has index.ts for translations and types.ts for its contract. Locale
 indexes only compose modules; never put all strings or field types in one file.
-Define each module contract in en-us and reexport it in en-mx to prevent drift.
+The maintained catalog defines domain contracts in en-us and reexports them in
+es-mx/es-es. Generated projects place those contracts in their selected default
+locale, so Spanish-only output does not require hidden English dictionaries. Preserve one contract per domain and each locale types.ts entry.
 Use the typed dictionary in Astro, and pass the current locale explicitly to
 Server Islands because their request URL is not the parent page URL.
 
@@ -40,7 +42,8 @@ when actual localized destinations differ. Resolve once for both navigation and
 SEO at the appropriate build/request boundary and document the provider mapping.
 
 `src/i18n/config.ts` is the source of truth for active locales. Default: en-us;
-en-mx is prepared but commented out (English for Mexico, not Spanish).
+es-mx/es-es are prepared; additional routes are activated explicitly. The
+installer emits only selected languages. en-mx is not a Spanish preset.
 `bun run check:i18n` checks visible literals in Astro markup. It is a guard,
 not data-flow analysis: keep browser script messages in dictionaries too.
 
@@ -77,7 +80,8 @@ All visible copy stays in the dictionaries.
 
 ## PageLoader
 
-Keep PageLoader in `src/components/PageLoader` and mount it inside Main's body.
+When PageLoader is selected, keep it in `src/components/PageLoader` and mount it
+inside Main's body.
 Retain ldrs: the user wants to swap animation icons easily. Keep the selected
 animation import, registration and custom element together in index.astro;
 use Tailwind for the overlay and a static reduced-motion fallback. Runtime
@@ -147,7 +151,6 @@ the source, separate from operational memory. All new developer documentation
 and memory must be in English. Do not treat installed skills as permission to
 publish, deploy, send messages, or override the user's instructions.
 
-
 ## Legacy reference and utility boundary
 
 Do not migrate Astro 5 helpers into the starter. The user plans separate packages
@@ -166,3 +169,19 @@ inside every protected Action, endpoint and Server Island. Never expose upstream
 tokens to browser JSON or HTML. Keep public pages SSG; private full pages must
 opt out of prerendering. Route rules never replace operation/resource checks.
 Do not run auth migrations during install/build or against an unspecified database.
+
+## Modular installer contract
+
+Read memory/engineering-contract.md and memory/modular-installer-plan.md before
+changing the CLI, distribution, feature selection or locale scaffolding. They
+record confirmed requirements, implemented ownership and supported limits.
+Do not substitute another architecture or invent additional commands/providers.
+
+Content selection must ask local/API/Strapi/Shopify/other and loading time, then
+include only the selected source with its basic example. Adding a locale later
+uses current project dictionary keys and empty translations, never release
+preset text, translated content or fabricated CMS entries. Preserve existing
+translations and keep unfinished locales inactive. These requirements supersede earlier seed-copy proposals. check:i18n validates
+active dictionaries; pending languages must stay out of the active list until
+the user completes them. Preserve the local composition checks and never execute
+dictionaries to infer their keys.

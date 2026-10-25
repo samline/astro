@@ -4,10 +4,39 @@ Base nueva sobre Astro 7 para sitios SSG con Server Islands y despliegue en
 Vercel. Las páginas se generan al compilar; los componentes con `server:defer`
 se resuelven bajo demanda mediante el adaptador de Vercel.
 
+## Instalador modular
+
+El asistente permite elegir idioma y añadir únicamente las integraciones necesarias.
+Forms instala también Formatter; Fields es una plantilla opcional. Mail incluye
+siempre su Action de contacto. Actions y Content Collections incluyen ejemplos.
+Content pregunta por archivos locales, API, Strapi, Shopify u otro servicio, y
+permite elegir consulta durante el build o mediante Live Collections.
+
+```sh
+npx @samline/astro mi-proyecto
+npx @samline/astro mi-proyecto --minimal --deploy vercel --locale es-mx
+npx @samline/astro add forms
+npx @samline/astro add auth --auth-mode external
+npx @samline/astro add content --source shopify --collection products
+npx @samline/astro locale add es-es
+npx @samline/astro status
+```
+
+Estos ejemplos con npx requieren publicar el paquete; por ahora se valida mediante
+el tarball local. Añadir un idioma analiza los diccionarios actuales y genera sus
+keys con traducciones vacías, sin contenido ni activación de rutas. El usuario
+completa las traducciones. Las adiciones conservan código personalizado y detectan
+conflictos antes de escribir. Usa `--dry-run` para inspeccionar o `--no-install`
+para preparar archivos sin instalar paquetes.
+
+Consulta [el contrato y las opciones del CLI](packages/cli/README.md). Las secciones
+siguientes describen las capacidades del repositorio completo; un proyecto generado
+incluye únicamente las elegidas. No se ha publicado en npm.
+
 ## Generador de proyectos
 
 La base se desarrolla en esta raíz. El paquete publicable
-`@samline/astro` vive en `packages/cli`, no tiene dependencias propias y
+`@samline/astro` vive en `packages/cli`, utiliza el parser de TypeScript y
 recibe una plantilla generada desde una lista explícita de archivos de la raíz.
 No se mantiene una segunda copia manual de la base.
 
@@ -78,11 +107,11 @@ bun run verify
 bun run kit:pack
 ```
 
-El tarball se escribe en `artifacts/samline-astro-7.19.0.tgz`. Se puede probar
+El tarball se escribe en `artifacts/samline-astro-7.20.0.tgz`. Se puede probar
 antes de publicar:
 
 ```sh
-npm exec --yes --package ./artifacts/samline-astro-7.19.0.tgz -- samline-astro mi-prueba
+npm exec --yes --package ./artifacts/samline-astro-7.20.0.tgz -- samline-astro mi-prueba
 ```
 
 Para una siguiente versión:
@@ -377,9 +406,9 @@ Las animaciones del switch respetan la preferencia de movimiento reducido.
 
 `src/i18n/config.ts` es la fuente única de idiomas para Astro, las rutas y el
 sitemap. El predeterminado es `en-us` y se sirve en `/`, sin prefijo. Para activar
-inglés de México, descomenta `locales.push('en-mx')` en ese archivo: se genera
-`/en-mx` y aparece el selector de idioma. `en-mx` significa inglés de México;
-no se sustituye por español (`es-mx`).
+español de México en este repositorio, descomenta `locales.push('es-mx')`.
+El instalador ofrece `en-us`, `es-mx`, `es-es` y códigos personalizados; un proyecto
+generado incluye solo los idiomas elegidos. El selector es una integración opcional.
 
 Los diccionarios están separados por idioma y responsabilidad. Cada módulo
 contiene `index.ts` con sus traducciones y `types.ts` con su contrato:
@@ -397,11 +426,11 @@ src/i18n/dictionaries/
 │   ├── errors/      (index.ts + types.ts)
 │   ├── seo/         (index.ts + types.ts)
 │   └── index.ts
-└── en-mx/          (misma estructura)
+└── es-mx/          (misma estructura)
 ```
 
 El `index.ts` de cada idioma solo reúne módulos; no contiene textos. Los tipos
-se definen junto al módulo de `en-us`; el `types.ts` correspondiente de `en-mx`
+se definen junto al módulo del idioma predeterminado seleccionado; el `types.ts` correspondiente de otro idioma
 reexporta el mismo contrato para evitar divergencias. `src/i18n/types.ts` solo
 compone esos contratos en `Dictionary`, sin concentrar las definiciones de campos.
 
@@ -428,7 +457,7 @@ Se usa `Astro.currentLocale` para conocer el idioma. Los enlaces se construyen
 con `getRelativeLocaleUrl` y `getAbsoluteLocaleUrl` de `astro:i18n`, respetando la
 configuración del framework. No hay un router propio. El layout y el selector
 reciben `path`, la ruta sin prefijo de idioma (por ejemplo `/about`); no pases
-`/en-mx/about`, porque Astro añade el prefijo correspondiente. Los slugs son
+`/es-mx/about`, porque Astro añade el prefijo correspondiente. Los slugs son
 compartidos entre idiomas. `getStaticPaths` está en la página dinámica que lo
 requiere, en lugar de una utilidad de routing separada.
 

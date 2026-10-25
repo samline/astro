@@ -61,6 +61,16 @@ await cp(
   path.join(root, 'scripts/check-i18n.mjs'),
   path.join(template, 'scripts/check-i18n.mjs')
 )
+await cp(
+  path.join(root, 'packages/cli/lib/dictionary.mjs'),
+  path.join(template, 'scripts/dictionary.mjs')
+)
+await writeFile(
+  path.join(template, 'scripts/check-translations.mjs'),
+  (
+    await readFile(path.join(root, 'scripts/check-translations.mjs'), 'utf8')
+  ).replace("'../packages/cli/lib/dictionary.mjs'", "'./dictionary.mjs'")
+)
 await writeFile(
   path.join(template, 'package.json'),
   `${JSON.stringify(pkg, null, 2)}\n`

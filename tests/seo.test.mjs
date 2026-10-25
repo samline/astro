@@ -86,8 +86,8 @@ test(
     }
     await edit(
       'src/i18n/config.ts',
-      "// locales.push('en-mx')",
-      "locales.push('en-mx')"
+      "// locales.push('es-mx')",
+      "locales.push('es-mx')"
     )
     await edit(
       'src/config/seo.ts',
@@ -204,14 +204,14 @@ const dictionary=getDictionary(Astro.currentLocale)
     )
     assert.ok(!english.includes('<script data-injected="true">'))
     assert.equal(schema(english)['@graph'].at(-1).name, hostileAlt)
-    const regional = await output('en-mx/about/index.html')
-    assert.ok(regional.includes('property="og:locale" content="en_MX"'))
+    const regional = await output('es-mx/about/index.html')
+    assert.ok(regional.includes('property="og:locale" content="es_MX"'))
     assert.ok(
       regional.includes('property="og:locale:alternate" content="en_US"')
     )
     assert.ok(
       regional.includes(
-        'rel="canonical" href="https://seo.example/en-mx/about"'
+        'rel="canonical" href="https://seo.example/es-mx/about"'
       )
     )
     assert.ok(
@@ -223,13 +223,13 @@ const dictionary=getDictionary(Astro.currentLocale)
       'User-agent: *\nAllow: /\n\nSitemap: https://seo.example/sitemap-index.xml\n'
     )
     const sitemap = await output('sitemap-0.xml')
-    assert.ok(sitemap.includes('https://seo.example/en-mx/about'))
+    assert.ok(sitemap.includes('https://seo.example/es-mx/about'))
     for (const name of ['/private', '/404', '/robots.txt'])
       assert.ok(!sitemap.includes(name), name)
     for (const file of [
       '404.html',
       'private/index.html',
-      'en-mx/private/index.html'
+      'es-mx/private/index.html'
     ]) {
       const html = await output(file)
       assert.ok(html.includes('content="noindex, follow"'), file)

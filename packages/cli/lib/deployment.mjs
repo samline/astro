@@ -33,7 +33,7 @@ export const deployments = {
   }
 }
 
-export function deploymentProfile(deployment) {
+export const deploymentProfile = (deployment) => {
   if (!Object.hasOwn(deployments, deployment)) {
     throw new Error(
       'Despliegue inválido. Usa static, vercel, netlify, cloudflare o custom.'
@@ -42,7 +42,7 @@ export function deploymentProfile(deployment) {
   return deployments[deployment]
 }
 
-export function siteOrigin(value) {
+export const siteOrigin = (value) => {
   if (!value) return undefined
   const url = new URL(value)
   if (
@@ -61,7 +61,7 @@ export function siteOrigin(value) {
 }
 
 // Fail visibly if the maintained base changes, rather than emit a partial config.
-function replace(source, previous, next) {
+const replace = (source, previous, next) => {
   if (!source.includes(previous))
     throw new Error(
       'La configuración base cambió. Actualiza el generador de despliegues.'
@@ -69,7 +69,7 @@ function replace(source, previous, next) {
   return source.replace(previous, next)
 }
 
-function astroDeploymentConfig(source, deployment) {
+const astroDeploymentConfig = (source, deployment) => {
   const profile = deploymentProfile(deployment)
   let config = replace(
     source,
@@ -104,7 +104,7 @@ function astroDeploymentConfig(source, deployment) {
   return config
 }
 
-export function deploymentManifest(manifest, deployment, tools) {
+export const deploymentManifest = (manifest, deployment, tools) => {
   const profile = deploymentProfile(deployment)
   const dependencies = { ...manifest.dependencies }
   for (const item of Object.values(deployments))
@@ -137,23 +137,11 @@ export const configureDeployment = async (
   name,
   site
 ) => {
-  const profile = deploymentProfile(deployment)
+  deploymentProfile(deployment)
   const file = (name) => path.join(destination, name)
   const write = (name, content) => writeFile(file(name), content)
   const json = (name, value) =>
     write(name, JSON.stringify(value, null, 2) + '\n')
-  const baseEnv = await readFile(file('.env.example'), 'utf8')
-  const mailStart = baseEnv.indexOf('# Optional SMTP mail.')
-  if (mailStart < 0)
-    throw new Error('Missing mail environment example in the base.')
-  const optionalEnv = '\n' + baseEnv.slice(mailStart)
-  if (['static', 'cloudflare'].includes(deployment)) {
-    await write(
-      'src/actions/index.ts.example',
-      "// Enable only after configuring a server adapter.\n// import { contact } from './contact'\n// import { contentDemo } from './content-demo'\n\n// Requires a compatible SMTP transport:\n// export const server = { contact }\n\n// Or register the content API examples after configuring their API:\n// export const server = { contentDemo }\n"
-    )
-    await rm(file('src/actions/index.ts'))
-  }
   await write(
     'astro.config.mjs',
     astroDeploymentConfig(
@@ -205,28 +193,14 @@ export const configureDeployment = async (
       compatibility_date: '2026-10-01',
       compatibility_flags: ['nodejs_compat']
     })
-    await write(
-      '.dev.vars.example',
-      '# Local Worker secrets. Copy to .dev.vars; never commit real credentials.\n# ASTRO_KEY=\n\n# Optional content API for Actions/live collections.\n# CONTENT_API_URL=https://cms.example.com/api/\n# CONTENT_API_TOKEN=\n\n# Optional runtime CAPTCHA secret (provider/site key/hostnames are build variables).\n# CAPTCHA_SECRET_KEY=\n\n# Optional authentication runtime settings. See server/auth/README.md.\n# AUTH_MODE=disabled\n# AUTH_URL=https://example.com\n# AUTH_SECRET=\n# AUTH_API_URL=https://api.example.com/api/\n# AUTH_API_KEY=\n# AUTH_DATABASE_URL=\n'
-    )
   }
-  const fallback =
-    deployment === 'vercel'
-      ? 'VERCEL_PROJECT_PRODUCTION_URL'
-      : deployment === 'netlify'
-        ? 'URL (Netlify)'
-        : 'localhost'
-  const server = deployment !== 'static'
-  const env = `# ${profile.label}\n# Local development origin. Set SITE_URL to your production origin when building.\n# Without SITE_URL, Astro falls back to ${fallback}.\nSITE_URL=http://localhost:4321\n\n# Optional indexing override. Default: production, non-local origin, no detected preview.\n# Set false for staging (including Cloudflare previews and custom hosting).\n# SITE_INDEXABLE=false\n\n# Optional Google Tag Manager. Unset means no GTM or consent UI.\n# GTM_ID=GTM-XXXXXXX\n# GTM_ENABLED=false\n${server ? '\n# Optional persistent Server Islands key. Generate with: ' + tools.runner + ' run astro create-key\n# Supply the same key to builds and runtime through your hosting environment.\n# ASTRO_KEY=\n' : ''}${deployment === 'custom' ? '\n# Standalone server runtime; start loads .env.production.\nHOST=0.0.0.0\nPORT=4321\n' : ''}`
-  await write('.env.example', env + optionalEnv)
-  await write('.env.development', env + optionalEnv)
   await write(
     '.env.production',
-    `# Set SITE_URL to your final production origin before deploying.\n${site ? `SITE_URL=${site}\n` : '# SITE_URL=https://example.com\n'}${deployment === 'custom' ? 'HOST=0.0.0.0\nPORT=4321\n' : ''}`
+    `# Configure the production origin before deploying.\n${site ? `SITE_URL=${site}\n` : '# SITE_URL=https://example.com\n'}${deployment === 'custom' ? 'HOST=0.0.0.0\nPORT=4321\n' : ''}`
   )
 }
 
-export function deploymentGuide(deployment, tools) {
+export const deploymentGuide = (deployment, tools) => {
   const run = tools.runner
   const common = `Configura \`SITE_URL\` con el origen de producción al compilar (dashboard del proveedor o \`.env.production\`). Conserva el lockfile tras la primera instalación. Las credenciales reales están ignoradas por Git. Declara futuros secretos en Astro como \`context: 'server', access: 'secret'\`.`
   const guide = {
@@ -239,6 +213,6 @@ export function deploymentGuide(deployment, tools) {
   return `${common}\n\n${guide[deployment]}\n\n${deployment === 'static' ? '' : `Las páginas siguen con \`output: 'static'\`; usa \`server:defer\` para islas. Para mantener el cifrado entre despliegues, genera \`ASTRO_KEY\` con \`${run} run astro create-key\` y configura la misma clave en build y runtime. No se activa SSR general.`}`
 }
 
-export function buildCommand(tools) {
+export const buildCommand = (tools) => {
   return `${tools.runner} run check:i18n && ${tools.runner} run check && ${tools.runner} run build`
 }

@@ -157,7 +157,7 @@ test('form template escapes content, preserves order and produces localized plai
     },
     { label: 'Next', value: 'Other' }
   ]
-  for (const locale of ['en-us', 'en-mx', 'invalid']) {
+  for (const locale of ['en-us', 'es-mx', 'invalid']) {
     const result = renderFormMail({ title, fields, locale })
     assert.equal(result.subject, title)
     assert.ok(result.text.includes(copy.introduction))

@@ -11,7 +11,7 @@ Send FormData, not JSON: this Action uses accept='form'.
 
 | Field   | Required | Contract                                                                                                                     |
 | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| locale  | No       | Enabled site locale; defaults to en-us.                                                                                      |
+| locale  | No       | Enabled site locale; defaults to defaultLocale in src/i18n/config.ts.                                                        |
 | name    | Yes      | Trimmed, nonempty, at most 100 characters.                                                                                   |
 | email   | Yes      | Valid email, at most 254 characters; used as replyTo only.                                                                   |
 | phone   | No       | Up to 30 characters, optional leading +, digits, spaces, parentheses, dots and hyphens; at least 6 characters when provided. |
@@ -95,8 +95,9 @@ For static and Cloudflare profiles the installer leaves the registration in
 src/actions/index.ts.example commented out, retaining this demo folder and its
 schema/documentation. Pure static hosting has
 no backend; Workers needs a compatible mail transport. Once that transport is
-implemented and an adapter is present, rename index.ts.example to index.ts and
-uncomment the import and server export:
+implemented and an adapter is present, merge the example into an existing
+index.ts without replacing its other Actions. If index.ts does not exist, rename
+index.ts.example and uncomment the import and server export:
 
 ```ts
 import { contact } from './contact'
@@ -115,9 +116,10 @@ References: [Astro Actions](https://docs.astro.build/en/guides/actions/),
 
 ## CAPTCHA
 
-The optional `captchaToken` field is bounded to 2048 characters. With
+When the CAPTCHA integration is installed, `captchaToken` is bounded to 2048
+characters. Without that integration the schema and handler omit verification. With
 `CAPTCHA_PROVIDER=none` it is not required. When Turnstile or reCAPTCHA is selected,
 the Action verifies it after Origin/honeypot checks and before mail. A failed
 check returns the translated `captcha.invalid` Action error and sends no mail.
 Never include the token in mail fields. Reset the client widget after every
-submission attempt; see [Captcha](../../components/Captcha/README.md).
+submission attempt; see src/components/Captcha/README.md when installed.

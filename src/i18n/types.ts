@@ -1,3 +1,4 @@
+import type { Actions } from './dictionaries/en-us/actions/types'
 import type { Locale } from './config'
 import type { Site } from './dictionaries/en-us/site/types'
 import type { Common } from './dictionaries/en-us/common/types'
@@ -19,6 +20,7 @@ import type { Captcha } from './dictionaries/en-us/captcha/types'
 import type { Auth } from './dictionaries/en-us/auth/types'
 
 export interface Dictionary {
+  actions: Actions
   auth: Auth
   captcha: Captcha
   content: Content

@@ -8,7 +8,8 @@ components work together; colors are defined in Tailwind.
 Main.astro already mounts Init.astro in the head. It applies the theme before
 first paint and exposes the client API. Do not mount it again in each section.
 
-Place the switch wherever needed; Welcome already includes one instance:
+Place the switch wherever needed. The optional Welcome presentation includes one
+instance when both integrations are selected during creation:
 
 ```astro
 ---

@@ -11,7 +11,7 @@ posts/data contains one entry per locale. IDs come from relative filenames, for
 example en-us/getting-started. Entries contain locale, copyKey, publishedAt, and
 draft. Visitor-facing demo text lives in the content dictionary domain; copyKey
 connects the entry to dictionary.content.posts. There is no duplicate UI copy in
-JSON or hardcoded page markup. en-mx is prepared, but its routes remain disabled.
+JSON or hardcoded page markup. es-mx is prepared, but its routes remain disabled.
 
 Collections can store inactive locales. Consumers must filter by the current
 enabled locale and draft state. In a domain section's frontmatter:
@@ -60,7 +60,7 @@ not depend on an Astro request or runtime secret bindings.
 - strapiStores demonstrates Strapi 5's flat data entries with documentId, locale,
   name, and url. It requests published stores with explicit stable sorting and
   pageSize=100, and follows meta.pagination up to 100 pages per locale. It maps
-  en-us to en-US and en-mx to en-MX for the CMS; adjust that mapping to the CMS's
+  en-us to en-US and es-mx to es-MX for the CMS; adjust that mapping to the CMS's
   actual locale configuration. This is an example contract, not a universal
   adapter for every Strapi project.
 

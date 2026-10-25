@@ -2,15 +2,15 @@ import { spawnSync } from 'node:child_process'
 
 // On Windows npm and pnpm are .cmd launchers. Only fixed tool names and
 // internally constructed arguments reach the shell; paths use the cwd option.
-export function command(tool, args, options = {}) {
+export const command = (tool, args, options = {}) => {
   return spawnSync(tool, args, {
     ...options,
-    shell: process.platform === 'win32',
+    shell: process.platform === 'win32' && ['npm', 'pnpm'].includes(tool),
     windowsHide: true
   })
 }
 
-export function detectTools() {
+export const detectTools = () => {
   const versions = {}
   for (const name of ['pnpm', 'bun', 'npm']) {
     const result = command(name, ['--version'], {
@@ -31,7 +31,7 @@ export function detectTools() {
   return versions
 }
 
-export function selectTools(versions) {
+export const selectTools = (versions) => {
   const manager = versions.pnpm ? 'pnpm' : 'npm'
   if (!versions[manager]) {
     throw new Error(
@@ -49,5 +49,23 @@ export function selectTools(versions) {
     runtime: versions.bun ? 'bun' : 'node',
     runner: versions.bun ? 'bun' : 'npm',
     bunVersion: versions.bun
+  }
+}
+
+export const projectTools = (manifest) => {
+  const manager = manifest.packageManager?.split('@')[0]
+  if (!['pnpm', 'npm'].includes(manager))
+    throw new Error(
+      'Existing project must declare pnpm or npm; add will not switch package managers.'
+    )
+  const bun = ['dev', 'build', 'astro', 'check', 'format', 'check:i18n'].some(
+    (name) => /^\s*bun(?:\s|$)/.test(manifest.scripts?.[name] ?? '')
+  )
+  return {
+    ...manifest.samlineAstro.tools,
+    manager,
+    managerVersion: manifest.packageManager.slice(manager.length + 1),
+    runtime: bun ? 'bun' : 'node',
+    runner: bun ? 'bun' : 'npm'
   }
 }

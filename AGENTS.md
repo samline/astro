@@ -8,6 +8,7 @@ Keep persistent project context in .agents and update it as decisions are made.
 Do not treat chat history or external memory as the only copy.
 
 <!-- codebase-memory-mcp:start -->
+
 For structural codebase exploration, use the installed codebase-memory skill.
 The project-local copy is .agents/skills/codebase-memory/SKILL.md.
 <!-- codebase-memory-mcp:end -->

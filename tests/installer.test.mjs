@@ -18,11 +18,10 @@ import { selectTools } from '../packages/cli/lib/process.mjs'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
 const template = path.join(root, 'packages/cli/template')
-const readme = path.join(root, 'packages/cli/project-readme.md')
 const readJSON = async (file) => JSON.parse(await readFile(file, 'utf8'))
 const kitVersion = (await readJSON(path.join(root, 'package.json'))).version
 
-async function temporary(t) {
+const temporary = async (t) => {
   const directory = await mkdtemp(path.join(tmpdir(), 'astro-kit-test-'))
   t.after(() => rm(directory, { recursive: true, force: true }))
   return directory
@@ -40,7 +39,6 @@ for (const pnpm of [true, false]) {
       const destination = path.join(directory, 'my-project')
       await createProject({
         template,
-        readme,
         destination,
         tools,
         kitVersion
@@ -165,12 +163,11 @@ test('rejects existing files, nonempty folders and symlink destinations without 
     await assert.rejects(
       createProject({
         template,
-        readme,
         destination,
         tools,
         kitVersion
       }),
-      /destino ya existe/
+      /Destination exists/
     )
   }
   assert.equal(await readFile(path.join(full, 'keep.txt'), 'utf8'), 'keep')
@@ -191,12 +188,11 @@ test('invalid package directory names fail before creating files', async (t) => 
   await assert.rejects(
     createProject({
       template,
-      readme,
       destination: path.join(directory, 'bad;name'),
       tools: selectTools({ npm: '11.2.0' }),
       kitVersion
     }),
-    /nombre de carpeta/
+    /folder name/
   )
   assert.deepEqual(await readdir(directory), [])
 })
@@ -219,10 +215,11 @@ test(
         for (const [name, version] of Object.entries(versions)) {
           await writeFile(
             path.join(bin, name),
-            `#!/bin/sh\nif [ "$1" = "--version" ]; then\n  echo '${version}'\n  exit 0\nfi\necho '${name}' "$@" >> commands.log\n`,
+            `#!/bin/sh\nif [ "$1" = "--version" ]; then\n  echo '${version}'\n  exit 0\nfi\necho '${name}' "$@" >> commands.log\nif [ "$1" = "install" ]; then /bin/ln -s '${root}node_modules' node_modules; fi\n`,
             { mode: 0o755 }
           )
         }
+        await symlink(process.execPath, path.join(bin, 'node'))
         const destination = path.join(scenario, 'project with spaces')
         const cli = path.join(root, 'packages/cli/bin/samline-astro.mjs')
         const result = spawnSync(
@@ -234,10 +231,13 @@ test(
           }
         )
         assert.equal(result.status, 0, result.stdout + result.stderr)
-        assert.equal(
-          await readFile(path.join(destination, 'commands.log'), 'utf8'),
-          `${pnpm ? 'pnpm' : 'npm'} install\n${bun ? 'bun' : 'npm'} run format\n`
+        const commands = await readFile(
+          path.join(destination, 'commands.log'),
+          'utf8'
         )
+        assert.ok(commands.startsWith(`${pnpm ? 'pnpm' : 'npm'} install\n`))
+        if (bun) assert.ok(commands.includes('bun --bun '))
+
         assert.equal(
           (await readJSON(path.join(destination, 'package.json'))).name,
           'project-with-spaces'
@@ -288,7 +288,6 @@ for (const deployment of [
         })
         await createProject({
           template,
-          readme,
           destination,
           tools,
           kitVersion,
@@ -301,37 +300,9 @@ for (const deployment of [
           'utf8'
         )
         const files = await readdir(destination)
-        const inactiveActions = ['static', 'cloudflare'].includes(deployment)
-        const actionRegistration = await readFile(
-          path.join(
-            destination,
-            inactiveActions
-              ? 'src/actions/index.ts.example'
-              : 'src/actions/index.ts'
-          ),
-          'utf8'
+        assert.ok(
+          !(await readdir(path.join(destination, 'src'))).includes('actions')
         )
-        if (['static', 'cloudflare'].includes(deployment)) {
-          assert.match(
-            actionRegistration,
-            /^\/\/ import \{ contact \} from '\.\/contact'$/m
-          )
-          assert.match(
-            actionRegistration,
-            /^\/\/ export const server = \{ contact \}$/m
-          )
-          assert.doesNotMatch(actionRegistration, /^export const server/m)
-          assert.ok(
-            !(await readdir(path.join(destination, 'src/actions'))).includes(
-              'index.ts'
-            )
-          )
-        } else {
-          assert.match(
-            actionRegistration,
-            /^export const server = \{ contact \}$/m
-          )
-        }
         const memory = await readFile(
           path.join(destination, '.agents/memory/project.md'),
           'utf8'
@@ -384,14 +355,8 @@ for (const deployment of [
           path.join(destination, '.env.example'),
           'utf8'
         )
-        assert.ok(envExample.includes('# CAPTCHA_PROVIDER=none'))
-        assert.ok(envExample.includes('# AUTH_MODE=disabled'))
-        assert.ok(envExample.includes('# AUTH_API_REFRESH_PATH=auth/refresh'))
-        assert.equal(
-          pkg.scripts['auth:migrate'],
-          `${tools.runtime === 'bun' ? 'bun' : 'node'} scripts/auth-migrate.mjs`
-        )
-        assert.ok(envExample.includes('# CAPTCHA_SECRET_KEY='))
+        assert.doesNotMatch(envExample, /AUTH_|CAPTCHA_/)
+        assert.equal(pkg.scripts['auth:migrate'], undefined)
         assert.ok(config.includes("output: 'static'"))
         assert.equal(config.includes('adapter:'), deployment !== 'static')
         if (adapter) assert.ok(config.includes(`from '${adapter}'`))
@@ -422,23 +387,26 @@ for (const deployment of [
           'utf8'
         )
         assert.equal(env.includes('ASTRO_KEY'), deployment !== 'static')
-        assert.ok(env.includes('# MAIL_ENABLED=false'))
-        assert.ok(env.includes('# SMTP_PASSWORD='))
-        assert.ok(
-          env.includes('# CONTENT_API_URL=https://cms.example.com/api/')
-        )
-        assert.ok(env.includes('# CONTENT_API_TOKEN='))
-        assert.ok(config.includes('CONTENT_API_TOKEN: envField.string'))
-        assert.ok(pkg.dependencies.nodemailer)
-        assert.ok(config.includes('SMTP_PASSWORD: envField.string'))
-        assert.ok(
-          (
-            await readFile(
-              path.join(destination, 'src/server/mail/index.ts'),
-              'utf8'
-            )
-          ).includes('astro:env/server')
-        )
+        for (const omitted of [
+          'MAIL_',
+          'SMTP_',
+          'CONTENT_API_',
+          'CAPTCHA_',
+          'AUTH_',
+          'GTM_'
+        ])
+          assert.ok(!env.includes(omitted), omitted)
+        for (const omitted of [
+          'nodemailer',
+          'pg',
+          'better-auth',
+          '@samline/forms',
+          '@samline/formatter',
+          'ldrs',
+          'vanilla-cookieconsent'
+        ])
+          assert.equal(pkg.dependencies[omitted], undefined)
+        assert.ok(!config.includes('SMTP_PASSWORD'))
         assert.equal(env.includes('HOST=0.0.0.0'), deployment === 'custom')
         assert.equal(
           config.includes('VERCEL_PROJECT_PRODUCTION_URL'),
@@ -498,7 +466,6 @@ test('invalid deployment and site fail before writing any files', async (t) => {
     await assert.rejects(
       createProject({
         template,
-        readme,
         destination: path.join(directory, 'project'),
         tools: selectTools({ npm: '11.2.0' }),
         kitVersion,

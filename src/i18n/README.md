@@ -10,8 +10,8 @@ explicitly because their request is isolated. This feature adds no custom router
 When a section needs several translated browser messages, configure Main:
 
 ```astro
-<Main clientTranslations={['forms', 'buttons']}>
-  <ContactSection />
+<Main clientTranslations={['common', 'buttons']}>
+  <ContentSection />
 </Main>
 ```
 
@@ -32,8 +32,8 @@ const setup = () => {
   if (!node?.textContent) return
   const { locale, translations } = JSON.parse(
     node.textContent
-  ) as ClientTranslations<'forms' | 'buttons'>
-  // Wire this section's UI with translations.forms and translations.buttons.
+  ) as ClientTranslations<'common' | 'buttons'>
+  // Wire this section's UI with translations.common and translations.buttons.
 }
 setup()
 document.addEventListener('astro:page-load', setup)
@@ -57,3 +57,18 @@ Before integrating API/CMS content or language-dependent slugs, read
 identity, provider normalization, SSG/SSR/live/browser resolution, missing
 translations, caching and consistent navigation/SEO. This is integration guidance;
 the starter's current path-based selector does not resolve translated slugs yet.
+
+## Language scaffolding and validation
+
+Initial installation emits only selected languages/domains. Built-in presets are
+en-us, es-mx and es-es. Later language additions inspect current dictionary keys
+and create empty translations, preserving custom domains and structural arrays.
+No posts, products, pages or translated slugs are created.
+
+Draft languages remain in availableLocales but out of locales in config.ts. Fill
+translations and language labels before deliberately activating their routes.
+check:i18n validates active dictionaries as well as Astro markup; empty active
+strings fail. If a key is intentionally empty, document it explicitly in an
+optionalTranslationKeys array in config.ts using domain.path keys. Do not use
+that exception to disguise untranslated content. Dynamic dictionaries and
+string-literal type constraints require review rather than execution or guessing.

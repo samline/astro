@@ -116,7 +116,7 @@ const item = { id: 'visible', title: 'Remote title', locale: 'en-us', draft: fal
 export const GET = async ({ params, request }) => {
   if (request.headers.get('authorization') !== 'Bearer local-only-fake-token') return new Response('', { status: 401 })
   await appendFile(${JSON.stringify(record)}, 'GET\\n')
-  return Response.json({ data: params.id ? item : [item, { ...item, id: 'draft', draft: true }, { ...item, id: 'other-language', locale: 'en-mx' }] })
+  return Response.json({ data: params.id ? item : [item, { ...item, id: 'draft', draft: true }, { ...item, id: 'other-language', locale: 'es-mx' }] })
 }
 export const POST = () => { throw new Error('Write authorization must reject before upstream access') }
 `

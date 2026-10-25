@@ -1,16 +1,18 @@
 # Authentication
 
 Optional Better Auth integration with a common session/authorization interface.
-Better Auth is installed, but `AUTH_MODE` defaults to `disabled`, the auth route
-is inactive, and no login page, business roles or account UI is imposed. Public
+Better Auth is installed when selected, but `AUTH_MODE` defaults to `disabled`.
+Route activation depends on the deployment; no login page, business roles or
+account UI is imposed. Public
 pages remain SSG. Authored visitor messages live in modular `auth` dictionaries.
 The REST bridge is a Better Auth plugin with an explicit provider contract.
 
 ## Activation
 
 1. Configure a server adapter (already present in the default Vercel profile).
-2. Rename `src/pages/api/auth/[...all].ts.example` to `[...all].ts`. Its contents
-   already implement the route; preserve `prerender = false` and the trusted
+2. The installer registers `[...all].ts` on compatible targets. If only
+   `src/pages/api/auth/[...all].ts.example` exists, configure a compatible adapter
+   and rename it to `[...all].ts`. Preserve `prerender = false` and the trusted
    client-address replacement. Never accept the browser's IP header as trusted.
 3. Set `AUTH_MODE`, a random `AUTH_SECRET` of at least 32 characters, and
    `AUTH_URL` to the application's exact origin. `SITE_URL` is the origin fallback.
@@ -48,6 +50,11 @@ the same origin; cross-origin frontend auth is outside this starter contract.
 and 3600 for database mode. REST sessions never extend beyond a provided upstream
 `expires_at`. Do not confuse local session expiry with an upstream access-token
 expiry or a refreshed user profile.
+
+The generator includes only the selected provider settings module. Changing an
+installed identity mode requires reviewing its source, dependencies and environment
+together; changing AUTH_MODE alone does not install another provider or migrate
+users. Check package.json samlineAstro.options for the initial selected mode.
 
 ### External REST
 

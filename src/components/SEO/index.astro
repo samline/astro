@@ -72,8 +72,8 @@ const translations = [...new Set(alternateLocales)].filter((language) =>
   locales.includes(language)
 )
 const ogLocale = (language: string) => {
-  const [code, region] = language.split('-')
-  return region ? `${code.toLowerCase()}_${region.toUpperCase()}` : code
+  const locale = new Intl.Locale(language)
+  return locale.region ? `${locale.language}_${locale.region}` : locale.language
 }
 const socialImage =
   image === undefined && seoConfig.image

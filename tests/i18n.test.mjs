@@ -16,7 +16,7 @@ import { spawnSync } from 'node:child_process'
 import { defaultLocale, locales } from '../src/i18n/config.ts'
 import { getDictionary, resolveLocale } from '../src/i18n/index.ts'
 import enUS from '../src/i18n/dictionaries/en-us/index.ts'
-import enMX from '../src/i18n/dictionaries/en-mx/index.ts'
+import esMX from '../src/i18n/dictionaries/es-mx/index.ts'
 import { findUntranslatedText } from '../scripts/check-i18n.mjs'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
@@ -37,7 +37,7 @@ test('each locale separates translation modules into index and types files', asy
     'mail',
     'content'
   ]
-  for (const locale of ['en-us', 'en-mx']) {
+  for (const locale of ['en-us', 'es-mx']) {
     const directory = path.join(root, 'src/i18n/dictionaries', locale)
     for (const module of modules) {
       assert.ok(
@@ -62,7 +62,7 @@ test('default locale, fallback and dictionary parity', () => {
   assert.deepEqual(locales, ['en-us'])
   assert.equal(resolveLocale('en-US'), 'en-us')
   assert.equal(resolveLocale('unknown'), 'en-us')
-  assert.equal(resolveLocale('en-mx'), 'en-us')
+  assert.equal(resolveLocale('es-mx'), 'en-us')
   assert.equal(getDictionary(undefined), enUS)
   const keys = (object, prefix = '') =>
     Object.entries(object)
@@ -74,13 +74,13 @@ test('default locale, fallback and dictionary parity', () => {
         return [name]
       })
       .sort()
-  assert.deepEqual(keys(enMX), keys(enUS))
+  assert.deepEqual(keys(esMX), keys(enUS))
 })
 
 test('enabled locales select their own dictionary', () => {
-  locales.push('en-mx')
+  locales.push('es-mx')
   try {
-    assert.equal(getDictionary('en-MX'), enMX)
+    assert.equal(getDictionary('es-MX'), esMX)
   } finally {
     locales.pop()
   }
@@ -162,9 +162,9 @@ const dictionary = getDictionary(Astro.currentLocale)
 const links = [
   { id: 'route', href: '/contact?from=home#form', target: '_blank', rel: 'nofollow sponsored' },
   { id: 'home', href: '/' },
-  { id: 'localized', href: '/en-mx/contact?x=1#form' },
-  { id: 'similar', href: '/en-mx-extra/contact' },
-  { id: 'nested', href: '/guides/en-mx/contact' },
+  { id: 'localized', href: '/es-mx/contact?x=1#form' },
+  { id: 'similar', href: '/es-mx-extra/contact' },
+  { id: 'nested', href: '/guides/es-mx/contact' },
   { id: 'hash', href: '#about' },
   { id: 'query', href: '?page=2#results' },
   { id: 'relative', href: '../contact' },
@@ -328,68 +328,68 @@ export const getStaticPaths = () => locales.map((locale) => ({
     assert.ok(home.indexOf('data-page-loader') > home.indexOf('<body'))
     assert.ok(home.includes(enUS.common.loading))
     assert.match(home, /<title>SAM Astro<\/title>/)
-    assert.ok(!home.includes('hreflang="en-mx"'))
+    assert.ok(!home.includes('hreflang="es-mx"'))
     await assert.rejects(
-      readFile(path.join(fixture, '.vercel/output/static/en-mx/index.html')),
+      readFile(path.join(fixture, '.vercel/output/static/es-mx/index.html')),
       /ENOENT/
     )
     const config = path.join(fixture, 'src/i18n/config.ts')
     await writeFile(
       config,
       (await readFile(config, 'utf8')).replace(
-        "// locales.push('en-mx')",
-        "locales.push('en-mx')"
+        "// locales.push('es-mx')",
+        "locales.push('es-mx')"
       )
     )
     const dictionary = path.join(
       fixture,
-      'src/i18n/dictionaries/en-mx/welcome/index.ts'
+      'src/i18n/dictionaries/es-mx/welcome/index.ts'
     )
     await writeFile(
       dictionary,
       (await readFile(dictionary, 'utf8')).replace(
-        'To get started, open the',
+        esMX.welcome.titleBeforeCode,
         'Regional welcome'
       )
     )
     build()
     const regional = await readFile(
-      path.join(fixture, '.vercel/output/static/en-mx/index.html'),
+      path.join(fixture, '.vercel/output/static/es-mx/index.html'),
       'utf8'
     )
-    assert.match(regional, /lang="en-mx"/)
+    assert.match(regional, /lang="es-mx"/)
     assert.equal((regional.match(/<main\b/g) || []).length, 1)
     assert.ok(regional.includes('Regional welcome'))
     assert.ok(
-      regional.includes('rel="canonical" href="https://i18n.example/en-mx"')
+      regional.includes('rel="canonical" href="https://i18n.example/es-mx"')
     )
     assert.ok(regional.includes('hreflang="en-us"'))
-    assert.ok(regional.includes('hreflang="en-mx"'))
-    assert.ok(regional.includes('aria-label="Select language"'))
+    assert.ok(regional.includes('hreflang="es-mx"'))
+    assert.ok(regional.includes(`aria-label="${esMX.common.language}"`))
     const regionalAbout = await readFile(
-      path.join(fixture, '.vercel/output/static/en-mx/about/index.html'),
+      path.join(fixture, '.vercel/output/static/es-mx/about/index.html'),
       'utf8'
     )
-    assert.match(regionalAbout, /lang="en-mx"/)
+    assert.match(regionalAbout, /lang="es-mx"/)
     const regionalCopy = JSON.parse(
       regionalAbout.match(
         /<script[^>]*id="kit-translations"[^>]*>([\s\S]*?)<\/script>/
       )[1]
     )
-    assert.equal(regionalCopy.locale, 'en-mx')
+    assert.equal(regionalCopy.locale, 'es-mx')
     assert.equal(
       regionalCopy.translations.forms.controls.clearFile,
-      'Clear files'
+      esMX.forms.controls.clearFile
     )
     assert.ok(
       regionalAbout.includes(
-        'rel="canonical" href="https://i18n.example/en-mx/about"'
+        'rel="canonical" href="https://i18n.example/es-mx/about"'
       )
     )
     assert.ok(regionalAbout.includes('href="/about"'))
-    assert.ok(regionalAbout.includes('href="/en-mx/about"'))
-    assert.match(regionalAbout, /href="\/en-mx\/about"[^>]*aria-current="page"/)
-    assert.ok(!regionalAbout.includes('/en-mx/en-mx/'))
+    assert.ok(regionalAbout.includes('href="/es-mx/about"'))
+    assert.match(regionalAbout, /href="\/es-mx\/about"[^>]*aria-current="page"/)
+    assert.ok(!regionalAbout.includes('/es-mx/es-mx/'))
     const defaultAbout = await readFile(
       path.join(fixture, '.vercel/output/static/about/index.html'),
       'utf8'
@@ -397,16 +397,16 @@ export const getStaticPaths = () => locales.map((locale) => ({
     assert.match(defaultAbout, /lang="en-us"/)
     for (const [html, prefix] of [
       [defaultAbout, ''],
-      [regionalAbout, '/en-mx']
+      [regionalAbout, '/es-mx']
     ]) {
       const link = (id) =>
         html.match(new RegExp('<a\\b[^>]*data-link="' + id + '"[^>]*>'))?.[0]
       const destination = (id) => link(id)?.match(/href="([^"]*)"/)?.[1]
       assert.equal(destination('route'), prefix + '/contact?from=home#form')
       assert.equal(destination('home'), prefix || '/')
-      assert.equal(destination('localized'), '/en-mx/contact?x=1#form')
-      assert.equal(destination('similar'), prefix + '/en-mx-extra/contact')
-      assert.equal(destination('nested'), prefix + '/guides/en-mx/contact')
+      assert.equal(destination('localized'), '/es-mx/contact?x=1#form')
+      assert.equal(destination('similar'), prefix + '/es-mx-extra/contact')
+      assert.equal(destination('nested'), prefix + '/guides/es-mx/contact')
       for (const [id, href] of Object.entries({
         hash: '#about',
         query: '?page=2#results',
@@ -427,7 +427,11 @@ export const getStaticPaths = () => locales.map((locale) => ({
       assert.doesNotMatch(link('home'), /\brel=/)
       assert.match(link('route'), /class="fixture-link"/)
       assert.match(link('route'), /data-astro-cid-/)
-      assert.match(link('route'), /aria-label="Home"/)
+      assert.ok(
+        link('route').includes(
+          `aria-label="${prefix ? esMX.navigation.home : enUS.navigation.home}"`
+        )
+      )
       assert.doesNotMatch(link('route'), /localize=/)
       assert.match(link('named-download'), /download="guide.pdf"/)
       assert.doesNotMatch(link('no-download'), /\bdownload=/)
@@ -458,8 +462,8 @@ export const getStaticPaths = () => locales.map((locale) => ({
       path.join(fixture, '.vercel/output/static/sitemap-0.xml'),
       'utf8'
     )
-    assert.ok(sitemap.includes('hreflang="en-mx"'))
-    assert.ok(sitemap.includes('https://i18n.example/en-mx'))
+    assert.ok(sitemap.includes('hreflang="es-mx"'))
+    assert.ok(sitemap.includes('https://i18n.example/es-mx'))
     assert.ok(!sitemap.includes('/404'))
   }
 )

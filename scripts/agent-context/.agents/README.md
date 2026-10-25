@@ -27,3 +27,5 @@ publishing, deployment, or external communications.
 Keep .agents, root AGENTS.md, and skills-lock.json versioned with the project.
 They are developer resources and are not public site assets. The root lockfile
 records upstream skill sources; preserve upstream files when formatting.
+
+Read memory/integrations.md for installed features, collections and pending locale translations.

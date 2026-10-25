@@ -3,8 +3,6 @@ import type { HTMLAttributes } from 'astro/types'
 import type { FieldAppearance, SelectEntry, SelectOption } from './types'
 import Field from './Field.astro'
 import { fieldAttributes } from './attributes'
-import FaIcon from '@/components/FaIcon/index.astro'
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons/faChevronDown'
 
 export type Props = Omit<HTMLAttributes<'select'>, 'name'> &
   FieldAppearance & {
@@ -96,6 +94,17 @@ const isSelected = (option: SelectOption) =>
     )}
   </select>
   {!multiple && (
-    <FaIcon slot='accessory' icon={faChevronDown} class='field-chevron' />
+    <svg
+      slot='accessory'
+      class='field-chevron'
+      viewBox='0 0 24 24'
+      fill='none'
+      stroke='currentColor'
+      stroke-width='2'
+      aria-hidden='true'
+      focusable='false'
+    >
+      <path d='m6 9 6 6 6-6' />
+    </svg>
   )}
 </Field>
