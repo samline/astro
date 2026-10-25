@@ -111,7 +111,7 @@ export function deploymentManifest(manifest, deployment, tools) {
     if (item.adapter) delete dependencies[item.adapter]
   if (profile.adapter) dependencies[profile.adapter] = profile.version
   manifest.dependencies = dependencies
-  manifest.astroKit.deployment = deployment
+  manifest.samlineAstro.deployment = deployment
   if (deployment === 'cloudflare') {
     manifest.devDependencies = {
       ...manifest.devDependencies,
@@ -207,7 +207,7 @@ export const configureDeployment = async (
     })
     await write(
       '.dev.vars.example',
-      '# Local Worker secrets. Copy to .dev.vars; never commit real credentials.\n# ASTRO_KEY=\n\n# Optional content API for Actions/live collections.\n# CONTENT_API_URL=https://cms.example.com/api/\n# CONTENT_API_TOKEN=\n'
+      '# Local Worker secrets. Copy to .dev.vars; never commit real credentials.\n# ASTRO_KEY=\n\n# Optional content API for Actions/live collections.\n# CONTENT_API_URL=https://cms.example.com/api/\n# CONTENT_API_TOKEN=\n\n# Optional runtime CAPTCHA secret (provider/site key/hostnames are build variables).\n# CAPTCHA_SECRET_KEY=\n\n# Optional authentication runtime settings. See server/auth/README.md.\n# AUTH_MODE=disabled\n# AUTH_URL=https://example.com\n# AUTH_SECRET=\n# AUTH_API_URL=https://api.example.com/api/\n# AUTH_API_KEY=\n# AUTH_DATABASE_URL=\n'
     )
   }
   const fallback =

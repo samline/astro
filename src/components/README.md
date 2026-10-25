@@ -10,9 +10,10 @@ its section folder rather than in this reusable component directory.
 | -------------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------- |
 | Fields         | [Fields/README.md](./Fields/README.md)                 | Native form controls, field presentation, password/file enhancements, and optional form controller. |
 | PageLoader     | [PageLoader/README.md](./PageLoader/README.md)         | showLoader, hideLoader, navigation, and ldrs animation selection.                                   |
-| Theme          | [Theme/README.md](./Theme/README.md)                   | Init, Switch, window.astroKitTheme, and themechange.                                                |
+| Theme          | [Theme/README.md](./Theme/README.md)                   | Init, Switch, window.samlineAstroTheme, and themechange.                                            |
 | GTM            | [GTM/README.md](./GTM/README.md)                       | Consent, CookiePreferences, and container configuration.                                            |
 | Section        | [Section/README.md](./Section/README.md)               | id, padded, slots, and vertical spacing.                                                            |
+| Captcha        | [Captcha/README.md](./Captcha/README.md)               | Turnstile/reCAPTCHA v2 selection, client lifecycle and server verification.                         |
 | Box            | [Box/README.md](./Box/README.md)                       | size, slots, width, and gutters.                                                                    |
 | Link           | [Link/README.md](./Link/README.md)                     | href, localize, and native navigation attributes.                                                   |
 | Button         | [Button/README.md](./Button/README.md)                 | variant, size, native actions, and styled links.                                                    |

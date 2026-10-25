@@ -51,6 +51,8 @@ test(
     await cp(path.join(root, 'src'), path.join(fixture, 'src'), {
       recursive: true
     })
+    // This fixture exercises content integration; auth has its own HTTP fixture.
+    await rm(path.join(fixture, 'src/middleware.ts'))
     await rm(path.join(fixture, 'src/pages'), { recursive: true })
     await mkdir(path.join(fixture, 'src/pages/upstream/posts'), {
       recursive: true

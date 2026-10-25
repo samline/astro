@@ -3,7 +3,7 @@
 ## Identity and tools
 
 - Project: {{NAME}}
-- Created from Astro Kit {{VERSION}}.
+- Created from SAM Astro {{VERSION}}.
 - Astro dependency: {{ASTRO}}
 - Package manager: {{INSTALL}}
 - Script runner: {{RUN}}
@@ -26,6 +26,12 @@ independently of the generator and starts at its own version 0.0.1.
   Collection and unregistered API Actions; see src/content/README.md.
 - Tailwind CSS 4, local Fontsource fonts, and light/dark theme controls.
 - Optional GTM consent and an ldrs-based PageLoader.
+- Disabled-by-default Better Auth integration for external REST identity,
+  OAuth/OIDC or project-owned users, with session/access APIs, explicit route
+  policies and guarded Server Island support; read src/server/auth/README.md.
+- Optional Captcha component with Turnstile / reCAPTCHA v2 selection (default none),
+  translated feedback and lifecycle APIs. Contact verifies tokens before mail;
+  pure static hosting requires a verification backend. See its component README.
 - Disabled-by-default SMTP service under src/server/mail with localized templates;
   request-time delivery needs server execution and configured credentials.
 - Native reusable Fields with local API docs, SAM Forms/Formatter integration,

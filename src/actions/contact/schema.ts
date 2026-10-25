@@ -10,9 +10,17 @@ export const contactInput = z
     locale: string().default(defaultLocale),
     name: string().trim(),
     email: string().trim(),
-    phone: string().trim().optional().default(''),
+    phone: string()
+      .trim()
+      .nullish()
+      .transform((value) => value ?? ''),
     message: string().trim(),
-    website: string().optional().default('')
+    website: string()
+      .nullish()
+      .transform((value) => value ?? ''),
+    captchaToken: string()
+      .nullish()
+      .transform((value) => value ?? '')
   })
   .superRefine((input, context) => {
     const copy = getDictionary(input.locale).forms.messages
@@ -28,7 +36,8 @@ export const contactInput = z
       ['email', 254],
       ['phone', 30],
       ['message', 5000],
-      ['website', 200]
+      ['website', 200],
+      ['captchaToken', 2048]
     ] as const) {
       if (input[field].length > limit) issue(field, copy.tooLong)
       if (input[field].includes('\0')) issue(field, copy.invalidInput)

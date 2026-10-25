@@ -1,13 +1,14 @@
 import { ActionError, defineAction } from 'astro:actions'
 import { getDictionary } from '../../i18n'
 import { sendFormMail } from '../../server/mail'
+import { verifyCaptcha } from '../../server/captcha'
 import { contactInput } from './schema'
 
 export const contact = defineAction({
   accept: 'form',
   input: contactInput,
   handler: async (
-    { locale, name, email, phone, message, website },
+    { locale, name, email, phone, message, website, captchaToken },
     context
   ) => {
     const dictionary = getDictionary(locale)
@@ -16,6 +17,12 @@ export const contact = defineAction({
       throw new ActionError({ code: 'FORBIDDEN', message: copy.forbidden })
     }
     if (website.trim()) return { success: true, message: copy.success }
+    if (!(await verifyCaptcha(captchaToken))) {
+      throw new ActionError({
+        code: 'BAD_REQUEST',
+        message: dictionary.captcha.invalid
+      })
+    }
     try {
       await sendFormMail({
         locale,

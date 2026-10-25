@@ -4,8 +4,8 @@ import { themeConfig } from '@/config/theme'
 
 <script is:inline define:vars={{ themeConfig }} data-astro-rerun>
   ;(() => {
-    if (window.astroKitTheme) {
-      window.astroKitTheme.refresh()
+    if (window.samlineAstroTheme) {
+      window.samlineAstroTheme.refresh()
       return
     }
 
@@ -52,7 +52,7 @@ import { themeConfig } from '@/config/theme'
       apply()
     }
 
-    window.astroKitTheme = Object.freeze({
+    window.samlineAstroTheme = Object.freeze({
       getTheme: resolve,
       getPreference: () => preference,
       setPreference,

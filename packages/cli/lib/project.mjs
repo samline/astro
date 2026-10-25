@@ -57,6 +57,7 @@ function projectManifest(
     },
     scripts: {
       preinstall: 'node scripts/check-package-manager.mjs',
+      'auth:migrate': `${bun ? 'bun' : 'node'} scripts/auth-migrate.mjs`,
       dev: `${astro} dev --background`,
       build: `${astro} build`,
       preview: `${astro} preview`,
@@ -69,7 +70,7 @@ function projectManifest(
     },
     dependencies: source.dependencies,
     devDependencies: source.devDependencies,
-    astroKit: { version: kitVersion }
+    samlineAstro: { version: kitVersion }
   }
 }
 

@@ -1,4 +1,4 @@
-# Astro Kit agent context
+# SAM Astro agent context
 
 This directory is the persistent project memory and local skill library.
 Read it when starting work or recovering context after a chat reset.

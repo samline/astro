@@ -1,9 +1,9 @@
-# @samline/astro-kit
+# @samline/astro
 
 Generador de sitios Astro 7 con SSG y despliegue configurable.
 
 ```sh
-npx @samline/astro-kit@latest mi-proyecto
+npx @samline/astro@latest mi-proyecto
 ```
 
 Sin nombre, pregunta la carpeta. Con `--no-install`, crea los archivos sin
@@ -23,7 +23,7 @@ El asistente permite elegir static, vercel (predeterminado), netlify, cloudflare
 admite Server Islands. Instala solo el adaptador del destino elegido.
 
 ```sh
-npx @samline/astro-kit@latest mi-proyecto --deploy cloudflare --site https://example.com
+npx @samline/astro@latest mi-proyecto --deploy cloudflare --site https://example.com
 ```
 
 `--deploy` es obligatorio en ejecuciones sin terminal interactiva. `--site` es

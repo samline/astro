@@ -1,10 +1,10 @@
 {
-  "name": "@samline/astro-kit",
-  "version": "7.17.0",
+  "name": "@samline/astro",
+  "version": "7.19.0",
   "description": "Crea sitios Astro 7 con SSG, Server Islands y Vercel.",
   "type": "module",
   "bin": {
-    "astro-kit": "bin/astro-kit.mjs"
+    "samline-astro": "bin/samline-astro.mjs"
   },
   "files": [
     "bin/",

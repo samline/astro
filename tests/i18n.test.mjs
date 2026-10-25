@@ -321,13 +321,13 @@ export const getStaticPaths = () => locales.map((locale) => ({
       /<button[^>]*role="switch"[^>]*aria-checked="false"[^>]*data-theme-switch[^>]*hidden/
     )
     assert.ok(home.includes('Dark mode'))
-    assert.ok(home.indexOf('window.astroKitTheme') < home.indexOf('<body'))
+    assert.ok(home.indexOf('window.samlineAstroTheme') < home.indexOf('<body'))
     assert.doesNotMatch(home, /aria-label="link"/)
     assert.match(home, /data-page-loader/)
     assert.match(home, /role="status" aria-live="polite" hidden/)
     assert.ok(home.indexOf('data-page-loader') > home.indexOf('<body'))
     assert.ok(home.includes(enUS.common.loading))
-    assert.match(home, /<title>Astro Kit<\/title>/)
+    assert.match(home, /<title>SAM Astro<\/title>/)
     assert.ok(!home.includes('hreflang="en-mx"'))
     await assert.rejects(
       readFile(path.join(fixture, '.vercel/output/static/en-mx/index.html')),

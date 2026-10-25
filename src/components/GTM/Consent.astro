@@ -43,7 +43,7 @@ const policyHref = gtmConfig.privacyPolicyPath
         if (current !== element || !element.isConnected) return
         consent.reset(false)
         const sync = () => {
-          const reload = window.astroKitGTM?.updateConsent({
+          const reload = window.samlineAstroGTM?.updateConsent({
             analytics: consent.acceptedCategory('analytics'),
             marketing: consent.acceptedCategory('marketing')
           })

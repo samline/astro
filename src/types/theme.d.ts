@@ -6,7 +6,7 @@ declare global {
   }
 
   interface Window {
-    astroKitTheme?: {
+    samlineAstroTheme?: {
       getTheme(): Theme
       getPreference(): ThemePreference
       setPreference(preference: ThemePreference): void

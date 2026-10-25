@@ -1,0 +1,66 @@
+---
+import type { HTMLAttributes } from 'astro/types'
+import { CAPTCHA_PROVIDER, CAPTCHA_SITE_KEY } from 'astro:env/server'
+import { getDictionary } from '../../i18n'
+
+interface Props extends Omit<HTMLAttributes<'div'>, 'children'> {
+  theme?: 'auto' | 'light' | 'dark'
+  size?: 'normal' | 'compact'
+}
+
+const {
+  theme = 'auto',
+  size = 'normal',
+  class: className,
+  ...attributes
+} = Astro.props
+const copy = getDictionary(Astro.currentLocale).captcha
+if (CAPTCHA_PROVIDER !== 'none' && !CAPTCHA_SITE_KEY?.trim()) {
+  throw new Error('Configure CAPTCHA_SITE_KEY before rendering Captcha.')
+}
+---
+
+{CAPTCHA_PROVIDER !== 'none' && (
+  <div
+    {...attributes}
+    class:list={['grid gap-2', className]}
+    data-captcha
+    data-provider={CAPTCHA_PROVIDER}
+    data-sitekey={CAPTCHA_SITE_KEY}
+    data-theme={theme}
+    data-size={size}
+    data-language={(Astro.currentLocale ?? 'en-us').split('-')[0]}
+    data-loading={copy.loading}
+    data-expired={copy.expired}
+    data-error={copy.error}
+    role='group'
+    aria-label={copy.label}
+  >
+    <div data-captcha-widget></div>
+    <input type='hidden' name='captchaToken' value='' data-captcha-token />
+    <p data-captcha-status role='status' class='text-sm'>
+      {copy.loading}
+    </p>
+    <button
+      type='button'
+      data-captcha-retry
+      hidden
+      class='w-fit cursor-pointer text-sm underline'
+    >
+      {copy.retry}
+    </button>
+    <noscript>
+      <p>{copy.noScript}</p>
+    </noscript>
+  </div>
+)}
+
+<script>
+  import { mountCaptchas, destroyCaptchas } from './scripts'
+  mountCaptchas()
+  document.addEventListener('astro:page-load', () => mountCaptchas())
+  document.addEventListener('astro:before-swap', () => destroyCaptchas())
+  window.addEventListener('pagehide', (event) => {
+    if (!event.persisted) destroyCaptchas()
+  })
+</script>

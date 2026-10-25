@@ -112,3 +112,12 @@ the test suite. HTTP tests replace delivery with an awaited local fake.
 
 References: [Astro Actions](https://docs.astro.build/en/guides/actions/),
 [Actions API](https://docs.astro.build/en/reference/modules/astro-actions/).
+
+## CAPTCHA
+
+The optional `captchaToken` field is bounded to 2048 characters. With
+`CAPTCHA_PROVIDER=none` it is not required. When Turnstile or reCAPTCHA is selected,
+the Action verifies it after Origin/honeypot checks and before mail. A failed
+check returns the translated `captcha.invalid` Action error and sends no mail.
+Never include the token in mail fields. Reset the client widget after every
+submission attempt; see [Captcha](../../components/Captcha/README.md).

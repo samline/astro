@@ -52,7 +52,7 @@ for (const pnpm of [true, false]) {
       assert.equal(pkg.name, 'my-project')
       assert.equal(pkg.version, '0.0.1')
       assert.equal(pkg.private, true)
-      assert.equal(pkg.astroKit.version, kitVersion)
+      assert.equal(pkg.samlineAstro.version, kitVersion)
       assert.equal(
         pkg.packageManager,
         `${manager}@${pnpm ? '12.9.1' : '11.2.0'}`
@@ -111,7 +111,7 @@ for (const pnpm of [true, false]) {
         'utf8'
       )
       assert.ok(memory.includes('Project: my-project'))
-      assert.ok(memory.includes(`Astro Kit ${kitVersion}`))
+      assert.ok(memory.includes(`SAM Astro ${kitVersion}`))
       assert.ok(!memory.includes('{{'))
       assert.ok(!memory.includes('2059917'))
       assert.ok(
@@ -224,7 +224,7 @@ test(
           )
         }
         const destination = path.join(scenario, 'project with spaces')
-        const cli = path.join(root, 'packages/cli/bin/astro-kit.mjs')
+        const cli = path.join(root, 'packages/cli/bin/samline-astro.mjs')
         const result = spawnSync(
           process.execPath,
           [cli, destination, '--deploy', 'vercel'],
@@ -254,7 +254,7 @@ test(
 )
 
 test('CLI rejects bad arguments and prints version without requiring tools', () => {
-  const cli = path.join(root, 'packages/cli/bin/astro-kit.mjs')
+  const cli = path.join(root, 'packages/cli/bin/samline-astro.mjs')
   const result = spawnSync(process.execPath, [cli, '--version'], {
     env: { ...process.env, PATH: '' },
     encoding: 'utf8'
@@ -379,7 +379,19 @@ for (const deployment of [
           ),
           adapter ? [adapter] : []
         )
-        assert.equal(pkg.astroKit.deployment, deployment)
+        assert.equal(pkg.samlineAstro.deployment, deployment)
+        const envExample = await readFile(
+          path.join(destination, '.env.example'),
+          'utf8'
+        )
+        assert.ok(envExample.includes('# CAPTCHA_PROVIDER=none'))
+        assert.ok(envExample.includes('# AUTH_MODE=disabled'))
+        assert.ok(envExample.includes('# AUTH_API_REFRESH_PATH=auth/refresh'))
+        assert.equal(
+          pkg.scripts['auth:migrate'],
+          `${tools.runtime === 'bun' ? 'bun' : 'node'} scripts/auth-migrate.mjs`
+        )
+        assert.ok(envExample.includes('# CAPTCHA_SECRET_KEY='))
         assert.ok(config.includes("output: 'static'"))
         assert.equal(config.includes('adapter:'), deployment !== 'static')
         if (adapter) assert.ok(config.includes(`from '${adapter}'`))
@@ -500,7 +512,7 @@ test('invalid deployment and site fail before writing any files', async (t) => {
 test('CLI requires a deployment without a TTY and rejects invalid choices before creating files', async (t) => {
   const directory = await temporary(t)
   const destination = path.join(directory, 'project')
-  const cli = path.join(root, 'packages/cli/bin/astro-kit.mjs')
+  const cli = path.join(root, 'packages/cli/bin/samline-astro.mjs')
   for (const flags of [
     [],
     ['--deploy', 'other'],

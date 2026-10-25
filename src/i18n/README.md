@@ -49,3 +49,11 @@ whole-dictionary download. Existing components using a few data attributes can
 keep doing that without enabling this payload. Importing getDictionary directly
 in browser code remains possible but includes the dictionaries in that bundle;
 prefer this scoped payload when the section only needs a few domains.
+
+## API content and translated routes
+
+Before integrating API/CMS content or language-dependent slugs, read
+[Localized content routes](./localized-content.md). It defines translation-group
+identity, provider normalization, SSG/SSR/live/browser resolution, missing
+translations, caching and consistent navigation/SEO. This is integration guidance;
+the starter's current path-based selector does not resolve translated slugs yet.

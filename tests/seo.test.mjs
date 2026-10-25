@@ -98,7 +98,7 @@ test(
       '</script><script data-injected="true">bad</script> & $& \u2028\u2029'
     await edit(
       'src/i18n/dictionaries/en-us/seo/index.ts',
-      "'Astro Kit website preview'",
+      "'SAM Astro website preview'",
       JSON.stringify(hostileAlt)
     )
     await writeFile(
@@ -174,7 +174,7 @@ const dictionary=getDictionary(Astro.currentLocale)
     assert.match(home, /<meta name="theme-color" content="#3245ff"/)
 
     assert.equal((home.match(/<title>/g) || []).length, 1)
-    assert.match(home, /<title>Astro Kit<\/title>/)
+    assert.match(home, /<title>SAM Astro<\/title>/)
     assert.ok(home.includes('content="index, follow, max-image-preview:large"'))
     assert.ok(home.includes('property="og:locale" content="en_US"'))
     assert.ok(home.includes('name="twitter:card" content="summary"'))
@@ -188,7 +188,7 @@ const dictionary=getDictionary(Astro.currentLocale)
       1
     )
     const english = await output('about/index.html')
-    assert.match(english, /<title>Home \| Astro Kit<\/title>/)
+    assert.match(english, /<title>Home \| SAM Astro<\/title>/)
     assert.ok(
       english.includes('rel="canonical" href="https://seo.example/about"')
     )

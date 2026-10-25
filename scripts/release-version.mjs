@@ -28,5 +28,5 @@ for (let i = 0; i < files.length; i++) {
   )
 }
 console.log(
-  `Astro Kit actualizado a ${version}. Ejecuta bun run verify y bun run kit:pack.`
+  `SAM Astro actualizado a ${version}. Ejecuta bun run verify y bun run kit:pack.`
 )

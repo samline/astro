@@ -12,6 +12,8 @@ import themes from './themes'
 import cookies from './cookies'
 import mail from './mail'
 import content from './content'
+import captcha from './captcha'
+import auth from './auth'
 
 export default {
   site,
@@ -26,5 +28,7 @@ export default {
   themes,
   cookies,
   mail,
-  content
+  content,
+  captcha,
+  auth
 } satisfies Dictionary

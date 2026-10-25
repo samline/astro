@@ -1,0 +1,13 @@
+// Remove .example only after configuring AUTH_MODE and a server adapter.
+import type { APIRoute } from 'astro'
+import { getAuth } from '../../../server/auth'
+
+export const prerender = false
+export const ALL: APIRoute = async ({ request, clientAddress }) => {
+  const service = getAuth()
+  if (!service) return new Response(null, { status: 404 })
+  const headers = new Headers(request.headers)
+  // Replace the browser-supplied value with the address resolved by the adapter.
+  headers.set('x-samline-client-ip', clientAddress)
+  return service.handler(new Request(request, { headers }))
+}

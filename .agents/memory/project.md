@@ -1,10 +1,10 @@
 # Project state
 
-Last reconciled: 2026-10-24.
+Last reconciled: 2026-10-25.
 
 ## Purpose and layout
 
-Astro Kit is a new Astro 7 base for SSG sites with Server Islands, using Vercel
+SAM Astro is a new Astro 7 base for SSG sites with Server Islands, using Vercel
 by default. The old Astro 5 project is a reference for intent, not an implementation
 to copy. Dinkbit is a reference for breakpoints and consent presentation.
 
@@ -15,15 +15,15 @@ Section-only pieces stay beside their owning section.
 
 ## Versions and distribution
 
-- Root and CLI version: 7.17.0.
+- Root and CLI version: 7.19.0.
 - Astro dependency: ^7.4.2; use Astro 7.4 behavior and current official docs.
 - Tailwind CSS 4 via its Vite plugin; TypeScript 6 and Vite 8.
 - Install with pnpm; execute project scripts with Bun.
 - Repository: git@github.com:samline/astro-kit.git; current branch main.
-- Latest committed source before Fields: 3df244c (Content Collections/API examples).
+- Previous baseline commit: 549f430 (SAM integrations and API/client translations).
 - Prior feature commits: d9f3d8f (GTM/consent/themes), cb62214 (UI primitives/themes).
 
-The public generator is @samline/astro-kit and must run through npx with Node.
+The public generator is @samline/astro and must run through npx with Node.
 It independently falls back to npm when pnpm or Bun is unavailable. Preserve
 all four tool combinations. The deploy prompt supports static, Vercel, Netlify,
 Cloudflare Workers, and custom Node standalone. Full SSR is future-project setup.
@@ -347,3 +347,124 @@ Validation for 7.17.0: 80 tests passed with formatting/i18n, no Astro/TypeScript
 diagnostics and successful SSG build. Local kit:pack validated the 7.17.0 archive.
 Chromium exercised real SAM packages for masks, raw/display submission, errors,
 reset and mirror cleanup/remount. No deployed API or real delivery was tested.
+
+## Package rename and CAPTCHA (7.18.0)
+
+The user renamed the generator to @samline/astro and reserved astro-kit for a
+future integration. Root private manifest and CLI share the new name/version;
+CLI bin is samline-astro, runtime namespaces are samlineAstroTheme/samlineAstroGTM,
+metadata is samlineAstro and theme storage is samline-astro:theme. Distribution
+instructions and portable seed use SAM Astro. The local folder and Git remote
+retain their existing names; nothing is published to npm.
+
+The prior cleanup was committed as 549f430, with 80 tests and SSG build passing.
+The user then explicitly authorized CAPTCHA migration while general component
+and helper migrations remain paused. Captcha owns its UI/docs/client lifecycle;
+server/captcha owns the private verification boundary. Global build settings
+choose none (default), Turnstile Managed or Google reCAPTCHA v2 checkbox, with
+one public site key and a private runtime secret. The contact Action verifies
+after Origin/honeypot and before sending mail. Hostnames are exact configured
+values, falling back to SITE_URL. No browser-selected provider or secret exposure.
+Provider availability, malformed results and mismatched hosts fail closed.
+Pure static hosting still needs an external verification backend or adapter.
+Client tokens use captchaToken; reset after every request; mount/reset/destroy
+are public APIs. No real provider credentials or live challenge is assumed.
+Validation: bun run verify passed all 84 tests, formatting/i18n, clean Astro/TS
+and the SSG build. Server verifier tests use fake HTTP responses for both official
+endpoints; the real Astro Action HTTP fixture proves failed tokens prevent mail
+and honeypots bypass verification without delivery. Empty FormData values are
+normalized because Astro returns null for empty optional inputs. Temporary
+Chromium checks passed for disabled mode, both provider SDK mocks, load failure /
+retry, multiple widgets with one SDK, FormData isolation, expiration, reset,
+cleanup/remount, ignored late callbacks and no-JS guidance. No real provider
+credentials, live challenge, external delivery or production deployment tested.
+Local kit:pack succeeded and generated artifacts/samline-astro-7.18.0.tgz.
+The 7.18.0 changes are included in the subsequent 7.19.0 cleanup commit.
+
+## Localized API integration documentation
+
+Read src/i18n/localized-content.md when adding an API/CMS with translated routes.
+The guide ships under src and is required by generated .agents conventions and
+inherited decisions. It covers SSG, SSR, live and browser-loaded content, stable
+translation identity, publication/availability, cache policy and shared selector /
+SEO destinations. Current LanguagePicker and SEO path contracts are unchanged;
+translated-slug resolution is not implemented merely by documenting it.
+
+## Authentication integration (7.19.0)
+
+The user authorized implementation after reviewing All Influencers. Better Auth
+1.7.12 and pg 8.23.1 are installed with pnpm (@types/pg 8.23.1 development-only).
+The integration is under src/server/auth, with browser-safe src/auth/client.ts,
+explicit src/config/auth.ts route rules and an inactive auth API route example.
+AUTH_MODE defaults to disabled. No login page, business role, subscription model
+or legacy helper was copied. Public output stays SSG with optional Server Islands.
+
+Modes: external REST (no local user DB), project-owned database (PostgreSQL),
+and stateless OAuth/OIDC. External REST is a custom Better Auth plugin using its
+exported cookie APIs: a Better Auth JWE session plus a separately encrypted,
+HttpOnly credential cookie bound to session/user IDs. No upstream token in public
+session JSON, browser storage or HTML. API base/paths are server-configured;
+requests forbid redirects, bound timeout/JSON and validate mapped identities.
+Same-origin Origin is required on mutations. The route replaces the browser IP
+header with the adapter-resolved address for rate limiting.
+
+requestAuth and locals.auth offer getSession, requireSession, requireAccess and
+withExternalToken. Roles are any-of, permissions all-of, verification explicit;
+constraints combine with AND. Parent/child route rules combine; dotted paths
+are not bypasses. Private prerendered pages fail build. Actions/endpoints/islands
+must guard their own work and ownership; public shell HTML cannot be private.
+Set private/no-store on personalized island responses. The user specifically
+confirmed SSG pages with authenticated Server Islands must work.
+
+REST reads revalidate the upstream profile on each new request, with request-only
+memoization. Token revocation/permission changes deny the next protected read.
+Refresh is explicit before expiry: optional API renewal, otherwise profile-only.
+Logout always clears local cookies and reports actual upstream revocation status.
+Copied stateless cookies cannot be individually invalidated locally without a
+server store; configure upstream revocation or accept bounded expiry. Token
+sizes and credential-cookie payloads are bounded; larger providers need storage.
+OAuth follows its own provider/session TTL and needs project revalidation policy
+for immediate access changes. Public OAuth token-export endpoints are blocked.
+
+Owned-user mode uses Better Auth schema/session storage; client role/permission
+fields are input:false, cookie cache is disabled and current DB records authorize.
+Native signup stays disabled until the project chooses provisioning/account policy.
+The explicit auth:migrate command prepares PostgreSQL core/shared fields; no
+migration runs on install/build. The standalone script works with Bun or Node
+and ships with generated projects. Alternative adapters/plugins need matching
+project migrations. No real PostgreSQL service or identity provider was connected.
+
+Validation: actual handler tests cover REST across instances,
+credential binding, permission freshness, revocation, renewal/logout, Origin,
+endpoint restrictions and rate limiting. Native flow uses disposable SQLite;
+OAuth code exchange uses a fake provider. Astro HTTP tests cover routes/Actions;
+Chromium passed public SSG shell + private Server Island, permission removal and
+upstream revocation. All real account/database/provider setup remains project-specific.
+See src/server/auth/README.md for the complete activation and operational contract.
+
+Final 7.19.0 verification passed 95 tests, formatting/i18n, clean Astro/TypeScript
+(no errors, warnings or hints), and the SSG/Vercel build. Distribution tests
+validated inactive auth route, server/browser APIs, explicit migration script
+and tool fallback commands. A protected prerendered fixture fails the build as
+required. Public shell + private island checks used a real Chromium browser and
+local Astro server with fake upstream identity. No real provider/PostgreSQL
+connection, account email or deployment was performed. The package remains unpublished.
+
+## Cleanup and session lifecycle documentation
+
+Reviewed the pending package rename, CAPTCHA and authentication integration for
+leftover temporary files, empty source folders, debug code and obsolete names.
+Kept optional examples, public APIs and their tests; they are intentional starter
+features. Removed reference-project history from shipped feature documentation
+and corrected the runtime settings comment: migration shares the schema, not
+the runtime provider factory. Added profile-update documentation for external
+REST and owned users, including request memoization, cookie/UI boundaries and
+OAuth limitations. User requested cleanup and a local commit; no push or npm
+publication is part of this request.
+
+Cleanup validation: bun run format completed; bun run verify passed all 95 tests,
+i18n and formatting checks, zero Astro/TypeScript errors/warnings/hints and the
+SSG/Vercel build. The restricted test run timed out on local HTTP fixtures; the
+complete run passed with loopback permissions. bun run kit:pack also succeeded
+for artifacts/samline-astro-7.19.0.tgz. No real provider/database connection, push,
+deployment or npm publication was performed.

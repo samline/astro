@@ -6,5 +6,5 @@ export const themeConfig: {
   storageKey: string
 } = {
   defaultPreference: 'system',
-  storageKey: 'astro-kit:theme'
+  storageKey: 'samline-astro:theme'
 }

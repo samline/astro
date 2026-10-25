@@ -79,3 +79,15 @@ This is project context, not a speculative improvement backlog.
   and Formatter packages; do not revive the legacy raw/mask/phone/controller scripts.
 - Keep component migrations paused. Adapt only branch capabilities useful to the
   SSG starter, with current Astro contracts and no product-specific auth defaults.
+
+## Package identity
+
+- The starter is now `@samline/astro`; reserve `@samline/astro-kit` for a different
+  future integration. The executable is `samline-astro` so it does not conflict
+  with the framework's `astro` binary. No npm publication is authorized.
+- The current repository/workspace retains its existing astro-kit location;
+  changing the package name does not authorize renaming a remote repository.
+
+- Astro Action FormData conversion returns null for empty optional strings under
+  wrappers/transforms. Normalize nullable optional phone, website and captchaToken
+  to empty strings; test actual HTTP submissions rather than schema objects alone.

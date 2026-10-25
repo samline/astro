@@ -32,6 +32,13 @@ Prefer native `astro:i18n` URL helpers and `Astro.currentLocale`; do not add a
 custom routing layer for behavior Astro already provides. Keep `getStaticPaths`
 with the dynamic page that requires it. Pass locale-free paths to URL helpers.
 
+Before consuming an API/CMS with localized content or translated slugs, read
+src/i18n/localized-content.md. Resolve equivalent destinations from an explicit
+translation relationship; never substitute the locale prefix on the current slug.
+The current LanguagePicker and SEO reuse one path and need coordinated adaptation
+when actual localized destinations differ. Resolve once for both navigation and
+SEO at the appropriate build/request boundary and document the provider mapping.
+
 `src/i18n/config.ts` is the source of truth for active locales. Default: en-us;
 en-mx is prepared but commented out (English for Mexico, not Spanish).
 `bun run check:i18n` checks visible literals in Astro markup. It is a guard,
@@ -150,3 +157,12 @@ not scripts copied from Astro 5. The local Fields adapter only connects the
 packages to Astro markup, accessible errors and lifecycle. Component migrations
 remain paused unless the user requests one explicitly. Framework integrations
 such as API clients/loaders may evolve within their existing feature ownership.
+
+## Optional authentication
+
+Read src/server/auth/README.md before changing auth or connecting identities.
+Keep auth disabled until explicitly activated. Use requestAuth/locals.auth guards
+inside every protected Action, endpoint and Server Island. Never expose upstream
+tokens to browser JSON or HTML. Keep public pages SSG; private full pages must
+opt out of prerendering. Route rules never replace operation/resource checks.
+Do not run auth migrations during install/build or against an unspecified database.

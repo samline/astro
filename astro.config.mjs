@@ -70,6 +70,101 @@ export default defineConfig({
 
   env: {
     schema: {
+      AUTH_MODE: envField.enum({
+        context: 'server',
+        access: 'secret',
+        values: ['disabled', 'external', 'database', 'oauth'],
+        optional: true
+      }),
+      AUTH_SECRET: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true
+      }),
+      AUTH_URL: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true,
+        url: true
+      }),
+      AUTH_SESSION_SECONDS: envField.number({
+        context: 'server',
+        access: 'secret',
+        optional: true
+      }),
+      AUTH_OAUTH_DISCOVERY_URL: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true,
+        url: true
+      }),
+      AUTH_OAUTH_CLIENT_ID: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true
+      }),
+      AUTH_OAUTH_CLIENT_SECRET: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true
+      }),
+      AUTH_DATABASE_URL: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true
+      }),
+      AUTH_API_URL: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true,
+        url: true
+      }),
+      AUTH_API_KEY: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true
+      }),
+      AUTH_API_LOGIN_PATH: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true
+      }),
+      AUTH_API_PROFILE_PATH: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true
+      }),
+      AUTH_API_REFRESH_PATH: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true
+      }),
+      AUTH_API_LOGOUT_PATH: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true
+      }),
+      CAPTCHA_PROVIDER: envField.enum({
+        context: 'server',
+        access: 'public',
+        values: ['none', 'turnstile', 'recaptcha'],
+        default: 'none'
+      }),
+      CAPTCHA_SITE_KEY: envField.string({
+        context: 'server',
+        access: 'public',
+        optional: true
+      }),
+      CAPTCHA_HOSTNAMES: envField.string({
+        context: 'server',
+        access: 'public',
+        optional: true
+      }),
+      CAPTCHA_SECRET_KEY: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true
+      }),
       CONTENT_API_URL: envField.string({
         context: 'server',
         access: 'secret',

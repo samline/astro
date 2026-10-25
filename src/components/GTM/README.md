@@ -77,7 +77,7 @@ history measurement. Validate the real container with Tag Assistant.
 
 ## Internal API and files
 
-The integration exposes window.astroKitGTM?.updateConsent({ analytics, marketing }).
+The integration exposes window.samlineAstroGTM?.updateConsent({ analytics, marketing }).
 It returns a boolean: true means a permission was withdrawn after GTM loaded and
 the caller should reload. The method updates signals and loads GTM when appropriate,
 but **does not save the cookie or reload by itself**. It is the internal bridge

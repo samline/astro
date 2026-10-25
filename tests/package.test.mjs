@@ -85,6 +85,27 @@ test(
       '.agents/todos.md',
       '.agents/skills/README.md',
       'skills-lock.json',
+      'src/server/auth/index.ts',
+      'src/server/auth/factory.ts',
+      'src/server/auth/external.ts',
+      'src/server/auth/remote.ts',
+      'src/server/auth/access.ts',
+      'src/server/auth/policy.ts',
+      'src/server/auth/settings.ts',
+      'src/server/auth/schema.mjs',
+      'src/server/auth/README.md',
+      'src/auth/client.ts',
+      'src/config/auth.ts',
+      'src/middleware.ts',
+      'src/types/auth.d.ts',
+      'src/pages/api/auth/[...all].ts.example',
+      'scripts/auth-migrate.mjs',
+      'src/components/Captcha/index.astro',
+      'src/components/Captcha/scripts.ts',
+      'src/components/Captcha/README.md',
+      'src/server/captcha/index.ts',
+      'src/server/captcha/verify.ts',
+      'src/server/captcha/README.md',
       'src/server/mail/index.ts',
       'src/server/mail/mailer.ts',
       'src/server/mail/template.ts',
@@ -280,8 +301,8 @@ test(
     const pkg = JSON.parse(
       await readFile(path.join(unpacked, 'package/package.json'), 'utf8')
     )
-    assert.equal(pkg.name, '@samline/astro-kit')
-    assert.equal(pkg.bin['astro-kit'], 'bin/astro-kit.mjs')
+    assert.equal(pkg.name, '@samline/astro')
+    assert.equal(pkg.bin['samline-astro'], 'bin/samline-astro.mjs')
     assert.equal(pkg.dependencies, undefined)
     assert.notEqual(pkg.private, true)
     const bin = path.join(directory, 'bin')
@@ -293,7 +314,7 @@ test(
     const create = spawnSync(
       process.execPath,
       [
-        path.join(unpacked, 'package/bin/astro-kit.mjs'),
+        path.join(unpacked, 'package/bin/samline-astro.mjs'),
         destination,
         '--deploy',
         'static',

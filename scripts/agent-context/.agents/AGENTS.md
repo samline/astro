@@ -99,3 +99,24 @@ adapter, not global SSR. Optional content Actions operate on an upstream API,
 not Astro's build store. Keep mutation authorization denied until real session
 checks exist. Changes to a CMS do not refresh previously generated SSG pages.
 Keep API credentials private at the correct build/runtime boundary.
+
+Before consuming an API/CMS with localized pages, read
+src/i18n/localized-content.md. Resolve equivalent destinations through explicit
+translation relationships, never by reusing a slug with another locale prefix.
+Adapt the current path-based LanguagePicker and SEO contracts when paths or
+publication availability differ. Share one validated result across both;
+resolve at build time for SSG and request time for on-demand content. Record the
+provider mapping and missing-translation/cache policy in project memory.
+
+## Optional authentication
+
+Read src/server/auth/README.md before connecting accounts or protecting content.
+Authentication starts disabled with an inactive API route. Choose REST external
+identity, OAuth/OIDC or project-owned users deliberately. Use the common request
+context to require sessions/permissions inside every protected Action, endpoint
+or Server Island; page middleware does not authorize their operations. Keep
+external credentials server-side, revalidate external access, and do not accept
+client-supplied roles. Private pages must opt out of prerendering; public SSG
+shells can contain guarded Server Islands with private, no-store responses.
+Database migrations are an explicit command, never an install/build side effect.
+Read the documented stateless revocation, token size and renewal limitations.

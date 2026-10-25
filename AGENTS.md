@@ -1,4 +1,4 @@
-# Astro Kit agent entry point
+# SAM Astro agent entry point
 
 Before working, read .agents/README.md, then .agents/AGENTS.md and
 .agents/memory/project.md. Read lessons.md, todos.md, and the relevant

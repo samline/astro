@@ -27,7 +27,7 @@ export async function main(args = process.argv.slice(2)) {
   if (values.version) return console.log(pkg.version)
   if (values.help) {
     console.log(
-      `Astro Kit ${pkg.version}\n\nUso: npx @samline/astro-kit@latest [carpeta] [opciones]\n\nEl asistente pregunta la carpeta y el destino de despliegue.\n  --deploy      static | vercel | netlify | cloudflare | custom\n                Obligatorio sin terminal interactiva; Vercel por defecto en el asistente.\n  --site        Origen de producción, por ejemplo https://example.com\n  --no-install  Crear archivos sin instalar dependencias\n  --version     Mostrar versión\n  --help        Mostrar ayuda`
+      `SAM Astro ${pkg.version}\n\nUso: npx @samline/astro@latest [carpeta] [opciones]\n\nEl asistente pregunta la carpeta y el destino de despliegue.\n  --deploy      static | vercel | netlify | cloudflare | custom\n                Obligatorio sin terminal interactiva; Vercel por defecto en el asistente.\n  --site        Origen de producción, por ejemplo https://example.com\n  --no-install  Crear archivos sin instalar dependencias\n  --version     Mostrar versión\n  --help        Mostrar ayuda`
     )
     return
   }
@@ -40,7 +40,7 @@ export async function main(args = process.argv.slice(2)) {
   if (!directory || !deployment) {
     if (!process.stdin.isTTY)
       throw new Error(
-        'Sin terminal interactiva, indica carpeta y --deploy: astro-kit mi-proyecto --deploy vercel'
+        'Sin terminal interactiva, indica carpeta y --deploy: samline-astro mi-proyecto --deploy vercel'
       )
     const prompt = createInterface({
       input: process.stdin,
@@ -82,7 +82,7 @@ export async function main(args = process.argv.slice(2)) {
   const tools = selectTools(detectTools())
   const destination = path.resolve(directory)
   console.log(
-    `\nAstro Kit ${pkg.version}\nInstalación: ${tools.manager}\nEjecución: ${tools.runtime === 'bun' ? 'Bun' : 'npm / Node.js'}\nDespliegue: ${deployments[deployment].label}\n`
+    `\nSAM Astro ${pkg.version}\nInstalación: ${tools.manager}\nEjecución: ${tools.runtime === 'bun' ? 'Bun' : 'npm / Node.js'}\nDespliegue: ${deployments[deployment].label}\n`
   )
   if (deployment === 'cloudflare' && tools.runtime === 'bun')
     console.log(

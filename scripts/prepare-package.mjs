@@ -54,6 +54,10 @@ for (const file of files) {
 }
 await mkdir(path.join(template, 'scripts'))
 await cp(
+  path.join(root, 'scripts/auth-migrate.mjs'),
+  path.join(template, 'scripts/auth-migrate.mjs')
+)
+await cp(
   path.join(root, 'scripts/check-i18n.mjs'),
   path.join(template, 'scripts/check-i18n.mjs')
 )

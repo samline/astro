@@ -5,7 +5,7 @@ status when work is completed; do not turn possible improvements into tasks.
 
 ## Explicitly deferred
 
-- [ ] Publish @samline/astro-kit to npm only after the user says the base is ready and authorizes publication. Local packaging is implemented; nothing has been published.
+- [ ] Publish @samline/astro to npm only after the user says the base is ready and authorizes publication. Local packaging is implemented; nothing has been published.
 
 ## Active feature backlog
 
@@ -34,3 +34,16 @@ No feature migration is currently pending.
 
 - [x] Analyze EasyTrip/legacy Fields and migrate generic native Astro controls with
       translated UI, accessible help/errors, optional SAM controller and API docs.
+
+- [x] Rename the generator to @samline/astro (7.18.0), with samline-astro executable,
+      updated distribution docs, metadata and runtime names. Do not publish yet.
+- [x] Add provider-selectable Captcha with Turnstile / reCAPTCHA v2, server-side
+      verification before contact delivery, lifecycle API and English documentation.
+
+- [x] Document future localized API/CMS integration for SSG/SSR/live/browser use,
+      and include the guidance in generated projects' agent context. Runtime
+      translated-slug resolution was not requested as part of this documentation.
+
+- [x] Implement optional Better Auth integration for external REST identities,
+      OAuth/OIDC and project-owned users, with route/operation permissions and
+      SSG Server Islands support. Provider/database configuration stays per project.

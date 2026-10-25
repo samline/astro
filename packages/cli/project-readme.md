@@ -1,6 +1,6 @@
 # {{NAME}}
 
-Creado con Astro Kit {{VERSION}}. Astro 7 con páginas estáticas (SSG).
+Creado con SAM Astro {{VERSION}}. Astro 7 con páginas estáticas (SSG).
 Destino seleccionado: {{DEPLOYMENT}}. Este proyecto es independiente del generador.
 
 ## Herramientas seleccionadas
@@ -412,7 +412,7 @@ controles al navegar con Astro ClientRouter si se incorpora más adelante.
 Para volver a seguir al sistema desde un control propio:
 
 ```ts
-window.astroKitTheme?.setPreference('system')
+window.samlineAstroTheme?.setPreference('system')
 ```
 
 La misma API acepta `light` y `dark`, expone `getPreference()` y `getTheme()`,
@@ -551,3 +551,22 @@ optional API/Strapi loaders and Live Collection. Only the local collection is
 enabled; demo text lives in the content dictionary. The optional
 [content Actions](src/actions/content-demo/README.md) need explicit registration
 and API configuration. Mutation remains denied until real authorization is added.
+
+## CAPTCHA
+
+Choose Cloudflare Turnstile or Google reCAPTCHA v2 checkbox through
+`CAPTCHA_PROVIDER=turnstile` / `recaptcha`; default `none`. Configure the public
+site key at build time and the private secret in the server environment. The
+contact Action verifies the token before sending mail. Pure static hosting needs
+an external backend or activation of a server adapter/Action.
+See [Captcha](src/components/Captcha/README.md) for configuration, rendering,
+SAM Forms integration, reset/lifecycle APIs and provider limits.
+
+## Authentication
+
+Optional Better Auth integration supports external REST identity, OAuth/OIDC and
+project-owned users. It starts disabled with an inactive auth route, no account
+UI and no predefined business roles. Public pages stay SSG; protected pages opt
+into server rendering, and Server Islands authorize their own requests.
+See [Authentication](src/server/auth/README.md) for activation, environment,
+database migrations, REST mapping, session/permission APIs and browser lifecycle.

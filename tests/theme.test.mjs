@@ -110,7 +110,7 @@ function browser({
     values,
     storage,
     boot,
-    api: window.astroKitTheme
+    api: window.samlineAstroTheme
   }
 }
 

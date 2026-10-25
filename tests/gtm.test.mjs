@@ -118,9 +118,15 @@ test('basic mode queues denied defaults before loading anything and separates an
     'ad_personalization'
   ])
     assert.equal(defaults[2][key], 'denied')
-  app.window.astroKitGTM.updateConsent({ analytics: false, marketing: false })
+  app.window.samlineAstroGTM.updateConsent({
+    analytics: false,
+    marketing: false
+  })
   assert.equal(app.requests.length, 0)
-  app.window.astroKitGTM.updateConsent({ analytics: true, marketing: false })
+  app.window.samlineAstroGTM.updateConsent({
+    analytics: true,
+    marketing: false
+  })
   assert.equal(lastConsent(app)[2].analytics_storage, 'granted')
   for (const key of ['ad_storage', 'ad_user_data', 'ad_personalization'])
     assert.equal(lastConsent(app)[2][key], 'denied')
@@ -130,7 +136,7 @@ test('basic mode queues denied defaults before loading anything and separates an
     app.requests[0].src,
     'https://www.googletagmanager.com/gtm.js?id=GTM-TEST12345'
   )
-  app.window.astroKitGTM.updateConsent({ analytics: true, marketing: true })
+  app.window.samlineAstroGTM.updateConsent({ analytics: true, marketing: true })
   app.boot()
   assert.equal(app.requests.length, 1)
   assert.equal(
@@ -142,13 +148,16 @@ test('basic mode queues denied defaults before loading anything and separates an
 test('marketing consent does not imply analytics; revocation updates all signals and requests a clean reload', () => {
   const app = runtime()
   assert.equal(
-    app.window.astroKitGTM.updateConsent({ analytics: false, marketing: true }),
+    app.window.samlineAstroGTM.updateConsent({
+      analytics: false,
+      marketing: true
+    }),
     false
   )
   assert.equal(lastConsent(app)[2].analytics_storage, 'denied')
   assert.equal(lastConsent(app)[2].ad_user_data, 'granted')
   assert.equal(
-    app.window.astroKitGTM.updateConsent({
+    app.window.samlineAstroGTM.updateConsent({
       analytics: false,
       marketing: false
     }),
@@ -176,7 +185,10 @@ test('advanced is explicit; Astro navigation avoids duplicate initial and hash p
   const app = runtime()
   app.navigate('https://example.com/not-consented')
   assert.equal(app.requests.length, 0)
-  app.window.astroKitGTM.updateConsent({ analytics: true, marketing: false })
+  app.window.samlineAstroGTM.updateConsent({
+    analytics: true,
+    marketing: false
+  })
   app.navigate('https://example.com/not-consented')
   app.navigate('https://example.com/not-consented#section')
   assert.equal(
@@ -334,7 +346,7 @@ test(
     assert.ok(home.includes('data-gtm-consent'))
     assert.ok(home.includes('data-cookie-preferences'))
     assert.ok(!home.includes('googletagmanager.com/ns.html'))
-    assert.ok(home.indexOf('window.astroKitGTM') < home.indexOf('<body'))
+    assert.ok(home.indexOf('window.samlineAstroGTM') < home.indexOf('<body'))
     assert.ok(home.includes('data-locale="en-us"'))
     const regional = await readFile(
       path.join(fixture, '.vercel/output/static/en-mx/index.html'),

@@ -1,4 +1,4 @@
-# Astro Kit
+# SAM Astro
 
 Base nueva sobre Astro 7 para sitios SSG con Server Islands y despliegue en
 Vercel. Las páginas se generan al compilar; los componentes con `server:defer`
@@ -7,16 +7,16 @@ se resuelven bajo demanda mediante el adaptador de Vercel.
 ## Generador de proyectos
 
 La base se desarrolla en esta raíz. El paquete publicable
-`@samline/astro-kit` vive en `packages/cli`, no tiene dependencias propias y
+`@samline/astro` vive en `packages/cli`, no tiene dependencias propias y
 recibe una plantilla generada desde una lista explícita de archivos de la raíz.
 No se mantiene una segunda copia manual de la base.
 
 Después de publicar en npm:
 
 ```sh
-npx @samline/astro-kit@latest mi-proyecto
+npx @samline/astro@latest mi-proyecto
 # Alternativa:
-pnpm dlx @samline/astro-kit@latest mi-proyecto
+pnpm dlx @samline/astro@latest mi-proyecto
 ```
 
 El asistente pregunta dónde desplegar: estático, Vercel (predeterminado),
@@ -39,7 +39,7 @@ Para automatizar, indica el destino; `--site` configura el origen de producción
 en `.env.production` (ignorado por Git):
 
 ```sh
-npx @samline/astro-kit@latest mi-proyecto --deploy netlify --site https://example.com
+npx @samline/astro@latest mi-proyecto --deploy netlify --site https://example.com
 ```
 
 Sin terminal interactiva, `--deploy` y la carpeta son obligatorios.
@@ -78,11 +78,11 @@ bun run verify
 bun run kit:pack
 ```
 
-El tarball se escribe en `artifacts/samline-astro-kit-7.14.0.tgz`. Se puede probar
+El tarball se escribe en `artifacts/samline-astro-7.19.0.tgz`. Se puede probar
 antes de publicar:
 
 ```sh
-npm exec --yes --package ./artifacts/samline-astro-kit-7.14.0.tgz -- astro-kit mi-prueba
+npm exec --yes --package ./artifacts/samline-astro-7.19.0.tgz -- samline-astro mi-prueba
 ```
 
 Para una siguiente versión:
@@ -366,7 +366,7 @@ controles al navegar con Astro ClientRouter si se incorpora más adelante.
 Para volver a seguir al sistema desde un control propio:
 
 ```ts
-window.astroKitTheme?.setPreference('system')
+window.samlineAstroTheme?.setPreference('system')
 ```
 
 La misma API acepta `light` y `dark`, expone `getPreference()` y `getTheme()`,
@@ -762,3 +762,22 @@ optional API/Strapi build loaders and an optional Astro 7 Live Collection.
 [Content Actions](src/actions/content-demo/README.md) demonstrate validated API
 reads and writes; they remain unregistered and writes deny access by default.
 No remote request or new demo page is enabled by default.
+
+## CAPTCHA
+
+Choose Cloudflare Turnstile or Google reCAPTCHA v2 checkbox through
+`CAPTCHA_PROVIDER=turnstile` / `recaptcha`; default `none`. Configure the public
+site key at build time and the private secret in the server environment. The
+contact Action verifies the token before sending mail. Pure static hosting needs
+an external backend or activation of a server adapter/Action.
+See [Captcha](src/components/Captcha/README.md) for configuration, rendering,
+SAM Forms integration, reset/lifecycle APIs and provider limits.
+
+## Authentication
+
+Optional Better Auth integration supports external REST identity, OAuth/OIDC and
+project-owned users. It starts disabled with an inactive auth route, no account
+UI and no predefined business roles. Public pages stay SSG; protected pages opt
+into server rendering, and Server Islands authorize their own requests.
+See [Authentication](src/server/auth/README.md) for activation, environment,
+database migrations, REST mapping, session/permission APIs and browser lifecycle.

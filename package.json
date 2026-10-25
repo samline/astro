@@ -1,7 +1,7 @@
 {
-  "name": "astro-kit",
+  "name": "@samline/astro",
   "type": "module",
-  "version": "7.17.0",
+  "version": "7.19.0",
   "private": true,
   "packageManager": "pnpm@12.9.1",
   "engines": {
@@ -22,7 +22,8 @@
     "test": "bun run kit:prepare && bun test tests",
     "kit:prepare": "bun scripts/prepare-package.mjs",
     "kit:pack": "bun run kit:prepare && pnpm --dir packages/cli pack --pack-destination ../../artifacts",
-    "kit:version": "bun scripts/release-version.mjs"
+    "kit:version": "bun scripts/release-version.mjs",
+    "auth:migrate": "bun scripts/auth-migrate.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
@@ -35,8 +36,10 @@
     "@samline/formatter": "^2.0.3",
     "@samline/forms": "^2.7.2",
     "astro": "^7.4.2",
+    "better-auth": "^1.7.12",
     "ldrs": "^1.1.9",
     "nodemailer": "^10.2.1",
+    "pg": "^8.23.1",
     "vanilla-cookieconsent": "^3.1.0"
   },
   "devDependencies": {
@@ -44,6 +47,7 @@
     "@tailwindcss/vite": "^4.3.3",
     "@types/node": "24.19.2",
     "@types/nodemailer": "^8.0.2",
+    "@types/pg": "^8.23.1",
     "prettier": "3.9.10",
     "prettier-plugin-astro": "1.1.1",
     "prettier-plugin-tailwindcss": "^0.8.1",

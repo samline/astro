@@ -31,17 +31,17 @@ switch selects an explicit light or dark preference.
 
 `src/config/theme.ts` contains behavior only:
 
-| Option              | Default             | Purpose                                                                   |
-| ------------------- | ------------------- | ------------------------------------------------------------------------- |
-| `defaultPreference` | `'system'`          | `'system'`, `'light'`, or `'dark'` when no valid saved preference exists. |
-| `storageKey`        | `'astro-kit:theme'` | LocalStorage key for the preference.                                      |
+| Option              | Default                 | Purpose                                                                   |
+| ------------------- | ----------------------- | ------------------------------------------------------------------------- |
+| `defaultPreference` | `'system'`              | `'system'`, `'light'`, or `'dark'` when no valid saved preference exists. |
+| `storageKey`        | `'samline-astro:theme'` | LocalStorage key for the preference.                                      |
 
 Theme and ThemePreference types are exported from that file.
 Color tokens and variants live in src/styles/tailwind.css.
 
 ## Client API
 
-After Init runs, use window.astroKitTheme from client scripts. The property is
+After Init runs, use window.samlineAstroTheme from client scripts. The property is
 optional in TypeScript and does not exist on the server.
 
 | Method                 | Returns                         | Purpose                                                        |
@@ -52,12 +52,12 @@ optional in TypeScript and does not exist on the server.
 | `refresh()`            | `void`                          | Reapplies current state and synchronizes newly added controls. |
 
 ```ts
-window.astroKitTheme?.setPreference('dark')
-window.astroKitTheme?.setPreference('light')
-window.astroKitTheme?.setPreference('system')
+window.samlineAstroTheme?.setPreference('dark')
+window.samlineAstroTheme?.setPreference('light')
+window.samlineAstroTheme?.setPreference('system')
 
-const theme = window.astroKitTheme?.getTheme()
-const preference = window.astroKitTheme?.getPreference()
+const theme = window.samlineAstroTheme?.getTheme()
+const preference = window.samlineAstroTheme?.getPreference()
 ```
 
 Use system to follow the operating system again; the API persists that explicit

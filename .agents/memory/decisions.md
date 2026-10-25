@@ -46,7 +46,7 @@ Tailwind4 @tailwindcss/vite. Main imports global.css -> tailwind.css. Config/var
 
 ## THEMES
 
-Grouped under src/components/Theme/: Init.astro in Main head initializes theme; Switch.astro is the reusable native role=switch button in Welcome. Imports alias ThemeInit/ThemeSwitch remain descriptive. Switch uses translated themes.darkMode, aria-checked, native attrs/classes/slot and is hidden without JS. Init applies data-theme before paint, delegates clicks, syncs instances/tabs, follows OS until explicit choice, tolerates blocked storage. Idempotent window.astroKitTheme; before-swap updates incoming page, page-load refreshes controls. config/theme.ts only defaultPreference system|light|dark and storageKey; Tailwind owns colors, global.css sets background/text/color-scheme. No-JS system fallback light. API setPreference/getPreference/getTheme/refresh and themechange event; setPreference('system') restores OS. Motion-aware switch. Tests cover persistence, keyboard, OS/storage/navigation and duplicate listeners.
+Grouped under src/components/Theme/: Init.astro in Main head initializes theme; Switch.astro is the reusable native role=switch button in Welcome. Imports alias ThemeInit/ThemeSwitch remain descriptive. Switch uses translated themes.darkMode, aria-checked, native attrs/classes/slot and is hidden without JS. Init applies data-theme before paint, delegates clicks, syncs instances/tabs, follows OS until explicit choice, tolerates blocked storage. Idempotent window.samlineAstroTheme; before-swap updates incoming page, page-load refreshes controls. config/theme.ts only defaultPreference system|light|dark and storageKey; Tailwind owns colors, global.css sets background/text/color-scheme. No-JS system fallback light. API setPreference/getPreference/getTheme/refresh and themechange event; setPreference('system') restores OS. Motion-aware switch. Tests cover persistence, keyboard, OS/storage/navigation and duplicate listeners.
 
 ## GTM
 
@@ -74,3 +74,50 @@ Sections connect Actions/API/external backends and render general statuses.
 No Alpine or product-specific calendar/country/payment/provider dependencies.
 Do not mutate error element child lists on every subscription: SAM observes the
 form subtree and would recursively notify. Update persistent Text nodes instead.
+
+## CAPTCHA (7.18.0)
+
+Captcha is provider-neutral. CAPTCHA_PROVIDER is a build-time enum with none as
+the default; Turnstile Managed and Google reCAPTCHA v2 checkbox share the
+captchaToken submission contract. CAPTCHA_SITE_KEY is public; CAPTCHA_SECRET_KEY
+is read server-side at runtime. CAPTCHA_HOSTNAMES defaults to SITE_URL hostname
+and is an exact configured allowlist, independent of request Host. All visible
+feedback lives in modular captcha dictionaries. Explicit SDK rendering is scoped
+to actual widgets; no global layout load. Public mount/reset/destroy APIs handle
+dynamic markup and Astro navigation. Reset after every submission attempt; no
+client callback substitutes for server verification. Pure static hosting still
+needs an external backend. The contact Action checks Origin, ignores honeypots,
+verifies the challenge, then sends only explicitly allowed mail fields. Google
+v2 exposes reset rather than remove, so remount uses a fresh owned container.
+
+## Localized API content guidance
+
+The user requested persistent instructions for future API integrations after
+reporting a language switch reusing an untranslated slug. The guide is
+src/i18n/localized-content.md, also linked from the portable agent conventions
+and inherited decisions. It requires explicit translation relationships, real
+published paths, one shared navigation/SEO result, build-time resolution for SSG,
+request-time resolution for SSR/live consumers and explicit client update rules.
+Missing translations must not create guessed URLs. Cache, publication/access,
+query/hash, default-prefix and provider failure policies belong to each integration.
+This request documents the future integration workflow only: LanguagePicker and
+SEO still reuse a single path, and no runtime resolver or CMS adapter was added.
+
+## Authentication integration
+
+Auth stays optional. Common server guards separate session management and access
+policy from the identity authority. REST mode uses a purpose-built Better Auth
+stateless plugin and fresh upstream profile checks; database mode uses owned
+users/sessions, and OAuth uses Generic OAuth with configured provider policy.
+Do not imply native email/password can authenticate any external REST API.
+External access/refresh credentials are private, encrypted, session-bound cookies;
+never put them in user JSON/data attributes or let browser input grant roles.
+Use server-only withExternalToken after an access rule for fixed-destination API
+operations. Database migrations and account signup are explicit choices.
+
+Public pages remain prerendered; private full pages opt out. Server Islands can
+personalize public shells but need their own guards and private/no-store caching.
+Actions require independent permission/ownership checks. Route policies are not
+inferred from translation dictionaries, role order or broad path exceptions.
+Stateless cookies have bounded revocation/renewal limits documented with the API.
+No per-device/global revocation promise without the necessary backing authority.

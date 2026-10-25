@@ -43,7 +43,11 @@ test('contact schema normalizes input, strips unrelated fields and returns dicti
     [{ locale: 'invalid' }, 'locale', copy.invalidInput],
     [{ name: 'null\0byte' }, 'name', copy.invalidInput]
   ]) {
-    const result = contactInput.safeParse({ ...input, ...overrides })
+    const result = contactInput.safeParse({
+      ...input,
+      captchaToken: 'valid-captcha',
+      ...overrides
+    })
     assert.equal(result.success, false)
     assert.ok(
       result.error.issues.some(
@@ -66,6 +70,17 @@ test(
       await cp(path.join(root, 'src', name), path.join(fixture, 'src', name), {
         recursive: true
       })
+    await cp(
+      path.join(root, 'src/server/captcha'),
+      path.join(fixture, 'src/server/captcha'),
+      { recursive: true }
+    )
+    await writeFile(
+      path.join(fixture, 'src/server/captcha/index.ts'),
+      `import { verifyToken } from './verify'
+export const verifyCaptcha = (token) => verifyToken(token, { provider: 'turnstile', secret: 'fixture-secret', hostnames: ['example.com'] }, async (_url, init) => new Response(JSON.stringify({ success: init.body.get('response') === 'valid-captcha', hostname: 'example.com' })))
+`
+    )
     await mkdir(path.join(fixture, 'src/server/mail'), { recursive: true })
     await mkdir(path.join(fixture, 'src/pages'), { recursive: true })
     await cp(
@@ -105,7 +120,11 @@ export const sendFormMail = async (mail) => {
     const origin = `http://127.0.0.1:${server.address.port}`
     const post = async (overrides = {}, requestOrigin = origin) => {
       const form = new FormData()
-      for (const [key, value] of Object.entries({ ...input, ...overrides }))
+      for (const [key, value] of Object.entries({
+        ...input,
+        captchaToken: 'valid-captcha',
+        ...overrides
+      }))
         form.set(key, value)
       return fetch(`${origin}/_actions/contact`, {
         method: 'POST',
@@ -130,6 +149,7 @@ export const sendFormMail = async (mail) => {
       Object.values(getDictionary().forms.labels)
     )
     assert.equal(mail.to, undefined)
+    assert.doesNotMatch(JSON.stringify(mail), /valid-captcha|captchaToken/)
     const invalid = await post({ email: 'invalid' })
     assert.equal(invalid.status, 400)
     assert.ok(
@@ -137,8 +157,22 @@ export const sendFormMail = async (mail) => {
         getDictionary().forms.messages.invalidEmail
       )
     )
-    const bot = await post({ website: 'bot content' })
-    assert.equal(bot.status, 200)
+    const captchaFailed = await post({ captchaToken: 'invalid-captcha' })
+    assert.equal(captchaFailed.status, 400)
+    assert.ok(
+      (await captchaFailed.text()).includes(getDictionary().captcha.invalid)
+    )
+    const emptyCaptcha = await post({
+      captchaToken: '',
+      website: '',
+      phone: ''
+    })
+    assert.equal(emptyCaptcha.status, 400)
+    assert.ok(
+      (await emptyCaptcha.text()).includes(getDictionary().captcha.invalid)
+    )
+    const bot = await post({ website: 'bot content', captchaToken: '' })
+    assert.equal(bot.status, 200, await bot.clone().text())
     assert.equal((await post({}, 'https://other.example')).status, 403)
     assert.equal((await post({}, null)).status, 403)
     const failed = await post({ name: 'transport-error' })

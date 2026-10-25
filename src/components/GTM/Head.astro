@@ -12,7 +12,7 @@ const mode = gtmConfig.consentMode
   data-astro-rerun
 >
   ;(() => {
-    if (window.astroKitGTM) return
+    if (window.samlineAstroGTM) return
     window.dataLayer = window.dataLayer || []
     window.gtag =
       window.gtag ||
@@ -43,7 +43,7 @@ const mode = gtmConfig.consentMode
       document.head.appendChild(script)
     }
 
-    window.astroKitGTM = Object.freeze({
+    window.samlineAstroGTM = Object.freeze({
       updateConsent: (choice) => {
         const next = {
           analytics: choice.analytics === true,

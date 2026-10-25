@@ -14,7 +14,13 @@ import type { Cookies } from './dictionaries/en-us/cookies/types'
 import type { Mail } from './dictionaries/en-us/mail/types'
 import type { Content } from './dictionaries/en-us/content/types'
 
+import type { Captcha } from './dictionaries/en-us/captcha/types'
+
+import type { Auth } from './dictionaries/en-us/auth/types'
+
 export interface Dictionary {
+  auth: Auth
+  captcha: Captcha
   content: Content
   mail: Mail
   cookies: Cookies
