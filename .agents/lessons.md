@@ -25,6 +25,16 @@ This is project context, not a speculative improvement backlog.
 
 ## Styling and documentation
 
+- Prefer `class:list` arrays with complete class strings grouped by purpose,
+  conditional object entries and a separate caller-class entry over one long
+  `class` attribute. See memory/frontend-conventions.md for the grouping rules.
+- Keep owned processed `<script>` and scoped `<style>` blocks with component
+  markup; supporting files remain in the owning feature folder. Scripts still
+  need root-scoped queries, per-instance closure state and explicit cleanup.
+- Setup and cleanup must be idempotent, preserve independent instances and allow
+  supported remounts without duplicate effects or stale async updates. The user
+  reaffirmed these conventions from Ticker/Drawer on 2026-10-26; retain this
+  project's existing lifecycle owners rather than importing their mount helper.
 - Tailwind configuration and variables belong in tailwind.css, not TypeScript or injected head variables.
 - Keep only black/white/placeholder, status colors, and three accent families with light/dark variants.
 - The main accent and head theme-color must agree.
@@ -159,3 +169,8 @@ This is project context, not a speculative improvement backlog.
 - Editorial readiness does not establish an actual registry or hosting operation.
   Preserve dated operational evidence privately in maintainer memory; do not
   invent publication/deployment dates, successes or verification.
+
+- In documentation menus, the active page belongs near the upper part of the
+  viewport where the natural scroll range permits it. Never create artificial
+  trailing space, padding or margins to force final items upward. Preserve manual
+  scrolling and the article position.

@@ -765,3 +765,32 @@ It supersedes the earlier 7.21.0 archive for deployment/release preparation. npm
 publication dry-run succeeded for this archive. No runtime behavior changed;
 full root behavior evidence remains the previous 127-test run. This revision
 changed public copy, not the factual history of remote registry/hosting actions.
+
+## Documentation navigation visibility — 2026-10-26
+
+The human reported that deep active sidebar links were hidden below the menu
+viewport in Astro, Ticker, Drawer and the package landing/docs template. Keep the
+current page visible within the menu on mounting/navigation/resize, without
+scrolling the article or stealing focus. Preserve manual menu exploration and
+clean up observers through mountElements. Mobile menus let Drawer focus their
+dialog rather than an offscreen first link. Regression tests cover direct deep
+URLs, actual navigation, resize, same-batch remount and repeated mobile opening.
+Validation: website verify passed 10 source tests, 30 Chromium tests, clean
+Astro diagnostics, protected design checks, formatting and a combined build with
+4,097 links across 42 pages. The new regression failed against the prior build
+and passes with the fix. Desktop and mobile screenshots were inspected locally;
+article scroll stayed at 0, mobile body scrolled, dialog stayed at 0 and its
+close control remained visible. All eight targeted regression cases across the
+four repositories passed, including 200% text and returning to desktop.
+
+The human clarified active-page placement: try to bring it toward the top
+using the menu's natural scroll range. Do not add margins, padding, pseudo
+spacers or any artificial blank space to force final items upward. Native
+scrollTop clamping is intentional. Preserve the article position, manual menu
+scrolling and the reachable mobile close control. The temporary spacer approach
+was rejected and removed from all four projects.
+
+Natural-scroll correction validated: both targeted browser regressions pass in
+each of the four projects (eight total). All combined artifacts rebuilt and
+passed their link audits. The SEO preview was inspected: article scroll remains
+0, the sidebar has no generated ::after content and no trailing-space variable.

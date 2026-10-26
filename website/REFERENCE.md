@@ -91,3 +91,12 @@ existing palette, card geometry and responsive composition remain. This custom
 section is not an upstream protected style. ToolCommands reuses the existing
 Tabs/TabPanel/CodeFrame for npm, pnpm and Bun alternatives in guides and recipes;
 no new client runtime or protected style replacement was introduced.
+
+## Documentation menu active-link correction
+
+The human requested visible active links in the scrollable docs navigation.
+The desktop layout, palette and typography remain unchanged. The mobile menu
+now scrolls its native Drawer body independently, reserving 3rem below the
+existing close control so it stays reachable when a deep active link is revealed.
+This is a bounded mobile interaction correction; no protected style fingerprint
+was replaced. The menu delegates focus and dismissal to Drawer as before.

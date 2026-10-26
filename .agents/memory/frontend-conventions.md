@@ -61,9 +61,15 @@ splitting an identifier or taking the last word of a heading.
 
 The starter's CSS-first Tailwind configuration owns breakpoints, font families,
 brand/status/placeholder colors, spacing and motion tokens. Group complete
-utility strings by purpose with class:list. Do not synthesize partial utility
-names. Use scoped component CSS when it expresses owned behavior/layout more
-clearly; do not scatter new config variables into TypeScript or the document head.
+utility strings by purpose in a `class:list` array rather than one long `class`
+string. Separate layout/display, dimensions/spacing, typography, color/decoration
+and interaction/motion into readable entries as applicable; keep responsive/state
+variants with their relevant group. Use complete literal utility names, object
+entries for conditional classes and a separate entry for the caller's class.
+Do not synthesize partial utility names or assume array order resolves conflicting
+utilities. Even a single static class can use `class:list={['component-root']}`.
+Use scoped component CSS when it expresses owned behavior/layout more clearly;
+do not scatter new config variables into TypeScript or the document head.
 The package website has its own approved shared theme; do not overwrite it with
 the starter palette or mix its primitives into generated consumer source.
 
@@ -76,6 +82,15 @@ Keep keyboard focus visible, native semantics, reduced-motion paths and readable
 no-JavaScript content. The human explicitly removed SkipLink; do not reintroduce
 it silently through a template or generic accessibility checklist.
 
+Keep owned `<style>` and processed `<script>` blocks in the `.astro` component
+that needs them, alongside its markup. Extract substantial or genuinely shared
+logic/styles into supporting files in the owning feature folder and import them
+there. Do not add empty blocks to static primitives. Shared theme tokens and
+document-wide responsibilities retain their existing owners. Use global styles
+or inline scripts only when the integration actually requires that boundary.
+Astro scopes component CSS, but a processed script does not automatically scope
+its DOM queries or execute separately for every rendered instance.
+
 ## Behavior belongs to the instance
 
 Author arrows, closures and direct calls. Avoid classes and this unless a real
@@ -85,6 +100,25 @@ releases exactly the listeners, observers, requests, timers and controllers owne
 by the instance. Preserve persisted pagehide behavior where needed. Do not
 initialize a global framework from every child or copy another package's mount
 helper merely because it exists in a reference project.
+
+Use a small setup function per root with state held in its closure and explicit
+cleanup. Repeated setup on an already mounted root must not duplicate listeners,
+observers, timers, DOM or package controllers. Repeated cleanup must be harmless;
+after cleanup, a supported remount must create a fresh working instance. Keep
+the exact controller returned by a package and destroy that owner directly.
+Cleanup also restores application-owned state such as `aria-expanded`; do not
+assume a package's destroy method emits the application's state callbacks.
+
+Use the owner's existing lifecycle for inserted/removed DOM and Astro navigation;
+register shared lifecycle hooks once. Where dynamic mounting applies, handle
+removal and reinsertion in the same mutation batch, releasing old side effects
+before setup runs again. Preserve controllers on persisted `pagehide` when needed
+for back/forward restoration; dispose on real departure. Abort owned listeners
+and pending work where possible, clear timers and observers, and prevent late
+async completions from updating a disposed or replacement instance. Verify
+independent instances, repeated mount/cleanup and supported remount paths when
+changing interactive behavior. These are lifecycle requirements, not a mandate
+to introduce Ticker/Drawer's shared mount helper into this starter.
 
 Forms compose native controls, one label/help/error owner and the SAM Forms and
 Formatter packages. Separate input behavior, validation and delivery transport.
