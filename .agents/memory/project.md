@@ -1,10 +1,10 @@
 # Project state
 
-Last reconciled: 2026-10-25.
+Last reconciled: 2026-10-26.
 
 ## Purpose and layout
 
-SAM Astro is a new Astro 7 base for SSG sites with Server Islands, using Vercel
+@samline/astro is a new Astro 7 base for SSG sites with Server Islands, using Vercel
 by default. The old Astro 5 project is a reference for intent, not an implementation
 to copy. Dinkbit is a reference for breakpoints and consent presentation.
 
@@ -15,17 +15,18 @@ Section-only pieces stay beside their owning section.
 
 ## Versions and distribution
 
-- Root and CLI version: 7.20.0 (modular installer; uncommitted source).
+- Root and CLI prepared version: 7.21.0; npm publication is still pending.
 - Astro dependency: ^7.4.2; use Astro 7.4 behavior and current official docs.
 - Tailwind CSS 4 via its Vite plugin; TypeScript 6 and Vite 8.
-- Install with pnpm; execute project scripts with Bun.
-- Repository: git@github.com:samline/astro-kit.git; current branch main.
-- Previous baseline commit: b95e186 (SAM Astro rename, CAPTCHA and authentication).
+- Maintain this repository with pnpm/Bun; consumers choose npm/pnpm/Bun and Node/Bun.
+- Repository: git@github.com:samline/astro.git; current branch main.
+- Current implementation baseline: 90eb9ff (modular installer); previous b95e186 covered rename, CAPTCHA and authentication.
 - Prior feature commits: d9f3d8f (GTM/consent/themes), cb62214 (UI primitives/themes).
 
 The public generator is @samline/astro and must run through npx with Node.
-It independently falls back to npm when pnpm or Bun is unavailable. Preserve
-all four tool combinations. The deploy prompt supports static, Vercel, Netlify,
+Consumers select npm, pnpm or Bun for dependencies and Node/Bun for scripts.
+Explicit missing tools fail; unattended defaults follow the recognized launcher,
+otherwise npm when available. Preserve all six combinations. The deploy prompt supports static, Vercel, Netlify,
 Cloudflare Workers, and custom Node standalone. Full SSR is future-project setup.
 
 packages/cli/template is generated from an explicit allowlist. Never edit it
@@ -355,7 +356,7 @@ The user renamed the generator to @samline/astro and reserved astro-kit for a
 future integration. Root private manifest and CLI share the new name/version;
 CLI bin is samline-astro, runtime namespaces are samlineAstroTheme/samlineAstroGTM,
 metadata is samlineAstro and theme storage is samline-astro:theme. Distribution
-instructions and portable seed use SAM Astro. The local folder and Git remote
+instructions and portable seed use @samline/astro. The local folder and Git remote
 retain their existing names; nothing is published to npm.
 
 The prior cleanup was committed as 549f430, with 80 tests and SSG build passing.
@@ -553,3 +554,192 @@ generator and superseded local 7.19.0 archive. No empty source directories or
 diff whitespace errors remain. Keep the final local 7.20.0 archive and required
 generated template. Source changes are uncommitted; no commit, push, npm
 publication, real provider request or deployment was performed for this task.
+
+## Package website analysis and repository rename (2026-10-25)
+
+The user supplied git@github.com:samline/astro.git as the renamed repository.
+Local origin now uses that URL; the workspace path remains astro-kit. No push
+was requested. The expected project Pages base would be /astro/ unless a custom
+domain or Pages configuration changes it; deployment has not been verified.
+
+Read-only source review covered sibling package-landing-docs and Ticker: separate
+landing/docs build apps with shared presentation, MD/MDX collections, Pagefind,
+combined static output and Pages workflow. The reusable template was extracted
+from Ticker, then generalized; it is not a dependency Ticker installs. Its
+configure script imports metadata/evidence but does not write package-specific
+prose or useful demos automatically. For this generator preserve the explicit
+CLI/template allowlists, portable .agents requirement, root pnpm/Bun conventions
+and current source catalog. Website tools/content must remain outside emitted
+consumer projects. Adapt documentation around CLI commands/recipes/deployment
+choices; do not copy browser-library CDN/runtime claims. No website files were
+added, no browser/build checks were run for either reference, and no deployment
+or npm publication was performed.
+
+## Package website implementation (2026-10-25)
+
+The user authorized the package-landing-docs adaptation, an editorial boundary
+that documents our distribution while referring framework behavior to Astro,
+and a prominent curated Drawer/Ticker/Forms section. Website source is isolated
+in website/ (private pnpm workspace with its own lockfile). The working starter
+remains at root. Template provenance is dd6d8892339690487099aab1246b2b01005df335;
+Ticker visual source remains 8a30c9c. Read website/README.md, AGENTS.md, REFERENCE.md
+and content-audit.json before editing. Source material does not authorize extra
+features, runtime changes, publication or deployment.
+
+Home, Examples and Docs share the inherited presentation, fonts, themes, Tabs,
+CodeFrame/CopyButton, Drawer-backed menus/search and lifecycle integration. The
+neutral counter was replaced with actual minimal/Fields/local-content commands,
+executed against the real CLI in source tests. Guides explain the generated
+configuration and limits, with official Astro links for framework APIs. The
+reference collection renders current CLI/component/server READMEs directly,
+resolving relative source links to GitHub instead of duplicating API prose.
+The website only publishes English; consumer locales remain independent.
+
+The personal package catalog is website/landing/src/i18n/translations/en/packages.ts.
+Drawer and Ticker link to their sites (HTTP 200 observed); Forms links to npm and
+says its website comes next. The static illustrations are decorative, not
+runtime demos. Add further packages only when requested. Website primary accent
+uses the existing #3245ff root token and contrast-readable #9aa4ff on dark.
+No new package trademark or official Astro affiliation is claimed.
+
+Root commands: site:install, site:dev, site:check, site:build, site:verify,
+site:preview. Source compilers use 4330/4331 with owning-origin redirects;
+production assembles Docs/search/sitemaps into website/landing/dist for /astro/.
+The manual .github/workflows/website.yml validates both workspaces and can upload
+that artifact to Pages; no push trigger or npm publication was introduced.
+site.template remains true/noindex during the unpublished preparation state.
+No GitHub environment or remote deployment was changed. CLI manifest homepage,
+repository and issue URLs now point to the renamed samline/astro repository/site.
+
+Distribution: root/CLI .npmignore and root/website .gitignore exclude the website,
+outputs, node_modules, reports and local artifacts as appropriate. Font sources,
+licenses, authored docs/tests and website pnpm-lock.yaml remain versionable.
+prepare-package strips site:* commands from its template manifest. Generated
+projects retain selected portable .agents and .env.example. Actual tarball and
+consumer tests verify no website path or site:* script leaks into projects.
+Root tests now enumerate ./tests/*.test.mjs explicitly; Bun's former substring
+filter also picked up website/tests, which is not the intended test boundary.
+
+Cleanup removed the neutral runtime, unused template importer/adaptation runner,
+unused FrameworkExamples/CodeFiles/RangeControl/Callout and orphan helper after
+source import/article checks. Retained live UI, required attribution and font
+licenses, source-backed component docs and relevant upstream browser regressions.
+Bounded responsive fixes: wrapping footer metadata at 200% text, stacking narrow
+capability labels and avoiding extra inner code padding. No global overflow
+hiding or typography reduction was used. The previously rejected SkipLink was
+not reintroduced. REFERENCE.md records these reviewed style exceptions and the
+formatter-normalized upstream fingerprint comparison.
+
+Validation: website site:verify passed 10 source tests, 23 Chromium tests,
+both Astro checks with zero errors/warnings/hints, the protected style contract
+and combined build/link audit (3,626 local links across 40 pages: two landing
+routes plus 38 docs/reference pages). Browser coverage includes every article's
+metadata and automated accessibility in both themes, 320–1440 and enlarged text,
+keyboard, reduced motion, no-JS, exact copying, lazy Pagefind, ToC, modal cleanup
+and delayed controls. Separate development browser navigation Home → Examples →
+Docs → Home passed without compilation overlays or browser errors. Screenshots
+for all three destinations in both themes plus mobile/200% are kept locally in
+.local/website-review and were inspected; no browser errors/overflow observed.
+These are local browser/build results, not measured PageSpeed or live provider
+validation. No npm release, deployment, commit or push was performed for this
+website task. The final root/package result is recorded below.
+
+Final closure: the final root `bun run verify` passed all 112 tests across 20
+files, formatting/i18n, zero Astro errors/warnings/hints and SSG/Vercel build.
+`bun run kit:pack` produced the local 7.20.0 archive with the website/script
+exclusions; the focused package suite passed all three archive/standalone/seed
+checks after manifest metadata updates. The site verification passed 10 source
+and 23 browser tests on the final implementation. Removed test reports and owned
+/tmp adaptation/diagnostic scripts; retained required build output/dependencies
+for local preview and ignored screenshots as review evidence. Git whitespace
+checks are clean. Root/website final formatting checks passed. Preview is
+available at http://127.0.0.1:4330/astro/ (Astro background preview); stop from
+website/landing using the local Astro `preview stop` command. The Codex browser
+panel open request was queued. No commit, push, deployment, npm publication,
+external provider operation or new performance score was performed.
+
+## 2026-10-26 audit, documentation and starter demo
+
+The current task audited the starter/CLI and its landing, Examples and Docs.
+See memory/audit-2026-10-26.md for the bounded findings, fixes and final evidence.
+The display name is Astro; @samline/astro identifies this independent installer.
+Root and CLI remain 7.20.0 / Astro ^7.4.2. No release operation was requested.
+
+The root README is now a focused English guide to purpose, installation,
+optional features, generated-source ownership, updates, skills and licensing.
+Component docs include complete imported examples checked in a generated fixture.
+Public guides and reference descriptions explain actual requirements and results.
+The update guide uses Astro's official temporary upgrade tool; our own copied
+source still has no automatic update command. Read memory/update-plan.md.
+
+The optional welcome feature now includes DemoHeader (private Navigation),
+Welcome, DemoPage and DemoFooter, with Home and /demo routes. Main remains generic
+with header/footer named slots outside its single main. Normal interactive
+creation proposes welcome; --minimal / none omit it. --yes without explicit
+features retains its unattended minimal default. Adding welcome later preserves
+the homepage; custom layouts need compatible slots. Navigation compares complete
+localized paths (with trailing slash normalization) and marks only the current
+page aria-current=page. Controls are included only when selected. The obsolete
+background.svg was removed; styling follows Tailwind tokens and dictionaries.
+
+Original project skills: samline-astro ships in generated projects;
+samline-astro-maintainer is repository-only. Portable frontend guidance is in
+scripts/agent-context/.agents/memory/frontend-conventions.md. The detailed
+maintainer evidence from seven reference projects stays in this repository.
+Both original skills passed the official skill validator and independent
+scenario review; no fabricated registry provenance was added.
+
+Original source is MIT licensed, matching the maintainer's Ticker/Drawer choice.
+LICENSE, THIRD_PARTY_NOTICES.md and retained licenses cover original source,
+Astro (including its upstream portions), included fonts/icons and copied skills.
+The noncommercial Bun skill was removed from source, selection and skills-lock;
+original project guidance preserves the requested runtime conventions. Generated
+projects keep source notices without assigning a license to their own application.
+
+Dependency audit found two pinned Vercel transitives. Scoped overrides replace
+only vulnerable path-to-regexp6 and zod4 ranges for pnpm/npm Vercel consumers;
+other adapters omit this policy. Direct dependency versions and Astro7 remain
+unchanged. Vercel cli-config embeds a separate Zod copy internally: a clean
+package-manager advisory report does not prove that bundled code was upgraded.
+The inspected cli-config schemas use primitive local configuration, not the
+collection schemas in the advisory. No compatible fixed parent was available
+at review time. This is a recorded upstream limitation, not a full security proof.
+
+Final evidence for this audit: root verify 122/122 tests across 23 files plus clean
+format/i18n/Astro diagnostics and SSG/Vercel build. Website verify 10/10 source and
+24/24 Chromium tests, 84 landing / 74 Docs files without diagnostics, and 4,081 links
+across 42 pages. Separate starter review 12 scenarios passed. Both original skills
+passed official validation and independent consumer/maintainer scenarios.
+The actual 7.20.0 tarball contains 348 entries (249,693 bytes), retains original and
+upstream licenses, the portable skill and demo, and excludes website/Bun skill/
+maintainer skill. Root/website advisory reports have zero known graph findings;
+the bundled Vercel code limitation above remains. See audit-2026-10-26.md for the
+archive hash, scope and limits. No npm publication, deployment, commit or push.
+
+## 7.21.0 release preparation and consumer tools (2026-10-26)
+
+The user clarified that consumers choose their own tooling. This supersedes
+historical pnpm/Bun consumer defaults above; repository maintenance still uses
+pnpm/Bun. Creation offers npm/pnpm/Bun dependencies and Node/Bun scripts, with
+explicit flags, launcher-aware unattended defaults and no silent explicit-tool
+fallback. Later add operations preserve the project's current choices. Public
+guides and recipes reuse Tabs for all three managers. Bun >=1.4 is required only
+when it manages Vercel dependencies because older versions ignore nested scoped
+overrides; this was observed with Bun1.3.14 and checked against official Bun docs.
+
+Prepared version: 7.21.0; Astro remains ^7.4.2. FAQs now cover 14 concrete setup,
+feature and maintenance questions with guide links. Landing/Examples/Docs share
+the dynamic-year credit Samuel Olvera · Made for the open web. Package cards use
+one aligned CTA arrow and cleaner decorative illustrations. The adapted website
+is indexable; its copy still truthfully states npm publication is pending.
+CHANGELOG and RELEASING.md describe packaging and separate publication/deployment.
+Final evidence is recorded below; historical 7.20.0 results are not evidence for
+this archive. No npm publication, deployment or push was performed.
+
+Final 7.21.0 verification: root 127 tests, focused archive/tools 8 tests; website
+10 source and 28 browser tests, 4,099 links/42 pages. Both original skills validate.
+The 349-entry, 251,255-byte archive passed npm publication dry-run and actual npm
+exec consumer creation with Bun1.4.4 installation plus checks/build. See the dated
+audit for SHA256 and limitations. Local screenshots remain in .local/website-review.
+The reviewed archive is artifacts/samline-astro-7.21.0.tgz. No npm publication,
+deployment or push; commit readiness follows these local results.

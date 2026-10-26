@@ -2,6 +2,6 @@
 import { main } from '../lib/cli.mjs'
 
 main().catch((error) => {
-  console.error(`\nSAM Astro: ${error.message}`)
+  console.error(`\n@samline/astro: ${error.message}`)
   process.exitCode = 1
 })

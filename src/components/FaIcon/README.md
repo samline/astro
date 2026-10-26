@@ -5,7 +5,17 @@ rendering. No browser JavaScript, DOM observer, font files, CDN, icon registry,
 or SVG Core runtime is required. The base includes the free Solid, Regular,
 and Brands packages.
 
-## Usage
+## Availability and placement
+
+Optional installer selection: `faicon`. If omitted, add it from the generated
+project with `npx @samline/astro add faicon`. This adds the component and its free
+icon-definition packages; manually copying only this folder is not sufficient.
+
+The implementation is `src/components/FaIcon/index.astro`. Put the following
+example in a section's content component, such as
+`src/sections/Navigation/BackLink.astro`, then compose it inside your section.
+
+## Complete example
 
 ```astro
 ---
@@ -26,6 +36,10 @@ const dictionary = getDictionary(Astro.currentLocale)
 <FaIcon icon={faHeart} class='text-2xl text-accent' />
 <FaIcon icon={faGithub} class='text-xl' />
 ```
+
+Expected result: a localized Back to home link with a decorative left arrow,
+plus two decorative icons. The arrow shares the link's color; changing `text-*`
+changes the SVG color/size. None of these icons runs a browser script.
 
 The last two examples are decorative. Import individual definitions; do not
 import the complete fas, far, or fab collections. The definition carries its
@@ -59,6 +73,18 @@ For an icon-only Button or Link, put the translated aria-label on that interacti
 element and leave the icon decorative. Naming the SVG does not replace naming
 its enclosing control. Icons are never separate keyboard controls.
 
+For an icon-only homepage link, put its accessible name on the control:
+
+```astro
+<Button href='/' aria-label={dictionary.buttons.backHome}>
+  <FaIcon icon={faArrowLeft} />
+</Button>
+```
+
+This fragment reuses the imports/dictionary above. For a standalone informative
+icon, `label` must come from an appropriate translated key; do not label a
+cosmetic icon that sits beside equivalent visible text.
+
 ## Limits and migration
 
 Replace icon='arrow-left' with icon={faArrowLeft} and remove lib. Replace old
@@ -71,3 +97,5 @@ definitions without changing this component.
 
 Font Awesome package licenses still apply to the rendered icons. Keep the package
 license files and review the relevant licenses when redistributing icon assets.
+
+SVG output is server-rendered through [Astro components](https://docs.astro.build/en/basics/astro-components/).

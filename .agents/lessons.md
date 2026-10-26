@@ -46,7 +46,7 @@ This is project context, not a speculative improvement backlog.
 
 ## Tooling and delivery
 
-- Install with pnpm and run scripts with Bun; the standalone generator has independent npm/Node fallbacks.
+- Maintain this repository with pnpm/Bun. Consumers choose npm, pnpm or Bun for dependencies and Node/Bun for scripts; this supersedes the old automatic pnpm/Bun preference. Docs show matching tabs, and later additions preserve the client’s choices.
 - Keep the package major aligned with Astro's major, not its minor version.
 - Do not publish to npm until the user authorizes it after the base is finished.
 - Keep .agents as persistent project memory rather than relying on chat history or a size-limited graph note alone.
@@ -123,3 +123,29 @@ This is project context, not a speculative improvement backlog.
   must not accidentally enable SMTP contact on Workers.
 - A new locale index must compose its own empty domain files; copying an index
   that points into another locale would silently reuse translated content.
+
+## Distribution website
+
+- Document the distribution's own installer, generated source, recipes and APIs;
+  Astro remains responsible for its framework, integrations and official docs.
+- Use the package-landing-docs/Ticker presentation without replacing the working
+  starter at the root. Keep website build/dependency/distribution boundaries clear.
+- Include a prominent curated personal-package section: Drawer and Ticker link
+  to their websites; Forms links to the package until its landing is available.
+  Add more packages only when the human requests them.
+- Maintain .gitignore and .npmignore alongside allowlists. Website output,
+  dependencies, reports and tooling stay out of generated projects; portable
+  .agents intentionally remains in the starter distribution.
+
+## Editorial identity and licensing
+
+- The display name is Astro; identify our package/installer as @samline/astro.
+  Do not invent the brand SAM Astro or imply framework ownership/endorsement.
+- Review titles, section names, descriptions and examples as a complete reader
+  journey on the landing, Examples, Docs and READMEs. Explain where a command
+  runs, what it changes and how the developer continues. Avoid generic repeated
+  reference descriptions or examples with hidden optional dependencies.
+- READMEs and developer documentation are English. The root README should make
+  the purpose, use, installed source and framework boundary clear immediately.
+- Own source is MIT; retain upstream notices. The former upstream Bun skill was
+  CC BY-NC and was removed rather than relabeled as unrestricted project source.

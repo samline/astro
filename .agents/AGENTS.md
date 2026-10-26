@@ -5,11 +5,16 @@ Install and manage dependencies exclusively with pnpm. Use `pnpm install`
 Run project scripts with Bun: `bun run dev`, `bun run build`, and
 `bun run preview`. The scripts explicitly use the Bun runtime.
 
-The published CLI is the exception: it must run through npx without requiring
-Bun or pnpm. Generated projects prefer pnpm for installs and Bun for execution,
-but independently fall back to npm for either missing tool. Adapt generated
-scripts, packageManager, install hooks, README and Vercel config together.
-Never silently install global tools. Test all four combinations.
+The published CLI runs through npx with Node, without requiring Bun or pnpm.
+Consumers choose npm, pnpm or Bun for dependencies and Node.js or Bun for scripts.
+The wizard lists installed tools; --package-manager and --runtime make explicit
+choices. Unattended creation follows a recognized launcher, otherwise npm when
+available. An explicit missing tool fails; never silently change that choice or
+install globals. Later additions preserve the existing project's current tools.
+Adapt scripts, packageManager, install hooks, README and provider configuration
+together. Test three managers across both runtimes. Bun dependency management
+with Vercel requires Bun >=1.4 for scoped overrides; Cloudflare tooling retains
+Node execution. These consumer choices supersede the old pnpm/Bun fallback policy.
 
 Keep the working Astro base at the repository root. `packages/cli/template`
 is generated from an explicit allowlist by `bun run kit:prepare`, never edited
@@ -185,3 +190,30 @@ translations and keep unfinished locales inactive. These requirements supersede 
 active dictionaries; pending languages must stay out of the active list until
 the user completes them. Preserve the local composition checks and never execute
 dictionaries to infer their keys.
+
+## Package website
+
+The private website/ workspace owns the package landing and distribution docs.
+Read website/AGENTS.md and README.md before editing it. The root remains the
+working starter; never include website source/tools/dependencies in generated
+projects or the CLI archive. Preserve portable .agents. Document our installer,
+recipes, defaults and APIs; refer to official Astro docs for framework behavior.
+Do not imply official affiliation or npm publication. The curated package section
+contains human-requested Drawer/Ticker/Forms; add others only when requested.
+
+## Working in the maintainer's frontend style
+
+Read memory/frontend-conventions.md before adding UI, changing component
+responsibilities or writing consumer examples. It records explicit current
+preferences and cross-project evidence; do not copy historical implementations.
+Read memory/update-plan.md before discussing updates: there is no source-update
+command today. Do not pretend add, latest generator execution or kit:version
+updates already copied files.
+
+## Original project skills
+
+Use skills/samline-astro for generated-site conventions and
+skills/samline-astro-maintainer for this repository's installer/distribution work.
+The portable skill ships with generated projects; the maintainer skill and
+repository history do not. Keep original skill metadata separate from upstream
+registry records and retain third-party notices when changing the skill catalog.

@@ -25,6 +25,8 @@ await rm(template, { recursive: true, force: true })
 await mkdir(template, { recursive: true })
 // Explicit distribution boundary: never copy the working directory wholesale.
 const files = [
+  'licenses',
+  'THIRD_PARTY_NOTICES.md',
   'src',
   'public',
   'astro.config.mjs',
@@ -53,6 +55,21 @@ for (const file of files) {
   })
 }
 await mkdir(path.join(template, 'scripts'))
+// Retain source attribution without choosing a license for the application.
+await cp(
+  path.join(root, 'LICENSE'),
+  path.join(template, 'licenses/samline-astro-MIT.txt')
+)
+for (const file of [
+  'LICENSE',
+  'THIRD_PARTY_NOTICES.md',
+  'licenses',
+  'CHANGELOG.md'
+]) {
+  await cp(path.join(root, file), path.join(root, 'packages/cli', file), {
+    recursive: true
+  })
+}
 await cp(
   path.join(root, 'scripts/auth-migrate.mjs'),
   path.join(template, 'scripts/auth-migrate.mjs')
@@ -73,7 +90,7 @@ await writeFile(
 )
 await writeFile(
   path.join(template, 'package.json'),
-  `${JSON.stringify(pkg, null, 2)}\n`
+  `${JSON.stringify({ ...pkg, scripts: Object.fromEntries(Object.entries(pkg.scripts).filter(([name]) => !name.startsWith('site:'))) }, null, 2)}\n`
 )
 // Ship a portable seed, never this repository's development memory.
 for (const file of agentContextFiles) {
@@ -90,7 +107,10 @@ skillLock.skills = Object.fromEntries(
   )
 )
 for (const name of agentSkillNames) {
-  if (name !== 'codebase-memory' && !skillLock.skills[name])
+  if (
+    !['codebase-memory', 'samline-astro'].includes(name) &&
+    !skillLock.skills[name]
+  )
     throw new Error(`Missing skill provenance: ${name}`)
   await cp(
     path.join(root, '.agents/skills', name),

@@ -11,7 +11,10 @@ export const askQuestions = async ({
   deployment,
   locale,
   additionalLocales = [],
-  installed = []
+  installed = [],
+  availableTools = {},
+  toolPreferences = {},
+  defaultManager = 'npm'
 }) => {
   const controller = new AbortController()
   const prompt = createInterface({
@@ -84,6 +87,18 @@ export const askQuestions = async ({
     }
     if (command === 'create') {
       directory ||= await ask('Project folder', 'my-project')
+      toolPreferences.manager ||= await choose(
+        'Install dependencies with',
+        ['npm', 'pnpm', 'bun']
+          .filter((name) => availableTools[name])
+          .map((name) => [name, name]),
+        defaultManager
+      )
+      toolPreferences.runtime ||= await choose(
+        'Run project scripts with',
+        [['node', 'Node.js'], ...(availableTools.bun ? [['bun', 'Bun']] : [])],
+        toolPreferences.manager === 'bun' ? 'bun' : 'node'
+      )
       if (!locale) {
         const selected = await language()
         locale = selected.code
@@ -138,12 +153,23 @@ export const askQuestions = async ({
       const available = Object.entries(features).filter(
         ([name]) => !installed.includes(name) || name === 'content'
       )
-      console.log('\nOptional integrations (blank for core only):')
+      console.log(
+        command === 'create'
+          ? '\nOptional integrations (the starter demo is selected by default; enter none for core only):'
+          : '\nOptional integrations (blank for no additions):'
+      )
       available.forEach(([name, item], index) =>
         console.log(`  ${index + 1}. ${item.label} (${name})`)
       )
       while (true) {
-        const answer = await ask('Names or numbers, comma separated')
+        const answer = await ask(
+          'Names or numbers, comma separated',
+          command === 'create' ? 'welcome' : ''
+        )
+        if (answer.toLowerCase() === 'none') {
+          requested = []
+          break
+        }
         const choices = answer
           .split(',')
           .map((item) => item.trim())
@@ -284,7 +310,8 @@ export const askQuestions = async ({
       options,
       deployment,
       locale,
-      additionalLocales
+      additionalLocales,
+      toolPreferences
     }
   } finally {
     process.removeListener('SIGINT', cancel)

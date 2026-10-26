@@ -1,0 +1,31 @@
+{
+  "name": "@samline/astro-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "bun scripts/assets.mjs && bun scripts/dev.mjs",
+    "build": "bun scripts/assets.mjs && pnpm --dir docs run build && pnpm --dir landing run build && bun scripts/assemble.mjs && bun scripts/check-site.mjs",
+    "preview": "pnpm --dir landing run preview --host 127.0.0.1 --port 4330",
+    "check": "bun scripts/check-config.mjs && bun scripts/check-design.mjs && pnpm --dir landing run check && pnpm --dir docs run check",
+    "format": "bun --bun ./node_modules/prettier/bin/prettier.cjs . --write",
+    "format:check": "bun --bun ./node_modules/prettier/bin/prettier.cjs . --check",
+    "test": "bun test tests",
+    "test:browser": "bun --bun ./node_modules/@playwright/test/cli.js test",
+    "verify": "bun run check && bun run format:check && bun run test && bun run build && bun run test:browser",
+    "postinstall": "bun scripts/assets.mjs",
+    "check:release": "node scripts/check-release.mjs",
+    "check:design": "node scripts/check-design.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1",
+    "axe-core": "^4.14.0",
+    "prettier": "^3.9.10",
+    "prettier-plugin-astro": "^1.1.1",
+    "typescript": "6.0.3"
+  },
+  "packageManager": "pnpm@12.9.1"
+}

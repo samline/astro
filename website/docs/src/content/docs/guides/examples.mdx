@@ -1,0 +1,59 @@
+---
+title: 'Installation examples'
+description: 'Choose a starting setup, understand its command, and follow the files it creates.'
+locale: en
+sidebar:
+  group: guides
+  order: 6
+---
+
+import ToolCommands from '../../../../../shared/components/ToolCommands.astro'
+import Playground from '../../../../../shared/components/Playground.astro'
+
+## Choose a starting setup
+
+Each example below describes one installation task. Read where to run the
+command, the required tools and the files it creates, then copy the command for
+the setup you want. The panels describe real CLI operations; the browser displays
+the instructions while the installer runs in your terminal.
+
+The public npm workflow is being prepared. To run the current version, substitute
+the local archive command from [Create a project](../../getting-started/#local-package-testing).
+
+<Playground id="docs-recipes" />
+
+## Add mail when the project needs it
+
+Run this from an existing generated project to inspect the proposed changes:
+
+<ToolCommands args={['add mail --dry-run']} />
+
+Mail includes the SMTP service and Contact Action. Forms and Fields are optional.
+If the plan is correct, repeat the command without `--dry-run`, then follow
+`src/server/mail/README.md` and `src/actions/contact/README.md` to configure SMTP
+and connect the form. The [mail reference](../../reference/mail/) describes the
+service API.
+
+## Start in Mexican Spanish
+
+Run this from the folder that will contain the new project:
+
+<ToolCommands args={['my-site --minimal --deploy vercel --locale es-mx']} />
+
+The result is a core-only Vercel project whose default dictionaries are the es-mx
+preset. Later language additions scaffold the keys from that project's current
+dictionaries for you to translate. See [Set up languages](../languages/) for the
+activation steps.
+
+## Add themes to an existing project
+
+From the generated project root:
+
+<ToolCommands args={['add themes --dry-run', 'status']} />
+
+Review the plan, then apply the first command without `--dry-run`. The installer
+adds theme initialization to Main and makes the switch available for your
+sections. Follow the [Theme component example](../../reference/components/theme/)
+to place the control.
+
+The [command reference](../../reference/api/) lists all supported options.

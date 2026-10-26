@@ -48,7 +48,12 @@ export const contentFiles = async (
         ) + '\n'
       )
     config = namedImport(config, name, `./content/${name}`)
-    config = appendExport(config, 'collections', { [name]: name })
+    config = appendExport(
+      config,
+      'collections',
+      { [name]: name },
+      { rejectExisting: true }
+    )
     files.set(configFile, config)
   } else {
     for (const file of ['types.ts', mode === 'live' ? 'live.ts' : 'build.ts'])
@@ -93,9 +98,12 @@ export const contentFiles = async (
         `${name}Loader`
       )
       // Keep the live definition directly in the special root config as Astro requires.
-      config = appendExport(config, 'collections', {
-        [name]: `defineLiveCollection({ loader: ${name}Loader })`
-      })
+      config = appendExport(
+        config,
+        'collections',
+        { [name]: `defineLiveCollection({ loader: ${name}Loader })` },
+        { rejectExisting: true }
+      )
       files.set(configFile, config)
     } else {
       if (!adding || !(await exists(root, configFile)))

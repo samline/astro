@@ -1,0 +1,33 @@
+---
+import Box from '@/components/Box/index.astro'
+import Link from '@/components/Link/index.astro'
+import { getDictionary } from '@/i18n'
+
+const { navigation, welcome } = getDictionary(Astro.currentLocale)
+---
+
+<footer class='border-t border-black/10 dark:border-white/15' data-demo-footer>
+  <Box class='flex flex-col justify-between gap-4 py-6 text-sm text-black/65 sm:flex-row sm:items-center dark:text-white/65'>
+    <p>{welcome.footer}</p>
+    <nav aria-label={navigation.resourcesLabel}>
+      <ul class='flex flex-wrap gap-x-6 gap-y-3'>
+        <li>
+          <Link
+            href='https://docs.astro.build/'
+            class='underline decoration-black/20 underline-offset-4 hover:text-accent dark:decoration-white/30 dark:hover:text-accent-light'
+          >
+            {navigation.documentation}
+          </Link>
+        </li>
+        <li>
+          <Link
+            href='https://astro.build/chat'
+            class='underline decoration-black/20 underline-offset-4 hover:text-accent dark:decoration-white/30 dark:hover:text-accent-light'
+          >
+            {navigation.community}
+          </Link>
+        </li>
+      </ul>
+    </nav>
+  </Box>
+</footer>

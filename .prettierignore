@@ -14,3 +14,6 @@ pnpm-lock.yaml
 public/
 artifacts/
 packages/cli/template/
+
+# Website has an independent toolchain and formatter.
+website/

@@ -1,0 +1,89 @@
+---
+title: 'Add integrations'
+description: 'Choose what to include, add features later, and find the setup steps for each integration.'
+locale: en
+sidebar:
+  group: guides
+  order: 1
+---
+
+import ToolCommands from '../../../../../shared/components/ToolCommands.astro'
+
+## Choose features during setup or later
+
+The installation wizard asks which integrations to include. You can start with
+the core and add a feature when the project needs it.
+
+From the root of a project created by `@samline/astro`, open the feature picker:
+
+<ToolCommands args={['add']} />
+
+Or name the features directly:
+
+<ToolCommands args={['add themes gtm', 'add fields']} />
+
+Adding Fields also includes its required Forms and Formatter packages. To install
+the packages without the templates, choose `forms` alone.
+
+## What each selection adds
+
+| Selection         | Added source and dependencies                                                   | Next step                                                                      |
+| ----------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `themes`          | Shared theme initialization, switch and styles.                                 | Place the switch in a section and design both themes.                          |
+| `auth`            | Better Auth with the selected external API, OAuth/OIDC or owned-database setup. | Configure that identity source and protect the required operations.            |
+| `captcha`         | Turnstile or reCAPTCHA widget and server verifier.                              | Supply provider keys/domains and verify tokens before the protected operation. |
+| `gtm`             | Google Tag Manager and CookieConsent.                                           | Set the container ID and review the project's tags and consent policy.         |
+| `language-picker` | LanguagePicker and language-label dictionaries.                                 | Place it in a section and check that its destinations exist.                   |
+| `forms`           | `@samline/forms`, `@samline/formatter` and usage guidance.                      | Define the form, validation and submission transport.                          |
+| `fields`          | Astro form-control templates, plus Forms prerequisites.                         | Compose the controls inside a form section.                                    |
+| `actions`         | An independent Basic Action example.                                            | Adapt its input, authorization and result to the operation.                    |
+| `content`         | The selected local, API or CMS collection example.                              | Follow the generated collection README to configure and read it.               |
+| `mail`            | SMTP mail service and Contact Action example.                                   | Configure the transport, sender and recipient, then connect a form.            |
+| `pageloader`      | PageLoader and `ldrs`.                                                          | Keep the default animation or select another one.                              |
+| `faicon`          | Inline SVG component and free Font Awesome icon packages.                       | Import the individual icons the project uses.                                  |
+| `welcome`         | The optional starter presentation.                                              | Replace its content as the site takes shape.                                   |
+
+Mail always includes Contact, even when the separate `actions` selection is
+omitted. Forms and Fields remain separate choices, so a Mail form can also use
+native controls or another project-owned presentation.
+
+## Supply feature-specific settings
+
+The wizard asks the extra questions needed by your selections. Explicit commands
+can supply those settings too:
+
+<ToolCommands
+  args={[
+    'add auth --auth-mode external',
+    'add captcha --captcha-provider turnstile'
+  ]}
+/>
+
+Content has its own [source and loading choices](../content/). Server features
+also need a compatible [deployment target](../deployment/).
+
+## Know where the feature appears
+
+Themes, GTM and PageLoader receive their required initialization in
+`src/layouts/Main.astro`. Controls such as Theme Switch, LanguagePicker, Fields
+and Captcha are ready for your sections to compose. A later addition keeps your
+existing header and homepage.
+
+Read each installed feature's README before activation. Authentication starts
+disabled; remote collections wait for source configuration; mail and CAPTCHA
+need their real environment values. The installer prepares those connections,
+and your project supplies the provider configuration.
+
+## Review before applying
+
+<ToolCommands args={['add mail --dry-run', 'status']} />
+
+The first command shows planned files. The second reports the project's local
+installation state. Repeat the addition without `--dry-run` when ready. These
+commands expect compatible installer metadata in `package.json`; see
+[configuration and recovery](../../reference/configuration/) for conflicts and
+older-project handling.
+
+Use [Astro integrations](https://docs.astro.build/en/guides/integrations-guide/)
+for the framework's integration API and official adapters. Better Auth, Forms,
+CAPTCHA providers and other dependencies document their own APIs.

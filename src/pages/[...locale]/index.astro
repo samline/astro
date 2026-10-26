@@ -1,7 +1,9 @@
 ---
 import type { GetStaticPaths } from 'astro'
-import Welcome from '@/sections/Welcome/index.astro'
 import Main from '@/layouts/Main.astro'
+import DemoHeader from '@/sections/DemoHeader/index.astro'
+import DemoFooter from '@/sections/DemoFooter/index.astro'
+import Welcome from '@/sections/Welcome/index.astro'
 import { defaultLocale, locales } from '@/i18n/config'
 
 export const getStaticPaths = (() =>
@@ -11,5 +13,7 @@ export const getStaticPaths = (() =>
 ---
 
 <Main path='/'>
+  <DemoHeader slot='header' />
   <Welcome />
+  <DemoFooter slot='footer' />
 </Main>

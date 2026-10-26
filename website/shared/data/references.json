@@ -1,0 +1,218 @@
+[
+  {
+    "id": "reference/api",
+    "title": "Installer commands",
+    "description": "Create a project, add integrations or languages later, inspect installed features, and preview changes before applying them.",
+    "source": "packages/cli/README.md",
+    "group": "reference",
+    "order": 2
+  },
+  {
+    "id": "reference/i18n",
+    "title": "Dictionary API",
+    "description": "Read typed dictionaries, configure active languages, and keep visitor text in separate translation domains.",
+    "source": "src/i18n/README.md",
+    "group": "reference",
+    "order": 3
+  },
+  {
+    "id": "reference/localized-content",
+    "title": "Translated destinations",
+    "description": "Connect translated records and URLs so language links and SEO point to the matching page, including API and CMS content.",
+    "source": "src/i18n/localized-content.md",
+    "group": "reference",
+    "order": 4
+  },
+  {
+    "id": "reference/auth",
+    "title": "Authentication integration",
+    "description": "Configure Better Auth for an external identity service, OAuth/OIDC or project-owned users, then protect routes and server operations.",
+    "source": "src/server/auth/README.md",
+    "group": "reference",
+    "order": 5
+  },
+  {
+    "id": "reference/auth-client",
+    "title": "Authentication client",
+    "description": "Call authentication methods in the browser, refresh user data and handle session changes without exposing server credentials.",
+    "source": "src/auth/README.md",
+    "group": "reference",
+    "order": 6
+  },
+  {
+    "id": "reference/mail",
+    "title": "SMTP mail integration",
+    "description": "Configure a private SMTP transport and send localized messages from trusted server code.",
+    "source": "src/server/mail/README.md",
+    "group": "reference",
+    "order": 7
+  },
+  {
+    "id": "reference/contact",
+    "title": "Contact Action",
+    "description": "Validate contact submissions, verify an optional CAPTCHA and send mail through the SMTP integration.",
+    "source": "src/actions/contact/README.md",
+    "group": "reference",
+    "order": 8
+  },
+  {
+    "id": "reference/basic-action",
+    "title": "Basic Action",
+    "description": "Start with a small validated Astro Action and connect it to a form with translated feedback.",
+    "source": "src/actions/basic/README.md",
+    "group": "reference",
+    "order": 9
+  },
+  {
+    "id": "reference/forms",
+    "title": "Forms adapter",
+    "description": "Use Forms and Formatter with your own controls or the optional Fields templates, keeping submission logic in its owning section.",
+    "source": "src/forms/README.md",
+    "group": "reference",
+    "order": 10
+  },
+  {
+    "id": "reference/content",
+    "title": "Maintained content catalog",
+    "description": "Explore the maintained local and remote content examples. Generated projects receive only the source selected during installation.",
+    "source": "src/content/README.md",
+    "group": "reference",
+    "order": 11
+  },
+  {
+    "id": "reference/content-api",
+    "title": "API transport",
+    "description": "Validate REST responses, handle transport failures and keep private API configuration on the server.",
+    "source": "src/server/content-api/README.md",
+    "group": "reference",
+    "order": 12
+  },
+  {
+    "id": "reference/content-live",
+    "title": "Live content catalog",
+    "description": "Build a typed Live Collection loader that validates upstream data and distinguishes missing entries from request failures.",
+    "source": "src/content/live/README.md",
+    "group": "reference",
+    "order": 13
+  },
+  {
+    "id": "reference/captcha-server",
+    "title": "CAPTCHA verification",
+    "description": "Verify Turnstile or reCAPTCHA tokens in trusted server code before accepting a protected operation.",
+    "source": "src/server/captcha/README.md",
+    "group": "reference",
+    "order": 14
+  },
+  {
+    "id": "reference/content-action",
+    "title": "Content Action catalog",
+    "description": "Adapt the maintained API read/write Action examples to a real backend, with validation and authorization checks.",
+    "source": "src/actions/content-demo/README.md",
+    "group": "reference",
+    "order": 15
+  },
+  {
+    "id": "reference/components/box",
+    "title": "Box",
+    "description": "Center content and control its width with default, narrow, wide and fluid container sizes.",
+    "source": "src/components/Box/README.md",
+    "group": "api",
+    "order": 1
+  },
+  {
+    "id": "reference/components/section",
+    "title": "Section",
+    "description": "Create a labeled page section with an anchor and consistent vertical spacing, independently of content width.",
+    "source": "src/components/Section/README.md",
+    "group": "api",
+    "order": 2
+  },
+  {
+    "id": "reference/components/h",
+    "title": "H",
+    "description": "Render a semantic heading and select its visual size without changing the document outline.",
+    "source": "src/components/H/README.md",
+    "group": "api",
+    "order": 3
+  },
+  {
+    "id": "reference/components/link",
+    "title": "Link",
+    "description": "Create links with native attributes, locale-aware internal URLs and explicit handling for downloads or resolved destinations.",
+    "source": "src/components/Link/README.md",
+    "group": "api",
+    "order": 4
+  },
+  {
+    "id": "reference/components/button",
+    "title": "Button",
+    "description": "Render a native button with clear type and size options, accessible labels and predictable disabled behavior.",
+    "source": "src/components/Button/README.md",
+    "group": "api",
+    "order": 5
+  },
+  {
+    "id": "reference/components/fields",
+    "title": "Fields",
+    "description": "Compose translated native form controls with labels, hints and errors, then connect them to Forms when needed.",
+    "source": "src/components/Fields/README.md",
+    "group": "api",
+    "order": 6
+  },
+  {
+    "id": "reference/components/theme",
+    "title": "Theme",
+    "description": "Initialize the color theme before paint and add a switch that follows system or saved preferences.",
+    "source": "src/components/Theme/README.md",
+    "group": "api",
+    "order": 7
+  },
+  {
+    "id": "reference/components/languagepicker",
+    "title": "LanguagePicker",
+    "description": "Let visitors choose an active language and supply matching URLs when content has translated slugs.",
+    "source": "src/components/LanguagePicker/README.md",
+    "group": "api",
+    "order": 8
+  },
+  {
+    "id": "reference/components/pageloader",
+    "title": "PageLoader",
+    "description": "Show and control the optional loading overlay, including custom ldrs animations and reduced-motion behavior.",
+    "source": "src/components/PageLoader/README.md",
+    "group": "api",
+    "order": 9
+  },
+  {
+    "id": "reference/components/faicon",
+    "title": "FaIcon",
+    "description": "Render selected Font Awesome SVG icons with accessible labels or mark decorative icons appropriately.",
+    "source": "src/components/FaIcon/README.md",
+    "group": "api",
+    "order": 10
+  },
+  {
+    "id": "reference/components/seo",
+    "title": "SEO",
+    "description": "Set page metadata, canonical and translated URLs, social previews and structured data through the shared layout.",
+    "source": "src/components/SEO/README.md",
+    "group": "api",
+    "order": 11
+  },
+  {
+    "id": "reference/components/gtm",
+    "title": "GTM",
+    "description": "Configure deferred Google Tag Manager loading and cookie preferences with separate analytics and advertising consent.",
+    "source": "src/components/GTM/README.md",
+    "group": "api",
+    "order": 12
+  },
+  {
+    "id": "reference/components/captcha",
+    "title": "Captcha",
+    "description": "Render Turnstile or reCAPTCHA, collect its token and reset the widget through its client API.",
+    "source": "src/components/Captcha/README.md",
+    "group": "api",
+    "order": 13
+  }
+]

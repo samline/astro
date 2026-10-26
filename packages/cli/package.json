@@ -1,7 +1,9 @@
 {
   "name": "@samline/astro",
-  "version": "7.20.0",
-  "description": "Crea sitios Astro 7 con SSG, Server Islands y Vercel.",
+  "version": "7.21.0",
+  "license": "MIT",
+  "author": "Samuel Olvera (samline)",
+  "description": "An opinionated Astro 7 distribution with a modular project installer.",
   "type": "module",
   "bin": {
     "samline-astro": "bin/samline-astro.mjs"
@@ -10,7 +12,10 @@
     "bin/",
     "lib/",
     "scripts/",
-    "template/"
+    "licenses/",
+    "THIRD_PARTY_NOTICES.md",
+    "template/",
+    "CHANGELOG.md"
   ],
   "engines": {
     "node": ">=22.23.4"
@@ -24,5 +29,24 @@
   },
   "dependencies": {
     "typescript": "6.0.3"
-  }
+  },
+  "homepage": "https://samline.github.io/astro/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samline/astro.git",
+    "directory": "packages/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/samline/astro/issues"
+  },
+  "keywords": [
+    "astro",
+    "starter",
+    "ssg",
+    "server-islands",
+    "cli",
+    "template",
+    "i18n",
+    "tailwind"
+  ]
 }

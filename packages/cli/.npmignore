@@ -1,0 +1,11 @@
+# Defense in depth; package.json files remains the distribution boundary.
+node_modules/
+*.tgz
+*.log
+.env*
+!template/.env.example
+website/
+tests/
+artifacts/
+.local/
+# Keep the generated portable .agents seed and skills.

@@ -1,0 +1,76 @@
+---
+title: 'Set up languages'
+description: 'Choose initial languages, add matching dictionary keys later, and activate a completed locale.'
+locale: en
+sidebar:
+  group: guides
+  order: 2
+---
+
+import ToolCommands from '../../../../../shared/components/ToolCommands.astro'
+
+## Choose the initial languages
+
+The wizard offers **en-us**, **es-mx** and **es-es**, with prepared translations
+for those presets. You can also enter another locale with its native display
+name and text direction. A custom language starts with dictionary keys for you
+to translate.
+
+The project includes only the languages you select. Domain contracts live in the
+chosen default locale, so a Spanish-only project can keep its complete dictionary
+structure under es-mx or es-es.
+
+## Find the dictionaries
+
+Each domain is a folder inside `src/i18n/dictionaries/<locale>`. Its `index.ts`
+contains the translated values and `types.ts` describes the expected keys. The
+locale's own index combines the domains.
+
+Put visitor-facing text here: page copy, metadata, control labels, accessible
+names, validation messages and loading/error feedback. Keep the same key structure
+across languages. See the [dictionary API](../../reference/i18n/) for typed access.
+
+## Add a language to an existing project
+
+Run one of these from the generated project root:
+
+<ToolCommands
+  args={[
+    "locale add fr-fr --locale-name 'Français (France)'",
+    'locale add ar --locale-name العربية --direction rtl'
+  ]}
+/>
+
+The installer reads the **current project's** dictionaries, including domains and
+keys added since creation. It creates the same structure for the new locale with
+empty translation strings. Your existing dictionaries retain their values.
+
+Read dictionary modules as static data so the installer can inspect their shape.
+If it reports dynamic values, inconsistent types or an index importing another
+locale's values, resolve that composition before retrying. Language creation
+scaffolds UI dictionaries; content entries and translated URLs are handled at
+their own source.
+
+## Translate, then activate
+
+1. Fill the new domain values in `src/i18n/dictionaries/<new-locale>`.
+2. Complete the language names wherever the LanguagePicker dictionaries need them.
+3. Check that the site's routes and content exist in the new language.
+4. Add the finished code to the existing `locales` array in `src/i18n/config.ts`.
+5. Run the generated formatter, `check:i18n`, type check and build.
+
+A later addition remains inactive until you edit that array. Once active, empty
+required translations fail `check:i18n`. For RTL languages, use the generated
+direction metadata and review the actual layout, controls and icons in RTL.
+
+## Match translated pages correctly
+
+For pages with the same path in every language, LanguagePicker can use that shared
+locale-free path. API/CMS articles with different slugs need an explicit relation
+between their translations. Resolve their real destinations once and share them
+between the picker and SEO; the installed
+`src/i18n/localized-content.md` explains the contract.
+
+Astro provides [internationalized routing](https://docs.astro.build/en/guides/internationalization/)
+and the [locale URL helpers](https://docs.astro.build/en/reference/modules/astro-i18n/).
+This package prepares the dictionaries and initial configuration around those APIs.

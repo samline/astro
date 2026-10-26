@@ -1,42 +1,62 @@
 # H
 
-Semantic heading primitive. Renders h1 through h6 with no added styles, wrapper,
-or client JavaScript. Use class utilities to establish a project's typography.
+A semantic heading primitive. Renders `h1` through `h6` without a wrapper, imposed
+typography, or browser JavaScript. Its level describes the document outline;
+Tailwind classes describe its visual appearance.
 
-## Usage
+## Availability and placement
+
+Included in every generated project at `src/components/H/index.astro`.
+Use it inside section content. The following can be the body of
+`src/sections/Introduction/index.astro`, rendered by a page inside Main.
+
+## Complete example
 
 ```astro
 ---
 import H from '@/components/H/index.astro'
 import { getDictionary } from '@/i18n'
 
-const dictionary = getDictionary(Astro.currentLocale)
+const { site } = getDictionary(Astro.currentLocale)
 ---
 
-<H level={1} id='not-found-title' class='text-3xl font-bold'>
-  {dictionary.errors.notFound.title}
+<H level={1} id='page-title' class='text-4xl font-bold md:text-6xl'>
+  {site.title}
 </H>
+<p>{site.description}</p>
 ```
+
+Expected result: an actual `h1`, with the current dictionary's title and the given
+ID/classes. There is no `level` attribute on the output. H does not read a locale
+prop or supply a default heading label.
 
 ## API
 
-| Prop                      | Default  | Purpose                                                      |
-| ------------------------- | -------- | ------------------------------------------------------------ |
-| `level`                   | Required | Semantic heading level: 1, 2, 3, 4, 5, or 6.                 |
-| Native heading attributes | —        | id, class, style, aria-_, data-_, and other HTML attributes. |
-| Default slot              | —        | Translated heading content, optionally with inline markup.   |
+| Prop                      | Default  | Purpose                                          |
+| ------------------------- | -------- | ------------------------------------------------ |
+| `level`                   | Required | Integer `1`, `2`, `3`, `4`, `5`, or `6`.         |
+| Native heading attributes | —        | `id`, `class`, `style`, `aria-*`, `data-*`, etc. |
+| Default slot              | —        | Translated text, optionally with inline markup.  |
 
-Choose level from the document hierarchy, independently of the visual text size.
-Use one h1 for the page title and nest section headings in a logical order.
-H does not infer levels from Section nesting or generate an id. To label a Section,
-set its aria-labelledby to this heading's unique id.
+Choose one primary heading for the page and nest section headings in a logical
+order. A visually small page title can still use `level={1}`. A visually large
+section title can use `level={2}`. H never infers a level from nesting or generates
+an ID. Invalid levels throw during rendering.
 
-All six levels share the same attribute contract. Custom props are consumed;
-native attributes and Astro scope attributes reach the heading element. Invalid
-levels throw during rendering instead of producing an unknown HTML element.
-There is no children prop: content belongs in the default slot. Text comes from
-the calling component's dictionary; H requires no locale prop.
+To name a section, match its `aria-labelledby` to the heading's unique `id`:
 
-The global base stylesheet owns text wrapping and normalization. No heading
-sizes, colors, margins, or typography variants are imposed here. Supply the
-desired appearance with class.
+```astro
+<Section id='overview' aria-labelledby='overview-title'>
+  <Box>
+    <H level={2} id='overview-title' class='text-3xl font-semibold'>
+      {site.title}
+    </H>
+  </Box>
+</Section>
+```
+
+This composition fragment assumes Section, Box and H are imported and `site` was
+read from the dictionary as above. Keep heading text in the owning domain's
+translations; there is no `children` prop or client API.
+
+For props and slots, use [Astro's component documentation](https://docs.astro.build/en/basics/astro-components/).

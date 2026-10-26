@@ -1,5 +1,9 @@
 # Basic Action
 
+Included by `npx @samline/astro add actions`. Active use requires a compatible
+server adapter. On pure static hosting, request inactive scaffolding with
+`--scaffold` and configure the backend before enabling the registration.
+
 A request-time FormData example with bounded input, explicit locale validation,
 same-origin checks and dictionary messages. It does not send email or write data.
 

@@ -5,7 +5,7 @@ import { features } from './features/registry.mjs'
 export const agentSkillNames = [
   'accessibility',
   'astro',
-  'bun',
+  'samline-astro',
   'codebase-memory',
   'deploy-to-vercel',
   'frontend-design',
@@ -21,6 +21,7 @@ export const agentContextFiles = [
   '.agents/AGENTS.md',
   '.agents/memory/project.md',
   '.agents/memory/decisions.md',
+  '.agents/memory/frontend-conventions.md',
   '.agents/lessons.md',
   '.agents/todos.md',
   '.agents/memory/integrations.md'
@@ -29,7 +30,10 @@ export const agentContextFiles = [
 export const agentSkillIndex = (names, registry) => {
   const rows = names.map((name) => {
     const source =
-      registry[name]?.source ?? 'Project-local graph/source exploration skill'
+      registry[name]?.source ??
+      (name === 'samline-astro'
+        ? 'Original @samline/astro project workflow (MIT)'
+        : 'DeusData/codebase-memory-mcp (MIT; local workflow additions)')
     return `- [${name}](./${name}/SKILL.md): ${source}.`
   })
   return `# Project skills

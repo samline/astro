@@ -1,7 +1,14 @@
 # GTM and consent
 
-Google Tag Manager with Consent Mode v2 and CookieConsent. Main integrates Head
-in the head and Consent inside the body when the integration is enabled.
+Google Tag Manager with Consent Mode v2 and CookieConsent. Optional installer
+selection: `gtm`. Add it later with `npx @samline/astro add gtm` from the generated
+project. The installer adds the SDK dependency, cookies dictionaries, configuration,
+environment declarations and Main integration; the feature still needs a real
+container ID before activation.
+
+Files live in `src/components/GTM`. With the feature installed, Main integrates
+Head in the head and Consent inside the body when tracking is enabled. Do not
+mount a second Head or Consent in an individual section.
 
 ## Enable
 
@@ -35,7 +42,10 @@ An existing cookie loads the SDK immediately to validate and restore the choice.
 Permissions are not granted by directly reading its contents. Bots and audit
 tools are not detected to change this behavior.
 
-## Reopen preferences
+## Complete footer control example
+
+Put this in `src/sections/CookieSettings/index.astro` and render the section inside
+Main, typically near the footer. It is an additional way to open the preferences:
 
 ```astro
 ---
@@ -44,6 +54,11 @@ import CookiePreferences from '@/components/GTM/CookiePreferences.astro'
 
 <CookiePreferences class='text-accent underline' />
 ```
+
+Expected result: when Consent is active and JavaScript runs, the translated
+Cookie preferences button is visible. Clicking it initializes the deferred SDK
+if necessary and opens the preferences dialog. If the feature is disabled or has
+no ID, it remains hidden. This example alone does not activate GTM.
 
 A native button accepting HTML attributes, classes, and a translated label slot.
 The default label is cookies.preferences, using Astro's locale. It controls type
@@ -95,3 +110,21 @@ replacing a visitor's choice with a direct API call.
 
 Copy lives in each locale's cookies dictionary domain. Customize content and the
 policy for the project without hardcoding visitor-facing strings in components.
+
+## Checking your setup
+
+1. Add the feature and supply a real `GTM_ID` through your environment.
+2. For localhost verification, explicitly set `GTM_ENABLED=true` and rebuild or
+   restart the dev server. Leave this override out when automatic detection is desired.
+3. Clear only this site's choice cookie or increase `revision` to inspect a first visit.
+4. Scroll, press a key, or activate CookiePreferences. Inspect the first dialog and
+   its preferences view. In basic mode, GTM must not download before opt-in.
+5. Test accept/reject/category changes with your real container and Tag Assistant.
+   A localhost fixture or successful build cannot verify the published container.
+
+The distribution prepares consent signals and UI; the project's tag configuration
+must honor them. No analytics account, privacy text, real policy page or tag
+rules are provisioned. `privacyPolicyPath` must refer to a route you actually add.
+For Astro's script processing and optional ClientRouter lifecycle, consult
+[Astro scripts](https://docs.astro.build/en/guides/client-side-scripts/) and
+[view transitions](https://docs.astro.build/en/guides/view-transitions/).

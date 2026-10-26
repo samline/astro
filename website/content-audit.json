@@ -1,0 +1,270 @@
+{
+  "status": "verified",
+  "packageVersion": "7.21.0",
+  "templateSource": {
+    "repository": "https://github.com/samline/package-landing-docs",
+    "commit": "dd6d8892339690487099aab1246b2b01005df335"
+  },
+  "themeReview": {
+    "status": "verified",
+    "source": "Existing source token src/styles/tailwind.css --color-accent (#3245ff); a lighter blue (#9aa4ff) preserves contrast on the website dark theme.",
+    "accentLight": "#3245ff",
+    "accentDark": "#9aa4ff"
+  },
+  "capabilityReview": {
+    "status": "verified",
+    "integrations": [
+      {
+        "name": "Distribution selections",
+        "evidence": "packages/cli/lib/features/registry.mjs",
+        "destination": "docs/src/content/docs/guides/integrations.mdx",
+        "reviewed": true
+      },
+      {
+        "name": "Astro framework boundary",
+        "evidence": "User editorial instruction: document distribution, refer to Astro for framework APIs.",
+        "destination": "docs/src/content/docs/index.md",
+        "reviewed": true
+      }
+    ],
+    "scenarios": [
+      {
+        "name": "minimal",
+        "evidence": "shared/i18n/translations/en/recipes.ts; commands executed against actual local CLI",
+        "destination": "docs/src/content/docs/guides/examples.mdx",
+        "reviewed": true
+      },
+      {
+        "name": "forms",
+        "evidence": "shared/i18n/translations/en/recipes.ts; commands executed against actual local CLI",
+        "destination": "docs/src/content/docs/guides/examples.mdx",
+        "reviewed": true
+      },
+      {
+        "name": "content",
+        "evidence": "shared/i18n/translations/en/recipes.ts; commands executed against actual local CLI",
+        "destination": "docs/src/content/docs/guides/examples.mdx",
+        "reviewed": true
+      }
+    ],
+    "onboarding": {
+      "equivalentModes": true,
+      "note": "One CLI product; npx, pnpm dlx and bunx launch the same generator. No browser import or CDN setup is claimed."
+    }
+  },
+  "sources": [
+    {
+      "source": "packages/cli/README.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/api",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": "src/i18n/README.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/i18n",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": "src/i18n/localized-content.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/localized-content",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": "src/server/auth/README.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/auth",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": "src/auth/README.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/auth-client",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": "src/server/mail/README.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/mail",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": "src/actions/contact/README.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/contact",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": "src/actions/basic/README.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/basic-action",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": "src/forms/README.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/forms",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": "src/content/README.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/content",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": "src/server/content-api/README.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/content-api",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": "src/content/live/README.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/content-live",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": "src/server/captcha/README.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/captcha-server",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": "src/actions/content-demo/README.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/content-action",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": "src/components/Box/README.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/components/box",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": "src/components/Section/README.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/components/section",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": "src/components/H/README.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/components/h",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": "src/components/Link/README.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/components/link",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": "src/components/Button/README.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/components/button",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": "src/components/Fields/README.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/components/fields",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": "src/components/Theme/README.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/components/theme",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": "src/components/LanguagePicker/README.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/components/languagepicker",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": "src/components/PageLoader/README.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/components/pageloader",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": "src/components/FaIcon/README.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/components/faicon",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": "src/components/SEO/README.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/components/seo",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": "src/components/GTM/README.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/components/gtm",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": "src/components/Captcha/README.md",
+      "destination": "shared/data/references.json",
+      "page": "reference/components/captcha",
+      "reviewed": true,
+      "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    }
+  ],
+  "publicExports": [],
+  "limits": [
+    "No npm publication or deployment performed.",
+    "Astro and third-party API documentation remain upstream.",
+    "No external provider, production SMTP, real database or Pages environment verified.",
+    "No PageSpeed score measured.",
+    "No pre-existing website URLs require migration."
+  ],
+  "personalPackages": {
+    "owner": "landing/src/i18n/translations/en/packages.ts",
+    "requested": ["drawer", "ticker", "forms"],
+    "forms": "npm link until a landing is available; do not invent its URL availability."
+  },
+  "licenseReview": {
+    "original": "MIT, Samuel Olvera (samline)",
+    "astro": "Full upstream MIT and SvelteKit/Vite notices retained in licenses/astro-MIT.txt",
+    "skills": "Third-party notices retained; noncommercial Bun skill excluded; original project skills MIT",
+    "consumer": "Source notices included; application license remains the consumer owner's choice"
+  },
+  "releasePreparation": {
+    "version": "7.21.0",
+    "npm": "Not published; read-only public registry lookup returned404 on2026-10-26. Preparation does not publish.",
+    "website": "Adaptation complete; indexable production artifact prepared, remote deployment not performed."
+  }
+}

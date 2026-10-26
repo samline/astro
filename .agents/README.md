@@ -1,4 +1,4 @@
-# SAM Astro agent context
+# @samline/astro agent context
 
 This directory is the persistent project memory and local skill library.
 Read it when starting work or recovering context after a chat reset.
@@ -13,6 +13,13 @@ Read it when starting work or recovering context after a chat reset.
    philosophy, ownership, installer invariants and evidence requirements.
 6. [memory/decisions.md](./memory/decisions.md): architectural decisions relevant to the task.
 7. [skills/README.md](./skills/README.md): choose relevant skills, then read their SKILL.md.
+
+## Frontend and updates
+
+- [Frontend conventions](./memory/frontend-conventions.md): explicit preferences,
+  cross-project evidence, ownership decisions and legacy practices to avoid.
+- [Update investigation](./memory/update-plan.md): official Astro update tools,
+  dependency/source boundaries and requirements for a future base updater.
 
 ## Reference analyses
 
@@ -33,6 +40,11 @@ Read it when starting work or recovering context after a chat reset.
 - [Modular installer plan](./memory/modular-installer-plan.md): requested feature
   selection, locales, later additions, dependency boundaries and validation.
   Implemented in 7.20.0; read project.md for actual validation and limits.
+
+## Package website
+
+See [website/README.md](../website/README.md) and [website/AGENTS.md](../website/AGENTS.md)
+for the private landing/docs workspace and its editorial/distribution contract.
 
 ## Maintenance
 
@@ -58,4 +70,8 @@ Autoskills 0.4.1 was run with npx on 2026-10-23. It installed 11 project-scoped
 skills under .agents/skills. The root skills-lock.json is maintained by the
 installer and records their sources and hashes; keep it at its standard path.
 The existing codebase-memory skill is also copied here for structural queries.
+The noncommercial Bun skill was later removed during license review; original
+project skills now document runtime and maintenance workflows.
 Do not reformat upstream skill files when updating project documentation.
+
+Audit findings and verification: [2026-10-26 audit](./memory/audit-2026-10-26.md).

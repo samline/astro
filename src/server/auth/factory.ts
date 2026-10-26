@@ -61,7 +61,7 @@ export const createAuthService = (options: AuthOptions) => {
   const external = options.mode === 'external'
   const auth = betterAuth({
     ...(options.mode === 'database' ? options.native : {}),
-    appName: 'SAM Astro',
+    appName: 'Astro',
     baseURL: base.origin,
     basePath: '/api/auth',
     secret: options.secret,

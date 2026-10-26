@@ -1,43 +1,77 @@
 # Box
 
-Centers content and limits its width. It adds no background, border, vertical
-spacing, or section semantics. Renders a div and needs no client JavaScript.
+A centered content-width container. Use it to align a section's content with the
+rest of the page. It renders one `div`, adds inline gutters, and needs no browser
+JavaScript. It does not create a card, a semantic section, or vertical spacing.
 
-## Usage
+## Availability and placement
+
+Included in every generated project at `src/components/Box/index.astro`.
+Pages compose `Main` and domain sections; sections compose reusable components.
+Put the following example in `src/sections/Overview/index.astro`, then render that
+section inside your page's `Main` layout.
+
+## Complete section example
 
 ```astro
 ---
+import Section from '@/components/Section/index.astro'
 import Box from '@/components/Box/index.astro'
+import H from '@/components/H/index.astro'
+import { getDictionary } from '@/i18n'
+
+const { site } = getDictionary(Astro.currentLocale)
 ---
 
-<Box size='narrow' class='flex flex-col gap-6'>
-  <slot />
-</Box>
+<Section id='overview' aria-labelledby='overview-title'>
+  <Box size='narrow' class='space-y-4'>
+    <H level={1} id='overview-title' class='text-3xl font-bold'>
+      {site.title}
+    </H>
+    <p>{site.description}</p>
+  </Box>
+</Section>
 ```
 
-## Props and slot
+Expected result: a named section with vertical spacing and centered text in a
+container up to **48rem** wide. The section owns the spacing; Box owns the width.
+Use `level={2}` if the page already has its primary heading.
 
-| Prop                  | Default     | Purpose                                                                            |
-| --------------------- | ----------- | ---------------------------------------------------------------------------------- |
-| `size`                | `'default'` | Default: maximum 90rem; narrow: 48rem; wide: 120rem; fluid: no maximum.            |
-| Native div attributes | —           | class, style, id, aria-_, data-_, and other attributes forwarded to the container. |
-| Default slot          | —           | Container content.                                                                 |
+## Choosing a size
 
-Fills the available width with 1.25rem inline gutters. The maximum includes those
-gutters. Caller classes are merged with component classes and Astro scope attributes
-are forwarded.
+| `size`              | Maximum width | Use when                                                |
+| ------------------- | ------------- | ------------------------------------------------------- |
+| `default` (default) | 90rem         | Normal site sections and multi-column layouts.          |
+| `narrow`            | 48rem         | Forms, article introductions, and focused reading.      |
+| `wide`              | 120rem        | Large grids that need more horizontal room.             |
+| `fluid`             | None          | Content should fill its parent while retaining gutters. |
 
-## CSS properties
+All sizes fill the available width and use **1.25rem inline gutters**. The maximum
+includes the gutters. A narrow parent still limits a fluid Box. Nesting Boxes
+adds their gutters; use siblings when you need independent widths in one section.
+
+## API and customization
+
+Accepts native `div` attributes, including `id`, `class`, `style`, `aria-*` and
+`data-*`. Attributes and Astro scope attributes reach the rendered container.
+The default slot is its content; there are no named slots or client methods.
+
+| CSS property      | Default     | Effect                                       |
+| ----------------- | ----------- | -------------------------------------------- |
+| `--box-max-width` | Chosen size | Override the maximum, including for `fluid`. |
+| `--box-gutter`    | `1.25rem`   | Override inline padding.                     |
+
+For a one-off responsive width, keep the change with its section:
 
 ```astro
-<Box style='--box-max-width: 64rem; --box-gutter: 2rem;'>
+<Box class='[--box-gutter:1rem] md:[--box-gutter:2rem]'>
   <slot />
 </Box>
 ```
 
---box-max-width overrides the maximum for any size, including fluid. --box-gutter
-changes inline padding. Use Tailwind utilities or section styles to set these
-properties responsively.
+This last fragment assumes Box is already imported; its slot forwards a wrapper
+component's content. Do not add backgrounds, borders or block padding to Box's
+base contract: apply those to the owning content component or section.
 
-Usually placed inside [Section](../Section/README.md). One Section can contain
-multiple Boxes or combine constrained content with full-width blocks.
+[Section](../Section/README.md) documents the spacing wrapper. Props, slots and
+component rendering follow [Astro components](https://docs.astro.build/en/basics/astro-components/).

@@ -23,8 +23,8 @@ dictionary domains, scripts or documentation implying they are present.
 - Default-language choices are en-us, es-mx, es-es and a custom language entered
   in the wizard. en-mx is not a Spanish alias and is not a default preset.
 - Preserve arrow functions, simple named modules, English developer docs,
-  modular translations, page -> layout -> section -> component, pnpm/Bun and
-  independent npm fallbacks. Keep SSG and existing security boundaries.
+  modular translations, page -> layout -> section -> component and consumer-selected npm/pnpm/Bun dependencies
+  with Node/Bun scripts (latest 2026-10-26 tooling decision). Keep SSG and existing security boundaries.
 - The subsequent user request authorized implementation and cleanup. No commit,
   push, npm publication, deployment or real database migration is authorized by
   this implementation request.
@@ -160,8 +160,9 @@ for create/add and reports the exact follow-up command. status distinguishes
 installed, configuration required, and detected missing/inconsistent files.
 
 Preserve an existing project's package manager, lockfile and chosen runtime.
-Only new-project creation detects tools and selects pnpm/Bun with independent
-npm/Node fallbacks. Do not silently replace an existing adapter or switch SSG to SSR.
+Only creation asks for available npm/pnpm/Bun managers and Node/Bun runtimes.
+Explicit choices are preserved; unattended defaults follow the recognized launcher
+or npm when available. Do not silently replace an existing adapter or switch SSG to SSR.
 
 ## Content source selection and examples
 

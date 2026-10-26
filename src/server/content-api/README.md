@@ -1,5 +1,9 @@
 # Content API client
 
+This is the maintained repository's normalized REST example contract. Installer
+Content selections generate a source-specific client beside the chosen collection
+instead; follow that collection's README in the generated project.
+
 Request-time server entry: getContentApi from @/server/content-api. Its
 astro:env/server import protects runtime settings from browser imports. Configure
 CONTENT_API_URL and optionally CONTENT_API_TOKEN as private runtime variables.

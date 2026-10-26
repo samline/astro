@@ -9,6 +9,10 @@ dist/
 worker-configuration.d.ts
 artifacts/
 packages/cli/template/
+packages/cli/licenses/
+packages/cli/LICENSE
+packages/cli/CHANGELOG.md
+packages/cli/THIRD_PARTY_NOTICES.md
 
 # dependencies
 node_modules/
@@ -33,3 +37,10 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Website verification artifacts and local reports
+test-results/
+playwright-report/
+coverage/
+*.tgz
+*.log

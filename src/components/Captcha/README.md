@@ -4,6 +4,18 @@ Provider-neutral form verification for Cloudflare Turnstile (Managed widget) or
 Google reCAPTCHA v2 checkbox, using explicit rendering and server verification. This API does
 not implement reCAPTCHA v3, invisible reCAPTCHA or Enterprise Assessments.
 
+## Availability and prerequisites
+
+Optional installer selection: `captcha`. Add it later with
+`npx @samline/astro add captcha --captcha-provider turnstile` (or `recaptcha`).
+The feature includes this widget, client lifecycle helpers, the server verifier,
+environment declarations and the captcha dictionary domain. It does not create a
+form, mail service or protected operation by itself.
+
+The component lives at `src/components/Captcha/index.astro`. Its widget can be
+rendered on SSG pages, but a submitted token must be verified by a backend before
+the protected operation. A static-only site needs an external verifier/backend.
+
 ## Configure
 
 ```dotenv
@@ -29,17 +41,34 @@ production bypass for test keys. Official testing instructions:
 [Turnstile](https://developers.cloudflare.com/turnstile/troubleshooting/testing/),
 [reCAPTCHA](https://developers.google.com/recaptcha/docs/faq).
 
-## Render
+## Complete rendering example
 
-Place one widget inside the form owned by a section:
+Put this in `src/sections/CaptchaPreview/index.astro` and compose the section in
+Main. This is deliberately a rendering preview, with a disabled submit control;
+it does not claim to submit or verify a token:
 
 ```astro
 ---
 import Captcha from '@/components/Captcha/index.astro'
+import Button from '@/components/Button/index.astro'
+import { getDictionary } from '@/i18n'
+
+const { buttons } = getDictionary(Astro.currentLocale)
 ---
 
-<Captcha />
+<form class='grid gap-5'>
+  <Captcha size='compact' />
+  <Button type='button' disabled>
+    {buttons.submit}
+  </Button>
+</form>
 ```
+
+Expected result: with the selected provider and a valid public site key, one
+compact provider widget appears inside the form. A successful challenge fills
+the hidden `captchaToken` field. That browser callback is not authorization or
+proof of server verification. With `CAPTCHA_PROVIDER=none`, no widget is rendered.
+The submit control stays disabled because this preview has no submission handler.
 
 | Prop                  | Default  | Purpose                                                                    |
 | --------------------- | -------- | -------------------------------------------------------------------------- |
@@ -69,6 +98,13 @@ it and show translated feedback/retry. JavaScript is required when enabled.
 
 ## Submission and lifecycle
 
+The helper below belongs in the **browser script** of an actual form section.
+It requires the `mail` feature's registered Contact Action, a supported server
+adapter, configured SMTP, and the fields documented by that Action (`name`,
+`email`, `message`, plus locale/honeypot when used). Installing only Captcha does
+not provide `actions.contact`. For another backend, call that backend instead
+and verify the token there. Do not copy this import into Astro frontmatter.
+
 ```ts
 import { actions } from 'astro:actions'
 import { resetCaptchas } from '@/components/Captcha/scripts'
@@ -76,7 +112,7 @@ import { resetCaptchas } from '@/components/Captcha/scripts'
 const submit = async (form: HTMLFormElement) => {
   try {
     const { data, error } = await actions.contact(new FormData(form))
-    // Render data.message or error.message through your section's status UI.
+    // Render translated success or generic failure text through the section's UI.
     return { data, error }
   } finally {
     resetCaptchas(form)
@@ -107,7 +143,7 @@ owns automatic listeners; consumers only call these APIs for their dynamic UI.
 ## Backend requirement
 
 `src/server/captcha/index.ts` exposes `verifyCaptcha(token): Promise<boolean>`.
-The contact Action calls it after same-origin/honeypot checks and **before mail**.
+When Mail is also installed, the generated Contact Action calls it after same-origin/honeypot checks and **before mail**.
 Other Actions/endpoints must call it explicitly before their protected operation.
 Missing tokens, unavailable/misconfigured providers, failed responses and hostname
 mismatches fail verification. No automatic verification retry consumes the token

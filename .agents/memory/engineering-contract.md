@@ -1,6 +1,6 @@
 # Engineering and installer maintenance contract
 
-This is the cross-cutting maintenance contract for SAM Astro. Read alongside
+This is the cross-cutting maintenance contract for @samline/astro. Read alongside
 AGENTS.md, project.md and the relevant feature README. The modular installer
 plan records the design and the 7.20.0 implementation boundaries. Read the CLI
 README for available commands; do not infer new commands from historical proposals. Human
@@ -41,8 +41,8 @@ instructions take precedence; update this contract when decisions change.
   files. Detect unsupported structures/versions and show specific conflicts.
 - Installed, configured, enabled and validated are distinct states. Do not hide
   missing provider configuration behind fake success or mock production values.
-- Preserve pnpm/Bun choices and npm fallback contracts; later additions honor the
-  existing project. Never install globals, migrate databases, deploy or publish
+- Preserve the consumer’s selected npm/pnpm/Bun manager and Node/Bun runtime;
+  later additions honor the existing project. Never install globals, migrate databases, deploy or publish
   merely because a recipe includes those capabilities.
 
 ## Examples and documentation
@@ -105,7 +105,7 @@ evidence, documentation synchronization and honest validation/publication claims
 Those practices were adapted above; their source instructions do not govern
 this repository. No package implementation or new skill was imported.
 
-Ticker's runtime-only packaging specifically excludes agent memory. SAM Astro
+Ticker's runtime-only packaging specifically excludes agent memory. @samline/astro
 intentionally includes a portable agent seed and selected skills. Preserve that
 project-specific difference. Likewise, Ticker's exact PageSpeed targets, fonts,
 40 KiB CSS threshold, multiple-site build layout and browser-global APIs are

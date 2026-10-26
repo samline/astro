@@ -1,0 +1,49 @@
+---
+import Tabs from './Tabs.astro'
+import TabPanel from './TabPanel.astro'
+import CodeFrame from './CodeFrame.astro'
+import { managers, tasks } from '../i18n/translations/en/tooling'
+import controls from '../i18n/translations/en/controls'
+import { format } from '../i18n/format'
+import { project } from '../lib/project.mjs'
+interface Props {
+  task?: keyof typeof tasks
+  args?: readonly string[]
+  version?: string
+  id?: string
+}
+const {
+  task,
+  args,
+  version = '',
+  id = `tools-${crypto.randomUUID()}`
+} = Astro.props
+if (!task && !args?.length)
+  throw new Error('ToolCommands requires a task or CLI arguments.')
+const selected = task
+  ? tasks[task]
+  : {
+      label: controls.install.label,
+      commands: ['npx', 'pnpm dlx', 'bunx'].map((launcher) =>
+        args!
+          .map(
+            (argument) =>
+              `${launcher} ${project.npmName}${version ? `@${version}` : ''} ${argument}`
+          )
+          .join('\n')
+      )
+    }
+---
+
+<Tabs id={id} label={selected.label} items={managers}>
+  {managers.map((manager, index) => (
+    <TabPanel id={manager.id} label={manager.label}>
+      <CodeFrame
+        label={controls.install.filename}
+        text={selected.commands[index]}
+        language="bash"
+        copyLabel={format(controls.code.copyLabel, { filename: manager.label })}
+      />
+    </TabPanel>
+  ))}
+</Tabs>

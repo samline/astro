@@ -1,5 +1,9 @@
 # API Live Loader
 
+This page documents the reusable loader in the maintained repository. A generated
+Live Collection has its own source-specific files and README under
+`src/content/<collection>/`; start with those instructions when using the installer.
+
 `apiLiveLoader` is an Astro integration, not a standalone utility package. The
 existing postsLiveLoader uses it. There is no default registration, cache, fetch
 on import, global request/session state or mutation of a build-time content store.

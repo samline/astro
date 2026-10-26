@@ -28,5 +28,5 @@ for (let i = 0; i < files.length; i++) {
   )
 }
 console.log(
-  `SAM Astro actualizado a ${version}. Ejecuta bun run verify y bun run kit:pack.`
+  `@samline/astro actualizado a ${version}. Ejecuta bun run verify y bun run kit:pack.`
 )

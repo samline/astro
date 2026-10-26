@@ -1,0 +1,88 @@
+---
+title: 'Update a project'
+description: 'Update Astro with its official tool, review other dependencies, and understand how copied source is maintained.'
+locale: en
+sidebar:
+  group: guides
+  order: 9
+---
+
+import ToolCommands from '../../../../../shared/components/ToolCommands.astro'
+import Installer from '../../../../../shared/components/Installer.astro'
+
+## Choose what you want to update
+
+A generated project has its own dependencies and editable source. There are
+three separate maintenance tasks:
+
+| Task                                                      | How to handle it                                                                  |
+| --------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| Update Astro and installed official integrations          | Use Astro's upgrade tool and migration guides.                                    |
+| Update other dependencies                                 | Review their releases and update the selected packages with your package manager. |
+| Bring in changes to generated components or configuration | Compare the source changes and merge them into your project deliberately.         |
+
+Run dependency commands from the **generated project's root**, using the package
+manager recorded by that project. Choose its matching tab below. Begin with a clean working tree so the resulting changes are easy to review.
+
+## Update Astro and its official integrations
+
+Preview the proposed versions first. The tabs show both the dry run and the
+command to apply the upgrade after review:
+
+<ToolCommands id="docs-upgrade-tools" task="upgrade" />
+
+Read the relevant [Astro upgrade guide](https://docs.astro.build/en/upgrade-astro/)
+before applying changes. `@astrojs/upgrade` is a temporary executable, not a
+permanent project dependency. The launcher you use does not change the project's
+selected dependency manager.
+
+The latest tool may propose a newer Astro major. This distribution currently
+starts with Astro 7; review the major-version migration before applying that
+change. To remain on a particular version, follow Astro's documented
+[specific-version installation](https://docs.astro.build/en/upgrade-astro/#install-a-specific-version-number)
+and check compatible official integration versions as well.
+
+## Review other dependencies separately
+
+Packages such as Tailwind, Better Auth, Forms and Formatter have their own release
+notes and APIs. Inspect the project's installed versions first:
+
+<ToolCommands id="docs-outdated-tools" task="outdated" />
+
+Choose the packages to update and review any migration instructions. For example,
+if Forms is installed, this updates Forms and Formatter within the ranges already
+declared by the project:
+
+<ToolCommands id="docs-forms-update-tools" task="formsUpdate" />
+
+Review `package.json` and your selected manager’s lockfile together. A deliberate major update may
+need new version ranges and corresponding source changes.
+
+## Use a newer generator
+
+After npm publication, choose the latest generator for a new project or a later
+addition:
+
+<ToolCommands version="latest" args={['new-site', 'add themes --dry-run']} />
+
+Run the first command from the parent folder for the new site. Run the second
+inside an existing generated project to inspect a missing feature's addition.
+A new generator version affects that operation; previously copied files remain
+project-owned source.
+
+## Review changes to copied source
+
+There is currently no `@samline/astro update` command. To bring a component or
+configuration improvement into an existing site, compare the relevant repository
+change with your current files, merge what applies, and preserve the site's
+custom behavior, translations and settings. Re-running `add` for an installed
+feature keeps that feature in place.
+
+After any update, run the generated formatter, checks and build with the matching tool:
+
+<ToolCommands id="docs-update-verify-tools" task="verify" />
+
+Then test the affected page or integration with its actual configuration before
+publishing the change. The
+[official upgrade tool README](https://github.com/withastro/astro/blob/main/packages/upgrade/README.md)
+and Astro's documentation remain the references for framework upgrades.

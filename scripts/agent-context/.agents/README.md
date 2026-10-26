@@ -10,7 +10,8 @@ skills. Start here when opening a new chat or recovering context.
 3. [lessons.md](./lessons.md): project-specific corrections and preferences.
 4. [todos.md](./todos.md): explicitly requested pending work.
 5. [memory/decisions.md](./memory/decisions.md): inherited and new design decisions.
-6. [skills/README.md](./skills/README.md): skill index and provenance.
+6. [memory/frontend-conventions.md](./memory/frontend-conventions.md): UI ownership and example conventions.
+7. [skills/README.md](./skills/README.md): skill index and provenance.
 
 Record confirmed decisions and lessons as work progresses. Add pending tasks
 only when the user requests or defers them. Keep environment values, credentials,
@@ -29,3 +30,5 @@ They are developer resources and are not public site assets. The root lockfile
 records upstream skill sources; preserve upstream files when formatting.
 
 Read memory/integrations.md for installed features, collections and pending locale translations.
+
+Use the bundled samline-astro skill for this distribution's project workflow.

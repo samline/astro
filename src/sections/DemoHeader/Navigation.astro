@@ -1,0 +1,37 @@
+---
+import Link from '@/components/Link/index.astro'
+import { getDictionary } from '@/i18n'
+
+interface Props {
+  links: readonly {
+    href: string
+    label: string
+    current: boolean
+  }[]
+}
+
+const { links } = Astro.props
+const { navigation } = getDictionary(Astro.currentLocale)
+---
+
+<nav aria-label={navigation.primaryLabel} data-demo-navigation>
+  <ul class='flex flex-wrap items-center gap-2'>
+    {links.map((link) => (
+      <li>
+        <Link
+          href={link.href}
+          localize={false}
+          aria-current={link.current ? 'page' : undefined}
+          class:list={[
+            'inline-flex min-h-11 items-center rounded-md px-4 py-2 text-sm font-medium',
+            link.current
+              ? 'bg-accent/10 text-accent dark:bg-accent-light/15 dark:text-accent-light'
+              : 'text-black/70 hover:bg-black/5 hover:text-black dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white'
+          ]}
+        >
+          {link.label}
+        </Link>
+      </li>
+    ))}
+  </ul>
+</nav>

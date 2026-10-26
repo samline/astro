@@ -1,0 +1,361 @@
+---
+import Section from '../../../shared/components/Section.astro'
+import Box from '../../../shared/components/Box.astro'
+import SectionHeading from '../components/SectionHeading.astro'
+import Reveal from '../components/Reveal.astro'
+import { getI18n } from '../i18n/utils'
+const t = getI18n(Astro).packages
+---
+
+<Section
+  id="packages"
+  aria-labelledby="packages-heading"
+  spacing="none"
+  class:list={['content-section']}
+>
+  <Box>
+    <SectionHeading headingId="packages-heading" eyebrow={t.eyebrow}>
+      {t.title + ' '}
+      <span class:list={['serif']}>{t.accent}</span>
+      <Fragment slot="description">{t.description}</Fragment>
+    </SectionHeading>
+    <div class:list={['package-grid']}>
+      {t.items.map((item) => (
+        <Reveal>
+          <a href={item.href} class:list={['package-card', item.id]}>
+            <div class:list={['package-art']} aria-hidden="true">
+              {item.id === 'drawer' ? (
+                <div class:list={['window']}>
+                  <div class:list={['window-toolbar']}>
+                    <i />
+                    <i />
+                    <i />
+                  </div>
+                  <div class:list={['window-lines']}>
+                    <i />
+                    <i />
+                    <i />
+                  </div>
+                  <div class:list={['drawer-panel']}>
+                    <span />
+                    {item.preview[1]}
+                    <i />
+                    <i />
+                  </div>
+                </div>
+              ) : item.id === 'ticker' ? (
+                <div class:list={['ticker-lines']}>
+                  <span>
+                    {item.preview[0]} <i /> {item.preview[1]} <i />{' '}
+                    {item.preview[0]}
+                  </span>
+                  <span>
+                    {item.preview[1]} <i /> {item.preview[0]} <i />{' '}
+                    {item.preview[1]}
+                  </span>
+                </div>
+              ) : (
+                <div class:list={['form-lines']}>
+                  <span>{item.preview[0]}</span>
+                  <i />
+                  <span>{item.preview[1]}</span>
+                  <i />
+                  <b>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="m6 12 4 4 8-8" />
+                    </svg>
+                    {item.preview[2]}
+                  </b>
+                </div>
+              )}
+            </div>
+            <div class:list={['package-copy']}>
+              <p class:list={['package-category']}>{item.category}</p>
+              <h3>{item.name}</h3>
+              <p class:list={['package-description']}>{item.description}</p>
+              <div class:list={['package-meta']}>
+                <code>{item.npm}</code>
+                <span>{item.status}</span>
+              </div>
+              <span class:list={['package-action']}>
+                {item.id === 'forms' ? t.package : t.visit}{' '}
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M7 17 17 7M7 7h10v10" />
+                </svg>
+              </span>
+            </div>
+          </a>
+        </Reveal>
+      ))}
+    </div>
+  </Box>
+</Section>
+<style>
+  .package-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+    margin-top: 2.5rem;
+  }
+  .package-card {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    border: 0.0625rem solid var(--color-border);
+    border-radius: 1rem;
+    background: var(--color-surface);
+    overflow: hidden;
+    color: var(--color-text);
+    transition: border-color var(--duration-ui) var(--ease-ui);
+  }
+  .package-card:hover {
+    border-color: var(--color-accent);
+  }
+  .package-card:focus-visible {
+    outline: 0.125rem solid var(--color-accent);
+    outline-offset: 0.25rem;
+  }
+  .package-art {
+    min-height: 14rem;
+    height: 14rem;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    background: var(--color-accent-soft);
+    border-bottom: 0.0625rem solid var(--color-border-soft);
+    color: var(--color-accent);
+    padding: 1.5rem;
+  }
+  .package-copy {
+    overflow-wrap: anywhere;
+    padding: 1.5rem;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 0;
+  }
+  .package-category {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.06em;
+    color: var(--color-text-subtle);
+  }
+  h3 {
+    font-size: 2rem;
+    line-height: 1.2;
+    letter-spacing: -0.05em;
+    font-weight: 500;
+  }
+  .package-description {
+    color: var(--color-text-muted);
+    line-height: 1.75;
+    font-size: 0.875rem;
+  }
+  .package-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    margin-top: auto;
+    padding-top: 0.5rem;
+    font-size: 0.625rem;
+    color: var(--color-text-subtle);
+  }
+  .package-meta code {
+    font-family: var(--font-mono);
+    overflow-wrap: anywhere;
+  }
+  .package-action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    border-top: 0.0625rem solid var(--color-border-soft);
+    padding-top: 1rem;
+    font-size: 0.75rem;
+  }
+  .window {
+    width: 100%;
+    max-width: 16rem;
+    height: 9rem;
+    position: relative;
+    border: 0.0625rem solid currentColor;
+    border-radius: 0.625rem;
+    overflow: hidden;
+  }
+  .window-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    height: 1.5rem;
+    padding-inline: 0.625rem;
+    border-bottom: 0.0625rem solid
+      color-mix(in srgb, currentColor 20%, transparent);
+  }
+  .window-toolbar i {
+    width: 0.1875rem;
+    height: 0.1875rem;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.5;
+  }
+  .window-lines {
+    display: grid;
+    gap: 1rem;
+    width: 40%;
+    padding: 1rem 0.75rem;
+    opacity: 0.35;
+  }
+  .window-lines i {
+    height: 0.1875rem;
+    background: currentColor;
+  }
+  .drawer-panel {
+    position: absolute;
+    inset: 1.5rem 0 0 auto;
+    width: 64%;
+    background: var(--color-bg);
+    padding: 1rem;
+    border-left: 0.0625rem solid currentColor;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.375rem;
+    line-height: 1.15;
+    display: grid;
+    align-content: center;
+    gap: 0.625rem;
+  }
+  .drawer-panel span {
+    width: 1rem;
+    height: 0.1875rem;
+    background: currentColor;
+    border-radius: 1rem;
+  }
+  .drawer-panel i {
+    height: 0.1875rem;
+    width: 80%;
+    background: currentColor;
+    opacity: 0.2;
+  }
+  .ticker-lines {
+    display: grid;
+    gap: 0.75rem;
+    width: 100%;
+    transform: rotate(-5deg);
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 8%,
+      black 92%,
+      transparent
+    );
+  }
+  .ticker-lines span {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    white-space: nowrap;
+    font-size: 1.75rem;
+    font-weight: 500;
+    letter-spacing: -0.05em;
+  }
+  .ticker-lines span:last-child {
+    font-family: var(--font-serif);
+    font-style: italic;
+    opacity: 0.55;
+  }
+  .ticker-lines i {
+    flex: none;
+    width: 0.3125rem;
+    height: 0.3125rem;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.45;
+  }
+  .form-lines {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem;
+    width: min(100%, 14rem);
+    font-size: 0.625rem;
+    font-family: var(--font-mono);
+  }
+  .form-lines i {
+    height: 1.75rem;
+    border: 0.0625rem solid currentColor;
+    border-radius: 0.375rem;
+    opacity: 0.6;
+  }
+  .form-lines b {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: end;
+    gap: 0.375rem;
+    min-height: 1.75rem;
+    margin-top: 0.125rem;
+    padding: 0.375rem 0.625rem;
+    font-family: var(--font-sans);
+    font-size: 0.625rem;
+    font-weight: 500;
+    line-height: 1;
+    background: var(--color-accent);
+    color: var(--palette-on-accent);
+    border-radius: 0.25rem;
+  }
+  .package-action svg {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+    color: var(--color-accent);
+  }
+  .form-lines svg {
+    width: 0.875rem;
+    height: 0.875rem;
+    flex: none;
+  }
+  @media (width < 64rem) {
+    .package-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .package-card {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+    }
+    .package-art {
+      height: 100%;
+      border-bottom: 0;
+      border-right: 0.0625rem solid var(--color-border-soft);
+    }
+  }
+  @media (width < 36rem) {
+    .package-card {
+      display: flex;
+    }
+    .package-art {
+      height: 12rem;
+      border-right: 0;
+      border-bottom: 0.0625rem solid var(--color-border-soft);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .package-card {
+      transition: none;
+    }
+  }
+</style>

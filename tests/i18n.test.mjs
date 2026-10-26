@@ -327,7 +327,7 @@ export const getStaticPaths = () => locales.map((locale) => ({
     assert.match(home, /role="status" aria-live="polite" hidden/)
     assert.ok(home.indexOf('data-page-loader') > home.indexOf('<body'))
     assert.ok(home.includes(enUS.common.loading))
-    assert.match(home, /<title>SAM Astro<\/title>/)
+    assert.match(home, /<title>Astro<\/title>/)
     assert.ok(!home.includes('hreflang="es-mx"'))
     await assert.rejects(
       readFile(path.join(fixture, '.vercel/output/static/es-mx/index.html')),
@@ -348,7 +348,7 @@ export const getStaticPaths = () => locales.map((locale) => ({
     await writeFile(
       dictionary,
       (await readFile(dictionary, 'utf8')).replace(
-        esMX.welcome.titleBeforeCode,
+        esMX.welcome.title,
         'Regional welcome'
       )
     )

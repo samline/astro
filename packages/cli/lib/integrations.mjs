@@ -190,6 +190,22 @@ export const addIntegrations = async ({
     effective,
     metadata.deployment
   )
+  if (added.includes('welcome')) {
+    const layout = await readCurrent('src/layouts/Main.astro')
+    const markup = layout
+      .replace(/^---\r?\n[\s\S]*?\r?\n---/, '')
+      .replace(/<!--[\s\S]*?-->|<(script|style)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, '')
+    const slots = markup.match(/<slot\b[^>]*>/g) ?? []
+    for (const name of ['header', 'footer'])
+      if (
+        slots.filter((slot) =>
+          new RegExp(`\\sname\\s*=\\s*(['"])${name}\\1`).test(slot)
+        ).length !== 1
+      )
+        throw new Error(
+          `The welcome demo needs one static ${name} slot in src/layouts/Main.astro. Review the layout and add named header/footer slots around main before retrying; no files were changed.`
+        )
+  }
   const total = resolveFeatures([...metadata.features, ...added])
   const files = await copyPayload(
     template,

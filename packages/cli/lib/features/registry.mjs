@@ -79,17 +79,22 @@ export const features = {
     ]
   },
   welcome: {
-    label: 'Welcome presentation',
+    label: 'Starter demo: header, navigation and two pages',
     files: [
       'src/assets/astro.svg',
-      'src/assets/background.svg',
-      'src/sections/Welcome'
+      'src/sections/Welcome',
+      'src/sections/DemoHeader',
+      'src/sections/DemoFooter',
+      'src/sections/DemoPage',
+      'src/pages/[...locale]/demo.astro'
     ],
     domains: ['welcome', 'navigation']
   }
 }
 export const coreDomains = ['site', 'common', 'buttons', 'errors', 'seo']
 export const coreFiles = [
+  'licenses',
+  'THIRD_PARTY_NOTICES.md',
   'public',
   'src/components/Box',
   'src/components/Section',

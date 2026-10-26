@@ -3,7 +3,7 @@
 ## Identity and tools
 
 - Project: {{NAME}}
-- Created from SAM Astro {{VERSION}}.
+- Created from @samline/astro {{VERSION}}.
 - Astro dependency: {{ASTRO}}
 - Package manager: {{INSTALL}}
 - Script runner: {{RUN}}

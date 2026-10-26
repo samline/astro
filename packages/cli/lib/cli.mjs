@@ -22,7 +22,7 @@ import { deploymentProfile, siteOrigin } from './deployment.mjs'
 import { applyFiles, serialize, json } from './files.mjs'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
-const help = `SAM Astro — modular project installer
+const help = `Astro project installer — @samline/astro
 
 Create: npx @samline/astro [folder]
 Add:    npx @samline/astro add [integration...] [--cwd path]
@@ -30,6 +30,8 @@ Locale: npx @samline/astro locale add <tag> [--locale-name name] [--direction lt
 Status: npx @samline/astro status [--cwd path]
 
 --features        Comma-separated integration names
+--package-manager  npm | pnpm | bun (installation)
+--runtime         node | bun (script execution)
 --deploy          static | vercel | netlify | cloudflare | custom
 --locale          Default language: en-us | es-mx | es-es | custom tag
 --locales         Additional preset languages, comma separated
@@ -74,8 +76,12 @@ const finish = async (
     return
   }
   if (install) {
+    const installEnvironment = { ...process.env }
+    delete installEnvironment.npm_config_user_agent
+    delete installEnvironment.npm_execpath
     const execution = runCommand(tools.manager, ['install'], {
       cwd: destination,
+      env: installEnvironment,
       stdio: 'inherit'
     })
     if (execution.error || execution.status !== 0)
@@ -130,6 +136,8 @@ export const main = async (args = process.argv.slice(2)) => {
       'dry-run': { type: 'boolean' },
       scaffold: { type: 'boolean' },
       deploy: { type: 'string' },
+      'package-manager': { type: 'string' },
+      runtime: { type: 'string' },
       site: { type: 'string' },
       features: { type: 'string' },
       locale: { type: 'string' },
@@ -246,6 +254,27 @@ export const main = async (args = process.argv.slice(2)) => {
     options.protocol = values.protocol
     options.service = values.service
   }
+  const availableTools = subcommand === 'create' ? detectTools() : {}
+  const launcher = process.env.npm_config_user_agent?.split('/')[0]
+  const defaultManager =
+    ['npm', 'pnpm', 'bun'].includes(launcher) && availableTools[launcher]
+      ? launcher
+      : availableTools.npm
+        ? 'npm'
+        : availableTools.pnpm
+          ? 'pnpm'
+          : 'bun'
+  let toolPreferences = {
+    manager: values['package-manager'],
+    runtime: values.runtime
+  }
+  if (
+    subcommand === 'add' &&
+    (toolPreferences.manager || toolPreferences.runtime)
+  )
+    throw new Error(
+      'add preserves the existing tools. Change the project configuration deliberately before adding integrations.'
+    )
   const interactive = process.stdin.isTTY && !values.yes && !values.minimal
   if (interactive) {
     const answers = await askQuestions({
@@ -260,10 +289,14 @@ export const main = async (args = process.argv.slice(2)) => {
       deployment,
       locale,
       additionalLocales,
-      installed: current?.samlineAstro.features
+      installed: current?.samlineAstro.features,
+      availableTools,
+      toolPreferences,
+      defaultManager
     })
     ;({ directory, requested, options, deployment, locale, additionalLocales } =
       answers)
+    toolPreferences = answers.toolPreferences ?? toolPreferences
   } else {
     if (
       subcommand === 'create' &&
@@ -280,14 +313,23 @@ export const main = async (args = process.argv.slice(2)) => {
   }
   if (values.minimal && requested?.length)
     throw new Error('--minimal cannot be combined with optional integrations.')
-  const tools = current ? projectTools(current) : selectTools(detectTools())
-  if (!['pnpm', 'npm'].includes(tools.manager))
+  const tools = current
+    ? projectTools(current)
+    : selectTools(availableTools, {
+        manager: toolPreferences.manager ?? defaultManager,
+        runtime:
+          toolPreferences.runtime ??
+          ((toolPreferences.manager ?? defaultManager) === 'bun'
+            ? 'bun'
+            : 'node')
+      })
+  if (!['pnpm', 'npm', 'bun'].includes(tools.manager))
     throw new Error(
-      'Existing project must declare pnpm or npm; add will not switch package managers.'
+      'Existing project must declare npm, pnpm or bun; add will not switch package managers.'
     )
   const resolved = resolveFeatures(requested)
   console.log(
-    `\nConfiguration: ${deployment}; install with ${tools.manager}; scripts with ${tools.runtime === 'bun' ? 'Bun' : 'Node / npm'}.`
+    `\nConfiguration: ${deployment}; install with ${tools.manager}; scripts with ${tools.runtime === 'bun' ? 'Bun' : 'Node.js'}.`
   )
   console.log(
     'Integrations: ' +

@@ -1,7 +1,9 @@
 # PageLoader
 
-Global indicator for navigation and asynchronous operations. `Main.astro`
-already mounts it once inside the body; using that layout is enough.
+Global indicator for navigation and asynchronous operations. Optional installer
+selection: `pageloader`. Add it later with `npx @samline/astro add pageloader`.
+The installer includes `ldrs` and mounts the component once inside Main's body.
+Using that generated Main layout is enough; do not mount a second loader.
 
 ## Files
 
@@ -10,22 +12,33 @@ already mounts it once inside the body; using that layout is enough.
 | `index.astro` | Overlay, translated status label, and ldrs animation. |
 | `scripts.ts`  | Client API and navigation event handlers.             |
 
-## Integration
+## Complete section example
 
-In a layout other than Main, place it inside the body, outside main:
+Use this at `src/sections/LoaderNavigation/index.astro`, inside the generated Main
+layout. Main already owns the single PageLoader instance:
 
 ```astro
 ---
-import PageLoader from '@/components/PageLoader/index.astro'
+import Link from '@/components/Link/index.astro'
+import { getDictionary } from '@/i18n'
+
+const { buttons } = getDictionary(Astro.currentLocale)
 ---
 
-<body>
-  <PageLoader />
-  <main>
-    <slot />
-  </main>
-</body>
+<Link href='/?from=loader-example' class='text-accent underline'>
+  {buttons.backHome}
+</Link>
 ```
+
+Expected result: a normal localized homepage link with a query parameter. A
+navigation to a different path/query starts the delayed indicator; a fast
+navigation may finish before it becomes visible. Clicking the exact current
+path/query again does not start it. The query example needs no new route/backend.
+
+For a custom layout, import `@/components/PageLoader/index.astro` and mount
+`<PageLoader />` once inside its body, outside its `main`. Preserve that layout's
+SEO, language, styles and other document configuration; do not render a second
+loader from a section.
 
 Accepts native div attributes, including class, style, aria-* and data-*.
 It controls hidden, role='status', and aria-live='polite' internally.
@@ -42,40 +55,32 @@ The module uses window and document: do not import it in frontmatter or server c
 | `showLoader()` | `void`  | Schedules the indicator after 250ms. Does nothing if already active or the component is absent. |
 | `hideLoader()` | `void`  | Cancels its timers and hides the indicator immediately.                                         |
 
-Complete example inside a component:
+To wrap an existing async operation, keep this helper in the consuming section's
+browser module, for example `src/sections/Contact/scripts.ts`:
 
-```astro
----
-import { getDictionary } from '@/i18n'
-const dictionary = getDictionary(Astro.currentLocale)
----
+```ts
+import { showLoader, hideLoader } from '@/components/PageLoader/scripts'
 
-<button type='button' data-refresh>
-  {dictionary.common.loading}
-</button>
-
-<script>
-  import { showLoader, hideLoader } from '@/components/PageLoader/scripts'
-
-  const refresh = async () => {
-    showLoader()
-    try {
-      // Replace this URL with a real project endpoint.
-      const response = await fetch('/api/refresh', { method: 'POST' })
-      if (!response.ok) throw new Error('Refresh request failed.')
-    } finally {
-      hideLoader()
-    }
+export const withPageLoader = async <T>(
+  operation: () => Promise<T>
+): Promise<T> => {
+  showLoader()
+  try {
+    return await operation()
+  } finally {
+    hideLoader()
   }
-
-  document.querySelector('[data-refresh]')?.addEventListener('click', () => {
-    void refresh().catch((error) => {
-      // Display errors using the project's translated messages.
-      console.error(error)
-    })
-  })
-</script>
+}
 ```
+
+Call `withPageLoader(() => yourExistingAsyncOperation())` from that section's
+actual event handler. This generic helper deliberately does not invent an API
+endpoint. It preserves the operation's result/error; your section still owns
+translated success/error feedback and duplicate-submission handling.
+
+Expected result: operations shorter than 250ms show no overlay. Longer operations
+show it until the operation finishes, unless the 10-second safety timeout hides it
+first. An absent mounted component makes `showLoader()` a no-op.
 
 This is a shared indicator without an operation counter: hideLoader hides it for
 every caller. Coordinate concurrent operations before hiding it. Repeating
@@ -92,12 +97,13 @@ Server Islands, or background work.
 To skip an individual link or form:
 
 ```astro
-<Link href='/guide' data-page-loader-skip>
-  {dictionary.navigation.documentation}
+<Link href='/' data-page-loader-skip>
+  {dictionary.buttons.backHome}
 </Link>
 ```
 
-This example assumes Link is imported and the route exists in your project.
+This fragment assumes Link and the current dictionary are imported in your section;
+`/` is the existing homepage.
 For asynchronous forms that cancel native submission, call the API explicitly.
 
 With ClientRouter, handles astro:before-preparation and astro:page-load, cleaning
@@ -125,3 +131,7 @@ for the overlay. Only the selected animation is imported.
 `scripts.ts` defines a 250ms delay and a 10-second safety timeout. The timeout
 only hides the UI; it does not cancel the operation. There is no simulated
 progress percentage or minimum visible duration.
+
+Automatic script processing and optional navigation lifecycle behavior are owned
+by [Astro scripts](https://docs.astro.build/en/guides/client-side-scripts/) and
+[Astro view transitions](https://docs.astro.build/en/guides/view-transitions/).

@@ -23,6 +23,8 @@ status when work is completed; do not turn possible improvements into tasks.
 
 ## Recent completed requests
 
+- [x] Adapt the package landing/docs for @samline/astro, preserve the Astro documentation boundary, add the curated Drawer/Ticker/Forms section, and maintain distribution ignores.
+
 - [x] Migrate and improve GTM/consent, with deferred loading and Dinkbit presentation.
 - [x] Group Theme's initialization and switch; demonstrate Tailwind theme variants.
 - [x] Migrate PageLoader while retaining ldrs for replaceable animations.
@@ -51,3 +53,17 @@ status when work is completed; do not turn possible improvements into tasks.
 - [x] Implement optional Better Auth integration for external REST identities,
       OAuth/OIDC and project-owned users, with route/operation permissions and
       SSG Server Islands support. Provider/database configuration stays per project.
+
+- [x] Audit the core installer and documentation site; clarify examples/titles,
+      correct overview icons and record frontend conventions from the reference projects.
+- [x] Investigate Astro/dependency/base-source updates and document the real
+      commands and unsupported automatic source merging.
+- [x] Create portable and maintainer project skills at the end of the audit.
+- [x] Review license/provenance and rewrite READMEs in English with a clear purpose.
+- [x] Add the improved optional starter demo with header, exact active navigation,
+      Welcome, a second page and footer; preserve minimal and later-add behavior.
+
+- [x] Expand FAQs and align landing/Examples/Docs footer credits with Ticker/Drawer.
+- [x] Refine personal-package cards and remove redundant decorative arrows.
+- [x] Offer client-selected package managers/runtimes and command tabs throughout
+      authored guides and recipes; keep maintainer pnpm/Bun rules separate.

@@ -45,7 +45,7 @@ for (const pnpm of [true, false]) {
       })
       const pkg = await readJSON(path.join(destination, 'package.json'))
       const vercel = await readJSON(path.join(destination, 'vercel.json'))
-      const runner = bun ? 'bun' : 'npm'
+      const runner = bun ? 'bun' : pnpm ? 'pnpm' : 'npm'
       const manager = pnpm ? 'pnpm' : 'npm'
       assert.equal(pkg.name, 'my-project')
       assert.equal(pkg.version, '0.0.1')
@@ -109,7 +109,7 @@ for (const pnpm of [true, false]) {
         'utf8'
       )
       assert.ok(memory.includes('Project: my-project'))
-      assert.ok(memory.includes(`SAM Astro ${kitVersion}`))
+      assert.ok(memory.includes(`@samline/astro ${kitVersion}`))
       assert.ok(!memory.includes('{{'))
       assert.ok(!memory.includes('2059917'))
       assert.ok(
@@ -175,12 +175,9 @@ test('rejects existing files, nonempty folders and symlink destinations without 
   assert.equal(await readFile(file, 'utf8'), 'keep')
 })
 
-test('requires at least npm when pnpm is absent', () => {
+test('requires an available dependency manager', () => {
   assert.throws(() => selectTools({ bun: '1.3.14' }), /pnpm ni npm/)
-  assert.throws(
-    () => selectTools({ pnpm: '12.9.1' }),
-    /Sin Bun se necesita npm/
-  )
+  assert.equal(selectTools({ pnpm: '12.9.1' }).runner, 'pnpm')
 })
 
 test('invalid package directory names fail before creating files', async (t) => {
@@ -224,7 +221,16 @@ test(
         const cli = path.join(root, 'packages/cli/bin/samline-astro.mjs')
         const result = spawnSync(
           process.execPath,
-          [cli, destination, '--deploy', 'vercel'],
+          [
+            cli,
+            destination,
+            '--deploy',
+            'vercel',
+            '--package-manager',
+            pnpm ? 'pnpm' : 'npm',
+            '--runtime',
+            bun ? 'bun' : 'node'
+          ],
           {
             env: { ...process.env, PATH: bin },
             encoding: 'utf8'

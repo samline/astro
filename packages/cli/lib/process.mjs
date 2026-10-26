@@ -31,32 +31,43 @@ export const detectTools = () => {
   return versions
 }
 
-export const selectTools = (versions) => {
-  const manager = versions.pnpm ? 'pnpm' : 'npm'
+export const selectTools = (versions, preferences = {}) => {
+  if (
+    preferences.manager &&
+    !['npm', 'pnpm', 'bun'].includes(preferences.manager)
+  )
+    throw new Error('Choose npm, pnpm or bun for --package-manager.')
+  if (preferences.runtime && !['node', 'bun'].includes(preferences.runtime))
+    throw new Error('Choose node or bun for --runtime.')
+  if (preferences.manager && !versions[preferences.manager])
+    throw new Error(
+      `Selected package manager ${preferences.manager} is not available. Install it or choose an available manager.`
+    )
+  if (preferences.runtime === 'bun' && !versions.bun)
+    throw new Error(
+      'Selected Bun runtime is not available. Install Bun or choose --runtime node.'
+    )
+  const manager = preferences.manager ?? (versions.pnpm ? 'pnpm' : 'npm')
   if (!versions[manager]) {
     throw new Error(
       'No se encontró pnpm ni npm. Instala Node.js con npm y vuelve a intentarlo.'
     )
   }
-  if (!versions.bun && !versions.npm) {
-    throw new Error(
-      'Sin Bun se necesita npm para ejecutar los scripts. Instala Node.js con npm.'
-    )
-  }
+  const runtime = preferences.runtime ?? (versions.bun ? 'bun' : 'node')
   return {
     manager,
     managerVersion: versions[manager],
-    runtime: versions.bun ? 'bun' : 'node',
-    runner: versions.bun ? 'bun' : 'npm',
+    runtime,
+    runner: runtime === 'bun' ? 'bun' : manager,
     bunVersion: versions.bun
   }
 }
 
 export const projectTools = (manifest) => {
   const manager = manifest.packageManager?.split('@')[0]
-  if (!['pnpm', 'npm'].includes(manager))
+  if (!['pnpm', 'npm', 'bun'].includes(manager))
     throw new Error(
-      'Existing project must declare pnpm or npm; add will not switch package managers.'
+      'Existing project must declare npm, pnpm or bun; add will not switch package managers.'
     )
   const bun = ['dev', 'build', 'astro', 'check', 'format', 'check:i18n'].some(
     (name) => /^\s*bun(?:\s|$)/.test(manifest.scripts?.[name] ?? '')
@@ -66,6 +77,6 @@ export const projectTools = (manifest) => {
     manager,
     managerVersion: manifest.packageManager.slice(manager.length + 1),
     runtime: bun ? 'bun' : 'node',
-    runner: bun ? 'bun' : 'npm'
+    runner: bun ? 'bun' : manager
   }
 }

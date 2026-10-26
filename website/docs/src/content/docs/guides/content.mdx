@@ -1,0 +1,89 @@
+---
+title: 'Set up Content Collections'
+description: 'Generate a local, REST, GraphQL, Strapi or Shopify example and configure when it loads.'
+locale: en
+sidebar:
+  group: guides
+  order: 3
+---
+
+import ToolCommands from '../../../../../shared/components/ToolCommands.astro'
+
+## Choose a source and a loading time
+
+When you select Content, the wizard asks for the source, a collection name and
+when the data should load. An API can be read during a static build; live reads
+need request-time execution through an adapter.
+
+| Source        | Generated starting example                                       |
+| ------------- | ---------------------------------------------------------------- |
+| Local files   | Offline JSON data, schema and active collection registration.    |
+| API           | A REST or GraphQL response contract, query and bounded requests. |
+| Strapi        | Strapi 5 published/localized documents and pagination.           |
+| Shopify       | A read-only Storefront products query with cursor pagination.    |
+| Other service | A named REST or GraphQL example to adapt to that service.        |
+
+Only the chosen source's example is added. You can add another collection later
+under a different name.
+
+## Add a local collection
+
+From the generated project root:
+
+<ToolCommands args={['add content --source local --collection articles']} />
+
+This creates `src/content/articles` with sample data and a schema, and registers
+`articles` in `src/content.config.ts`. The adjacent README shows how to read the
+sample and resolve its `copyKey` through the content dictionary. It works offline.
+
+Local files use build-time collections. Add your real content and schema in that
+folder, then render it from the section that owns the content.
+
+## Prepare a remote collection
+
+Choose the command for your actual source; these are independent alternatives:
+
+<ToolCommands
+  args={[
+    'add content --source strapi --collection news --content-mode build',
+    'add content --source api --protocol rest --collection updates --content-mode live',
+    'add content --source shopify --collection products',
+    "add content --source other --service 'Custom CMS' --protocol graphql --collection stories"
+  ]}
+/>
+
+The live example requires a server-capable deployment. Each remote collection
+gets `index.ts`, `source.ts`, `loader.ts`, `types.ts`, `.env.example` and a README
+inside `src/content/<collection-name>`. Installation prepares these files without
+calling the provider.
+
+Before activating a remote example:
+
+1. Copy its environment variable names to the project's ignored environment or hosting settings, and supply the real URL, endpoint and token as needed.
+2. Adapt `source.ts` to the provider's actual fields and response schema.
+3. Review the explicit locale map in `index.ts` against the provider's language codes.
+4. Follow the registration instructions in the generated README, then run the project checks with its real source configured.
+
+For build-time data, merge the adjacent `registration.ts.example` into
+`src/content.config.ts`. For live data, merge or rename
+`src/live.config.ts.example` to `src/live.config.ts`. Preserve other registered
+collections when merging.
+
+The Shopify example reads products through the Storefront API. Cart, checkout,
+Admin API and customer accounts are separate application work. The Other option
+supplies a custom-service starting point whose API contract you adapt yourself.
+
+## Read at the right time
+
+Build-time collections are read while Astro builds the site; upstream changes
+appear after another build. Live Collections are read in a request-time consumer,
+such as a server-rendered route or Server Island. A static parent page can remain
+static while its island loads current data.
+
+The generated collection README includes the appropriate read example. Keep
+content UI in its section and use real translation relationships when content
+slugs differ between languages.
+
+For the framework APIs, continue with Astro's
+[Content Collections](https://docs.astro.build/en/guides/content-collections/)
+and [Content Loader API](https://docs.astro.build/en/reference/content-loader-reference/).

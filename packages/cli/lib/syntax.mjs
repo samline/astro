@@ -114,19 +114,32 @@ export const appendProperties = (source, node, properties) => {
   )
   if (!additions.length) return source
   const last = node.properties.at(-1)
-  const separator =
-    last && !source.slice(last.end, node.end - 1).includes(',') ? ',' : ''
-  return edits(source, [
+  const changes = [
     {
       start: node.end - 1,
-      text: `${separator}\n${additions.map(([key, value]) => `${JSON.stringify(key)}: ${value}`).join(',\n')}\n`
+      text: `\n${additions.map(([key, value]) => `${JSON.stringify(key)}: ${value}`).join(',\n')}\n`
     }
-  ])
+  ]
+  if (last && !node.properties.hasTrailingComma)
+    changes.push({ start: last.end, text: ',' })
+  return edits(source, changes)
 }
 
-export const appendExport = (source, exportName, entries) => {
+export const appendExport = (
+  source,
+  exportName,
+  entries,
+  { rejectExisting = false } = {}
+) => {
   const tree = parse(source)
-  return appendProperties(source, variable(tree, exportName), entries)
+  const node = variable(tree, exportName)
+  if (rejectExisting)
+    for (const name of Object.keys(entries))
+      if (objectProperty(node, name))
+        throw new Error(
+          `Registration conflict: ${exportName}.${name} already exists. Review the existing registration before adding this integration.`
+        )
+  return appendProperties(source, node, entries)
 }
 
 export const removeImports = (source, modules) => {

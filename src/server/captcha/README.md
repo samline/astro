@@ -1,5 +1,9 @@
 # Server CAPTCHA verification
 
+Included by `npx @samline/astro add captcha`. Provider keys and a server-side
+submission handler are required to verify a token; rendering the widget alone
+does not protect a submission.
+
 Import `verifyCaptcha` from this folder in Actions/endpoints. It returns a boolean
 and never trusts a client-selected provider. The configured provider is fixed at
 build time; only the secret is read at runtime. `none` explicitly bypasses the

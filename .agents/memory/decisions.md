@@ -170,3 +170,52 @@ Captured source bytes detect changes during planning; caught filesystem errors
 restore installer-owned writes. Dependency installation remains a separate step
 with explicit retry behavior. Add honors actual package/core script choices and
 never promotes an inactive mail transport by adding another Action.
+
+## Package website ownership
+
+The human approved a package-landing-docs adaptation and a curated personal-package
+section. Isolate website/ as a private pnpm workspace so root src remains the
+starter catalog and website dependencies/scripts never reach consumer projects.
+Document generator selections/defaults/local APIs; link framework semantics to
+Astro and third-party semantics to their owners. Source-backed references render
+canonical READMEs instead of maintaining duplicate API prose. Retain template
+presentation and record bounded readability exceptions. Drawer/Ticker use their
+real sites, Forms its package until a landing is provided; extend only on request.
+The Pages workflow is manual. No website work authorizes npm publication, push
+or deployment. Keep ignore files and explicit package allowlists under real
+archive tests, preserving the deliberately shipped portable .agents context.
+
+## 2026-10-26: portable workflow, editorial identity and demo composition
+
+Use Astro as the display name and @samline/astro for our package/installer.
+The website and README explain our source/configuration; Astro owns framework
+behavior. Replace generic repeated descriptions with task-specific guidance.
+Complete examples include imports, real dictionary keys, prerequisites and next
+steps. Keep commands separate from illustrative file trees.
+
+Maintain one portable samline-astro skill and one repo-only maintainer skill.
+Ship portable frontend conventions from scripts/agent-context; keep cross-project
+research and maintainer history out of consumers. Retain upstream license terms
+and remove noncommercial material from this commercially reusable base.
+
+Keep demo chrome as sections, composed into generic Main header/footer slots.
+The optional welcome feature owns both demonstration routes and private nav.
+Do not promote demo-only markup into reusable components or silently mount demo
+chrome in every future page. Exact localized route comparison marks aria-current.
+Later additions preserve the existing homepage and require compatible layout slots.
+
+## Consumer tooling is independent of maintainer tooling (2026-10-26)
+
+Maintain this repository with pnpm/Bun. Generated projects choose npm/pnpm/Bun
+and Node/Bun independently. The wizard lists installed tools; flags make the
+choice explicit. A missing explicitly selected tool fails before project writes.
+Later additions preserve the current project configuration. Public CLI guides
+and recipes show three tabs through the shared ToolCommands component.
+
+When spawning an installation, discard inherited npm_config_user_agent and
+npm_execpath so the actual manager supplies its own identity. Bun inherits
+these variables from an npm launcher otherwise, causing the generated install
+guard to reject a legitimate Bun installation. This was reproduced and tested
+through the final actual archive. Bun1.3.14 also ignores nested overrides;
+Bun-managed Vercel profiles require >=1.4.0 to keep the scoped dependency policy.
+Cloudflare's Astro/Wrangler commands continue to execute with Node.

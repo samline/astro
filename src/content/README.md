@@ -1,5 +1,10 @@
 # Content collections
 
+This page describes the full example catalog maintained in this repository.
+When you select Content Collections in the installer, the generated project
+receives only its chosen source and a README in `src/content/<collection>/`.
+Follow that README for the installed schema, registration and read example.
+
 Astro 7 build-time collections are registered in src/content.config.ts. The base
 enables only posts, a local JSON collection using astro/loaders glob and a Zod
 schema from astro/zod. No external API, credentials, new page, or server runtime
@@ -127,8 +132,8 @@ posts owns the local schema/data; remote owns build loaders; live owns request-t
 loading. Each directory has a collection definition entry, and reusable loader
 logic stays beside it. Remove the posts registration, sample data and unused
 content.posts dictionary entries when replacing the local demo in a real project.
-Optional examples can be removed independently. Generated projects include all
-these source files and this documentation.
+Optional examples can be removed independently. These catalog examples are not
+all copied into each generated project.
 
 References: [Content collections](https://docs.astro.build/en/guides/content-collections/),
 [Content API](https://docs.astro.build/en/reference/modules/astro-content/),

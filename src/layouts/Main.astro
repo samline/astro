@@ -43,7 +43,7 @@ const clientCopy = JSON.stringify({ locale, translations }).replace(
     <GTMHead />
     <slot name='head' />
   </head>
-  <body>
+  <body class='flex min-h-svh flex-col'>
     {clientTranslations.length > 0 && (
       <script
         id='kit-translations'
@@ -54,8 +54,10 @@ const clientCopy = JSON.stringify({ locale, translations }).replace(
     )}
     <PageLoader />
     {GTM_ENABLED && GTM_ID?.trim() && <GTMConsent />}
-    <main>
+    <slot name='header' />
+    <main class='flex-1'>
       <slot />
     </main>
+    <slot name='footer' />
   </body>
 </html>

@@ -1,0 +1,69 @@
+---
+title: 'Configuration and recovery'
+description: 'Find each setting, preview additions, resolve conflicts and retry a failed dependency install.'
+locale: en
+sidebar:
+  group: reference
+  order: 1
+---
+
+import ToolCommands from '../../../../../shared/components/ToolCommands.astro'
+
+## Where settings live
+
+| File or folder                  | What to change there                                                                                                           |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `astro.config.mjs`              | Astro settings and the selected deployment adapter.                                                                            |
+| `src/i18n/config.ts`            | Default language, available languages and the active list.                                                                     |
+| `src/i18n/dictionaries/`        | Translated UI text and the type contract for each domain.                                                                      |
+| `.env.example`                  | Names and example values for the selected integrations. Put real credentials in ignored environment files or hosting settings. |
+| `src/styles/tailwind.css`       | Tailwind configuration, colors, typography and design tokens.                                                                  |
+| `src/layouts/Main.astro`        | Document structure, metadata and layout-level feature initialization.                                                          |
+| `package.json` → `samlineAstro` | The installer's record of selected features, files and configuration.                                                          |
+| Each feature's `README.md`      | Activation steps, examples, API and limits for that feature.                                                                   |
+
+For Astro's full configuration API, use the
+[configuration reference](https://docs.astro.build/en/reference/configuration-reference/).
+The [environment guide](https://docs.astro.build/en/guides/environment-variables/)
+explains Astro's handling of public and server-only values.
+
+## Preview an addition
+
+Run these commands from the generated project:
+
+<ToolCommands args={['add mail --dry-run', 'status']} />
+
+`--dry-run` lists the planned file changes without applying them. `status` reports
+installed features, files and locale state. Read the feature's README for the
+configuration still needed, such as SMTP credentials or a provider endpoint.
+
+When the plan is correct, repeat the add command without `--dry-run`. Creation
+and later additions use the same feature definitions. Adding an installed feature
+again leaves it in place; adding a new named content collection is a separate
+operation.
+
+## Resolve a conflict
+
+The installer merges supported layout, Action, middleware and dictionary changes
+while keeping unrelated source and existing dependency versions. If a file or
+custom configuration cannot be merged safely, it reports the conflict before
+applying the plan.
+
+Review the named file and the proposed feature together. Reconcile the change
+manually, preserving the project's custom code. Keep the `samlineAstro` metadata;
+it records the source the installer expects. Projects created before compatible
+metadata existed need a manual review before they can use later additions.
+
+## Retry a failed installation
+
+Cancelling before the installer applies a plan leaves the project unchanged.
+Caught filesystem failures during application roll back its owned writes.
+
+If dependency installation fails **after the source files were added**, those
+files remain. Run the retry command printed by the CLI from the generated
+project. Package-manager scripts may have effects outside the installer's file
+changes, so inspect their error output as well.
+
+With `--no-install`, install dependencies yourself, then run the generated
+formatter and verification scripts. Follow that project's recorded tool choices.
+For normal future maintenance, see [updating a project](../../guides/updating/).

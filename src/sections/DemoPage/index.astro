@@ -1,0 +1,50 @@
+---
+import Section from '@/components/Section/index.astro'
+import Box from '@/components/Box/index.astro'
+import H from '@/components/H/index.astro'
+import Button from '@/components/Button/index.astro'
+import { getDictionary } from '@/i18n'
+
+const { welcome, buttons } = getDictionary(Astro.currentLocale)
+const copy = welcome.demo
+---
+
+<Section id='demo-page' aria-labelledby='demo-title'>
+  <Box size='narrow'>
+    <div class='space-y-5'>
+      <H
+        level={1}
+        id='demo-title'
+        class='text-4xl leading-tight font-semibold tracking-tight sm:text-5xl'
+      >
+        {copy.title}
+      </H>
+      <p class='text-lg leading-relaxed text-black/65 dark:text-white/70'>
+        {copy.description}
+      </p>
+    </div>
+    <div class='mt-10 border-y border-black/10 py-8 dark:border-white/15'>
+      <H level={2} class='text-xl font-semibold'>
+        {copy.structureTitle}
+      </H>
+      <ol class='mt-6 space-y-7'>
+        {copy.steps.map((step) => (
+          <li class='space-y-2'>
+            <H level={3} class='font-semibold'>
+              {step.title}
+            </H>
+            <code class='block text-sm break-words text-accent dark:text-accent-light'>
+              {step.path}
+            </code>
+            <p class='text-sm leading-relaxed text-black/65 dark:text-white/65'>
+              {step.description}
+            </p>
+          </li>
+        ))}
+      </ol>
+    </div>
+    <Button href='/' variant='secondary' class='mt-8'>
+      {buttons.backHome}
+    </Button>
+  </Box>
+</Section>

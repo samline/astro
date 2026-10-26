@@ -1,5 +1,9 @@
 # Contact Action
 
+Included by `npx @samline/astro add mail`. The installer registers it only on a
+supported server profile; inactive scaffolding keeps `src/actions/index.ts.example`
+so pure static builds remain valid. No contact page is generated.
+
 Demo form Action exposed as actions.contact. It validates contact data and calls
 the server mail service. Registration lives in src/actions/index.ts; the schema
 and handler stay together in this folder. Uses Astro 7's astro:actions and

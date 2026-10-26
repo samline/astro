@@ -2,6 +2,9 @@ import type { Navigation } from './types'
 
 export default {
   home: 'Home',
-  documentation: 'Read our docs',
-  community: 'Join our Discord'
+  demo: 'Example page',
+  primaryLabel: 'Main navigation',
+  resourcesLabel: 'Astro resources',
+  documentation: 'Astro documentation',
+  community: 'Astro community'
 } satisfies Navigation

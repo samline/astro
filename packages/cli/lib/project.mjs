@@ -25,6 +25,8 @@ import {
 import {
   coreLayout,
   welcomeSection,
+  demoHeader,
+  minimalPage,
   authSettings,
   contactWithoutCaptcha,
   contactSchemaWithoutCaptcha,
@@ -89,7 +91,11 @@ export const projectManifest = (
     packageManager: `${tools.manager}@${tools.managerVersion}`,
     engines: {
       node: source.engines.node,
-      ...(bun ? { bun: source.engines.bun } : {})
+      ...(tools.manager === 'bun' && deployment === 'vercel'
+        ? { bun: '>=1.4.0' }
+        : bun || tools.manager === 'bun'
+          ? { bun: source.engines.bun }
+          : {})
     },
     scripts: {
       preinstall: 'node scripts/check-package-manager.mjs',
@@ -105,6 +111,18 @@ export const projectManifest = (
     },
     dependencies,
     devDependencies,
+    ...(tools.manager === 'bun' &&
+    ['netlify', 'cloudflare'].includes(deployment)
+      ? {
+          trustedDependencies:
+            deployment === 'cloudflare' ? ['esbuild', 'workerd'] : ['esbuild']
+        }
+      : {}),
+    ...(['npm', 'bun'].includes(tools.manager) &&
+    deployment === 'vercel' &&
+    source.overrides
+      ? { overrides: source.overrides }
+      : {}),
     samlineAstro: {
       version: kitVersion,
       schema: 1,
@@ -133,6 +151,8 @@ export const copyPayload = async (template, prefixes, selected, options) => {
         files.set(prefix, await authSettings(template, options.authMode))
       else if (prefix === 'src/sections/Welcome/index.astro')
         files.set(prefix, await welcomeSection(template, selected))
+      else if (prefix === 'src/sections/DemoHeader/index.astro')
+        files.set(prefix, await demoHeader(template, selected))
       else if (
         prefix === 'src/actions/contact/index.ts' &&
         !selected.includes('captcha')
@@ -173,6 +193,13 @@ export const createProject = async ({
   ...options
 }) => {
   deploymentProfile(deployment)
+  if (tools.manager === 'bun' && deployment === 'vercel') {
+    const [major, minor] = tools.managerVersion.split('.').map(Number)
+    if (major < 1 || (major === 1 && minor < 4))
+      throw new Error(
+        'Vercel with Bun as package manager requires Bun 1.4.0 or newer for scoped dependency overrides. Upgrade Bun or choose npm/pnpm.'
+      )
+  }
   const origin = siteOrigin(site)
   const name = projectName(destination)
   const selected = resolveFeatures(requested)
@@ -231,28 +258,16 @@ export const createProject = async ({
       await welcomeSection(template, selected)
     )
     if (section === 'Home')
-      payload.set(
-        'src/pages/[...locale]/index.astro',
-        (await read(template, 'src/pages/[...locale]/index.astro')).replaceAll(
-          'Welcome',
-          'Home'
-        )
-      )
+      payload.set('src/pages/[...locale]/index.astro', minimalPage)
     let config = selectEnvironment(
       await read(template, 'astro.config.mjs'),
       new Set(environmentNames(selected, options))
     )
     if (!selected.includes('gtm')) config = withoutTrackingImport(config)
     payload.set('astro.config.mjs', config)
+    const source = await json(template)
     const manifest = deploymentManifest(
-      projectManifest(
-        await json(template),
-        name,
-        tools,
-        kitVersion,
-        deployment,
-        selected
-      ),
+      projectManifest(source, name, tools, kitVersion, deployment, selected),
       deployment,
       tools
     )
@@ -340,6 +355,38 @@ export const createProject = async ({
     }
     await applyFiles(stage, payload)
     await configureDeployment(stage, deployment, tools, name, origin)
+    if (tools.runtime === 'node')
+      await applyFiles(
+        stage,
+        new Map([
+          [
+            'bunfig.toml',
+            (await read(stage, 'bunfig.toml')).replace(
+              'bun = true',
+              'bun = false'
+            )
+          ]
+        ])
+      )
+    if (tools.manager === 'pnpm' && deployment === 'vercel' && source.overrides)
+      await applyFiles(
+        stage,
+        new Map([
+          [
+            'pnpm-workspace.yaml',
+            '# Scoped fixes for the selected Vercel adapter dependencies.\noverrides:\n' +
+              Object.entries(source.overrides)
+                .flatMap(([parent, dependencies]) =>
+                  Object.entries(dependencies).map(
+                    ([name, version]) =>
+                      `  ${JSON.stringify(`${parent}>${name}`)}: ${JSON.stringify(version)}`
+                  )
+                )
+                .join('\n') +
+              '\n'
+          ]
+        ])
+      )
     let env = await environmentExample(
       template,
       selected,
@@ -364,7 +411,9 @@ export const createProject = async ({
         installCommand:
           tools.manager === 'pnpm'
             ? 'pnpm install --frozen-lockfile'
-            : 'npm ci',
+            : tools.manager === 'bun'
+              ? 'bun install --frozen-lockfile'
+              : 'npm ci',
         buildCommand: buildCommand(tools),
         devCommand: `${tools.runner} run astro dev`
       })
@@ -399,4 +448,4 @@ export const createProject = async ({
 }
 
 export const projectReadme = (manifest, tools, deployment) =>
-  `# ${manifest.name}\n\nCreated with SAM Astro ${manifest.samlineAstro.version}. Public output is SSG.\n\n## Commands\n\n\`\`\`sh\n${tools.manager} install\n${tools.runner} run dev\n${tools.runner} run verify\n\`\`\`\n\n## Initial integrations\n\n${manifest.samlineAstro.features.length ? manifest.samlineAstro.features.map((name) => `- ${features[name].label}`).join('\n') : 'Core only; no optional integrations installed.'}\n\nDefault language: ${manifest.samlineAstro.locales[0].code}. Read src/i18n/config.ts\nfor active languages. New language scaffolds contain empty translations and stay\ninactive until completed. Locale addition creates no content entries.\n\n\`\`\`sh\nnpx @samline/astro add\nnpx @samline/astro status\nnpx @samline/astro locale add es-mx\n\`\`\`\n\nFor the current inventory read .agents/memory/integrations.md or run status.\nInstalled does not mean configured. Follow the installed feature README and\n.env.example; keep real secrets in ignored local files or provider settings.\nUnconfigured remote collections remain inactive; each has registration instructions.\n\n## Deployment\n\n${deploymentGuide(deployment, tools)}\n\n## Agent context\n\nRead AGENTS.md and .agents/README.md. Components document their API alongside\nthe source. This project evolves independently of the generator; add never\nautomatically upgrades Astro or replaces custom code.\n`
+  `# ${manifest.name}\n\nCreated with @samline/astro ${manifest.samlineAstro.version}. Public output is SSG.\n\n## Commands\n\n\`\`\`sh\n${tools.manager} install\n${tools.runner} run dev\n${tools.runner} run verify\n\`\`\`\n\n## Initial integrations\n\n${manifest.samlineAstro.features.length ? manifest.samlineAstro.features.map((name) => `- ${features[name].label}`).join('\n') : 'Core only; no optional integrations installed.'}\n\nDefault language: ${manifest.samlineAstro.locales[0].code}. Read src/i18n/config.ts\nfor active languages. New language scaffolds contain empty translations and stay\ninactive until completed. Locale addition creates no content entries.\n\n\`\`\`sh\nnpx @samline/astro add\nnpx @samline/astro status\nnpx @samline/astro locale add es-mx\n\`\`\`\n\nFor the current inventory read .agents/memory/integrations.md or run status.\nInstalled does not mean configured. Follow the installed feature README and\n.env.example; keep real secrets in ignored local files or provider settings.\nUnconfigured remote collections remain inactive; each has registration instructions.\n\n## Deployment\n\n${deploymentGuide(deployment, tools)}\n\n## Agent context\n\nRead AGENTS.md and .agents/README.md. Components document their API alongside\nthe source. This project evolves independently of the generator; add never\nautomatically upgrades Astro or replaces custom code.\n`

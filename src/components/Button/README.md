@@ -1,54 +1,77 @@
 # Button
 
-Minimal button styling for actions and navigation. Uses the project's Tailwind
-accent tokens, requires no client JavaScript, and adds no default text.
+A small Tailwind primitive for native actions and styled navigation. It uses the
+project's accent tokens, has no built-in text or client runtime, and leaves
+application behavior with its consuming section.
 
-## Usage
+## Availability and placement
+
+Included in every generated project at `src/components/Button/index.astro`.
+Use it from a section or reusable content component. Save this example as
+`src/sections/NavigationActions/index.astro` and render it inside Main.
+
+## Complete example
 
 ```astro
 ---
 import Button from '@/components/Button/index.astro'
 import { getDictionary } from '@/i18n'
 
-const dictionary = getDictionary(Astro.currentLocale)
+const { buttons } = getDictionary(Astro.currentLocale)
 ---
 
-<Button type='submit'>{dictionary.buttons.submit}</Button>
-<Button type='button' variant='secondary' disabled>
-  {dictionary.buttons.cancel}
-</Button>
-<Button href='/' size='sm'>
-  {dictionary.buttons.backHome}
+<div class='flex flex-wrap gap-3'>
+  <Button href='/'>{buttons.backHome}</Button>
+  <Button type='button' variant='secondary' size='sm' disabled>
+    {buttons.cancel}
+  </Button>
+</div>
+```
+
+Expected result: an accent-colored homepage **link** and a compact, disabled
+outline **button**. The link navigates; the disabled button does nothing. Removing
+`disabled` does not invent a cancel handler: attach project behavior explicitly.
+
+## Choosing props
+
+| Prop              | Default   | When to change it                                                              |
+| ----------------- | --------- | ------------------------------------------------------------------------------ |
+| `variant`         | `primary` | `secondary` for the less prominent action.                                     |
+| `size`            | `md`      | `sm` for compact controls; `lg` for a more prominent action.                   |
+| `href`            | Omitted   | Set for navigation; output delegates to Link.                                  |
+| `type`            | `button`  | Use `submit` or `reset` for a real form operation. Button mode only.           |
+| `disabled`        | `false`   | Disable a native action button. Not accepted in link mode.                     |
+| `localize`        | `true`    | Link mode only; `false` preserves a resolved URL or public resource path.      |
+| Native attributes | —         | Attributes for the selected element, including form, ARIA and data attributes. |
+| Default slot      | —         | Translated label and optional decorative icon.                                 |
+
+A submit control belongs inside a form, or points to one with its native `form`
+attribute. With Button and `buttons` already in scope:
+
+```astro
+<Button type='submit' form='contact-form' class='w-full'>
+  {buttons.submit}
 </Button>
 ```
 
-## API
+This fragment requires an actual `<form id='contact-form'>` and submission
+handling. Button does not create an Action, SMTP service, request, or success
+message. See [Fields](../Fields/README.md) if that integration is installed.
 
-| Prop              | Default   | Purpose                                                                      |
-| ----------------- | --------- | ---------------------------------------------------------------------------- |
-| `variant`         | `primary` | Solid accent or outlined `secondary`.                                        |
-| `size`            | `md`      | `sm`, `md`, or `lg`; controls padding, text, and minimum height.             |
-| `href`            | —         | Renders Link when provided; otherwise renders a native button.               |
-| `type`            | `button`  | Use `submit` or `reset` explicitly for form actions.                         |
-| `disabled`        | `false`   | Native disabled behavior, available only without href.                       |
-| `localize`        | `true`    | Link-only option; see the Link documentation.                                |
-| Native attributes | —         | Attributes for the selected element, including class, id, aria-* and data-*. |
-| Default slot      | —         | Translated label, optionally with decorative icons.                          |
+## Styling and accessibility
 
-Native form attributes such as form, name, value, and formaction are forwarded.
-With href, Link retains its localization, download, and target/rel behavior.
-TypeScript separates link and button attributes; links do not support disabled.
-Hide an unavailable destination or render a disabled action button instead.
+Change project-wide colors in `src/styles/tailwind.css`. `class` works well for
+layout such as `w-full`; when changing the visual design, edit the component's
+variant/size maps instead of stacking conflicting color utilities. Tailwind
+class conflicts are not resolved by a merge library.
 
-Use a visible translated label. For an icon-only action, supply a translated
-aria-label and mark decorative icons aria-hidden='true'. Keep all visitor-facing
-text in dictionaries; there is no locale prop. Focus is visible, disabled buttons
-are dimmed, and color transitions respect reduced-motion preferences.
+Use a visible translated label. For an icon-only action, name the button using a
+translated `aria-label` and leave its child icon decorative. Focus is visible,
+disabled buttons are dimmed, and transitions respect reduced motion.
 
-Customize project-wide colors in src/styles/tailwind.css. Use class for layout
-utilities such as w-full. Edit this component's variant and size maps when
-establishing a new project's design; conflicting Tailwind utilities are not merged.
-There is no loading state, event system, or built-in click handler. Attach behavior
-using a normal Astro client script and native DOM events when needed.
+There is no loading prop, event bus, implicit click handler or locale prop.
+Native form attributes are forwarded. In link mode, [Link](../Link/README.md)
+owns URL localization, `download`, `target` and `rel` behavior.
 
-See [Link](../Link/README.md) for URL localization rules.
+Use [Astro scripts and event handling](https://docs.astro.build/en/guides/client-side-scripts/)
+when your section needs browser behavior.

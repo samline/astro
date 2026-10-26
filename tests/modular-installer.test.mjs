@@ -243,7 +243,7 @@ test('add preserves custom layouts, Actions, dependencies, secrets and project c
   const layout = await read(directory, 'src/layouts/Main.astro')
   await writeFile(
     path.join(directory, 'src/layouts/Main.astro'),
-    layout.replace('<main>', '<main data-user-layout>')
+    layout.replace('<main ', '<main data-user-layout ')
   )
   const actions = await read(directory, 'src/actions/index.ts')
   await writeFile(

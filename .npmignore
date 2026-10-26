@@ -1,0 +1,13 @@
+# Maintainer repository. The published package is packages/cli with its files allowlist.
+website/
+tests/
+artifacts/
+.local/
+.github/
+node_modules/
+dist/
+.vercel/
+.astro/
+.env*
+!.env.example
+# Portable agent context is intentional; do not exclude .agents here.

@@ -1,5 +1,9 @@
 # Server mail
 
+Install with `npx @samline/astro add mail` from a generated project. This also
+includes the contact Action example. Configure a compatible server adapter and
+SMTP credentials before enabling delivery.
+
 Reusable server service for SMTP delivery and localized form notifications.
 It belongs under src/server because it is not a UI component or an Astro
 integration plugin. Import the public API from @/server/mail only in server code.

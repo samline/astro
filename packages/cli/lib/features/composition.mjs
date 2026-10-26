@@ -112,7 +112,11 @@ export const mountLayout = (source, selected) => {
 export const welcomeSection = async (template, selected) => {
   if (!selected.includes('welcome'))
     return `---\nimport Section from '@/components/Section/index.astro'\nimport Box from '@/components/Box/index.astro'\nimport H from '@/components/H/index.astro'\nimport { getDictionary } from '@/i18n'\nconst dictionary = getDictionary(Astro.currentLocale)\n---\n<Section id='home' aria-labelledby='home-title'><Box><H level={1} id='home-title'>{dictionary.site.title}</H></Box></Section>\n`
-  let source = await read(template, 'src/sections/Welcome/index.astro')
+  return read(template, 'src/sections/Welcome/index.astro')
+}
+
+export const demoHeader = async (template, selected) => {
+  let source = await read(template, 'src/sections/DemoHeader/index.astro')
   for (const [feature, name, module] of [
     ['themes', 'ThemeSwitch', '@/components/Theme/Switch.astro'],
     [
@@ -127,15 +131,34 @@ export const welcomeSection = async (template, selected) => {
       '---\n' +
       removeImports(source.slice(4, end), [module]) +
       source.slice(end)
-    source = source.replace(
+    source = replaceOnce(
+      source,
       name === 'ThemeSwitch'
-        ? '    <ThemeSwitch />'
-        : "    <LanguagePicker path='/' />",
+        ? '<ThemeSwitch />'
+        : '<LanguagePicker path={path} />',
       ''
     )
   }
   return source
 }
+
+/** A core-only page must not import or mount any optional demo source. */
+export const minimalPage = `---
+import type { GetStaticPaths } from 'astro'
+import Home from '@/sections/Home/index.astro'
+import Main from '@/layouts/Main.astro'
+import { defaultLocale, locales } from '@/i18n/config'
+
+export const getStaticPaths = (() =>
+  locales.map((locale) => ({
+    params: { locale: locale === defaultLocale ? undefined : locale }
+  }))) satisfies GetStaticPaths
+---
+
+<Main path='/'>
+  <Home />
+</Main>
+`
 
 export const authSettings = async (template, mode) => {
   let source = await read(template, 'src/server/auth/settings.ts')
@@ -187,9 +210,12 @@ export const addContactCaptcha = (source) => {
 }
 
 export const registerAction = (source, name) =>
-  appendExport(namedImport(source, name, `./${name}`), 'server', {
-    [name]: name
-  })
+  appendExport(
+    namedImport(source, name, `./${name}`),
+    'server',
+    { [name]: name },
+    { rejectExisting: true }
+  )
 
 export const contactSchemaWithoutCaptcha = (source) => {
   const tree = parse(source)
@@ -266,15 +292,15 @@ export const addContactCaptchaSchema = (source, reference) => {
   })
   current = find(source)
   const last = current.limits.elements.at(-1)
-  const comma = source.slice(last.end, current.limits.end - 1).includes(',')
-    ? ''
-    : ','
-  return edits(source, [
+  const changes = [
     {
       start: current.limits.end - 1,
-      text: `${comma}\n['captchaToken', 2048]\n`
+      text: `\n['captchaToken', 2048]\n`
     }
-  ])
+  ]
+  if (!current.limits.elements.hasTrailingComma)
+    changes.push({ start: last.end, text: ',' })
+  return edits(source, changes)
 }
 
 export const mergeAuthMiddleware = (source) => {

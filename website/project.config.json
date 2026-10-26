@@ -1,0 +1,25 @@
+{
+  "package": {
+    "name": "Astro",
+    "npmName": "@samline/astro",
+    "version": "7.21.0",
+    "description": "An independent Astro starter from @samline/astro. Choose integrations, work with the generated source, and add more when needed.",
+    "author": "Samuel Olvera (samline)",
+    "license": "MIT",
+    "keywords": ["astro", "starter", "ssg", "installer", "server-islands"]
+  },
+  "site": {
+    "url": "https://samline.github.io/astro/",
+    "repository": "https://github.com/samline/astro",
+    "namespace": "samline-astro",
+    "template": false
+  },
+  "theme": {
+    "accentLight": "#3245ff",
+    "accentDark": "#9aa4ff"
+  },
+  "delivery": {
+    "cdnScript": null,
+    "cdnStylesheet": null
+  }
+}

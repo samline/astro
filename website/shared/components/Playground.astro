@@ -1,0 +1,52 @@
+---
+import DemoStudio from './DemoStudio.astro'
+import DemoFooter from './DemoFooter.astro'
+import Tabs from './Tabs.astro'
+import TabPanel from './TabPanel.astro'
+import RecipePanel from './RecipePanel.astro'
+import { recipes } from '../i18n/translations/en/recipes'
+import t from '../i18n/translations/en/demo'
+const { id = `setup-${crypto.randomUUID()}` } = Astro.props
+---
+
+<div data-ui class:list={['playground']}>
+  <DemoStudio>
+    <Tabs id={id} variant="demo" label={t.label} items={recipes}>
+      <div slot="heading" class:list={['studio-title']}>
+        <span class:list={['status-dot']} aria-hidden="true"></span>
+        {t.label}
+      </div>
+      {recipes.map((recipe) => (
+        <TabPanel id={recipe.id} label={recipe.label}>
+          <RecipePanel recipe={recipe} />
+        </TabPanel>
+      ))}
+    </Tabs>
+    <DemoFooter note={t.description} />
+  </DemoStudio>
+</div>
+<style>
+  .playground {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-lg);
+    min-width: 0;
+  }
+  .studio-title {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.13em;
+    line-height: 1.6;
+    display: flex;
+    align-items: center;
+    gap: 0.5625rem;
+    color: var(--palette-studio-title);
+  }
+  .status-dot {
+    width: 0.375rem;
+    height: 0.375rem;
+    background: var(--color-accent);
+    border-radius: 50%;
+    flex: none;
+  }
+</style>

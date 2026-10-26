@@ -76,6 +76,31 @@ test(
     assert.ok(files.includes('package/template/_gitignore'))
     assert.ok(files.includes('package/template/.env.example'))
     for (const file of [
+      'LICENSE',
+      'THIRD_PARTY_NOTICES.md',
+      'licenses/astro-MIT.txt'
+    ])
+      assert.ok(files.includes(`package/${file}`), file)
+    for (const file of [
+      'THIRD_PARTY_NOTICES.md',
+      'licenses/astro-MIT.txt',
+      'licenses/samline-astro-MIT.txt',
+      '.agents/memory/frontend-conventions.md'
+    ])
+      assert.ok(files.includes(`package/template/${file}`), file)
+    const templateManifest = JSON.parse(
+      await readFile(
+        path.join(root, 'packages/cli/template/package.json'),
+        'utf8'
+      )
+    )
+    assert.ok(
+      !Object.keys(templateManifest.scripts).some((name) =>
+        name.startsWith('site:')
+      )
+    )
+    assert.ok(!files.some((file) => /(?:^|\/)website(?:\/|$)/.test(file)))
+    for (const file of [
       'AGENTS.md',
       '.agents/README.md',
       '.agents/AGENTS.md',
@@ -137,7 +162,7 @@ test(
       'astro',
       'tailwind-css-patterns',
       'typescript-advanced-types',
-      'bun',
+      'samline-astro',
       'vite',
       'seo',
       'accessibility',
@@ -152,6 +177,8 @@ test(
     assert.ok(
       !files.some(
         (file) =>
+          file.includes('/skills/bun/') ||
+          file.includes('/skills/samline-astro-maintainer/') ||
           file.includes('nodejs-backend-patterns') ||
           file.includes('nodejs-best-practices')
       )
@@ -354,6 +381,12 @@ test(
       await readFile(path.join(destination, 'skills-lock.json'), 'utf8')
     )
     assert.ok(!skillLock.skills['deploy-to-vercel'])
+    assert.ok(!skillLock.skills.bun)
+    assert.ok(!skillLock.skills['samline-astro'])
+    const skillNames = await readdir(path.join(destination, '.agents/skills'))
+    assert.ok(skillNames.includes('samline-astro'))
+    assert.ok(!skillNames.includes('bun'))
+    assert.ok(!skillNames.includes('samline-astro-maintainer'))
     assert.ok(
       !(await readdir(path.join(destination, '.agents/skills'))).includes(
         'deploy-to-vercel'

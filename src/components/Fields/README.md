@@ -1,8 +1,20 @@
 # Fields
 
-Native Astro form controls with a shared presentation inspired by EasyTrip.
+Native Astro form controls with shared labels, errors and layout.
 Works in SSG without a client framework. The browser keeps its native validation,
 autocomplete, keyboard, date picker, select and file selection behavior.
+
+## Availability and ownership
+
+Optional installer selection: `forms`, then opt into the Fields templates.
+Alternatively, `npx @samline/astro add fields` adds Fields **and** its required
+`@samline/forms` / `@samline/formatter` integration. Selecting Forms alone installs
+the packages and `src/forms` guidance, not this folder.
+
+All templates live in `src/components/Fields`. Form UI, submission handlers and
+status messages belong to a domain section in `src/sections`; route files only
+compose that section inside Main. Form sends nothing by itself. A working submit
+requires a real Astro Action or external backend, chosen by the consuming project.
 
 ## Components
 
@@ -37,10 +49,11 @@ Native numeric `size` is separate from visual `fieldSize`.
 Avoid naming or identifying controls `reset`, `submit` or `requestSubmit`: native
 form named properties can shadow methods used by the controller.
 
-## Basic composition
+## First: render the controls
 
-The owning section imports the dictionary and components; no form UI belongs in
-a route file. No locale prop is needed on these components.
+Save this complete preview as `src/sections/ContactPreview/index.astro` and render
+it inside Main. It uses existing forms/buttons dictionary keys, requires no
+backend, and intentionally has a disabled action. No locale prop is needed.
 
 ```astro
 ---
@@ -52,7 +65,7 @@ import { getDictionary } from '@/i18n'
 const { forms, buttons } = getDictionary(Astro.currentLocale)
 ---
 
-<Form id='contact-form' method='post' action='/your-endpoint'>
+<Form id='contact-preview'>
   <Input name='name' label={forms.labels.name} autocomplete='name' required />
   <Input
     name='email'
@@ -62,17 +75,29 @@ const { forms, buttons } = getDictionary(Astro.currentLocale)
     required
   />
   <Textarea name='message' label={forms.labels.message} required />
-  <Button type='submit'>{buttons.submit}</Button>
+  <Button type='button' disabled>
+    {buttons.submit}
+  </Button>
 </Form>
 ```
 
-Use a real endpoint for native submission. A prerendered page cannot handle
-request-specific Action results. Static hosting without an adapter needs an
-external backend; see `src/actions/contact/README.md` for the SSG Action recipe.
+Expected result: labeled name/email/message controls with native browser
+validation and a disabled button. This proves presentation only; it does not
+pretend to deliver a message. Enable a submit control only after connecting the
+actual transport, as in the next complete example.
+
+A prerendered page cannot render request-specific Action results from frontmatter.
+Static hosting without an adapter needs an external backend. For real SMTP mail,
+install `mail` and follow the generated `src/actions/contact/README.md`; the
+independent Basic Action example below deliberately sends no mail.
 File uploads need a matching backend and `enctype="multipart/form-data"` for
 native POST. Accept/type/size restrictions must also be validated on the server.
 
 ## Select data
+
+For project choices, add descriptive keys to the owning dictionary domain first;
+option values are stable backend identifiers, while `label` is translated copy.
+A Select does not generate those keys, fetch remote options or invent a placeholder.
 
 Use a typed `SelectEntry[]` from `./types`. Each option is
 `{ value: string | number, label: string, disabled?: boolean }`. An optgroup is
@@ -84,6 +109,102 @@ values; no placeholder option is added. With no explicit value or placeholder,
 a single select selects its first enabled option. Use an empty value and a
 placeholder for a deliberate unselected required field. No HTML slot parsing,
 Alpine-specific options or country catalog is imposed.
+
+## Additional control examples
+
+Password, file upload and contact preference labels are project-specific, so the
+starter does not guess their wording. Before using the customization example
+below, extend `Forms` in
+`src/i18n/dictionaries/<default-locale>/forms/types.ts` with:
+
+```ts
+examples: {
+  password: string
+  contactMethod: string
+  chooseContactMethod: string
+  updates: string
+  attachment: string
+}
+```
+
+Add a matching `examples` object to **each locale's** `forms/index.ts`. These are
+example English values for that object; supply the corresponding translations
+in your other languages:
+
+```json
+{
+  "password": "Password",
+  "contactMethod": "Preferred contact method",
+  "chooseContactMethod": "Choose a contact method",
+  "updates": "Receive project updates",
+  "attachment": "Attachment"
+}
+```
+
+After those explicit dictionary additions, this complete section can live at
+`src/sections/AdditionalFields/index.astro`:
+
+```astro
+---
+import Form from '@/components/Fields/Form.astro'
+import Input from '@/components/Fields/Input.astro'
+import Select from '@/components/Fields/Select.astro'
+import Checkbox from '@/components/Fields/Checkbox.astro'
+import Radio from '@/components/Fields/Radio.astro'
+import File from '@/components/Fields/File.astro'
+import Fieldset from '@/components/Fields/Fieldset.astro'
+import { getDictionary } from '@/i18n'
+
+const { forms } = getDictionary(Astro.currentLocale)
+const options = [
+  { value: 'email', label: forms.labels.email },
+  { value: 'phone', label: forms.labels.phone }
+]
+---
+
+<Form id='additional-fields'>
+  <Input
+    name='password'
+    type='password'
+    label={forms.examples.password}
+    autocomplete='new-password'
+    variant='basic'
+  />
+  <Select
+    name='contactMethod'
+    label={forms.examples.contactMethod}
+    options={options}
+    placeholder={forms.examples.chooseContactMethod}
+    value=''
+    required
+  />
+  <Fieldset legend={forms.examples.contactMethod}>
+    <Radio
+      name='preferredChannel'
+      value='email'
+      label={forms.labels.email}
+      checked
+    />
+    <Radio name='preferredChannel' value='phone' label={forms.labels.phone} />
+  </Fieldset>
+  <Checkbox name='updates' value='yes' label={forms.examples.updates} />
+  <File name='attachment' label={forms.examples.attachment} accept='.pdf' />
+</Form>
+```
+
+Expected result: a password field with a progressive show/hide button, a required
+select with no initial choice, two mutually exclusive radios, an independent
+checkbox, and a native PDF file chooser. These are separate controls showing the
+API; the example has no submit operation or upload service. Both contact choice
+controls are included only to compare Select with a Radio group; use the suitable
+one in a real form. `accept='.pdf'` guides the picker and does not validate the
+upload on the server.
+
+Use `multiple value={['email', 'phone']} variant='basic'` for a multiple Select.
+For repeated Checkbox names, give each a distinct value and read all values with
+`formData.getAll(name)` on the backend. A Radio group shares one name; separate
+instances receive unique generated IDs. Disable a related group with Fieldset's
+native `disabled` attribute. Keep hidden metadata as native inputs, not Field.
 
 ## Progressive enhancement
 
@@ -127,46 +248,96 @@ restored into the controller. Repeated field names share their message; aggregat
 errors do not identify a specific item. Validators using `each` can still mark
 individual controls through the library. No implicit success checkmark is shown.
 
-```ts
-import { actions, isInputError } from 'astro:actions'
-import { createForm } from '@/components/Fields/scripts'
-import { getDictionary } from '@/i18n'
+## Then: connect a real SSG Action
 
-const initialized = new WeakSet<HTMLFormElement>()
-const setup = () => {
-  const element = document.getElementById('contact-form')
-  if (!(element instanceof HTMLFormElement) || initialized.has(element)) return
-  const copy = getDictionary(document.documentElement.lang).forms
-  const controller = createForm(element)
-  initialized.add(element)
-  controller.addCleanup(() => initialized.delete(element))
-  const status = element.querySelector<HTMLElement>('[data-form-status]')
-  // Register once per mount; createForm itself is idempotent, onSubmit is additive.
-  controller.onSubmit(async (_element, _values, formData) => {
-    try {
-      const result = await actions.contact(formData)
-      if (result.error) {
-        if (isInputError(result.error))
-          controller.setErrors(result.error.fields)
-        if (status) status.textContent = copy.messages.error
-        return
+This complete section is `src/sections/NameForm/index.astro`. In addition to
+Fields, it requires the `actions` integration with its registered `basic` Action
+and a compatible adapter (Vercel, Netlify or custom). If Actions were generated
+only as an inactive static scaffold, activate the adapter/registration first.
+
+The Basic Action accepts `name` and `locale`, validates them, and returns a
+translated message. It does not send email or write data. The disabled submit
+button prevents an unhandled native POST when JavaScript is unavailable; setup
+reveals its normal enabled behavior after attaching the controller.
+
+```astro
+---
+import Form from '@/components/Fields/Form.astro'
+import Input from '@/components/Fields/Input.astro'
+import Button from '@/components/Button/index.astro'
+import { getDictionary, resolveLocale } from '@/i18n'
+
+const locale = resolveLocale(Astro.currentLocale)
+const { forms, buttons, actions: copy } = getDictionary(locale)
+---
+
+<Form id='name-form' data-error={copy.invalid}>
+  <input type='hidden' name='locale' value={locale} />
+  <Input
+    name='name'
+    label={forms.labels.name}
+    autocomplete='name'
+    maxlength={100}
+    required
+  />
+  <Button type='submit' disabled>
+    {buttons.submit}
+  </Button>
+  <p data-form-status role='status'></p>
+</Form>
+
+<script>
+  import { actions, isInputError } from 'astro:actions'
+  import { createForm } from '@/components/Fields/scripts'
+
+  const initialized = new WeakSet<HTMLFormElement>()
+  const setup = () => {
+    const element = document.getElementById('name-form')
+    if (!(element instanceof HTMLFormElement) || initialized.has(element))
+      return
+    const status = element.querySelector<HTMLElement>('[data-form-status]')
+    const button = element.querySelector<HTMLButtonElement>('[type="submit"]')
+    if (!status || !button) return
+    const controller = createForm(element)
+    initialized.add(element)
+    controller.addCleanup(() => initialized.delete(element))
+    let submitting = false
+    controller.onSubmit(async (_element, _values, formData) => {
+      if (submitting) return
+      submitting = true
+      button.disabled = true
+      try {
+        const { data, error } = await actions.basic(formData)
+        if (isInputError(error)) controller.setErrors(error.fields)
+        status.textContent = error
+          ? (element.dataset.error ?? '')
+          : data.message
+      } catch {
+        status.textContent = element.dataset.error ?? ''
+      } finally {
+        submitting = false
+        button.disabled = false
       }
-      if (status) status.textContent = result.data.message
-    } catch {
-      if (status) status.textContent = copy.messages.error
-    }
-  })
-}
-setup()
-document.addEventListener('astro:page-load', setup)
+    })
+    button.disabled = false
+  }
+  setup()
+  document.addEventListener('astro:page-load', setup)
+</script>
 ```
 
-Add a section-owned `<p data-form-status role="status"></p>` for the general
-status. The example requires a registered contact Action/adapter and the contact schema's
-locale/honeypot inputs where appropriate. In a project with ClientRouter, arrange
-one setup per mount: destroy controllers on before-swap (automatic), and use a
-section-owned initialization guard for persisted elements or repeated setup.
-Do not register multiple onSubmit handlers on an existing controller.
+Expected result: native required/name-length validation, one Action request per
+submission, field errors under their matching controls when returned by Astro,
+and a general translated status. Network/Action errors use the serialized fallback.
+The browser imports only the public Action helper and Fields controller; it does
+not bundle every locale dictionary just to display one error message.
+
+`createForm` is idempotent, but `onSubmit` registration is additive. The WeakSet
+prevents registering the same handler twice on a persisted element. Its cleanup
+entry allows the controller to be initialized again after it is destroyed.
+Controllers are destroyed on before-swap automatically; setup handles page-load.
+Do not register a controller separately before this setup if it needs different
+options: initial options belong to the first call.
 
 Submission and status UI belong to the section. Handle transport failures in the
 handler; rejected promises do not automatically become field errors. Prevent
@@ -193,7 +364,11 @@ Formatting and raw-value synchronization belong to `@samline/forms` and
 local masks, cursor trackers, phone parser or regex dictionary.
 
 Use text/tel inputs for masks, not type=number (formatted separators are not valid
-native number input values). In the consuming section's processed script:
+native number input values). The configuration fragment below requires a real
+mounted `contact-form` containing named `phone` and `amount` controls. Add the
+amount label to the owning dictionary domain first; it is not a shipped field.
+Choose the format at the **first** `createForm` call in that section's browser
+script, not after another setup already created its controller:
 
 ```ts
 import { createForm } from '@/components/Fields/scripts'
@@ -232,3 +407,13 @@ formatter loads: initialize before the user can submit a masked form when raw
 values are mandatory. Native HTML validation still applies to the display input.
 Reset synchronizes the mirrors; destroy removes owned mirrors and restores names.
 Do not manually rename these inputs or create a second raw mirror.
+
+## Framework and package references
+
+The distribution owns this markup adapter and its cleanup/error connection.
+Submission APIs remain [Astro Actions](https://docs.astro.build/en/guides/actions/),
+and browser script processing remains
+[Astro scripts](https://docs.astro.build/en/guides/client-side-scripts/).
+Use the installed SAM Forms and Formatter package documentation for their full
+validator, state and formatting APIs; this README only documents the wrapper's
+choices and the Fields templates.

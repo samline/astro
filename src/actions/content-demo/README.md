@@ -1,8 +1,10 @@
 # Content API Action examples
 
-Replacements for the old collection demo GET/POST wrappers. These Actions access
-an upstream API; they are not Content Collection CRUD. They are intentionally not
-registered or called by the base and need no credentials until enabled.
+Maintainer examples of validated API reads and writes through Astro Actions.
+They access an upstream API rather than modifying a Content Collection. They
+remain unregistered in this repository and are not included by the installer's
+basic Actions selection. Use that selection's `actions.basic` example when
+starting a new form.
 
 ## Registration
 

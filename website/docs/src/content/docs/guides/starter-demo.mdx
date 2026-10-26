@@ -1,0 +1,81 @@
+---
+title: 'Starter demo'
+description: 'Find the demo header, navigation, homepage, second page and footer, then adapt their source for your site.'
+locale: en
+sidebar:
+  group: start
+  order: 3
+---
+
+import ToolCommands from '../../../../../shared/components/ToolCommands.astro'
+
+## Start with a working composition
+
+The interactive installer selects `welcome` by default. It supplies two static
+pages with a shared header, active navigation and footer. This is a source
+example of the distribution's conventions, ready to edit. `--minimal` leaves it
+out and creates a core homepage instead.
+
+To select the demo explicitly after npm publication:
+
+<ToolCommands args={['my-site --yes --deploy static --features welcome']} />
+
+The package is not published yet. Use the
+[local package instructions](../../getting-started/#local-package-testing) to
+run the same selection from the current tarball.
+
+## Follow the source
+
+| Open                                         | Change                                      |
+| -------------------------------------------- | ------------------------------------------- |
+| `src/pages/[...locale]/index.astro`          | Which sections compose the homepage         |
+| `src/pages/[...locale]/demo.astro`           | The second page and its metadata            |
+| `src/sections/DemoHeader/`                   | Header layout, links and current-page state |
+| `src/sections/Welcome/`                      | Homepage content                            |
+| `src/sections/DemoPage/`                     | The second page's content                   |
+| `src/sections/DemoFooter/`                   | Footer content                              |
+| `src/i18n/dictionaries/<locale>/welcome/`    | Demo text                                   |
+| `src/i18n/dictionaries/<locale>/navigation/` | Navigation labels                           |
+
+`Main.astro` owns the document and main landmark. Pages place DemoHeader and
+DemoFooter in its named slots, so the layout does not depend on the demo. Each
+content section composes the reusable components. The generated
+`src/sections/Welcome/README.md` explains that composition beside the source.
+
+## Check the two pages
+
+Run the generated development command and open `/`, then `/demo`. The header
+marks the current navigation link with `aria-current="page"`. With another active
+language, visit that locale's paths as well. The default language has no prefix;
+other active languages do. The language picker keeps the current demo page when
+switching languages.
+
+Theme Switch and LanguagePicker appear in the initial header only when their
+integrations are selected. They are independent choices; the demo does not
+install them for you. Adding one later makes its component available, and you
+decide where to mount it. See [integration choices](../integrations/).
+
+## Adapt it to your site
+
+Replace the demo dictionary copy, then edit its owning sections. Add page-specific
+content under `src/sections`, and keep shared primitives under `src/components`.
+When a new route needs the same header and footer, follow the existing page
+composition. [Project conventions](../conventions/) explains the responsibilities;
+the [Section reference](../../reference/components/section/) explains its local
+props and links to related components.
+
+If you started without the demo, `add welcome` supplies its sections and `/demo`
+route while leaving your homepage intact. Read the generated README before
+deliberately changing your homepage to use it. The installer reports conflicting
+files instead of replacing them.
+An older or customized Main must have one static named `header` slot and one
+static named `footer` slot around its main content. If either is missing, adding
+the demo stops without changing any files. Review the intended placement and add
+the slots explicitly before retrying.
+
+The demo uses native Astro routing and localization. Its page paths match across
+languages; it does not invent translated API/CMS slugs. Refer to Astro's
+[routing](https://docs.astro.build/en/guides/routing/) and
+[internationalization](https://docs.astro.build/en/guides/internationalization/)
+guides for framework behavior. Our [language guide](../languages/) explains the
+distribution's dictionary setup and translated-content limits.

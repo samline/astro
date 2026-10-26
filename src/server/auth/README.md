@@ -239,20 +239,16 @@ props. Pass the parent locale explicitly across the island boundary when needed.
 ---
 // Inside the deferred island; props are supplied by its parent section.
 import { requestAuth } from '@/server/auth'
-import { getDictionary } from '@/i18n'
 import type { Locale } from '@/i18n/config'
 interface Props {
   locale: Locale
 }
 const { locale } = Astro.props
 const state = await requestAuth(Astro.request, locale).requireSession()
-const dictionary = getDictionary(locale)
 Astro.response.headers.set('Cache-Control', 'private, no-store')
 ---
 
-<p>
-  {dictionary.forms.labels.name}: {state.user.name}
-</p>
+<p>{state.user.name}</p>
 ```
 
 This example requires a session; for a guest/error fallback, catch the expected
