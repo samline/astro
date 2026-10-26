@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import sections from '../landing/src/i18n/translations/en/sections'
 
-test('Home onboarding links to factual local package testing before npm publication', async ({
+test('Home onboarding links to requirements and public installation commands', async ({
   page
 }) => {
   await page.goto('./')
@@ -9,8 +9,10 @@ test('Home onboarding links to factual local package testing before npm publicat
     .locator('#how')
     .getByRole('link', { name: sections.gettingStarted.integrationLabel })
     .click()
-  await expect(page.locator('#local-package-testing')).toBeVisible()
-  await expect(page.locator('main')).toContainText('npm exec --yes --package')
+  await expect(page.locator('#requirements')).toBeVisible()
+  await expect(
+    page.locator('[data-group=docs-create-tools]').getByRole('tabpanel')
+  ).toContainText('npx @samline/astro my-site')
 })
 
 test('personal packages use curated destinations and make Forms availability explicit', async ({

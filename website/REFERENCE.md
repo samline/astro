@@ -71,8 +71,7 @@ languages, tooling and Astro ownership. No icon dependency was introduced.
 The new shared RecipePanel explains run location, prerequisites, one executable
 command, expected result and next steps; file trees are read-only disclosures.
 Home/Docs use tabs for alternatives; Examples shows each distinct task directly.
-The three gallery links now map to those actual tasks. The Hero visibly states
-that npm publication is pending. Existing typography, Box widths, neutral palette
+The three gallery links now map to those actual tasks. The Hero introduces the installer and its selectable tools. Existing typography, Box widths, neutral palette
 and component behavior remain owned by the inherited theme.
 
 ## 2026-10-26 editorial review

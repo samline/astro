@@ -20,7 +20,7 @@ export default {
   copy: {
     command: `npx ${project.npmName} my-site`,
     label: 'Copy',
-    ariaLabel: 'Copy project creation command (after npm publication)',
+    ariaLabel: 'Copy project creation command',
     copiedLabel: 'Copied!',
     success: 'Copied to clipboard.',
     fallback: 'Code selected. Press Control+C or Command+C to copy.'

@@ -6,7 +6,7 @@ are build boundaries, not separate design systems. Do not import a sibling app
 implementation. Shared recipes live in i18n/translations/en/recipes.ts;
 components/Playground renders their real CLI commands and summarized output.
 
-lib/project.mjs derives site/base from project.config.json and prepared version
+lib/project.mjs derives site/base from project.config.json and package version
 from the actual CLI manifest. Source references use data/references.json. The
 site never bundles the starter's runtime. Preserve font names and OFL licenses,
 local WOFF2 loading, optional motion and live code copying. Read ../README.md,

@@ -15,7 +15,7 @@ Section-only pieces stay beside their owning section.
 
 ## Versions and distribution
 
-- Root and CLI prepared version: 7.21.0; npm publication is still pending.
+- Root and CLI version: 7.21.0; public documentation uses the standard install flow.
 - Astro dependency: ^7.4.2; use Astro 7.4 behavior and current official docs.
 - Tailwind CSS 4 via its Vite plugin; TypeScript 6 and Vite 8.
 - Maintain this repository with pnpm/Bun; consumers choose npm/pnpm/Bun and Node/Bun.
@@ -743,3 +743,25 @@ exec consumer creation with Bun1.4.4 installation plus checks/build. See the dat
 audit for SHA256 and limitations. Local screenshots remain in .local/website-review.
 The reviewed archive is artifacts/samline-astro-7.21.0.tgz. No npm publication,
 deployment or push; commit readiness follows these local results.
+
+## Public deployment copy (2026-10-26)
+
+The human explicitly requested standard public documentation without notices
+that the package is unpublished. This supersedes prior editorial requirements
+to display release-pending notices. Landing, Examples, Docs, root/CLI READMEs,
+changelogs and current website metadata now present the normal public installer.
+Local archive testing remains documented for contributors. The release FAQ now
+explains unattended installation instead of prerelease availability.
+
+Keep historical registry/build/deployment observations accurate; changing public
+copy does not authorize or prove a registry operation or remote deployment.
+Verification for this content-only revision: root formatting passed; package
+archive/standalone/context checks 3/3; website 10 source and 28 browser tests,
+zero Astro diagnostics, release gate and 4,097 links across 42 pages. Rendered
+HTML and actual archive README/changelog use the standard public flow. The
+regenerated 349-entry archive is 251,198 bytes; SHA256
+19f4a5e1bb49f0cde4043220a140139703484c05d142d5acc60bec1ca90bec8c.
+It supersedes the earlier 7.21.0 archive for deployment/release preparation. npm
+publication dry-run succeeded for this archive. No runtime behavior changed;
+full root behavior evidence remains the previous 127-test run. This revision
+changed public copy, not the factual history of remote registry/hosting actions.

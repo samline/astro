@@ -1,11 +1,10 @@
 # Release @samline/astro
 
-The prepared version is **7.21.0**, targeting Astro 7. Source preparation, npm
-publication and GitHub Pages deployment are separate operations. No npm release
-or deployment is implied by this checklist. Keep the package major aligned with
-Astro's major; the package minor and patch versions evolve independently.
+The current version is **7.21.0**, targeting Astro 7. Use this workflow for npm
+releases and GitHub Pages deployments. Keep the package major aligned with
+Astro’s major; the package minor and patch versions evolve independently.
 
-## Validate the prepared source
+## Validate the release
 
 This maintainer repository installs dependencies with pnpm and runs scripts with
 Bun. Generated projects choose their own tools.
@@ -45,14 +44,14 @@ requirements. Never commit credentials. See npm's
 Only after explicit publication authorization, publish the reviewed archive with
 `npm publish ./artifacts/samline-astro-7.21.0.tgz --access public`. Confirm the
 registry version and integrity afterward. A published version cannot be reused.
-Then update the pending-publication notices in the README, CLI README, website
-catalogs, getting-started/overview/examples guides and changelogs to match reality.
-Do not remove those notices merely because a local dry run passed.
+Keep public documentation written as the standard installation and usage flow.
+Do not add publication-pending banners or make local tarball testing a prerequisite
+for consumers. Record actual registry operations in maintainer memory.
 
 ## Deploy the website separately
 
-The adapted website is indexable (`site.template=false`), while the copy still
-states that npm publication is pending. Its combined static artifact is
+The adapted website is indexable (`site.template=false`). Its combined static
+artifact is
 `website/landing/dist` with base `/astro/`. The manual **Verify and deploy package
 website** workflow verifies the source and uploads that artifact to GitHub Pages.
 Run it only within the authorized deployment scope after the intended commit is

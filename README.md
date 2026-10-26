@@ -10,10 +10,6 @@ custom Node server are also available. Astro provides the framework and renderin
 APIs. This package provides project configuration, reusable components and
 integration examples built around it.
 
-**Release status:** the package is being prepared and has not been published to
-npm. The `npx` commands below describe the release interface. Use the
-[local package workflow](#try-the-package-locally) to test it today.
-
 [Installation](website/docs/src/content/docs/getting-started.mdx) ·
 [CLI reference](packages/cli/README.md) ·
 [Components](src/components/README.md) ·
@@ -21,8 +17,7 @@ npm. The `npx` commands below describe the release interface. Use the
 
 ## Create a project
 
-Once the package is published, run this from the folder that will contain your
-new project:
+Run this from the folder that will contain your new project:
 
 ```sh
 npx @samline/astro@latest my-site

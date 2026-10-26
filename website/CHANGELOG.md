@@ -1,6 +1,6 @@
 # Changelog
 
-## 7.21.0 — prepared, unpublished
+## 7.21.0
 
 - Add the optional two-page starter demo with header, active navigation and footer.
 - Let consumers choose npm, pnpm or Bun and their Node/Bun script runtime.
@@ -11,10 +11,8 @@
 - Prepare the landing, Examples and Docs with expanded FAQs, consistent credits
   and refined personal-package illustrations.
 
-## 7.20.0 — prepared, unpublished
+## 7.20.0
 
 - Add the modular project wizard and later `add`, `locale add` and `status` commands.
 - Select source-specific Content Collection examples and optional integrations.
 - Scaffold new languages from current dictionary keys with empty translations.
-
-These entries describe prepared source. They do not claim an npm publication.

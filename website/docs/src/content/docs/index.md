@@ -43,8 +43,8 @@ it; your generated site contains the parts you requested.
 - [Update a project](./guides/updating/): Astro, dependencies and generated source.
 - [Read the command reference](./reference/api/): flags and supported operations.
 
-## Package availability
+## Start building
 
-The package is being prepared for npm publication. The `npx @samline/astro`
-commands show the intended public workflow. To try the current code, follow
-[local package testing](./getting-started/#local-package-testing).
+Follow [Create a project](./getting-started/) to choose your tools, deployment
+target, languages and integrations. Then replace the generated sections with
+your site’s content and use the component references as you build.

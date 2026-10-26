@@ -3,7 +3,7 @@ export default {
   label: 'Choose a setup task',
   previewTagline: 'Setup example',
   description:
-    'These commands show how the installer creates or extends a project. The npm release is not published yet; the installation guide explains how to test the local package.',
+    'Use these commands to create a project or add integrations. Choose your package manager, then follow the setup guide for the generated files.',
   runFrom: 'Where to run it',
   requires: 'Before you start',
   source: 'Terminal command',

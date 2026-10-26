@@ -83,7 +83,7 @@
       "sourcePath": "landing/src/sections/Hero.astro",
       "styleSha256": "0fcabda5362fc88f87b073e709d4c69c00c6cad593fafff75578f19cc43ad547",
       "upstreamStyleSha256": "788a1ae0ee333632b36e3e3febee1faa3efb82df56c5655e0c95dc25af773b1f",
-      "adaptation": "An explicit visible npm-preparation note prevents mistaking the upcoming public npx command for an available release."
+      "adaptation": "The installation hint introduces the npm, pnpm and Bun choices without prerelease notices."
     },
     {
       "path": "landing/src/sections/Features.astro",

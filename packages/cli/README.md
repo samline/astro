@@ -1,13 +1,13 @@
 # @samline/astro installer
 
 Creates Astro 7 projects from the maintained base and adds optional integrations
-later. This repository prepares a local package; it has not been published to npm.
+later.
 The CLI runs on Node and uses the TypeScript parser for static dictionary analysis
 and targeted configuration edits. It does not require Bun or pnpm to start.
 
 ## Create a project
 
-After publication:
+Run from the folder that will contain your new project:
 
 ```sh
 npx @samline/astro my-site

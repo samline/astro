@@ -55,7 +55,7 @@ export default {
       {
         href: '#faq',
         label: 'FAQ',
-        description: 'Understand server requirements and release status.'
+        description: 'Understand setup choices and server requirements.'
       },
       {
         page: 'examples',
@@ -83,7 +83,7 @@ export default {
     guide: 'Read the setup guide',
     navigation: 'Setup examples',
     accessibility:
-      'Commands shown here become available after npm publication. Local package testing is documented in the installation guide.',
+      'Choose npm, pnpm or Bun to run each command. Read the installation guide for requirements and setup options.',
     components: 'See how to use the components'
   }
 } as const

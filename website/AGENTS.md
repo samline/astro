@@ -17,8 +17,8 @@ of duplicating prose. Guide articles and catalogs are English. All UI copy stays
 in catalogs; article prose/frontmatter stays in the content collection.
 
 Public npm commands are upcoming until publication is explicitly authorized.
-Do not publish/deploy/push as part of a content update. The adapted distribution site is indexable; retain pending-publication copy
-until the npm release is confirmed. Unadapted templates use site.template=true. No automatic remove, upgrade or arbitrary-project
+Do not publish/deploy/push as part of a content update. The adapted distribution site is indexable. The human requested normal public
+installation copy without pending-publication notices; do not reintroduce them. Unadapted templates use site.template=true. No automatic remove, upgrade or arbitrary-project
 adoption is supported by the installer. Do not invent those commands.
 
 ## Approved design and curated packages

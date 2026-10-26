@@ -12,8 +12,7 @@ const code = (source: string) => ({
 export default {
   hero: {
     kicker: 'An independent distribution for Astro 7',
-    availability:
-      'Not published on npm yet. The installation guide includes local testing.',
+    availability: 'Create your project with npm, pnpm or Bun.',
     title: 'Start with Astro.',
     titleAccent: 'Add what you need.',
     description: 'A configured project, ready for your own source.',
@@ -114,7 +113,7 @@ export default {
     eyebrow: '03 / Create, run, extend',
     heading: heading('Create your project.', 'Then build with Astro.'),
     integrationDescription:
-      'The command below starts the interactive installer after npm publication. Until then, follow the installation guide to build and run the local tarball.',
+      'Choose your package manager and run the command from the folder that will contain your project. The wizard guides you through deployment, languages and integrations.',
     integrationLabel: 'Read installation instructions',
     steps: { install: 'Choose', markup: 'Run', initialize: 'Extend' },
     fullExampleLabel: 'Read the installer reference',
@@ -260,13 +259,13 @@ export default {
         guide: 'reference/api/#license',
         guideLabel: 'Read the distribution license notes'
       },
-      release: {
-        question: text('How can I try the installer before the npm release?'),
+      automation: {
+        question: text('Can I create a project without interactive questions?'),
         answer: text(
-          'The first npm release is being prepared. Build the local tarball from this repository and execute it with npm exec to try the same create and add commands. Public npx commands shown on this site become available after publication. Preparing or packaging the release does not publish it or deploy your site.'
+          'Yes. Use --minimal for the core, or --yes with explicit deployment, language and feature flags. Set --package-manager and --runtime to choose tools explicitly. Use --no-install when dependency installation belongs to a separate step, and --dry-run to inspect planned changes. The command reference lists the available flags.'
         ),
-        guide: 'getting-started/#local-package-testing',
-        guideLabel: 'Try the local package'
+        guide: 'reference/api/',
+        guideLabel: 'Read the command options'
       }
     }
   },

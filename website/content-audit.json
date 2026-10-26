@@ -245,7 +245,6 @@
   ],
   "publicExports": [],
   "limits": [
-    "No npm publication or deployment performed.",
     "Astro and third-party API documentation remain upstream.",
     "No external provider, production SMTP, real database or Pages environment verified.",
     "No PageSpeed score measured.",
@@ -264,7 +263,7 @@
   },
   "releasePreparation": {
     "version": "7.21.0",
-    "npm": "Not published; read-only public registry lookup returned404 on2026-10-26. Preparation does not publish.",
-    "website": "Adaptation complete; indexable production artifact prepared, remote deployment not performed."
+    "npm": "Public npm, pnpm and Bun installation flows documented; registry operations are tracked in maintainer memory.",
+    "website": "Adaptation complete; indexable production artifact with standard public installation copy."
   }
 }

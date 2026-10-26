@@ -149,3 +149,13 @@ This is project context, not a speculative improvement backlog.
   the purpose, use, installed source and framework boundary clear immediately.
 - Own source is MIT; retain upstream notices. The former upstream Bun skill was
   CC BY-NC and was removed rather than relabeled as unrestricted project source.
+
+## Public release copy
+
+- The human wants the landing, Examples, Docs, READMEs and changelogs to use the
+  normal public installation flow without unpublished, coming-release or
+  pending-publication notices. Do not reintroduce those banners.
+- Local archive testing is a contributor workflow, not a consumer prerequisite.
+- Editorial readiness does not establish an actual registry or hosting operation.
+  Preserve dated operational evidence privately in maintainer memory; do not
+  invent publication/deployment dates, successes or verification.

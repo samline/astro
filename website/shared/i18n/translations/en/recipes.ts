@@ -7,7 +7,7 @@ export const recipes = [
       'Start with the core configuration and a simple homepage. Optional integrations are omitted until you choose to add them.',
     runFrom: 'The parent folder where you keep your projects.',
     requires:
-      'Node 22.23.4 or newer, with your chosen package manager available. Use a new or empty folder named my-site. See the local-package instructions while npm publication is pending.',
+      'Node 22.23.4 or newer, with your chosen package manager available. Use a new or empty folder named my-site.',
     command:
       'npx @samline/astro my-site --minimal --deploy static --locale en-us',
     result:

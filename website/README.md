@@ -21,8 +21,9 @@ publish npm. Pages must use GitHub Actions before manually deploying.
 Document this distribution: CLI, recipes, emitted source, conventions and local
 component APIs. Link to official Astro docs for framework semantics; do not
 claim Astro capabilities as our inventions. Third parties retain their own APIs.
-Package commands remain explicitly marked unpublished. Never imply npm release,
-a hosted integration, an official affiliation or live provider verification.
+Use the public npm installer as the primary onboarding flow. Keep local archive
+testing as a contributor workflow. Do not imply official affiliation or claim
+that external providers have been validated by source installation.
 English is the website's only published language; generated sites support their
 selected locales independently.
 
@@ -30,7 +31,7 @@ Source-backed reference pages read the current component/server READMEs and the
 CLI README from the parent repository at build time. Update those authoritative
 sources instead of copying their prose into a second reference tree. Guide
 articles explain setup and link to Astro. `shared/data/references.json` owns the
-published reference inventory. The prepared version is read from the CLI manifest.
+published reference inventory. The package version is read from the CLI manifest.
 
 `landing/src/i18n/translations/en/packages.ts` owns the curated personal-package
 section. Add only human-requested packages with real descriptions and URLs.
@@ -51,8 +52,8 @@ types, formatting, source tests, a combined build/link audit and browser checks.
 Use each route in both themes, narrow/enlarged/no-JS views, keyboard, reduced
 motion, copying, search and menu lifecycle. No upstream score is this site's score.
 The adapted site uses `site.template:false` after the content/release review.
-Public copy still states that npm publication is pending. Use template mode
-(noindex) only for an unadapted copy. No publication, push or deployment is implied by a
+Public copy uses the standard installation flow without prerelease notices. Use
+template mode (noindex) only for an unadapted copy. No publication, push or deployment is implied by a
 successful local build. See content-audit.json for sources and actual review limits.
 
 Cleanup: the neutral counter, downloadable template-adaptation skill, generic
