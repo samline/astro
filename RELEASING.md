@@ -46,17 +46,18 @@ Only after explicit publication authorization, publish the reviewed archive with
 registry version and integrity afterward. A published version cannot be reused.
 Keep public documentation written as the standard installation and usage flow.
 Do not add publication-pending banners or make local tarball testing a prerequisite
-for consumers. Record actual registry operations in maintainer memory.
+for consumers. Record release verification in the release description.
 
 ## Deploy the website separately
 
 The adapted website is indexable (`site.template=false`). Its combined static
 artifact is
-`website/landing/dist` with base `/astro/`. The manual **Verify and deploy package
-website** workflow verifies the source and uploads that artifact to GitHub Pages.
-Run it only within the authorized deployment scope after the intended commit is
-on GitHub. Confirm the deployed commit, routes, search, assets and canonical URLs;
+`website/landing/dist` with base `/astro/`. The **Verify and deploy package
+website** workflow verifies and deploys that artifact to GitHub Pages on every
+push to `main`. It also supports manual runs through `workflow_dispatch`.
+Configure GitHub Pages to use GitHub Actions. Confirm the deployed commit,
+routes, search, assets and canonical URLs;
 a queued workflow is not deployment evidence.
 
-Update `.agents/memory/project.md` with the actual release/deployment result and
-remaining limitations. Record only actions and checks that were performed.
+Report deployment verification and remaining limitations in the release or change
+description. Keep project memory focused on current technical contracts.

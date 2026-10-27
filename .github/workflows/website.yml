@@ -1,5 +1,7 @@
 name: Verify and deploy package website
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read

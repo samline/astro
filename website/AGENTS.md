@@ -46,8 +46,9 @@ checks. Root bun run verify protects the starter and CLI package boundary. Keep
 the actual tarball, including .env.example and selected portable agent context.
 Do not ignore source, docs, tests, source fonts/licenses or pnpm-lock.yaml.
 
-The combined static output is landing/dist. Pages configuration is manual and
-publication is separate from npm. Dev uses two compilers on 4330/4331 with
+The combined static output is landing/dist. The Pages workflow validates and
+deploys every push to main and supports manual runs. Pages uses GitHub Actions;
+website deployment is separate from npm publication. Dev uses two compilers on 4330/4331 with
 owning-origin redirects; verify Home → Examples → Docs → Home. Never replace
 this with an HTML-only proxy. Production uses one origin and base /astro/.
 

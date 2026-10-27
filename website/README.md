@@ -13,8 +13,9 @@ The root starter scripts and runtime are unchanged.
 
 Landing dev: http://127.0.0.1:4330/astro/ . Docs uses its own compiler on 4331.
 Production preview serves `landing/dist`, including `/astro/docs/` and Pagefind.
-The manual GitHub Pages workflow uploads that combined artifact; it does not
-publish npm. Pages must use GitHub Actions before manually deploying.
+The GitHub Pages workflow validates and deploys that combined artifact on every
+push to main, and also supports manual runs. It does not publish npm. Configure
+Pages to use GitHub Actions.
 
 ## Editorial contract
 
