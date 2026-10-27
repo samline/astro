@@ -5,6 +5,69 @@ read-only source review on 2026-10-25. It captures intent, not legacy code to co
 Read this with AGENTS.md and engineering-contract.md. The latest human request
 wins over this document, reference repositories and installed skills.
 
+## Vocabulary for design analysis
+
+Use these definitions when evaluating a design and inventorying its blocks and
+components. They describe responsibilities, not just file extensions: an Astro
+component file can implement a layout, a section or a smaller UI component.
+
+- **Page:** composes one route's view through a layout and ordered sections. It
+  owns route/data logic and metadata; its entry stays focused on composition.
+- **Layout:** the shared document structure, including the head, common
+  navigation/footer and the place where page content is rendered. It owns the
+  unique main landmark and provides slots for appropriate shared chrome.
+- **Section or block:** a complete content or application unit with a recognizable
+  purpose, such as Hero, Services, Testimonials or Contact. It composes content
+  and smaller components to serve that purpose. A different background, color,
+  spacing or viewport boundary alone does not establish a new section. A section
+  may be reused across pages without becoming a lower-level component.
+- **Reusable component:** a UI piece with a clear responsibility and a deliberate
+  API that supports use across sections or layouts. Examples include Button,
+  Card and Accordion. It can be static or interactive; JavaScript, visual size
+  and repeated appearance are not requirements for being a component. Reuse must
+  have a credible purpose rather than speculative props for unknown consumers.
+- **Section-private component:** a piece worth extracting for meaningful
+  structure, repetition, behavior or lifecycle whose responsibility depends on
+  its section. Keep it inside that section's folder. Repeated cards inside one
+  block do not automatically belong in the reusable component catalog.
+- **Internal element:** a heading, paragraph, icon or container that can remain
+  in the owning markup. Not every visible element needs a new component; use an
+  existing primitive where appropriate and justify any additional extraction.
+
+A design block does not automatically require an HTML `<section>` element.
+Choose semantics from the content and document hierarchy. The existing `Section`
+primitive supplies section semantics and vertical rhythm; `Box` supplies width
+and gutters. Neither replaces the domain block that composes its actual content.
+Shared header/footer chrome retains its layout-slot ownership.
+
+## Turn a design into an inventory
+
+Identify the page structure and complete blocks first, then inspect their child
+pieces. Name each block by its purpose, describe its responsibility and preserve
+the hierarchy. Review existing sections, components, slots and variants before
+proposing new files. Distinguish an existing piece to reuse/adapt from a new
+extraction, and justify why each extracted piece deserves its own owner.
+
+For each proposed piece, record its name, classification, responsibility,
+contained/reused pieces and proposed location. Include its parent when the
+relationship is not obvious. Classify shared UI by responsibility and API rather
+than appearance alone: two similar cards can have different owners, while the
+same component may support visual variants through the existing styling system.
+
+Illustrative inventory, not a declaration of installed features:
+
+| Piece       | Classification     | Responsibility             | Contains or reuses                 | Proposed location                         |
+| ----------- | ------------------ | -------------------------- | ---------------------------------- | ----------------------------------------- |
+| Services    | Section            | Present available services | ServiceCard, existing H and Button | `src/sections/Services/index.astro`       |
+| ServiceCard | Section-private    | Present one service        | Icon, heading and description      | `src/sections/Services/ServiceCard.astro` |
+| Button      | Reusable component | Act or navigate            | Label and optional icon            | Existing `src/components/Button/`         |
+
+Mark behavior, states, responsive changes or reuse that cannot be confirmed from
+the supplied design as assumptions or unresolved details. A screenshot alone does
+not establish a carousel, accordion, backend or interaction contract. An inventory
+request produces an analysis; it does not itself authorize implementing every
+proposed piece.
+
 ## Decide ownership before writing code
 
 | Responsibility                                                          | Owner                                          | Keep out                                             |

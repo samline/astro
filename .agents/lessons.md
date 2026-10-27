@@ -13,6 +13,12 @@ This is project context, not a speculative improvement backlog.
 - Group related pieces such as Theme Init/Switch and GTM Head/Consent together.
 - Section owns semantics and vertical spacing; Box owns content width. Do not conflate them.
 - Keep Box's narrow size for focused content and forms.
+- For design inventories, use the definitions and inventory format in
+  memory/frontend-conventions.md: identify complete purpose-driven blocks first,
+  then reusable components, section-private pieces and internal elements. Record
+  responsibility, composition and location; reuse existing owners and mark
+  assumptions. A visual block is not automatically an HTML section, and every
+  visible element does not need its own component. Confirmed on 2026-10-26.
 
 ## Code and localization
 
