@@ -15,30 +15,51 @@ integration examples built around it.
 [Components](src/components/README.md) ·
 [Astro documentation](https://docs.astro.build/)
 
+## Table of contents
+
+- [Create a project](#create-a-project)
+- [Quick start](#quick-start)
+- [What the base provides](#what-the-base-provides)
+- [Add integrations later](#add-integrations-later)
+- [Work with the generated source](#work-with-the-generated-source)
+- [Documentation](#documentation)
+- [AI agent skills](#ai-agent-skills)
+- [Keep a project updated](#keep-a-project-updated)
+- [Repository development](#repository-development)
+- [License](#license)
+
 ## Create a project
 
-Run this from the folder that will contain your new project:
+Requires Node.js 22.23.4 or newer to run the installer. Run one of these commands
+from the folder that will contain your new project:
+
+With npm:
 
 ```sh
 npx @samline/astro@latest my-site
+```
+
+With pnpm:
+
+```sh
+pnpm dlx @samline/astro@latest my-site
+```
+
+With Bun:
+
+```sh
+bunx @samline/astro@latest my-site
 ```
 
 The wizard asks for a project folder, deployment target, languages and optional
 integrations. Language presets are `en-us`, `es-mx` and `es-es`; you can enter
 another language. Only selected integrations and their dependencies are included.
 
-After creation, enter the generated folder and use the commands printed by the
-installer. For a project configured with Bun scripts:
-
-```sh
-cd my-site
-bun run dev
-bun run verify
-```
-
 Choose **npm, pnpm or Bun for dependencies** and **Node.js or Bun for scripts**.
 The wizard lists available tools. Use `--package-manager` and `--runtime` to make
-those choices in unattended commands. It never installs global tools. Node.js 22.23.4 or newer is required to run the installer.
+those choices in unattended commands. Selected tools must already be installed;
+the installer never installs global tools. Bun dependency management with the
+Vercel profile requires Bun 1.4.0 or newer.
 
 For a minimal, noninteractive static project:
 
@@ -49,6 +70,28 @@ npx @samline/astro@latest my-site --minimal --deploy static --locale en-us
 Pure static hosting has no server runtime. Server Islands, active Actions and
 server authentication require a compatible adapter. All deployment profiles
 retain `output: 'static'`; individual server consumers opt into request-time work.
+
+## Quick start
+
+After creation, enter the generated project:
+
+```sh
+cd my-site
+```
+
+Use the commands printed by the installer for your selected tools:
+
+| Task                         | npm              | pnpm          | Bun              |
+| ---------------------------- | ---------------- | ------------- | ---------------- |
+| Start the development server | `npm run dev`    | `pnpm dev`    | `bun run dev`    |
+| Check and build the project  | `npm run verify` | `pnpm verify` | `bun run verify` |
+| Build for deployment         | `npm run build`  | `pnpm build`  | `bun run build`  |
+
+The `dev` command starts a background Astro server and prints its local URL.
+Open that URL to see your generated homepage. The interactive wizard selects the
+Welcome demo by default; a minimal project starts with the core homepage.
+Edit the page composition in `src/pages`, its content blocks in `src/sections`
+and visitor-facing copy in `src/i18n/dictionaries`.
 
 ## What the base provides
 
@@ -66,6 +109,7 @@ Portable `.agents` guidance and relevant skills are included for future work.
 | GTM                  | Deferred Google Tag Manager loading and cookie preferences.                                                                |
 | Language picker      | A reusable control for the project's active languages.                                                                     |
 | Forms                | `@samline/forms` and `@samline/formatter`; Fields templates are a separate choice.                                         |
+| Fields               | Native Astro form controls with labels, help, errors and optional Forms enhancements.                                      |
 | Actions              | A basic validated Astro Action example.                                                                                    |
 | Content Collections  | A selected local/API/Strapi/Shopify/custom source and a read example, with build or live loading where supported.          |
 | SMTP mail            | A private mail service and contact Action example.                                                                         |
@@ -109,8 +153,8 @@ conflicts and recovery.
 
 ## Work with the generated source
 
-Pages compose a layout, layouts contain domain sections, and sections use
-reusable components:
+Pages select a layout and compose domain sections; sections use reusable
+components and keep their private children beside them:
 
 ```text
 src/
@@ -131,7 +175,18 @@ dictionaries; developer documentation is in English.
 For framework behavior, use [Astro's official docs](https://docs.astro.build/).
 Our documentation covers what this distribution configures and exposes.
 
-## Agent skills
+## Documentation
+
+| Resource                                                                    | Use it for                                         |
+| --------------------------------------------------------------------------- | -------------------------------------------------- |
+| [Getting started](website/docs/src/content/docs/getting-started.mdx)        | Installation, project choices and first steps.     |
+| [CLI reference](packages/cli/README.md)                                     | Commands, flags, compatibility and recovery.       |
+| [Components](src/components/README.md)                                      | Installed component APIs and examples.             |
+| [Frontend conventions](website/docs/src/content/docs/guides/conventions.md) | Page, section and component ownership.             |
+| [Update guide](website/docs/src/content/docs/guides/updating.mdx)           | Dependency upgrades and copied-source maintenance. |
+| [Astro documentation](https://docs.astro.build/)                            | Framework APIs, rendering and routing.             |
+
+## AI agent skills
 
 Generated projects include the original
 [samline-astro skill](.agents/skills/samline-astro/SKILL.md), portable frontend
@@ -155,9 +210,12 @@ Astro, integrations and other dependencies. A new generator version does not
 replace source already copied into a project. There is currently no automatic
 base-source update command; `add` installs missing integrations.
 
-## Try the package locally
+## Repository development
 
-From a checkout of this repository:
+### Validate and test the installer
+
+To work on this distribution itself, use pnpm for dependencies and Bun for
+repository scripts. From a checkout:
 
 ```sh
 pnpm install
@@ -181,7 +239,7 @@ supporting Astro 7; minor versions evolve independently of Astro's minor number.
 `bun run kit:version 7.x.y` advances both manifests for a future release.
 Packaging, publishing and deployment are separate operations.
 
-## Landing and documentation development
+### Landing and documentation
 
 The private [website workspace](website/README.md) contains the landing, Examples
 and documentation site:

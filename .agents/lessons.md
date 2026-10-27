@@ -155,6 +155,11 @@ This is project context, not a speculative improvement backlog.
 
 ## Editorial identity and licensing
 
+- Keep the root README consistent with Ticker/Drawer's reader journey: clear
+  purpose, table of contents, creation and quick start, capabilities, references,
+  agent skills and license. Show npm/pnpm/Bun consumer commands and group this
+  repository's pnpm/Bun development workflow separately. Preserve the starter's
+  own installation and source-ownership model rather than copying runtime APIs.
 - The display name is Astro; identify our package/installer as @samline/astro.
   Do not invent the brand SAM Astro or imply framework ownership/endorsement.
 - Review titles, section names, descriptions and examples as a complete reader
