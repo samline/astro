@@ -5,6 +5,11 @@ later.
 The CLI runs on Node and uses the TypeScript parser for static dictionary analysis
 and targeted configuration edits. It does not require Bun or pnpm to start.
 
+[Website](https://samline.github.io/astro/) ·
+[Examples](https://samline.github.io/astro/examples/) ·
+[Documentation](https://samline.github.io/astro/docs/) ·
+[Changelog](CHANGELOG.md)
+
 ## Create a project
 
 Run from the folder that will contain your new project:

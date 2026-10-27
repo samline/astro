@@ -10,10 +10,10 @@ custom Node server are also available. Astro provides the framework and renderin
 APIs. This package provides project configuration, reusable components and
 integration examples built around it.
 
-[Installation](website/docs/src/content/docs/getting-started.mdx) ·
-[CLI reference](packages/cli/README.md) ·
-[Components](src/components/README.md) ·
-[Astro documentation](https://docs.astro.build/)
+[Website](https://samline.github.io/astro/) ·
+[Examples](https://samline.github.io/astro/examples/) ·
+[Documentation](https://samline.github.io/astro/docs/) ·
+[Changelog](CHANGELOG.md)
 
 ## Table of contents
 
