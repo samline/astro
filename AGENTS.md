@@ -1,11 +1,13 @@
 # @samline/astro agent entry point
 
 Before working, read .agents/README.md, then .agents/AGENTS.md and
-.agents/memory/project.md. Read lessons.md, todos.md, and the relevant
-architecture decisions and skills listed by that index.
+.agents/memory/project.md. Read the technical pitfalls, current work, architecture decisions and relevant
+skills listed by that index.
 
-Keep persistent project context in .agents and update it as decisions are made.
-Do not treat chat history or external memory as the only copy.
+Keep .agents limited to current project contracts and useful technical context.
+Update existing documents; remove stale tasks and superseded rules. Do not store
+conversations, personal attribution, session histories or test-run logs. Preserve
+required license notices and third-party attribution.
 
 <!-- codebase-memory-mcp:start -->
 

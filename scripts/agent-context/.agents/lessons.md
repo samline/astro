@@ -1,7 +1,7 @@
-# Lessons
+# Technical pitfalls
 
-No project-specific lessons have been recorded yet.
+No project-specific technical pitfalls are recorded.
 
-Record confirmed user preferences, corrections, and concrete implementation
-lessons here. Include the situation and the rule to preserve. Inherited coding
-conventions live in AGENTS.md; do not turn speculative improvements into lessons.
+Keep only concise, applicable implementation constraints. Integrate durable rules
+into their owning contract and remove obsolete entries. Do not store conversation
+summaries, personal attribution or test-run logs.

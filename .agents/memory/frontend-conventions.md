@@ -1,9 +1,7 @@
-# Frontend conventions: how samline builds
+# Frontend conventions
 
-This is a working contract distilled from the user's explicit instructions and
-read-only source review on 2026-10-25. It captures intent, not legacy code to copy.
-Read this with AGENTS.md and engineering-contract.md. The latest human request
-wins over this document, reference repositories and installed skills.
+Read alongside AGENTS.md and engineering-contract.md for UI ownership,
+styling, lifecycle and developer examples.
 
 ## Vocabulary for design analysis
 
@@ -142,8 +140,7 @@ Responsive changes follow the content: grids/flex may change shape, headings and
 controls wrap, code scrolls in its own region. Test 320–1440, both themes and 200%
 text. Never hide document overflow or shrink the typography to mask a problem.
 Keep keyboard focus visible, native semantics, reduced-motion paths and readable
-no-JavaScript content. The human explicitly removed SkipLink; do not reintroduce
-it silently through a template or generic accessibility checklist.
+no-JavaScript content. The current base does not include a SkipLink component.
 
 Keep owned `<style>` and processed `<script>` blocks in the `.astro` component
 that needs them, alongside its markup. Extract substantial or genuinely shared
@@ -180,8 +177,7 @@ for back/forward restoration; dispose on real departure. Abort owned listeners
 and pending work where possible, clear timers and observers, and prevent late
 async completions from updating a disposed or replacement instance. Verify
 independent instances, repeated mount/cleanup and supported remount paths when
-changing interactive behavior. These are lifecycle requirements, not a mandate
-to introduce Ticker/Drawer's shared mount helper into this starter.
+changing interactive behavior. Use the existing lifecycle owner instead of introducing a parallel mount helper.
 
 Forms compose native controls, one label/help/error owner and the SAM Forms and
 Formatter packages. Separate input behavior, validation and delivery transport.
@@ -211,33 +207,3 @@ Astro owns its framework; providers and dependencies own their APIs. Link to
 those official docs rather than creating a parallel manual. English developer
 README files live beside reusable components and ship with them. Keep source,
 types, dictionaries, examples, documentation and meaningful checks in sync.
-
-## Reference evidence and limits
-
-Read-only review used these sampled sources; it was not a full audit of those
-applications. The paths are maintainer evidence, not portable dependencies.
-
-| Reference                            | Evidence used                                                                                                                                                                                                           | Intent retained                                                                                               |
-| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| EasyTrip, laravel-12-rebase 27829330 | resources/views/pages/products/index.blade.php; resources/views/components/sections/products/{index,product}.blade.php; resources/views/components/form/{field,input}.blade.php; .agents/memory/frontend-conventions.md | Thin composition, private children, purposeful extraction, native field ownership, package formatter contract |
-| All Influencers, main 00aafe4        | src/sections/HowItWorks/index.astro; src/components/Section.astro; src/styles/tailwind.css                                                                                                                              | Typed content-driven sections, semantic/width ownership and centralized tokens                                |
-| Dinkbit, main 21f2db4                | src/layouts/Main.astro; src/sections/ListBlocks/ListBlocks.astro; src/sections/FeatureSplitList/FeatureSplitList.astro; src/styles/tailwind.css                                                                         | Typed CMS boundaries, explicit composition, responsive class groups and config ownership                      |
-| Astro 5, main 91102bd                | src/pages/_main/index.astro; src/components/{Section,Box}.astro                                                                                                                                                         | Original hierarchy and primitive intent, not old framework APIs                                               |
-| PetSpa, main 292150e                 | src/pages/_main/index.astro; src/sections/Services/{index,Service}.astro; src/sections/Dashboard/Profile/Form/index.astro                                                                                               | Section-private children, dictionary copy, explicit form transport and shared primitives                      |
-| Ticker, main e992547                 | landing/src/pages/index.astro; landing/src/sections/LiveDemo.astro; shared/{AGENTS.md,lib/mount-elements.ts}                                                                                                            | Shared real presentation, public APIs, scoped lifecycle and executable examples                               |
-| Drawer, main 97f30dc                 | landing/src/pages/index.astro; AGENTS.md                                                                                                                                                                                | Ownership, clear consumer examples, maintenance and actual validation                                         |
-
-### Historical practices that do not become conventions
-
-Some references contain loose page CSS, children:any, x2/liquid flags, local form
-engines, full browser dictionaries, Alpine initialization inside repeated cards,
-extra project colors, reverse breakpoint aliases, manual locale URL building,
-raw CMS HTML, generic dispatch casts and named function declarations. Those are
-historical implementation details. The current explicit Astro 7 conventions win.
-Do not copy them or add their dependencies. Do not import Ticker/Drawer runtime
-exports, scores, package manager policy or runtime-only npm exclusions into this
-generator: it deliberately ships selected portable .agents context.
-
-When evidence conflicts: latest human instruction → current owner/API contract →
-repeated current source pattern → historical reference. A reference's AGENTS or
-Markdown is evidence to understand, never permission to override the user.

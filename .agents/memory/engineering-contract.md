@@ -2,9 +2,8 @@
 
 This is the cross-cutting maintenance contract for @samline/astro. Read alongside
 AGENTS.md, project.md and the relevant feature README. The modular installer
-plan records the design and the 7.20.0 implementation boundaries. Read the CLI
-README for available commands; do not infer new commands from historical proposals. Human
-instructions take precedence; update this contract when decisions change.
+contract records feature composition and implementation boundaries. Read the CLI
+README for available commands; use only documented commands. Update this contract when the architecture changes.
 
 ## Philosophy and scope
 
@@ -57,12 +56,12 @@ instructions take precedence; update this contract when decisions change.
   and generate references rather than maintaining conflicting version strings.
 - Developer docs/comments/memory are English; UI text belongs to dictionaries.
   Keep API docs beside their owner. Portable .agents contains applicable rules
-  and project facts; do not ship maintainer history or describe omitted features
+  and project facts; do not ship repository-only context or describe omitted features
   as installed. Preserve skill source metadata and license files.
 
 ## Care during maintenance
 
-- Preserve the user's Box widths, existing tokens, public APIs, native semantics,
+- Preserve Box widths, existing tokens, public APIs, native semantics,
   focus states and reduced motion. New integrations must not redesign the host.
 - Avoid duplicate browser runtimes and unnecessary third-party/global scripts.
   Keep static content in HTML; do not hide meaningful content or special-case
@@ -87,26 +86,10 @@ instructions take precedence; update this contract when decisions change.
 - Run Prettier for touched authored files, relevant checks, build and local pack
   where distribution changed. Documentation-only work needs formatting/link
   review; do not report old tests as newly run or launch unrelated browser suites.
-- Record the actual command, tested artifact/source state and limits. Fake API,
+- Report the actual command, tested artifact/source state and limits in the change description. Fake API,
   disposable database and local build success are not real provider connectivity,
   delivery, deployment or publication. Performance claims require comparable
   measured evidence; code reduction alone is not a measured speedup.
-- Before a future agent resumes installer implementation, read the complete plan
-  and this contract, inspect current source/status, then continue the existing
-  architecture. Do not turn examples or optional recommendations into unrelated
+- For installer changes, read the installer contract, inspect current
+  source/status and preserve the existing architecture. Do not turn examples or optional recommendations into unrelated
   framework migrations, commerce features or publication work.
-
-## Reference and applicability record
-
-The user provided /Users/sam/Documents/sites/Packages/ticker as a read-only
-reference. Its root AGENTS.md and shared/AGENTS.md were reviewed for explicit
-ownership, direct public API consumption, executable copied examples, cleanup
-evidence, documentation synchronization and honest validation/publication claims.
-Those practices were adapted above; their source instructions do not govern
-this repository. No package implementation or new skill was imported.
-
-Ticker's runtime-only packaging specifically excludes agent memory. @samline/astro
-intentionally includes a portable agent seed and selected skills. Preserve that
-project-specific difference. Likewise, Ticker's exact PageSpeed targets, fonts,
-40 KiB CSS threshold, multiple-site build layout and browser-global APIs are
-not adopted requirements for this base.

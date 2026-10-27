@@ -14,7 +14,7 @@ install globals. Later additions preserve the existing project's current tools.
 Adapt scripts, packageManager, install hooks, README and provider configuration
 together. Test three managers across both runtimes. Bun dependency management
 with Vercel requires Bun >=1.4 for scoped overrides; Cloudflare tooling retains
-Node execution. These consumer choices supersede the old pnpm/Bun fallback policy.
+Node execution.
 
 Keep the working Astro base at the repository root. `packages/cli/template`
 is generated from an explicit allowlist by `bun run kit:prepare`, never edited
@@ -73,7 +73,7 @@ Box instances or full-width content; do not automatically insert a Box into it.
 semantic section. It uses full available width, a 90rem maximum and 1.25rem
 inline gutters. size='narrow' uses 48rem for forms or focused content;
 size='wide' uses 120rem; size='fluid' removes the maximum.
-Use a single size prop instead of the old x2/liquid booleans. Override dimensions
+Use the size prop for width variants. Override dimensions
 with --box-max-width and --box-gutter. Do not add vertical spacing or decoration.
 
 The usual domain-section composition is Section > Box > content components.
@@ -87,7 +87,7 @@ All visible copy stays in the dictionaries.
 
 When PageLoader is selected, keep it in `src/components/PageLoader` and mount it
 inside Main's body.
-Retain ldrs: the user wants to swap animation icons easily. Keep the selected
+Retain ldrs for replaceable loading animations. Keep the selected
 animation import, registration and custom element together in index.astro;
 use Tailwind for the overlay and a static reduced-motion fallback. Runtime
 helpers live in scripts.ts, use arrow functions and do not use beforeunload.
@@ -101,9 +101,8 @@ API depends on behavior an arrow cannot provide, such as its own `arguments`.
 
 ## Development principles
 
-This is a new Astro 7 base. Use the old Astro 5 project only as context about
-preferences; do not copy its implementation. Propose current approaches as
-features are requested.
+Use the installed Astro version and current feature contracts. Do not import
+legacy implementations or dependencies into the starter.
 
 Pages use SSG (`output: 'static'`). The Vercel adapter supports Server Islands
 with `server:defer`. Configure full SSR only in a future project that needs it.
@@ -148,23 +147,19 @@ Consult these guides before working on related tasks:
 
 ## Project memory
 
-.agents is the persistent source of project context. Read .agents/README.md and
-.agents/memory/project.md at the beginning of a task. Update conventions when
-the user establishes a rule, lessons when a correction matters, and todos only
-for explicitly requested pending work. Keep component API documentation beside
-the source, separate from operational memory. All new developer documentation
-and memory must be in English. Do not treat installed skills as permission to
-publish, deploy, send messages, or override the user's instructions.
+Keep .agents focused on current project facts, architecture, development rules
+and actionable work. Update contracts in place; remove superseded rules and
+completed or abandoned todos. Keep technical pitfalls concise in lessons.md.
+Do not record conversations, personal attribution, session summaries, test-run
+ledgers, commit histories, release-operation logs or temporary evidence paths.
+Report validation in change descriptions. Preserve required legal attribution.
+Developer documentation and memory are English; API docs stay beside the source.
 
-## Legacy reference and utility boundary
+## Utility boundary
 
-Do not migrate Astro 5 helpers into the starter. The user plans separate packages
-for those utilities later; do not recreate them under a different directory.
-Form state, validation and formatting use @samline/forms and @samline/formatter,
-not scripts copied from Astro 5. The local Fields adapter only connects the
-packages to Astro markup, accessible errors and lifecycle. Component migrations
-remain paused unless the user requests one explicitly. Framework integrations
-such as API clients/loaders may evolve within their existing feature ownership.
+Form state, validation and formatting belong to @samline/forms and
+@samline/formatter. Fields connects those packages to Astro markup, accessible
+errors and lifecycle. Do not recreate their engines or copy legacy helpers.
 
 ## Optional authentication
 
@@ -179,16 +174,15 @@ Do not run auth migrations during install/build or against an unspecified databa
 
 Read memory/engineering-contract.md and memory/modular-installer-plan.md before
 changing the CLI, distribution, feature selection or locale scaffolding. They
-record confirmed requirements, implemented ownership and supported limits.
+record current composition rules, ownership and supported limits.
 Do not substitute another architecture or invent additional commands/providers.
 
 Content selection must ask local/API/Strapi/Shopify/other and loading time, then
 include only the selected source with its basic example. Adding a locale later
 uses current project dictionary keys and empty translations, never release
 preset text, translated content or fabricated CMS entries. Preserve existing
-translations and keep unfinished locales inactive. These requirements supersede earlier seed-copy proposals. check:i18n validates
-active dictionaries; pending languages must stay out of the active list until
-the user completes them. Preserve the local composition checks and never execute
+translations and keep unfinished locales inactive. check:i18n validates
+active dictionaries; pending languages stay inactive until completed. Preserve the local composition checks and never execute
 dictionaries to infer their keys.
 
 ## Package website
@@ -198,14 +192,14 @@ Read website/AGENTS.md and README.md before editing it. The root remains the
 working starter; never include website source/tools/dependencies in generated
 projects or the CLI archive. Preserve portable .agents. Document our installer,
 recipes, defaults and APIs; refer to official Astro docs for framework behavior.
-Do not imply official affiliation or npm publication. The curated package section
-contains human-requested Drawer/Ticker/Forms; add others only when requested.
+Keep the independent installer identity clear. The curated package section
+contains Drawer/Ticker/Forms.
 
-## Working in the maintainer's frontend style
+## Frontend and updates
 
 Read memory/frontend-conventions.md before adding UI, changing component
-responsibilities or writing consumer examples. It records explicit current
-preferences and cross-project evidence; do not copy historical implementations.
+responsibilities or writing consumer examples. It records UI ownership, styling
+and lifecycle contracts.
 Read memory/update-plan.md before discussing updates: there is no source-update
 command today. Do not pretend add, latest generator execution or kit:version
 updates already copied files.
@@ -214,6 +208,5 @@ updates already copied files.
 
 Use skills/samline-astro for generated-site conventions and
 skills/samline-astro-maintainer for this repository's installer/distribution work.
-The portable skill ships with generated projects; the maintainer skill and
-repository history do not. Keep original skill metadata separate from upstream
+The portable skill ships with generated projects; the maintainer skill stays repository-only. Keep original skill metadata separate from upstream
 registry records and retain third-party notices when changing the skill catalog.

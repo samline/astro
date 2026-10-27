@@ -10,8 +10,8 @@ CreateProject then renders project identity/tool/deployment placeholders and
 removes the Vercel deployment skill when another target is chosen.
 
 Keep new-project lessons and todos empty. Record reusable base conventions here;
-keep the kit's commits, local references, work history, and publishing backlog in
-its maintainer memory. Preserve upstream skill bytes, references, and licenses.
+omit personal attribution, conversations, session histories, old test results
+and completed or abandoned work from repository and portable context. Preserve upstream skill bytes, references, and licenses.
 
 The package validator allows only this seed structure and the selected skills.
 Integration tests verify provider/tool combinations and generation from a real

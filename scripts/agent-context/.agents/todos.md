@@ -1,7 +1,6 @@
-# Todos
+# Current work
 
-No pending project-specific work has been recorded yet.
+No pending project-specific work is recorded.
 
-Add a task only when the user requests or explicitly defers it. Record its
-context and completion state. Update this file when a task is completed rather
-than carrying stale pending work between chats.
+Keep only actionable, in-scope tasks. Remove completed or abandoned entries;
+feature defaults and optional provider setup belong in their owning documentation.

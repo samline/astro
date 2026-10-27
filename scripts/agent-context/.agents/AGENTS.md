@@ -74,8 +74,10 @@ the head, with reusable Switch controls wherever needed.
 
 Write developer docs and example comments in English. Keep component API docs next
 to their implementation and update props, methods, events, and examples together.
-Read and maintain this directory's project memory. Keep project-specific lessons
-and todos accurate; do not invent backlog tasks or claim unperformed validation.
+Keep memory limited to current project contracts and applicable technical
+constraints. Remove completed tasks and superseded rules. Do not store personal
+attribution, conversations, session summaries or test-run ledgers. Report checks
+in change descriptions; retain required legal attribution and license notices.
 
 Reference documentation: https://docs.astro.build
 

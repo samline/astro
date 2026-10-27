@@ -1,21 +1,23 @@
 # Project agent context
 
 This directory contains the project's conventions, persistent memory, and bundled
-skills. Start here when opening a new chat or recovering context.
+skills. Start here for the current project contracts.
 
 ## Reading order
 
 1. [AGENTS.md](./AGENTS.md): coding and architecture conventions.
 2. [memory/project.md](./memory/project.md): project identity, tools, and deployment.
-3. [lessons.md](./lessons.md): project-specific corrections and preferences.
-4. [todos.md](./todos.md): explicitly requested pending work.
+3. [lessons.md](./lessons.md): applicable technical pitfalls.
+4. [todos.md](./todos.md): current actionable work.
 5. [memory/decisions.md](./memory/decisions.md): inherited and new design decisions.
 6. [memory/frontend-conventions.md](./memory/frontend-conventions.md): UI ownership and example conventions.
 7. [skills/README.md](./skills/README.md): skill index and provenance.
 
-Record confirmed decisions and lessons as work progresses. Add pending tasks
-only when the user requests or defers them. Keep environment values, credentials,
-private logs, and unrelated project context out of memory.
+Keep current project facts, decisions and actionable tasks. Update contracts in
+place and remove completed tasks, abandoned plans and superseded rules. Do not
+store conversations, personal attribution, session summaries, test-run logs,
+commit histories or temporary evidence. Report validation in change descriptions.
+Keep secrets and unrelated project context out of memory. Preserve legal notices.
 
 Developer documentation and memory are written in English. Component API docs
 belong beside the source at src/components/<Name>/README.md.
