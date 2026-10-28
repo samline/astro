@@ -40,7 +40,7 @@ const sizes = {
 }
 
 const classes = [
-  'inline-flex items-center justify-center rounded-md border-[0.0625rem] text-center leading-snug font-medium no-underline active:opacity-80 aria-pressed:ring-2 aria-pressed:ring-current aria-current:underline focus-visible:outline-[0.125rem] focus-visible:outline-offset-[0.1875rem] focus-visible:outline-accent disabled:pointer-events-none disabled:opacity-50 motion-safe:transition-colors',
+  'inline-flex items-center justify-center rounded-md border-[0.0625rem] text-center leading-snug font-medium no-underline active:opacity-80 aria-pressed:ring-2 aria-pressed:ring-current [&[aria-current]:not([aria-current=false])]:underline focus-visible:outline-[0.125rem] focus-visible:outline-offset-[0.1875rem] focus-visible:outline-accent disabled:pointer-events-none disabled:opacity-50 motion-safe:transition-colors',
   variants[variant],
   sizes[size],
   className

@@ -24,7 +24,7 @@ const {
 const appearances = {
   plain: '',
   text: 'text-accent underline underline-offset-4 hover:text-accent-dark dark:text-accent-light dark:hover:text-accent active:opacity-80',
-  nav: 'text-inherit no-underline underline-offset-4 hover:underline aria-current:underline aria-current:font-semibold active:opacity-80'
+  nav: 'text-inherit no-underline underline-offset-4 hover:underline [&[aria-current]:not([aria-current=false])]:underline [&[aria-current]:not([aria-current=false])]:font-semibold active:opacity-80'
 }
 
 let destination = href
