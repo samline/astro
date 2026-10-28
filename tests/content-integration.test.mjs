@@ -146,7 +146,27 @@ export const POST = () => { throw new Error('Write authorization must reject bef
       })
       return { status: response.status, body: result.data ?? result.error }
     }
-    const snapshotResponse = await fetch(`${origin}/snapshot.json`)
+    // Initial content synchronization can trigger a Vite restart just after
+    // dev() resolves. Retry only a refused startup connection, never an HTTP
+    // response or a content/schema error.
+    let snapshotResponse
+    for (let attempt = 0; attempt < 50; attempt++) {
+      try {
+        snapshotResponse = await fetch(`${origin}/snapshot.json`, {
+          signal: AbortSignal.timeout(10000)
+        })
+        break
+      } catch (error) {
+        const code = error.code ?? error.cause?.code
+        if (
+          !['ConnectionRefused', 'ECONNREFUSED'].includes(code) ||
+          attempt === 49
+        )
+          throw error
+        await new Promise((resolve) => setTimeout(resolve, 100))
+      }
+    }
+    assert.ok(snapshotResponse, 'The content fixture must start listening.')
     const snapshotText = await snapshotResponse.text()
     assert.equal(snapshotResponse.status, 200, snapshotText.slice(0, 4000))
     const snapshot = JSON.parse(snapshotText)
