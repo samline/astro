@@ -128,41 +128,45 @@ test(
   }
 )
 
-test('core-only output omits the demo; later add preserves the homepage and supplies an inspectable demo route', async (t) => {
-  const directory = await fixture(t, [])
-  for (const file of [
-    'src/pages/[...locale]/demo.astro',
-    'src/sections/Welcome',
-    'src/sections/DemoHeader',
-    'src/sections/DemoFooter',
-    'src/sections/DemoPage',
-    'src/i18n/dictionaries/es-mx/welcome',
-    'src/i18n/dictionaries/es-mx/navigation'
-  ])
-    assert.equal(await exists(directory, file), false, file)
-  const homepage = await read(directory, 'src/pages/[...locale]/index.astro')
-  assert.doesNotMatch(homepage, /DemoHeader|DemoFooter|Welcome/)
-  await addIntegrations({
-    root: directory,
-    template,
-    kitVersion,
-    requested: ['welcome']
-  })
-  assert.equal(
-    await read(directory, 'src/pages/[...locale]/index.astro'),
-    homepage
-  )
-  assert.equal(
-    await exists(directory, 'src/pages/[...locale]/demo.astro'),
-    true
-  )
-  const header = await read(directory, 'src/sections/DemoHeader/index.astro')
-  assert.doesNotMatch(header, /ThemeSwitch|LanguagePicker/)
-  await build(directory)
-  const home = await read(directory, 'dist/index.html')
-  assert.doesNotMatch(home, /<header\b|<footer\b/)
-  navigation(await read(directory, 'dist/demo/index.html'), '/demo')
-})
+test(
+  'core-only output omits the demo; later add preserves the homepage and supplies an inspectable demo route',
+  { timeout: 75000 },
+  async (t) => {
+    const directory = await fixture(t, [])
+    for (const file of [
+      'src/pages/[...locale]/demo.astro',
+      'src/sections/Welcome',
+      'src/sections/DemoHeader',
+      'src/sections/DemoFooter',
+      'src/sections/DemoPage',
+      'src/i18n/dictionaries/es-mx/welcome',
+      'src/i18n/dictionaries/es-mx/navigation'
+    ])
+      assert.equal(await exists(directory, file), false, file)
+    const homepage = await read(directory, 'src/pages/[...locale]/index.astro')
+    assert.doesNotMatch(homepage, /DemoHeader|DemoFooter|Welcome/)
+    await addIntegrations({
+      root: directory,
+      template,
+      kitVersion,
+      requested: ['welcome']
+    })
+    assert.equal(
+      await read(directory, 'src/pages/[...locale]/index.astro'),
+      homepage
+    )
+    assert.equal(
+      await exists(directory, 'src/pages/[...locale]/demo.astro'),
+      true
+    )
+    const header = await read(directory, 'src/sections/DemoHeader/index.astro')
+    assert.doesNotMatch(header, /ThemeSwitch|LanguagePicker/)
+    await build(directory)
+    const home = await read(directory, 'dist/index.html')
+    assert.doesNotMatch(home, /<header\b|<footer\b/)
+    navigation(await read(directory, 'dist/demo/index.html'), '/demo')
+  }
+)
 
 test('adding welcome refuses missing layout slots without changing any project files', async (t) => {
   for (const missing of ['header', 'footer', 'both']) {
