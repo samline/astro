@@ -196,7 +196,7 @@ test('invalid package directory names fail before creating files', async (t) => 
 
 test(
   'CLI detects PATH tools and performs the chosen installation',
-  { skip: process.platform === 'win32' },
+  { skip: process.platform === 'win32', timeout: 30000 },
   async (t) => {
     const directory = await temporary(t)
     for (const pnpm of [true, false]) {

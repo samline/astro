@@ -271,7 +271,12 @@ const locale = resolveLocale(Astro.currentLocale)
 const { forms, buttons, actions: copy } = getDictionary(locale)
 ---
 
-<Form id='name-form' data-error={copy.invalid}>
+<Form
+  id='name-form'
+  data-error={copy.invalid}
+  data-required={forms.messages.required}
+  data-too-long={forms.messages.tooLong}
+>
   <input type='hidden' name='locale' value={locale} />
   <Input
     name='name'
@@ -298,7 +303,14 @@ const { forms, buttons, actions: copy } = getDictionary(locale)
     const status = element.querySelector<HTMLElement>('[data-form-status]')
     const button = element.querySelector<HTMLButtonElement>('[type="submit"]')
     if (!status || !button) return
-    const controller = createForm(element)
+    const controller = createForm(element, {
+      validators: {
+        name: {
+          required: { value: true, message: element.dataset.required ?? '' },
+          maxLength: { value: 100, message: element.dataset.tooLong ?? '' }
+        }
+      }
+    })
     initialized.add(element)
     controller.addCleanup(() => initialized.delete(element))
     let submitting = false
@@ -326,7 +338,7 @@ const { forms, buttons, actions: copy } = getDictionary(locale)
 </script>
 ```
 
-Expected result: native required/name-length validation, one Action request per
+Expected result: native constraints plus explicit translated SAM name validation, one Action request per
 submission, field errors under their matching controls when returned by Astro,
 and a general translated status. Network/Action errors use the serialized fallback.
 The browser imports only the public Action helper and Fields controller; it does
@@ -417,3 +429,75 @@ and browser script processing remains
 Use the installed SAM Forms and Formatter package documentation for their full
 validator, state and formatting APIs; this README only documents the wrapper's
 choices and the Fields templates.
+
+## Native GET forms
+
+A search/filter form can use normal navigation without SAM Forms or an Action.
+This complete section uses the current locale's homepage as its GET destination;
+the receiving page must implement the `name` filter. Rendering the form alone
+will not filter a listing.
+
+```astro
+---
+import Form from '@/components/Fields/Form.astro'
+import Input from '@/components/Fields/Input.astro'
+import Button from '@/components/Button/index.astro'
+import { getRelativeLocaleUrl } from 'astro:i18n'
+import { getDictionary, resolveLocale } from '@/i18n'
+const locale = resolveLocale(Astro.currentLocale)
+const { forms, buttons } = getDictionary(locale)
+---
+
+<Form action={getRelativeLocaleUrl(locale, '/')} method='get'>
+  <Input type='search' name='name' label={forms.labels.name} />
+  <Button type='submit'>{buttons.submit}</Button>
+</Form>
+```
+
+Do not attach `onSubmit` just to make native GET work: a controller submission
+handler intercepts native navigation. SSG frontmatter cannot read the visitor's
+query at build time. Follow the [parent URL policy](../../i18n/localized-content.md#parent-query-context-for-server-islands)
+when the results are rendered inside a Server Island.
+
+## Reusing a form for different entry contexts
+
+Opening a general enquiry after a contextual enquiry must start a new draft.
+Reset through the owning SAM controller **before** applying optional values:
+
+```ts
+import { createForm } from '@/components/Fields/scripts'
+
+// Run after inserting the existing form, before revealing it to the user.
+const controller = createForm('contact-form')
+const beginDraft = (name?: string) => {
+  controller.reset()
+  // Reset returns markup defaults, which should be neutral for a shared form.
+  controller.clearErrors()
+  if (name !== undefined) controller.setValue('name', name)
+  // Clear section-owned status text and derived fallback URLs here too.
+}
+beginDraft()
+```
+
+Use the controller created by your section's setup when it has validators,
+formatting or submit handlers; `createForm` does not replace its first options.
+Validation rules/messages remain explicit SAM options and translated dictionary
+values. Reset does not clear application state outside the form or restore a
+fallback link derived from a previous entry. A manually retained draft is a
+separate, deliberate product policy.
+
+## Forms inserted into Drawer or deferred HTML
+
+The section that inserts/removes the HTML owns its lifecycle. After insertion,
+call `mountFields(root)` for progressive controls and then `createForm(element,
+options)` for every form that needs SAM behavior. Register submit handlers once
+per owned element. Before removing/replacing the subtree, call
+`destroyForms(root)` and remove section-owned listeners/status subscriptions.
+Calling `createForm` on a detached template fails deliberately.
+
+Drawer's close callback, content factory and destroy path must use the cleanup
+belonging to that particular mounted subtree. Do not assume closing always
+removes DOM, or that package destruction invokes your close callback. A reused
+connected form retains its controller; call the entry-context reset above when
+starting a fresh task. HTML inserted with `innerHTML` does not execute its script
+tags. Keep setup in the host's processed script, not in the injected fragment.

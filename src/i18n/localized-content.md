@@ -149,3 +149,54 @@ Official references:
 [Astro internationalization](https://docs.astro.build/en/guides/internationalization/),
 [URL helpers](https://docs.astro.build/en/reference/modules/astro-i18n/),
 [routing](https://docs.astro.build/en/guides/routing/).
+
+## Parent query context for Server Islands
+
+A Server Island's `Astro.url` describes its isolated endpoint, not the page that
+contains it. Pass known route data and locale explicitly as props. On an SSG
+page, visitor query parameters do not exist during frontmatter execution, so
+passing `Astro.url.search` at build time cannot transport the visitor's filters.
+Astro documents reading the island request's `Referer` for this case:
+<https://docs.astro.build/en/guides/server-islands/#accessing-the-page-url-in-a-server-island>.
+
+For a public listing, this frontmatter fragment resolves same-origin parent
+context and a bounded, allowlisted filter. It must run inside the island:
+
+```ts
+const resolveParent = (referer: string | null, site: URL) => {
+  if (!referer) return undefined
+  try {
+    const parent = new URL(referer)
+    return parent.origin === site.origin ? parent : undefined
+  } catch {
+    return undefined
+  }
+}
+const parent = resolveParent(Astro.request.headers.get('referer'), Astro.site!)
+const name = parent?.searchParams.get('name')?.trim().slice(0, 100) ?? ''
+// Query the real provider using only validated filters and the explicit locale.
+// Referer-dependent HTML must not be shared under the island endpoint's URL.
+Astro.response.headers.set('Cache-Control', 'private, no-store')
+```
+
+The production site's configured origin must match the parent origin. A preview
+needs its own correct site configuration or a separately validated allowed
+origin; do not accept arbitrary request headers as trusted origins. Referer is
+optional and caller-controlled: it cannot authorize a user or resource. Validate
+filter enums, numeric ranges and provider arguments independently.
+
+Define the missing-context policy in the consuming product. An unfiltered
+**public** listing is acceptable only when that is the agreed behavior; if an
+explicit filter is required, show translated recovery feedback instead. Do not
+silently return fixtures when a real provider fails. Referrer-Policy may remove
+the path/query, and production delivery must be tested with filters, reload,
+missing/malformed/foreign Referer and navigation between different queries.
+
+Keep the returned island HTML private/no-store when it depends on Referer or
+user context. A server-side data cache may separately use normalized locale and
+all validated filter dimensions as its key. `Vary: Referer` alone is not a
+portable substitute for an explicit CDN policy. If reliable context or shared
+HTTP caching is required, use an explicit browser request carrying validated
+filters to an owned endpoint, or a request-rendered page; define its cache key
+and fallback there. Do not retrofit a second global query router into every
+starter project.

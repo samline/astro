@@ -4,14 +4,14 @@ import Link from '@/components/Link/index.astro'
 import type { Props as LinkProps } from '@/components/Link/index.astro'
 
 type Appearance = {
-  variant?: 'primary' | 'secondary'
+  variant?: 'primary' | 'secondary' | 'text'
   size?: 'sm' | 'md' | 'lg'
 }
 
 export type Props = Appearance &
   (
     | (HTMLAttributes<'button'> & { href?: never; localize?: never })
-    | (LinkProps & { disabled?: never })
+    | (Omit<LinkProps, 'variant'> & { disabled?: never })
   )
 
 const {
@@ -20,12 +20,17 @@ const {
   class: className,
   ...attributes
 } = Astro.props
+const buttonType =
+  attributes.type === 'submit' || attributes.type === 'reset'
+    ? attributes.type
+    : 'button'
 
 const variants = {
   primary:
     'border-accent bg-accent text-white hover:border-accent-dark hover:bg-accent-dark',
   secondary:
-    'border-current bg-transparent text-accent hover:bg-accent/10 dark:text-accent-light dark:hover:bg-accent-light/10'
+    'border-current bg-transparent text-accent hover:bg-accent/10 dark:text-accent-light dark:hover:bg-accent-light/10',
+  text: 'border-transparent bg-transparent text-accent underline-offset-4 hover:underline dark:text-accent-light'
 }
 
 const sizes = {
@@ -35,7 +40,7 @@ const sizes = {
 }
 
 const classes = [
-  'inline-flex items-center justify-center rounded-md border-[0.0625rem] text-center leading-snug font-medium no-underline focus-visible:outline-[0.125rem] focus-visible:outline-offset-[0.1875rem] focus-visible:outline-accent disabled:pointer-events-none disabled:opacity-50 motion-safe:transition-colors',
+  'inline-flex items-center justify-center rounded-md border-[0.0625rem] text-center leading-snug font-medium no-underline active:opacity-80 aria-pressed:ring-2 aria-pressed:ring-current aria-current:underline focus-visible:outline-[0.125rem] focus-visible:outline-offset-[0.1875rem] focus-visible:outline-accent disabled:pointer-events-none disabled:opacity-50 motion-safe:transition-colors',
   variants[variant],
   sizes[size],
   className
@@ -47,7 +52,7 @@ const classes = [
     <slot />
   </Link>
 ) : (
-  <button type='button' {...attributes} class:list={classes}>
+  <button {...attributes} type={buttonType} class:list={classes}>
     <slot />
   </button>
 )}

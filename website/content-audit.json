@@ -1,6 +1,6 @@
 {
   "status": "verified",
-  "packageVersion": "7.21.0",
+  "packageVersion": "7.21.1",
   "templateSource": {
     "repository": "https://github.com/samline/package-landing-docs",
     "commit": "dd6d8892339690487099aab1246b2b01005df335"
@@ -262,7 +262,7 @@
     "consumer": "Source notices included; application license remains the consumer owner's choice"
   },
   "releasePreparation": {
-    "version": "7.21.0",
+    "version": "7.21.1",
     "npm": "Public npm, pnpm and Bun installation flows documented; registry operations are tracked in maintainer memory.",
     "website": "Adaptation complete; indexable production artifact with standard public installation copy."
   }

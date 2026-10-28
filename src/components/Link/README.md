@@ -1,7 +1,7 @@
 # Link
 
 A native anchor with locale-aware internal URLs and `noopener` for new-tab
-navigation. It adds no appearance or browser JavaScript. Use it for navigation;
+navigation. Its default plain variant adds no appearance or browser JavaScript. Use it for navigation;
 use Button's native button mode for actions.
 
 ## Availability and placement
@@ -20,7 +20,7 @@ import { getDictionary } from '@/i18n'
 const { buttons } = getDictionary(Astro.currentLocale)
 ---
 
-<Link href='/' class='text-accent underline underline-offset-4'>
+<Link href='/' variant='text'>
   {buttons.backHome}
 </Link>
 ```
@@ -31,12 +31,13 @@ from `Astro.currentLocale`; do not pass it as a prop.
 
 ## API
 
-| Prop                     | Default  | Purpose                                              |
-| ------------------------ | -------- | ---------------------------------------------------- |
-| `href: string`           | Required | Destination URL or fragment.                         |
-| `localize: boolean`      | `true`   | Localize eligible root-relative internal paths.      |
-| Native anchor attributes | —        | `target`, `rel`, `download`, `class`, `aria-*`, etc. |
-| Default slot             | —        | Content that names the destination.                  |
+| Prop                                   | Default  | Purpose                                              |
+| -------------------------------------- | -------- | ---------------------------------------------------- |
+| `variant?: 'plain' \| 'text' \| 'nav'` | `plain`  | Shared contextual or navigation states.              |
+| `href: string`                         | Required | Destination URL or fragment.                         |
+| `localize: boolean`                    | `true`   | Localize eligible root-relative internal paths.      |
+| Native anchor attributes               | —        | `target`, `rel`, `download`, `class`, `aria-*`, etc. |
+| Default slot                           | —        | Content that names the destination.                  |
 
 ## Which URLs change?
 
@@ -82,3 +83,12 @@ No prefetch policy, disabled link simulation, or click handler is added.
 
 URL construction belongs to [Astro internationalization](https://docs.astro.build/en/guides/internationalization/)
 and its [URL helpers](https://docs.astro.build/en/reference/modules/astro-i18n/).
+
+## Shared text and navigation states
+
+Use `variant='text'` for an underlined contextual link in the accent palette, or
+`variant='nav'` for a navigation item inheriting its surrounding color. Both
+include hover, focus-visible and active states. Nav styles an explicit
+`aria-current` value; the section decides which destination is current. Plain
+remains the default for custom designs and Button composition. Do not use
+`aria-pressed` for navigation. Layout stays with the consuming section.

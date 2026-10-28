@@ -1,5 +1,12 @@
 # Changelog
 
+## 7.21.1
+
+- Preserve explicit Button submit/reset types after forwarded attributes.
+- Add reusable text/navigation interaction states to Button and Link.
+- Add native GET, contextual reset and dynamically inserted form recipes.
+- Document validated parent-query context and private/no-store island responses.
+
 ## 7.21.0
 
 - Add the optional two-page starter demo with header, active navigation and footer.

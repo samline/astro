@@ -190,6 +190,13 @@ test(
     assert.match(await html('h-1'), /<h1\b[^>]*id="page-title"/)
     assert.match(await html('link-1'), /href="\/"/)
     assert.match(await html('button-1'), /<button\b[^>]*disabled/)
+    const action =
+      (await html('fields-3')).match(/<button\b[^>]*type="submit"[^>]*>/g) ?? []
+    assert.equal(
+      action.length,
+      1,
+      'the Action example must render a real submit button'
+    )
     assert.match(await html('faicon-1'), /<svg\b[^>]*aria-hidden="true"/)
     assert.match(await html('captcha-1'), /name="captchaToken"/)
     assert.match(await html('fields-1'), /id="contact-preview"/)
@@ -198,6 +205,8 @@ test(
     assert.match(choices, /name="attachment"[^>]*type="file"/)
     assert.match(choices, /Preferred contact method/)
     assert.match(await html('fields-3'), /id="name-form"[^>]*data-error=/)
+    assert.match(await html('fields-4'), /<form\b[^>]*method="get"/)
+    assert.match(await html('fields-4'), /<button\b[^>]*type="submit"/)
     assert.match(await html('languagepicker-1'), /hreflang="es-mx"/)
     assert.match(await html('pageloader-1'), /href="\/\?from=loader-example"/)
     assert.match(await html('theme-1'), /data-theme-switch[^>]*hidden/)

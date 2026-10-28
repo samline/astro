@@ -7,17 +7,25 @@ import { locales } from '@/i18n/config'
 export interface Props extends HTMLAttributes<'a'> {
   href: string
   localize?: boolean
+  variant?: 'plain' | 'text' | 'nav'
 }
 
 const {
   href,
   localize = true,
+  variant = 'plain',
   target,
   rel,
   download,
   class: className,
   ...attributes
 } = Astro.props
+
+const appearances = {
+  plain: '',
+  text: 'text-accent underline underline-offset-4 hover:text-accent-dark dark:text-accent-light dark:hover:text-accent active:opacity-80',
+  nav: 'text-inherit no-underline underline-offset-4 hover:underline aria-current:underline aria-current:font-semibold active:opacity-80'
+}
 
 let destination = href
 if (
@@ -53,7 +61,12 @@ if (
   target={target}
   rel={relationships.length ? relationships.join(' ') : undefined}
   download={download}
-  class:list={[className]}
+  class:list={[
+    appearances[variant],
+    variant !== 'plain' &&
+      'focus-visible:outline-[0.125rem] focus-visible:outline-offset-[0.1875rem] focus-visible:outline-accent motion-safe:transition-colors',
+    className
+  ]}
   {...attributes}
 >
   <slot />

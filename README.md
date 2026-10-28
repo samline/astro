@@ -223,18 +223,18 @@ bun run verify
 bun run kit:pack
 ```
 
-The current archive is `artifacts/samline-astro-7.21.0.tgz`. From the folder where
+The current archive is `artifacts/samline-astro-7.21.1.tgz`. From the folder where
 you want the test project, run the following with an absolute archive path:
 
 ```sh
-npm exec --yes --package /absolute/path/to/astro/artifacts/samline-astro-7.21.0.tgz -- samline-astro my-site
+npm exec --yes --package /absolute/path/to/astro/artifacts/samline-astro-7.21.1.tgz -- samline-astro my-site
 ```
 
 The repository root is the maintained starter. `packages/cli/template` is
 regenerated from explicit allowlists; edit the original source, then run
 `bun run kit:prepare`. Never maintain the generated template by hand.
 
-Root and CLI versions are `7.21.0`. Distribution releases stay on major 7 while
+Root and CLI versions are `7.21.1`. Distribution releases stay on major 7 while
 supporting Astro 7; minor versions evolve independently of Astro's minor number.
 `bun run kit:version 7.x.y` advances both manifests for a future release.
 Packaging, publishing and deployment are separate operations.

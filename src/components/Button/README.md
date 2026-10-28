@@ -36,7 +36,7 @@ outline **button**. The link navigates; the disabled button does nothing. Removi
 
 | Prop              | Default   | When to change it                                                              |
 | ----------------- | --------- | ------------------------------------------------------------------------------ |
-| `variant`         | `primary` | `secondary` for the less prominent action.                                     |
+| `variant`         | `primary` | `secondary` for the less prominent action; `text` for a text action.           |
 | `size`            | `md`      | `sm` for compact controls; `lg` for a more prominent action.                   |
 | `href`            | Omitted   | Set for navigation; output delegates to Link.                                  |
 | `type`            | `button`  | Use `submit` or `reset` for a real form operation. Button mode only.           |
@@ -75,3 +75,9 @@ owns URL localization, `download`, `target` and `rel` behavior.
 
 Use [Astro scripts and event handling](https://docs.astro.build/en/guides/client-side-scripts/)
 when your section needs browser behavior.
+
+Text actions use the same accent palette, native button semantics and focus
+outline. All variants include active feedback and style explicit `aria-pressed`
+state; the owning section must update that attribute and implement its behavior.
+The resolved native `type` is rendered once after forwarded attributes so submit
+and reset controls retain their requested operation.
