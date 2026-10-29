@@ -20,8 +20,8 @@ The optional welcome feature owns Home/demo sections and private navigation.
 Only exact normalized localized paths receive aria-current. Adding the feature
 preserves an existing homepage and requires compatible layout slots.
 
-Site chrome customization preserves explicit Main/Head/Header/Navigation/NavItems/
-Footer owners and private mobile navigation/announcement parts when present.
+Site chrome has explicit Main, Head, Header, Navigation, NavItems and Footer
+owners, with private mobile navigation and announcement parts when present.
 See frontend-conventions.md for composition and verification; the compact demo
 is a starting point rather than the final architecture for a customized site.
 

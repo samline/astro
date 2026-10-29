@@ -21,7 +21,6 @@ is generated from an explicit allowlist by `bun run kit:prepare`, never edited
 manually. Root and CLI versions match Astro's major (currently 7). Run
 `bun run kit:version 7.x.y` for a release and test `bun run kit:pack` locally.
 
-
 Before changing installed dependencies, identify the server owner and preserve its
 foreground/background mode and flags. Stop only the authorized owned instance via
 its manager, install/update with the project's package manager, restart through

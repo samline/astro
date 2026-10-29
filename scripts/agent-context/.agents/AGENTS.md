@@ -16,7 +16,6 @@ Keep output static unless the project explicitly needs SSR. {{ISLANDS}}
 Use the selected adapter and deployment files. Environment secrets belong in
 ignored .env files or provider settings; document variable names in .env.example.
 
-
 Before changing installed dependencies, identify the server owner and preserve its
 foreground/background mode and flags. Stop only the authorized owned instance via
 its manager, install/update with the project's package manager, restart through

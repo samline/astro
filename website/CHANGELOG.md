@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.21.5
+
+- Clean up maintainer and portable architecture guidance while retaining the
+  layout-owned chrome defaults and exceptional slot contract.
+- Synchronize release metadata and local archive examples for publication.
+
 ## 7.21.4
 
 - Render the selected site's shared header/navigation and footer from Main by
