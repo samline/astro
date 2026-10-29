@@ -34,3 +34,5 @@ records upstream skill sources; preserve upstream files when formatting.
 Read memory/integrations.md for installed features, collections and pending locale translations.
 
 Use the bundled samline-astro skill for this distribution's project workflow.
+
+For opt-in scroll entrances, read [the reveal recipe](./memory/reveal-recipe.md).

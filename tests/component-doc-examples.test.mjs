@@ -133,6 +133,25 @@ test(
     const pagesDirectory = path.join(directory, 'src/pages/examples')
     await mkdir(sectionsDirectory, { recursive: true })
     await mkdir(pagesDirectory, { recursive: true })
+    const recipe = await readFile(
+      path.join(root, 'scripts/agent-context/.agents/memory/reveal-recipe.md'),
+      'utf8'
+    )
+    await mkdir(path.join(directory, 'src/sections/RevealOverview'), {
+      recursive: true
+    })
+    await writeFile(
+      path.join(directory, 'src/sections/RevealOverview/reveal.ts'),
+      recipe.match(/```ts\n([\s\S]*?)\n```/)[1]
+    )
+    await writeFile(
+      path.join(directory, 'src/sections/RevealOverview/index.astro'),
+      completeExamples(recipe)[0]
+    )
+    await writeFile(
+      path.join(pagesDirectory, 'reveal.astro'),
+      "---\nimport Main from '@/layouts/Main.astro'\nimport Overview from '@/sections/RevealOverview/index.astro'\n---\n<Main path='/examples/reveal'><Overview /></Main>\n"
+    )
     const rendered = new Map()
     for (const name of components) {
       const markdown = await readFile(

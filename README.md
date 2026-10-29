@@ -210,6 +210,41 @@ Astro, integrations and other dependencies. A new generator version does not
 replace source already copied into a project. There is currently no automatic
 base-source update command; `add` installs missing integrations.
 
+## Dependency updates and server readiness
+
+From the project root, identify who owns the current server and record its launch
+flags and local URL before changing installed dependencies. Ordinary source edits
+use HMR. If an agent owns the background server, stop that instance with the
+selected runner's `run astro dev stop`, update/install with the selected manager,
+and restart using its original command and flags. A foreground server belongs to
+its terminal/supervisor; stop and restart through that owner. Obtain authorization
+before interrupting a user-owned session.
+
+For this repository's default background server:
+
+```sh
+bun run astro dev stop
+pnpm install
+bun run dev
+```
+
+Use the actual project tools in generated projects. After restarting, inspect
+logs and request the exact printed URL with `curl --fail --show-error <local-url>`
+(replace the placeholder), or open it in a browser and confirm the intended page
+loads. A live PID, a manager record, a TCP listener and a successful HTTP response
+are different signals. A port in use does not establish project identity.
+
+If startup reports an existing server but HTTP fails, inspect the launch owner's
+logs, PID command and working directory from an environment allowed to inspect
+processes. Restricted PID probes can return EPERM; in the installed Astro version,
+status can then classify a healthy record as stale and remove it. Do not assume
+status is read-only under restricted process visibility. Once visibility is
+adequate, use status/logs together with an actual HTTP request. Confirm process
+identity before any termination; do not start with --force, delete/rebuild lock
+metadata or kill an unrelated listener. Preserve the lock and diagnose the owner
+when identity cannot be established. Dependency installation need not modify
+package.json; restarting after every build is unnecessary.
+
 ## Repository development
 
 ### Validate and test the installer
@@ -223,18 +258,18 @@ bun run verify
 bun run kit:pack
 ```
 
-The current archive is `artifacts/samline-astro-7.21.1.tgz`. From the folder where
+The current archive is `artifacts/samline-astro-7.21.2.tgz`. From the folder where
 you want the test project, run the following with an absolute archive path:
 
 ```sh
-npm exec --yes --package /absolute/path/to/astro/artifacts/samline-astro-7.21.1.tgz -- samline-astro my-site
+npm exec --yes --package /absolute/path/to/astro/artifacts/samline-astro-7.21.2.tgz -- samline-astro my-site
 ```
 
 The repository root is the maintained starter. `packages/cli/template` is
 regenerated from explicit allowlists; edit the original source, then run
 `bun run kit:prepare`. Never maintain the generated template by hand.
 
-Root and CLI versions are `7.21.1`. Distribution releases stay on major 7 while
+Root and CLI versions are `7.21.2`. Distribution releases stay on major 7 while
 supporting Astro 7; minor versions evolve independently of Astro's minor number.
 `bun run kit:version 7.x.y` advances both manifests for a future release.
 Packaging, publishing and deployment are separate operations.

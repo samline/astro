@@ -22,6 +22,7 @@ export const agentContextFiles = [
   '.agents/memory/project.md',
   '.agents/memory/decisions.md',
   '.agents/memory/frontend-conventions.md',
+  '.agents/memory/reveal-recipe.md',
   '.agents/lessons.md',
   '.agents/todos.md',
   '.agents/memory/integrations.md'

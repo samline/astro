@@ -24,6 +24,36 @@ three separate maintenance tasks:
 Run dependency commands from the **generated project's root**, using the package
 manager recorded by that project. Choose its matching tab below. Begin with a clean working tree so the resulting changes are easy to review.
 
+## Preserve the development server owner
+
+Before changing installed dependencies, record the server's owner, original
+command, flags, foreground/background mode and printed local URL. Stop only the
+instance you are authorized to manage, through its existing terminal, supervisor
+or Astro background manager. Preserve that launch configuration when restarting
+after the installation/update. Ordinary source edits use HMR; a build does not
+inherently require a restart. Do not interrupt a user-owned session without
+authorization.
+
+For a generated background server, the selected script runner's
+`run astro dev stop` stops that instance, and `run dev` starts it again. Use the
+project's dependency manager for installation/updates; the manager and runtime
+can differ. After restart, inspect logs and request the exact printed URL with
+`curl --fail --show-error <local-url>` (replace the placeholder), or open it and
+confirm the intended page loads.
+
+A live PID, manager registration, TCP listener and HTTP readiness are separate
+signals. A port in use alone does not identify this project. If startup reports
+an existing server but HTTP fails, inspect the owner's logs, PID command and
+working directory with adequate process permissions. Restricted PID probes may
+return EPERM; Astro status can then classify a healthy record as stale and remove
+it. Status is not guaranteed read-only under restricted process visibility.
+
+Once process visibility is adequate, combine status/logs with the actual HTTP
+request. Confirm identity before terminating a process. Do not begin with
+`--force`, delete/rebuild lock metadata or kill unrelated listeners. Preserve the
+record and diagnose with the owner when identity remains uncertain. Installing
+dependencies does not necessarily modify `package.json`.
+
 ## Update Astro and its official integrations
 
 Preview the proposed versions first. The tabs show both the dry run and the

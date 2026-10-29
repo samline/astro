@@ -57,3 +57,77 @@ provider connectivity, authorization or production behavior.
 Update the owning README and persistent project memory as APIs or conventions
 change. Verify the affected behavior using the project's actual scripts; report
 what was checked and the remaining limits.
+
+## Cards with variable-length content
+
+Keep this layout with the section or its private card. Comparable cards start
+with the editorial stack at the top; vertically centering a whole variable-length
+caption misaligns its first rows. A grouped attribution/action can consume the
+remaining space with margin-block-start:auto. For stacked media/caption layouts,
+use an intrinsic media row plus a remaining-space content row:
+
+```css
+.content-card {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-inline-size: 0;
+}
+.content-card__media {
+  aspect-ratio: 4 / 3;
+  overflow: clip;
+  border-radius: var(--radius-card, 0.75rem);
+}
+.content-card__media img {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+.content-card__caption {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 1rem;
+  padding: 1.25rem;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+.content-card__attribution {
+  margin-block-start: auto;
+}
+```
+
+Partial CSS recipe: apply these classes to the owning card's media wrapper,
+caption and attribution group. The parent grid/carousel establishes comparable
+card heights. Preserve the existing crop/radius tokens and reserve media geometry
+with intrinsic image dimensions or aspect-ratio. This recipe adds no global Card
+component. Use text-wrap:balance selectively for editorial headings when useful.
+Do not force fixed text heights, arbitrary minimum heights, line clamping or
+shorter translated/provider text to conceal misalignment.
+
+Review short/long headings and quotes, wrapped author/location, long button labels
+and delayed provider content at 320, 390, 768 and 1440 CSS viewport widths. Check
+starting rows, footer/action insets, image boundaries, keyboard focus, overflow
+and 200% text zoom in both themes. For carousels also check the final-to-first
+loop seam. Viewport dimensions are test inputs; authored fixed CSS lengths use
+rem. Inputs and every text node do not need balanced wrapping.
+
+## Optional reveal behavior
+
+Reveal belongs to its section and stays opt-in. Natural HTML must remain visible
+without JavaScript. Prepare only targets below the viewport on the first observer
+report; initially visible or already-passed content stays natural. Use natural →
+pending offscreen → playing → revealed, once per element, with no default delay
+or stagger. A restrained starting point is opacity plus individual translate,
+0.75rem over 600ms, starting 4rem before intersection.
+
+Give each animated property one owner. Do not reveal ticker tracks,
+Drawer-controlled panels, parallax targets or nested reveal ancestors with a
+competing transform. Focus/hash navigation reveals immediately; reduced motion
+exposes pending content and cancels playback even when changed mid-animation.
+Restore natural styles and dispose owned observers/effects/listeners on
+navigation/HMR; deliberately preserve BFCache state. Deferred Server Island
+content needs an explicit mount/cleanup owner.
+
+See the [complete section-owned reveal recipe](./reveal-recipe.md) and its
+acceptance matrix before implementing this behavior.

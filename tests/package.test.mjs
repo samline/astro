@@ -85,7 +85,8 @@ test(
       'THIRD_PARTY_NOTICES.md',
       'licenses/astro-MIT.txt',
       'licenses/samline-astro-MIT.txt',
-      '.agents/memory/frontend-conventions.md'
+      '.agents/memory/frontend-conventions.md',
+      '.agents/memory/reveal-recipe.md'
     ])
       assert.ok(files.includes(`package/template/${file}`), file)
     const templateManifest = JSON.parse(

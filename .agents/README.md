@@ -39,3 +39,5 @@ is English. Version and dependency facts come from package manifests and lockfil
 Generated projects receive scripts/agent-context and selected skills, never this
 repository's maintainer context. Preserve upstream skill files, supporting files,
 licenses and skills-lock.json provenance.
+
+For opt-in scroll entrances, read [the reveal recipe](./memory/reveal-recipe.md).

@@ -21,6 +21,20 @@ is generated from an explicit allowlist by `bun run kit:prepare`, never edited
 manually. Root and CLI versions match Astro's major (currently 7). Run
 `bun run kit:version 7.x.y` for a release and test `bun run kit:pack` locally.
 
+
+Before changing installed dependencies, identify the server owner and preserve its
+foreground/background mode and flags. Stop only the authorized owned instance via
+its manager, install/update with the project's package manager, restart through
+the same owner and request the printed URL to verify HTTP readiness. Ordinary
+source edits use HMR. PID liveness, manager registration, a TCP listener and HTTP
+readiness are separate signals; a busy port does not identify this project.
+In restricted environments, process inspection may fail with EPERM and Astro
+status may treat the record as stale and remove it: status is not guaranteed
+read-only. Diagnose with sufficient process visibility; never delete lock metadata,
+use --force or terminate a PID before confirming its command/project identity.
+Do not restart a user-owned session without authorization. See README.md for the
+update and recovery workflow.
+
 ## Internationalization
 
 Every visitor-facing string belongs in `src/i18n/dictionaries`: page copy,

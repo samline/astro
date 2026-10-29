@@ -16,6 +16,20 @@ Keep output static unless the project explicitly needs SSR. {{ISLANDS}}
 Use the selected adapter and deployment files. Environment secrets belong in
 ignored .env files or provider settings; document variable names in .env.example.
 
+
+Before changing installed dependencies, identify the server owner and preserve its
+foreground/background mode and flags. Stop only the authorized owned instance via
+its manager, install/update with the project's package manager, restart through
+the same owner and request the printed URL to verify HTTP readiness. Ordinary
+source edits use HMR. PID liveness, manager registration, a TCP listener and HTTP
+readiness are separate signals; a busy port does not identify this project.
+In restricted environments, process inspection may fail with EPERM and Astro
+status may treat the record as stale and remove it: status is not guaranteed
+read-only. Diagnose with sufficient process visibility; never delete lock metadata,
+use --force or terminate a PID before confirming its command/project identity.
+Do not restart a user-owned session without authorization. See README.md for the
+update and recovery workflow.
+
 ## UI ownership
 
 Pages compose layout -> section -> reusable component. Main owns the document,

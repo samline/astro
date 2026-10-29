@@ -1,6 +1,6 @@
 # Release @samline/astro
 
-The current version is **7.21.0**, targeting Astro 7. Use this workflow for npm
+The current version is **7.21.2**, targeting Astro 7. Use this workflow for npm
 releases and GitHub Pages deployments. Keep the package major aligned with
 Astro’s major; the package minor and patch versions evolve independently.
 
@@ -31,7 +31,7 @@ Do not rewrite historical validation records as if they covered a new archive.
 ## Review publication without publishing
 
 ```sh
-npm publish ./artifacts/samline-astro-7.21.0.tgz --dry-run --access public
+npm publish ./artifacts/samline-astro-7.21.2.tgz --dry-run --access public
 ```
 
 A successful dry run validates packaging, not npm account permissions, scope
@@ -42,7 +42,7 @@ requirements. Never commit credentials. See npm's
 [scoped public packages guide](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages/).
 
 Only after explicit publication authorization, publish the reviewed archive with
-`npm publish ./artifacts/samline-astro-7.21.0.tgz --access public`. Confirm the
+`npm publish ./artifacts/samline-astro-7.21.2.tgz --access public`. Confirm the
 registry version and integrity afterward. A published version cannot be reused.
 Keep public documentation written as the standard installation and usage flow.
 Do not add publication-pending banners or make local tarball testing a prerequisite

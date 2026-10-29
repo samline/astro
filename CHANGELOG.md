@@ -1,5 +1,15 @@
 # Changelog
 
+## 7.21.2
+
+- Ship an opt-in, section-owned reveal recipe with focus/hash handling, reduced
+  motion, navigation/HMR cleanup and deliberate BFCache preservation.
+- Document dependency-update server ownership, restart and HTTP-readiness checks
+  using each generated project's selected package manager and runtime.
+- Add responsive card guidance for variable-length content and its review matrix.
+- Include the recipes and conventions in portable agent context, and check the
+  copied reveal source through regression tests and real Astro compilation.
+
 ## 7.21.1
 
 - Preserve explicit Button submit/reset types after forwarded attributes.
