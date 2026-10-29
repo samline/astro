@@ -1,5 +1,16 @@
 # Changelog
 
+## 7.21.4
+
+- Render the selected site's shared header/navigation and footer from Main by
+  default, so ordinary routes and errors only supply metadata and content.
+- Retain header/footer slots for exceptional overrides and add a separate
+  body-end slot for trailing UI.
+- Preserve existing layouts and homepages when adding the optional demo later;
+  its dedicated Demo layout owns the feature's chrome overrides.
+- Align portable memory, project skills and demo documentation with layout-owned
+  defaults; verify new routes, errors, overrides and custom-layout preservation.
+
 ## 7.21.3
 
 - Make document and site chrome ownership explicit in maintainer memory, portable

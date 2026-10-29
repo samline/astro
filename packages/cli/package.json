@@ -1,6 +1,6 @@
 {
   "name": "@samline/astro",
-  "version": "7.21.3",
+  "version": "7.21.4",
   "license": "MIT",
   "author": "Samuel Olvera (samline)",
   "description": "An opinionated Astro 7 distribution with a modular project installer.",

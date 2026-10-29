@@ -97,6 +97,12 @@ consume custom props instead of leaking them to the DOM. Do not add children:any
 loose any prop signatures, client JavaScript or Tailwind just for these wrappers.
 All visible copy stays in the dictionaries.
 
+Main imports and renders the site's shared head, header/navigation and footer
+by default, outside its unique main landmark. Ordinary pages supply metadata and
+content sections only. Named header/footer slots are exceptional overrides with
+layout-owned defaults, not required page boilerplate. Mount shared widgets once
+in the layout; reserve body-end for exceptional trailing content.
+
 For site chrome work, follow memory/frontend-conventions.md: keep Main, Head,
 Header, Navigation, NavItems and Footer responsibilities separate, with private
 mobile navigation and announcement bars when present. A header file containing

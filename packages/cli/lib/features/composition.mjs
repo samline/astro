@@ -19,6 +19,10 @@ const replaceOnce = (source, previous, next) => {
   return source.replace(previous, next)
 }
 const imports = {
+  welcome: [
+    '@/sections/DemoHeader/index.astro',
+    '@/sections/DemoFooter/index.astro'
+  ],
   themes: ['@/components/Theme/Init.astro', '@/config/theme'],
   gtm: [
     '@/components/GTM/Head.astro',
@@ -36,6 +40,17 @@ export const coreLayout = async (template, selected) => {
     if (!selected.includes(feature)) front = removeImports(front, modules)
   front = namedImport(front, 'localeDirections', '@/i18n/config')
   source = '---\n' + front + source.slice(end)
+  if (!selected.includes('welcome')) {
+    for (const [name, component] of [
+      ['header', 'DemoHeader'],
+      ['footer', 'DemoFooter']
+    ])
+      source = replaceOnce(
+        source,
+        `    <slot name='${name}'>\n      <${component} />\n    </slot>`,
+        `    <slot name='${name}' />`
+      )
+  }
   source = replaceOnce(
     source,
     '  lang={locale}',
@@ -157,6 +172,25 @@ export const getStaticPaths = (() =>
 
 <Main path='/'>
   <Home />
+</Main>
+`
+
+/** Later demo additions use their own layout without changing the site's chrome. */
+export const addedDemoLayout = `---
+import type { ComponentProps } from 'astro/types'
+import Main from '@/layouts/Main.astro'
+import DemoHeader from '@/sections/DemoHeader/index.astro'
+import DemoFooter from '@/sections/DemoFooter/index.astro'
+
+type Props = ComponentProps<typeof Main>
+---
+
+<Main {...Astro.props}>
+  <slot name='head' slot='head' />
+  <DemoHeader slot='header' />
+  <slot />
+  <DemoFooter slot='footer' />
+  <slot name='body-end' slot='body-end' />
 </Main>
 `
 

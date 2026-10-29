@@ -1,8 +1,6 @@
 ---
 import type { GetStaticPaths } from 'astro'
 import Main from '@/layouts/Main.astro'
-import DemoHeader from '@/sections/DemoHeader/index.astro'
-import DemoFooter from '@/sections/DemoFooter/index.astro'
 import DemoPage from '@/sections/DemoPage/index.astro'
 import { getDictionary } from '@/i18n'
 import { defaultLocale, locales } from '@/i18n/config'
@@ -15,7 +13,5 @@ const { demo } = getDictionary(Astro.currentLocale).welcome
 ---
 
 <Main path='/demo' title={demo.title} description={demo.description}>
-  <DemoHeader slot='header' />
   <DemoPage />
-  <DemoFooter slot='footer' />
 </Main>

@@ -45,6 +45,12 @@ Section owns semantic sections, unique anchors, and vertical rhythm. Box owns
 centered content width and gutters. Preserve their separate responsibilities.
 Read each component's README before changing its public contract.
 
+Main imports and renders the site's shared head, header/navigation and footer
+by default, outside its unique main landmark. Ordinary pages supply metadata and
+content sections only. Named header/footer slots are exceptional overrides with
+layout-owned defaults, not required page boilerplate. Mount shared widgets once
+in the layout; reserve body-end for exceptional trailing content.
+
 For site chrome work, follow memory/frontend-conventions.md: keep Main, Head,
 Header, Navigation, NavItems and Footer responsibilities separate, with private
 mobile navigation and announcement bars when present. A header file containing

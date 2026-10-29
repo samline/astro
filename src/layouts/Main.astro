@@ -9,6 +9,8 @@ import GTMHead from '@/components/GTM/Head.astro'
 import GTMConsent from '@/components/GTM/Consent.astro'
 import { GTM_ENABLED, GTM_ID } from 'astro:env/server'
 import '@/styles/global.css'
+import DemoHeader from '@/sections/DemoHeader/index.astro'
+import DemoFooter from '@/sections/DemoFooter/index.astro'
 
 type Props = SEOProps & {
   /** Public dictionary domains required by this page's browser scripts. */
@@ -54,10 +56,15 @@ const clientCopy = JSON.stringify({ locale, translations }).replace(
     )}
     <PageLoader />
     {GTM_ENABLED && GTM_ID?.trim() && <GTMConsent />}
-    <slot name='header' />
+    <slot name='header'>
+      <DemoHeader />
+    </slot>
     <main class='flex-1'>
       <slot />
     </main>
-    <slot name='footer' />
+    <slot name='footer'>
+      <DemoFooter />
+    </slot>
+    <slot name='body-end' />
   </body>
 </html>

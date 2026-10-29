@@ -22,8 +22,15 @@ When building or reshaping a site's chrome, preserve separate owners for Main,
 Head, Header, Navigation, NavItems and Footer. A separate header file alone does
 not satisfy this boundary if it contains every navigation mode and controller.
 
-- Main assembles html/body, the unique main landmark, global mounts and named
-  head/header/footer slots. Keep page-specific content in sections.
+- Main assembles html/body, head, the unique main landmark and global mounts.
+  It imports and renders the site's shared Header (including navigation) and
+  Footer by default. Ordinary pages pass metadata and content sections only;
+  never require repeated header/footer imports or mounts in every route.
+  Keep named header/footer slots only for intentional exceptional overrides,
+  with the common components as fallback content. A head slot adds page metadata;
+  a separate body-end slot accepts exceptional trailing UI without replacing the
+  footer. Mount genuinely global panels/widgets once in the layout; keep
+  route-specific controllers with their route's section.
 - A layout-private Head owns the document head assembly and reuses SEO and
   installed head integrations. Forward the existing SEO props and head slot;
   render exactly one head. Keep body mounts outside it.
@@ -40,17 +47,25 @@ Keep these private files with their existing owner, for example
 src/layouts/Main/Head.astro and src/sections/SiteHeader/{Navigation,NavItems,
 MobileNavigation,AnnouncementBar}.astro. Names are illustrative; reuse equivalent
 existing owners and do not create empty wrappers or speculative variants. Shared
-chrome stays outside main through the layout slots; do not move it into content
-sections or the global reusable component catalog just to split files.
+chrome stays outside main and is mounted by the layout itself; do not move it
+into page composition, content sections or the reusable component catalog just
+to split files.
 
-The compact generated starter currently keeps head assembly inside Main and
-simple demo items inside Navigation. Treat those as starting implementations,
+On creation with the welcome feature, Main renders DemoHeader and DemoFooter
+by default, including on new routes and errors. Minimal output intentionally has
+no demo chrome. Adding welcome later preserves the existing Main/homepage and
+uses a dedicated Demo layout to own that feature's chrome overrides. An existing
+site's layout must own its production chrome, independent of the optional demo.
+The compact starter keeps head assembly inside Main and simple demo items inside
+Navigation. Treat those as starting implementations,
 not a reason to grow a customized site's chrome into one file. These conventions
 guide subsequent site work; they do not claim the seed already contains all of
 the illustrative files, nor authorize an unrelated redesign or source update.
 
 Before delivering a chrome change, inspect the actual imports and composition.
-Verify one head/main, preserved SEO props and slots, shared typed item data,
+Verify ordinary routes contain no repeated shared header/footer composition and
+that calling the layout alone renders its complete shared structure. Also verify
+one head/main/header/footer, preserved SEO props and slots, shared typed item data,
 active-link semantics and distinct desktop/mobile/no-JavaScript behavior. Moving
 markup changes Astro CSS scope: check affected selectors, responsive styles,
 Drawer focus/dismiss hooks, Ticker controls, reduced motion and owned cleanup.

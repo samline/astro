@@ -77,7 +77,9 @@ const navigation = (html, currentPath) => {
   )
   assert.ok(active[0].includes(`href="${currentPath}"`), active[0])
   assert.equal((html.match(/<main\b/g) ?? []).length, 1)
-  assert.match(html, /<footer\b/)
+  assert.equal((html.match(/<head\b/g) ?? []).length, 1)
+  assert.equal((html.match(/<header\b/g) ?? []).length, 1)
+  assert.equal((html.match(/<footer\b/g) ?? []).length, 1)
 }
 
 test(
@@ -103,7 +105,63 @@ test(
         await exists(directory, 'src/sections/Welcome/README.md'),
         true
       )
+      for (const route of ['index', 'demo']) {
+        const page = await read(
+          directory,
+          `src/pages/[...locale]/${route}.astro`
+        )
+        assert.doesNotMatch(
+          page,
+          /DemoHeader|DemoFooter|slot=['"](?:header|footer)/
+        )
+      }
+      await writeFile(
+        path.join(directory, 'src/pages/ordinary.astro'),
+        `---
+import Main from '@/layouts/Main.astro'
+import DemoPage from '@/sections/DemoPage/index.astro'
+---
+<Main path='/ordinary'><DemoPage /></Main>
+`
+      )
+      await writeFile(
+        path.join(directory, 'src/pages/overrides.astro'),
+        `---
+import Main from '@/layouts/Main.astro'
+import DemoPage from '@/sections/DemoPage/index.astro'
+---
+<Main path='/overrides'>
+  <meta slot='head' name='layout-override' content='preserved' />
+  <header slot='header' data-custom-header />
+  <DemoPage />
+  <footer slot='footer' data-custom-footer />
+  <div slot='body-end' data-body-end />
+</Main>
+`
+      )
       await build(directory)
+      for (const file of ['ordinary/index.html', '404.html']) {
+        const html = await read(directory, `dist/${file}`)
+        for (const tag of ['head', 'header', 'main', 'footer'])
+          assert.equal(
+            (html.match(new RegExp(`<${tag}\\b`, 'g')) ?? []).length,
+            1,
+            `${file}: ${tag}`
+          )
+        assert.match(html, /data-demo-header/)
+        assert.match(html, /data-demo-footer/)
+      }
+      const overrides = await read(directory, 'dist/overrides/index.html')
+      assert.doesNotMatch(overrides, /data-demo-header|data-demo-footer/)
+      assert.match(overrides, /name="layout-override" content="preserved"/)
+      assert.match(overrides, /data-custom-header/)
+      assert.match(overrides, /data-custom-footer/)
+      assert.match(overrides, /<\/main>[\s\S]*data-body-end/)
+      for (const tag of ['head', 'header', 'main', 'footer'])
+        assert.equal(
+          (overrides.match(new RegExp(`<${tag}\\b`, 'g')) ?? []).length,
+          1
+        )
       for (const [file, currentPath, locale] of [
         ['index.html', '/', 'es-mx'],
         ['demo/index.html', '/demo', 'es-mx'],
@@ -144,7 +202,19 @@ test(
     ])
       assert.equal(await exists(directory, file), false, file)
     const homepage = await read(directory, 'src/pages/[...locale]/index.astro')
+    let layout = await read(directory, 'src/layouts/Main.astro')
     assert.doesNotMatch(homepage, /DemoHeader|DemoFooter|Welcome/)
+    assert.doesNotMatch(layout, /DemoHeader|DemoFooter/)
+    layout = layout
+      .replace(
+        "<slot name='header' />",
+        "<slot name='header'><header data-custom-site-header /></slot>"
+      )
+      .replace(
+        "<slot name='footer' />",
+        "<slot name='footer'><footer data-custom-site-footer /></slot>"
+      )
+    await writeFile(path.join(directory, 'src/layouts/Main.astro'), layout)
     await addIntegrations({
       root: directory,
       template,
@@ -155,6 +225,13 @@ test(
       await read(directory, 'src/pages/[...locale]/index.astro'),
       homepage
     )
+    assert.equal(await read(directory, 'src/layouts/Main.astro'), layout)
+    const demoRoute = await read(directory, 'src/pages/[...locale]/demo.astro')
+    assert.match(demoRoute, /@\/layouts\/Demo\.astro/)
+    assert.doesNotMatch(
+      demoRoute,
+      /DemoHeader|DemoFooter|slot=['"](?:header|footer)/
+    )
     assert.equal(
       await exists(directory, 'src/pages/[...locale]/demo.astro'),
       true
@@ -163,8 +240,12 @@ test(
     assert.doesNotMatch(header, /ThemeSwitch|LanguagePicker/)
     await build(directory)
     const home = await read(directory, 'dist/index.html')
-    assert.doesNotMatch(home, /<header\b|<footer\b/)
-    navigation(await read(directory, 'dist/demo/index.html'), '/demo')
+    assert.match(home, /data-custom-site-header/)
+    assert.match(home, /data-custom-site-footer/)
+    assert.doesNotMatch(home, /data-demo-header|data-demo-footer/)
+    const demo = await read(directory, 'dist/demo/index.html')
+    assert.doesNotMatch(demo, /data-custom-site-header|data-custom-site-footer/)
+    navigation(demo, '/demo')
   }
 )
 

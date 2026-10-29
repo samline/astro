@@ -21,17 +21,22 @@ your own site as you build; it is a source example, not a separate UI framework.
 
 ## Assemble a page
 
-The layout exposes named `header` and `footer` slots around its default content
-slot. This keeps demo sections out of the layout itself and avoids adding them
-to pages that do not use them. The homepage composes:
+Main imports and renders the shared DemoHeader/navigation and DemoFooter by
+default, around its unique main landmark. Ordinary pages supply metadata and
+content sections only:
 
 ```astro
 <Main path='/'>
-  <DemoHeader slot='header' />
   <Welcome />
-  <DemoFooter slot='footer' />
 </Main>
 ```
+
+New routes and the 404 page inherit the same chrome automatically. Customize its
+shared imports in Main when building your own site. Named header/footer slots
+replace those defaults only when a route genuinely needs different chrome;
+do not repeat the same header/footer mounts across pages. The head slot adds
+page-specific metadata, and body-end is available for exceptional trailing UI.
+Global site widgets belong in Main rather than in each page's footer slot.
 
 The existing route supplies the imports and `getStaticPaths`. Start there instead
 of copying this composition into a route without its frontmatter. Use the
@@ -62,12 +67,14 @@ its own README; `add` does not rewrite customized sections.
 
 Run `npx @samline/astro add welcome` inside a compatible generated project after
 the npm release is available. This adds the demo sections and `/demo` route,
-then preserves your existing homepage. To use the demo homepage as well, review
-the composition above and edit your route deliberately. Existing conflicting
+and a dedicated src/layouts/Demo.astro that supplies its shared chrome through
+Main's override slots. Your existing Main and homepage stay unchanged. To use the
+demo homepage as well, select Demo as that route's layout deliberately. For your
+production site, keep its normal shared chrome in Main itself. Existing conflicting
 files require review rather than being overwritten.
 
-Existing layouts must expose one static `<slot name='header' />` and one static
-`<slot name='footer' />` around their main content. If an older or customized
+Existing layouts must expose one static named header slot and one static named
+footer slot around their main content; they may include fallback components. If an older or customized
 layout lacks them, `add welcome` stops before writing any files. Review and add
 those slots explicitly before retrying; the installer does not rewrite a custom
 document to guess the intended header/footer placement.

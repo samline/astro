@@ -4,7 +4,9 @@
 
 The project begins with static output and the selected deployment adapter.
 Add full SSR only when a project requirement justifies it. Keep sections and
-reusable components separate, with the document and metadata owned by Main.
+reusable components separate. Main owns the document, metadata and shared
+header/navigation/footer defaults. Ordinary routes provide metadata and sections,
+not repeated chrome composition. Named slots allow exceptional overrides only.
 
 Section provides semantics and vertical spacing; Box constrains content width.
 Link uses native navigation and Astro localization helpers. Components read the

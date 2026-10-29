@@ -20,7 +20,9 @@ their unrelated files, imports, dependencies or domains in a generated project.
 - Auth external/OAuth omits database dependencies/migrations; owned mode includes
   setup without running migrations.
 - Interactive creation offers Welcome; minimal selection omits demo chrome.
-  Later addition preserves the current homepage and requires compatible slots.
+  Creation mounts shared demo chrome as Main's defaults. Later addition preserves
+  Main and the current homepage, uses a feature-owned Demo layout for its chrome,
+  and requires compatible slots for those exceptional overrides.
 
 Installed, configured and enabled are separate states. Server Actions, live
 collections and local auth require an adapter; build-time local content does not.

@@ -37,7 +37,11 @@ commands. Initial creation and later addition share the same feature ownership.
 Read [frontend-conventions.md](../../memory/frontend-conventions.md) when changing
 UI ownership or writing an example. Pages compose layout → section → reusable
 component. Keep section-private children beside their section. Main owns the
-single main landmark; shared header/footer belong outside it through its slots.
+single main landmark and mounts shared header/navigation/footer outside it by
+default. Ordinary pages pass metadata and sections only. Named header/footer
+slots are exceptional overrides with layout-owned defaults; they are not required
+on each route. Mount global panels/widgets once in the layout; use a separate
+body-end slot for exceptional trailing content.
 Section owns semantics and spacing; Box owns width and gutters.
 
 When building or reshaping site chrome, apply the explicit Main/Head/Header/

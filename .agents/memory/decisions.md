@@ -3,10 +3,14 @@
 ## Composition and APIs
 
 Pages own routing/data, metadata and section order. Main owns the document and
-single main landmark, with header/footer slots. Domain sections compose reusable
+single main landmark, and renders the shared header/navigation/footer by default.
+Pages do not repeat these imports or mounts; header/footer slots are exceptional
+overrides with layout-owned fallbacks. Domain sections compose reusable
 components and keep private children inside their directory. Shared components
 do not import sections or layouts. This keeps page composition independent of
-reusable UI and prevents demo-specific content from becoming global chrome.
+reusable UI. On creation, optional demo chrome becomes Main's default; minimal
+output omits it. A later demo addition uses its own Demo layout to preserve the
+existing site's Main and homepage.
 
 Section supplies semantic grouping and vertical rhythm; Box supplies width and
 gutters. Keep native typed attributes, slots, Astro scope attributes and logical

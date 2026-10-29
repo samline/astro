@@ -8,6 +8,7 @@ import {
 import { copyPayload } from './project.mjs'
 import {
   mountLayout,
+  addedDemoLayout,
   mergeAuthMiddleware,
   addContactCaptcha,
   addContactCaptchaSchema,
@@ -213,6 +214,15 @@ export const addIntegrations = async ({
     total,
     effective
   )
+  if (added.includes('welcome')) {
+    files.set('src/layouts/Demo.astro', addedDemoLayout)
+    const route = 'src/pages/[...locale]/demo.astro'
+    const source = await read(template, route)
+    files.set(
+      route,
+      source.replace('@/layouts/Main.astro', '@/layouts/Demo.astro')
+    )
+  }
   if (added.includes('auth') && (await exists(root, 'src/middleware.ts')))
     files.set(
       'src/middleware.ts',

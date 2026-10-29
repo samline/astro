@@ -19,7 +19,9 @@ packages/cli/package.json for current versions.
 - tests/: authored regression and distribution checks.
 
 Pages compose layout -> section -> reusable component. Main owns the document,
-SEO and unique main landmark. Section-private pieces live with their section;
+SEO, unique main landmark and shared header/navigation/footer defaults. Pages
+supply metadata and content sections; slots provide exceptional overrides only.
+Section-private pieces live with their section;
 reusable components own a folder containing source, supporting files and README.
 See decisions.md and the feature READMEs for API and security boundaries.
 

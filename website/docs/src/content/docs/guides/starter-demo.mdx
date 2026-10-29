@@ -33,9 +33,12 @@ To select the demo explicitly:
 | `src/i18n/dictionaries/<locale>/welcome/`    | Demo text                                   |
 | `src/i18n/dictionaries/<locale>/navigation/` | Navigation labels                           |
 
-`Main.astro` owns the document and main landmark. Pages place DemoHeader and
-DemoFooter in its named slots, so the layout does not depend on the demo. Each
-content section composes the reusable components. The generated
+`Main.astro` owns the document, main landmark and shared header/navigation/footer.
+It renders DemoHeader and DemoFooter by default when the demo is selected at
+creation. Ordinary routes only pass metadata and content sections, so new pages
+and errors inherit the same chrome automatically. Named header/footer slots are
+reserved for exceptional overrides. Each content section composes reusable
+components. The generated
 `src/sections/Welcome/README.md` explains that composition beside the source.
 
 ## Check the two pages
@@ -55,13 +58,16 @@ decide where to mount it. See [integration choices](../integrations/).
 
 Replace the demo dictionary copy, then edit its owning sections. Add page-specific
 content under `src/sections`, and keep shared primitives under `src/components`.
-When a new route needs the same header and footer, follow the existing page
-composition. [Project conventions](../conventions/) explains the responsibilities;
+New routes use `<Main>` with their metadata and content sections; do not repeat
+header/footer imports or mounts. Customize Main's shared imports once for the
+whole site. Mount global panels/widgets in the layout and use body-end for
+exceptional trailing UI, rather than using the footer override as a catch-all. [Project conventions](../conventions/) explains the responsibilities;
 the [Section reference](../../reference/components/section/) explains its local
 props and links to related components.
 
 If you started without the demo, `add welcome` supplies its sections and `/demo`
-route while leaving your homepage intact. Read the generated README before
+route plus a dedicated Demo layout while leaving your Main and homepage intact.
+That feature layout owns the demo's exceptional chrome overrides. Read the generated README before
 deliberately changing your homepage to use it. The installer reports conflicting
 files instead of replacing them.
 An older or customized Main must have one static named `header` slot and one
