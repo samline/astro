@@ -97,6 +97,12 @@ consume custom props instead of leaking them to the DOM. Do not add children:any
 loose any prop signatures, client JavaScript or Tailwind just for these wrappers.
 All visible copy stays in the dictionaries.
 
+For site chrome work, follow memory/frontend-conventions.md: keep Main, Head,
+Header, Navigation, NavItems and Footer responsibilities separate, with private
+mobile navigation and announcement bars when present. A header file containing
+all navigation modes/controllers is not sufficient decomposition. Preserve the
+layout slots, SEO contract and component-owned styles/lifecycle when extracting.
+
 ## PageLoader
 
 When PageLoader is selected, keep it in `src/components/PageLoader` and mount it

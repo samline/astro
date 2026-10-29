@@ -45,6 +45,12 @@ Section owns semantic sections, unique anchors, and vertical rhythm. Box owns
 centered content width and gutters. Preserve their separate responsibilities.
 Read each component's README before changing its public contract.
 
+For site chrome work, follow memory/frontend-conventions.md: keep Main, Head,
+Header, Navigation, NavItems and Footer responsibilities separate, with private
+mobile navigation and announcement bars when present. A header file containing
+all navigation modes/controllers is not sufficient decomposition. Preserve the
+layout slots, SEO contract and component-owned styles/lifecycle when extracting.
+
 ## JavaScript and TypeScript
 
 Use arrow functions by default. Avoid classes and this in authored code; use

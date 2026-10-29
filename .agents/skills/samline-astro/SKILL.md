@@ -40,6 +40,13 @@ component. Keep section-private children beside their section. Main owns the
 single main landmark; shared header/footer belong outside it through its slots.
 Section owns semantics and spacing; Box owns width and gutters.
 
+When building or reshaping site chrome, apply the explicit Main/Head/Header/
+Navigation/NavItems/Footer contract in frontend-conventions.md. Keep mobile
+navigation and announcement bars private to their owner when present. The compact
+demo is a starting point, not a model for growing all navigation into Header.
+Preserve head/SEO props, layout slots, scoped styles and owned lifecycle; verify
+desktop/mobile/no-JavaScript behavior after extraction.
+
 Use native typed attributes, slots and explicit small props. Prefer arrows; use
 other function forms only when required. Regular Astro components read their own
 Astro.currentLocale. Isolated requests such as Server Islands receive the parent

@@ -1,5 +1,15 @@
 # Changelog
 
+## 7.21.3
+
+- Make document and site chrome ownership explicit in maintainer memory, portable
+  project guidance and the generated-project skill: Main, Head, Header,
+  Navigation, NavItems and Footer, with private mobile menus and announcement bars.
+- Require composition and behavior checks when extracting chrome, including SEO,
+  slots, Astro CSS scope, accessible navigation and package-owned lifecycle.
+- Clarify that the compact demo is a starting implementation; this guidance
+  update does not refactor starter source or update existing generated sites.
+
 ## 7.21.2
 
 - Ship an opt-in, section-owned reveal recipe with focus/hash handling, reduced

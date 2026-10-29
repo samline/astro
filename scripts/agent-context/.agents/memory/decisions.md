@@ -17,6 +17,11 @@ independent. PageLoader retains ldrs to make animation changes straightforward.
 Keep the inherited component API documentation alongside the source. Read it
 before altering behavior; record new project decisions below as they are made.
 
+Site chrome customization preserves explicit Main/Head/Header/Navigation/NavItems/
+Footer owners and private mobile navigation/announcement parts when present.
+See frontend-conventions.md for composition and verification; the compact demo
+is a starting point rather than the final architecture for a customized site.
+
 ## Localized API integration guidance
 
 Before adding API/CMS content or translated slugs, follow

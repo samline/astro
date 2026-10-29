@@ -16,6 +16,46 @@ explicitly changes the contract.
 - Section supplies semantics, anchors and vertical rhythm. Box supplies centered
   width and gutters. Neither is a generic styled card.
 
+## Compose document and site chrome explicitly
+
+When building or reshaping a site's chrome, preserve separate owners for Main,
+Head, Header, Navigation, NavItems and Footer. A separate header file alone does
+not satisfy this boundary if it contains every navigation mode and controller.
+
+- Main assembles html/body, the unique main landmark, global mounts and named
+  head/header/footer slots. Keep page-specific content in sections.
+- A layout-private Head owns the document head assembly and reuses SEO and
+  installed head integrations. Forward the existing SEO props and head slot;
+  render exactly one head. Keep body mounts outside it.
+- Header assembles its private parts. Navigation owns the nav landmark and list;
+  NavItems renders typed navigation entries, sharing the same data across real
+  desktop/mobile/fallback variants without duplicating route or action logic.
+- Mobile navigation/Drawer and announcement/Ticker bars have their own private
+  components when present. Keep their markup, styles and lifecycle together;
+  retain package-owned behavior and the header's positioning controller.
+- Footer remains a separate owner. Extract substantial forms, link groups or
+  other distinct responsibilities when useful, not every paragraph or icon.
+
+Keep these private files with their existing owner, for example
+src/layouts/Main/Head.astro and src/sections/SiteHeader/{Navigation,NavItems,
+MobileNavigation,AnnouncementBar}.astro. Names are illustrative; reuse equivalent
+existing owners and do not create empty wrappers or speculative variants. Shared
+chrome stays outside main through the layout slots; do not move it into content
+sections or the global reusable component catalog just to split files.
+
+The compact generated starter currently keeps head assembly inside Main and
+simple demo items inside Navigation. Treat those as starting implementations,
+not a reason to grow a customized site's chrome into one file. These conventions
+guide subsequent site work; they do not claim the seed already contains all of
+the illustrative files, nor authorize an unrelated redesign or source update.
+
+Before delivering a chrome change, inspect the actual imports and composition.
+Verify one head/main, preserved SEO props and slots, shared typed item data,
+active-link semantics and distinct desktop/mobile/no-JavaScript behavior. Moving
+markup changes Astro CSS scope: check affected selectors, responsive styles,
+Drawer focus/dismiss hooks, Ticker controls, reduced motion and owned cleanup.
+Do not declare the decomposition complete solely because the build passes.
+
 ## Keep APIs small and explicit
 
 Use native HTML, typed attributes and slots. Consume custom props before
