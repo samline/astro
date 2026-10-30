@@ -1,5 +1,12 @@
 # Changelog
 
+## 7.22.1
+
+- Update the maintained starter and website to Astro 7.4.4 and refresh their
+  installed official Astro integrations through the official upgrade tool.
+- Align the generated Vercel deployment profile with adapter 11.0.17.
+- Synchronize lockfiles, release metadata and local archive examples.
+
 ## 7.22.0
 
 - Include the optional samline-project-kickoff skill, English project brief and

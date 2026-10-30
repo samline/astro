@@ -6,7 +6,7 @@ export const deployments = {
   vercel: {
     label: 'Vercel',
     adapter: '@astrojs/vercel',
-    version: '11.0.16',
+    version: '11.0.17',
     identifier: 'vercel',
     options: '{ imageService: false }'
   },

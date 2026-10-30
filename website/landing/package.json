@@ -16,13 +16,13 @@
     "@resvg/resvg-js": "^2.6.2",
     "@samline/drawer": "5.0.2",
     "@tailwindcss/vite": "4.3.0",
-    "astro": "^7.4.2",
+    "astro": "^7.4.4",
     "tailwindcss": "4.3.0"
   },
   "private": true,
   "devDependencies": {
-    "@astrojs/check": "^0.9.4",
-    "@astrojs/compiler-rs": "0.5.1",
+    "@astrojs/check": "^0.9.12",
+    "@astrojs/compiler-rs": "0.5.2",
     "prettier": "^3.9.10",
     "prettier-plugin-astro": "^1.1.1",
     "typescript": "6.0.3",
