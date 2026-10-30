@@ -164,6 +164,7 @@ test(
       'tailwind-css-patterns',
       'typescript-advanced-types',
       'samline-astro',
+      'samline-project-kickoff',
       'vite',
       'seo',
       'accessibility',
@@ -384,6 +385,19 @@ test(
     assert.ok(!skillLock.skills['deploy-to-vercel'])
     assert.ok(!skillLock.skills.bun)
     assert.ok(!skillLock.skills['samline-astro'])
+    assert.ok(!skillLock.skills['samline-project-kickoff'])
+    for (const file of [
+      'SKILL.md',
+      'references/kickoff-prompt.md',
+      'references/design-inventory.md'
+    ]) {
+      const relative = `.agents/skills/samline-project-kickoff/${file}`
+      assert.ok(files.includes(`package/template/${relative}`), relative)
+      assert.equal(
+        await readFile(path.join(destination, relative), 'utf8'),
+        await readFile(path.join(root, relative), 'utf8')
+      )
+    }
     const skillNames = await readdir(path.join(destination, '.agents/skills'))
     assert.ok(skillNames.includes('samline-astro'))
     assert.ok(!skillNames.includes('bun'))

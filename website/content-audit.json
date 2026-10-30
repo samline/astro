@@ -1,6 +1,6 @@
 {
   "status": "verified",
-  "packageVersion": "7.21.5",
+  "packageVersion": "7.22.0",
   "templateSource": {
     "repository": "https://github.com/samline/package-landing-docs",
     "commit": "dd6d8892339690487099aab1246b2b01005df335"
@@ -241,6 +241,13 @@
       "page": "reference/components/captcha",
       "reviewed": true,
       "method": "Source-backed rendered reference with repository-relative link adaptation; no duplicate API prose."
+    },
+    {
+      "source": ".agents/skills/samline-project-kickoff/SKILL.md",
+      "destination": "docs/src/content/docs/guides/agent-workflows.mdx",
+      "page": "guides/agent-workflows",
+      "reviewed": true,
+      "method": "Reviewed portable skill, canonical English prompt and inventory contract; the guide imports the prompt and downloads derive from the same licensed source."
     }
   ],
   "publicExports": [],
@@ -262,7 +269,7 @@
     "consumer": "Source notices included; application license remains the consumer owner's choice"
   },
   "releasePreparation": {
-    "version": "7.21.5",
+    "version": "7.22.0",
     "npm": "Public npm, pnpm and Bun installation flows documented; publication and registry verification are recorded in release descriptions.",
     "website": "Adaptation complete; indexable production artifact with standard public installation copy."
   }

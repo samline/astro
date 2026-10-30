@@ -31,7 +31,9 @@ docs and component ownership.
 - [samline-astro](./samline-astro/SKILL.md): build and maintain a generated project using its installed features, dictionaries, ownership and update boundaries. Shipped with generated projects.
 - [samline-astro-maintainer](./samline-astro-maintainer/SKILL.md): maintain this repository's CLI, catalog, package and website. Repository-only; not installed in consumer projects.
 
-These two skills are original MIT-licensed project source. They are not registry
+- [samline-project-kickoff](./samline-project-kickoff/SKILL.md): prepare a project and an evidence-backed design inventory. Includes an English prompt and inventory contract; shipped with generated projects.
+
+These three skills are original MIT-licensed project source. They are not registry
 entries and must not receive fabricated autoskills hashes. Third-party licenses
 and notices are retained in ../../licenses/skills and THIRD_PARTY_NOTICES.md.
 Runtime conventions live in project instructions and the project workflow skills.

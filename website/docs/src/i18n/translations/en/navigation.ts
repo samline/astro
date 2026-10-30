@@ -23,6 +23,7 @@ export default {
     'guides/languages': 'Set up languages',
     'guides/content': 'Content Collections',
     'guides/deployment': 'Deployment targets',
+    'guides/agent-workflows': 'AI agent workflows',
     'guides/conventions': 'Project conventions',
     'guides/starter-demo': 'Starter demo',
     'guides/examples': 'Installation examples',

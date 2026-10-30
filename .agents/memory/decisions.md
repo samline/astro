@@ -92,5 +92,8 @@ CLI and generated projects. Drawer/Ticker/Forms comprise the curated package
 section; template and dependency licenses retain required notices.
 
 Portable guidance comes from scripts/agent-context plus selected skills.
-samline-astro is portable; samline-astro-maintainer stays repository-only.
+samline-astro and samline-project-kickoff are portable;
+samline-astro-maintainer stays repository-only. The optional kickoff workflow
+owns its English prompt and design inventory reference. Website downloads and
+the copyable prompt are derived from that same skill source.
 Context contains applicable project contracts rather than development history.

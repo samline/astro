@@ -6,6 +6,7 @@ export const agentSkillNames = [
   'accessibility',
   'astro',
   'samline-astro',
+  'samline-project-kickoff',
   'codebase-memory',
   'deploy-to-vercel',
   'frontend-design',
@@ -32,7 +33,7 @@ export const agentSkillIndex = (names, registry) => {
   const rows = names.map((name) => {
     const source =
       registry[name]?.source ??
-      (name === 'samline-astro'
+      (['samline-astro', 'samline-project-kickoff'].includes(name)
         ? 'Original @samline/astro project workflow (MIT)'
         : 'DeusData/codebase-memory-mcp (MIT; local workflow additions)')
     return `- [${name}](./${name}/SKILL.md): ${source}.`
@@ -48,6 +49,10 @@ ${rows.join('\n')}
 Codebase-memory uses its MCP service when configured. Otherwise inspect source
 directly and state coverage limits. Skills do not install or authorize external
 services. Deployment guidance does not itself deploy the project.
+
+For a new project or design handoff, use samline-project-kickoff and its
+[copyable prompt](./samline-project-kickoff/references/kickoff-prompt.md).
+It is available guidance; generation does not run a design review automatically.
 `
 }
 

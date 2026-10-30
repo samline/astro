@@ -36,3 +36,8 @@ Read memory/integrations.md for installed features, collections and pending loca
 Use the bundled samline-astro skill for this distribution's project workflow.
 
 For opt-in scroll entrances, read [the reveal recipe](./memory/reveal-recipe.md).
+
+For new projects and design handoffs, use the bundled
+[samline-project-kickoff skill](./skills/samline-project-kickoff/SKILL.md) and
+[copyable kickoff prompt](./skills/samline-project-kickoff/references/kickoff-prompt.md).
+These are optional workflows; generation does not run them automatically.

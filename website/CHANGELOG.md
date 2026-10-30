@@ -1,5 +1,15 @@
 # Changelog
 
+## 7.22.0
+
+- Include the optional samline-project-kickoff skill, English project brief and
+  design inventory contract in every new project's portable .agents directory.
+- Document setup, design review, staged implementation and agent continuity,
+  with explicit authorization for publishing upstream issues and external work.
+- Generate a copyable prompt and standalone skill ZIP from the same maintained
+  source used by the installer; retain the skill license and supporting files.
+- Verify packed-project skill integrity and browser copying/download behavior.
+
 ## 7.21.5
 
 - Clean up maintainer and portable architecture guidance while retaining the

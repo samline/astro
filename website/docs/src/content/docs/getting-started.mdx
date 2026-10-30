@@ -93,22 +93,28 @@ pnpm install
 bun run kit:pack
 ```
 
-Use the archive filename printed by `kit:pack`. For version 7.21.5,
+Use the archive filename printed by `kit:pack`. For version 7.22.0,
 create a project next to the checkout with:
 
 ```sh
-npm exec --yes --package ./artifacts/samline-astro-7.21.5.tgz -- samline-astro ../my-site --minimal --deploy static --no-install
+npm exec --yes --package ./artifacts/samline-astro-7.22.0.tgz -- samline-astro ../my-site --minimal --deploy static --no-install
 ```
 
 While still in the checkout, the same archive can add a feature to that project:
 
 ```sh
-npm exec --yes --package ./artifacts/samline-astro-7.21.5.tgz -- samline-astro add themes --cwd ../my-site --no-install
+npm exec --yes --package ./artifacts/samline-astro-7.22.0.tgz -- samline-astro add themes --cwd ../my-site --no-install
 ```
 
 Then enter `../my-site`, install dependencies using its generated instructions,
 and run its formatter and verification scripts. Local archive commands exercise
 the installer without publishing the package.
+
+## Start with a design reference
+
+For a design-led project, use the bundled kickoff skill and copyable English
+prompt in [AI agent workflows](../guides/agent-workflows/). The guide also covers
+standalone downloads and the purpose of the included skills.
 
 ## Continue with Astro
 

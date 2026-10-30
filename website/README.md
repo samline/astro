@@ -11,6 +11,13 @@ From the repository root: `bun run site:install`, `bun run site:dev`,
 pnpm workspace/lock; execution uses Bun, with Node required by external tools.
 The root starter scripts and runtime are unchanged.
 
+The asset preparation step derives the kickoff prompt and standalone skill ZIP
+in `docs/public/downloads/` from `.agents/skills/samline-project-kickoff/` at the
+repository root. Edit that source rather than the generated downloads. Building
+requires the `zip` command; the download integrity test also uses `unzip`.
+The downloads belong to website output; the CLI ships the original skill
+directly and continues to exclude website source and tools.
+
 Landing dev: http://127.0.0.1:4330/astro/ . Docs uses its own compiler on 4331.
 Production preview serves `landing/dist`, including `/astro/docs/` and Pagefind.
 The GitHub Pages workflow validates and deploys that combined artifact on every

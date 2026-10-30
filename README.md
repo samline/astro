@@ -193,6 +193,13 @@ Generated projects include the original
 conventions and fresh project memory. Agents can use them to follow the installed
 features, translated UI and section ownership without importing maintainer history.
 
+For design-led projects, the bundled
+[samline-project-kickoff skill](.agents/skills/samline-project-kickoff/SKILL.md)
+provides setup, design inventory and staged handoff guidance. Start with its
+[English kickoff prompt](.agents/skills/samline-project-kickoff/references/kickoff-prompt.md).
+The [agent workflow guide](website/docs/src/content/docs/guides/agent-workflows.mdx)
+explains invocation, standalone downloads and the bundled skills.
+
 The [maintainer skill](.agents/skills/samline-astro-maintainer/SKILL.md) describes
 the CLI, package and website workflow in this repository. It is excluded from
 generated projects. Bundled third-party skills retain their own licenses.
@@ -258,18 +265,18 @@ bun run verify
 bun run kit:pack
 ```
 
-The current archive is `artifacts/samline-astro-7.21.5.tgz`. From the folder where
+The current archive is `artifacts/samline-astro-7.22.0.tgz`. From the folder where
 you want the test project, run the following with an absolute archive path:
 
 ```sh
-npm exec --yes --package /absolute/path/to/astro/artifacts/samline-astro-7.21.5.tgz -- samline-astro my-site
+npm exec --yes --package /absolute/path/to/astro/artifacts/samline-astro-7.22.0.tgz -- samline-astro my-site
 ```
 
 The repository root is the maintained starter. `packages/cli/template` is
 regenerated from explicit allowlists; edit the original source, then run
 `bun run kit:prepare`. Never maintain the generated template by hand.
 
-Root and CLI versions are `7.21.5`. Distribution releases stay on major 7 while
+Root and CLI versions are `7.22.0`. Distribution releases stay on major 7 while
 supporting Astro 7; minor versions evolve independently of Astro's minor number.
 `bun run kit:version 7.x.y` advances both manifests for a future release.
 Packaging, publishing and deployment are separate operations.

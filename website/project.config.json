@@ -2,7 +2,7 @@
   "package": {
     "name": "Astro",
     "npmName": "@samline/astro",
-    "version": "7.21.5",
+    "version": "7.22.0",
     "description": "An independent Astro starter from @samline/astro. Choose integrations, work with the generated source, and add more when needed.",
     "author": "Samuel Olvera (samline)",
     "license": "MIT",

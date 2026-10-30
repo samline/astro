@@ -1,0 +1,122 @@
+---
+title: 'AI agent workflows'
+description: 'Use the bundled skills and English kickoff prompt to prepare a project, review design references and plan implementation stages.'
+locale: en
+sidebar:
+  group: start
+  order: 4
+---
+
+import CodeFrame from '../../../../../shared/components/CodeFrame.astro'
+import prompt from '../../../../../../.agents/skills/samline-project-kickoff/references/kickoff-prompt.md?raw'
+
+## Start with the project brief
+
+The installer includes `samline-project-kickoff` in every new project's `.agents`
+folder, including minimal projects. Use it when starting a site, handing a design
+to an agent, resuming an inventory or reviewing a revised delivery. It helps the
+agent verify setup, inspect references and produce a scoped implementation stage.
+Creating a project copies the workflow; it does not execute it.
+
+Fill in the prompt below and paste it into your agent chat. Leave unknown choices
+marked for discussion. Your communication language, package manager, runtime,
+locales and deployment target are independent choices. Design-only work needs no
+automatic installation of optional integrations.
+
+<CodeFrame
+  label="Project kickoff prompt"
+  text={prompt.split('\n---\n')[1].trim() + '\n'}
+  copyLabel="Copy project kickoff prompt"
+  language="markdown"
+/>
+
+The default brief asks for setup and analysis before implementation. Change its
+scope when you want a specific implementation stage performed immediately. Read
+the Git/external-actions field before sending it; posting issues and deploying
+are separate actions that need your authorization.
+
+## Find or download the workflow
+
+In a generated project, open:
+
+```text
+.agents/skills/samline-project-kickoff/
+  SKILL.md
+  references/
+    kickoff-prompt.md
+    design-inventory.md
+```
+
+Invoke `$samline-project-kickoff` in agents that support that syntax. Otherwise
+ask the agent to read the local SKILL.md and its linked references. Discovery
+rules vary by agent: copying a folder does not guarantee automatic activation.
+
+- <a
+    href={`${import.meta.env.BASE_URL}downloads/samline-project-kickoff.zip`}
+    download
+  >
+    Download the skill with its prompt and inventory contract
+  </a>
+- <a href={`${import.meta.env.BASE_URL}downloads/kickoff-prompt.md`} download>
+    Download the English prompt
+  </a>
+- [Browse the maintained skill source](https://github.com/samline/astro/tree/main/.agents/skills/samline-project-kickoff)
+
+Extract the skill archive at your project root; it contains
+`.agents/skills/samline-project-kickoff/` and the skill's MIT license. Inspect and
+reconcile any existing copy before extracting over it. To install into a different
+agent's skill directory, copy the complete `samline-project-kickoff` folder there,
+including `references`. You can also attach those files directly to your agent.
+The prompt alone provides a compact brief; the skill adds the detailed workflow.
+
+Existing generated projects do not automatically receive new skill files when
+you update or rerun the generator. Download and review the workflow separately.
+The archive contains this original workflow, not the third-party skill catalog.
+
+## What the design review produces
+
+The workflow separates visual presentation, developer inspection and interactive
+navigation. It records which modes, artboards and viewports were actually
+accessible and distinguishes observed facts, inferences, proposals and unknowns.
+Figma/XD inspection access is useful but optional; exports and screenshots can
+support a partial inventory with explicit limits. No particular connector is
+required, and the skill cannot grant access to a private design.
+
+For a complete handoff, expect matching Markdown/JSON records with stable IDs,
+route/interaction and asset maps, a coverage matrix, open questions and a local
+screenshot gallery. Smaller references use only the applicable artifacts. Private
+evidence belongs under an actually ignored `.local/design-inventory/`; durable
+project contracts stay in `.agents`. New deliveries preserve previous evidence
+and identify the implementation that needs revalidation.
+
+The result includes actual setup choices, missing inputs, reuse candidates,
+build/runtime data boundaries and an implementation stage with acceptance
+criteria. An inventory does not prove that a site has been implemented or that a
+provider connection works.
+
+## Choose the skill for the task
+
+Read `.agents/README.md` first, then `.agents/skills/README.md` for the generated
+project's actual catalog and provenance. Bundled guidance serves different tasks:
+
+| Skill                               | Purpose                                                                                                                |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `samline-project-kickoff`           | Setup, design evidence, asset inventory and staged handoff.                                                            |
+| `samline-astro`                     | This distribution's ownership, dictionaries, installed features and maintenance boundaries.                            |
+| `astro`                             | Astro framework workflows and APIs.                                                                                    |
+| `frontend-design`                   | Visual direction when the task calls for design decisions.                                                             |
+| `tailwind-css-patterns`             | Styling and responsive composition.                                                                                    |
+| `accessibility`, `seo`              | Accessibility and search visibility work.                                                                              |
+| `typescript-advanced-types`, `vite` | Relevant type-system and build-tool work.                                                                              |
+| `codebase-memory`                   | Structural source exploration when its MCP service is configured; otherwise inspect source directly and report limits. |
+| `deploy-to-vercel`                  | Vercel workflows; included only when Vercel is selected.                                                               |
+
+Skills guide the agent; they do not install the named tools, connect services or
+authorize external actions. Use only those relevant to your task. Current user
+instructions and project contracts take precedence over generic skill examples.
+The repository-only `samline-astro-maintainer` skill is excluded from generated
+sites. Original project skills are MIT-licensed; bundled third-party skills keep
+their licenses and source metadata in `skills-lock.json` and license notices.
+
+Continue with [project conventions](../conventions/) and
+[updating a project](../updating/) for ongoing site work.
