@@ -122,6 +122,17 @@ test(
     assert.doesNotMatch(routeCatalog, /en-us|demo|company\.about/)
     assert.match(routeCatalog, /home\.index/)
     assert.equal(await exists(directory, 'src/i18n/routes.ts'), true)
+    assert.doesNotMatch(
+      await read(directory, 'src/i18n/route-tables.ts'),
+      /en-us|demo/
+    )
+    assert.deepEqual(
+      dictionary(
+        await read(directory, 'src/i18n/dictionaries/es-mx/routes.ts'),
+        'routes'
+      ),
+      { 'home.index': '/' }
+    )
     const types = await read(directory, 'src/i18n/types.ts')
     assert.doesNotMatch(types, /themes|cookies|auth|forms|en-us/)
     assert.equal(manifest.scripts['auth:migrate'], undefined)
@@ -133,6 +144,13 @@ test(
       /samlineAstroTheme|cookieconsent|data-theme-switch/
     )
     await add(directory, ['welcome'])
+    assert.equal(
+      dictionary(
+        await read(directory, 'src/i18n/dictionaries/es-mx/routes.ts'),
+        'routes'
+      )['demo.index'],
+      '/demo'
+    )
     const welcome = await read(directory, 'src/sections/Welcome/index.astro')
     assert.doesNotMatch(welcome, /ThemeSwitch|LanguagePicker/)
     await build(directory)
@@ -351,10 +369,34 @@ test(
     const content = await readdir(
       path.join(directory, 'src/content/posts/data')
     )
-    const routeCatalog = await read(directory, 'src/config/routes.ts')
+    const routeFile = 'src/i18n/dictionaries/es-mx/routes.ts'
+    const routeCatalog = (
+      await read(directory, 'src/config/routes.ts')
+    ).replace(
+      '"home":"home.index"',
+      '"home":"home.index","checkout":"checkout.index"'
+    )
+    await writeFile(path.join(directory, 'src/config/routes.ts'), routeCatalog)
+    const routeTable = (await read(directory, routeFile)).replace(
+      '"home.index": "/"',
+      '"home.index": "/", "checkout.index": "/pagar"'
+    )
+    await writeFile(path.join(directory, routeFile), routeTable)
     const entry = localeDetails('fr-fr', 'Français')
     await addProjectLocale({ root: directory, kitVersion, entry })
     assert.equal(await read(directory, 'src/config/routes.ts'), routeCatalog)
+    assert.equal(await read(directory, routeFile), routeTable)
+    assert.deepEqual(
+      dictionary(
+        await read(directory, 'src/i18n/dictionaries/fr-fr/routes.ts'),
+        'routes'
+      ),
+      { 'home.index': null, 'checkout.index': null }
+    )
+    assert.match(
+      await read(directory, 'src/i18n/route-tables.ts'),
+      /dictionaries\/fr-fr\/routes/
+    )
     const added = dictionary(
       await read(directory, 'src/i18n/dictionaries/fr-fr/checkout/index.ts'),
       'checkout'

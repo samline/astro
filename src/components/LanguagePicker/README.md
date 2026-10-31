@@ -83,3 +83,8 @@ headers, missing translations and provider mapping.
 URL prefixes and trailing-slash behavior belong to
 [Astro i18n](https://docs.astro.build/en/guides/internationalization/) and
 [Astro URL helpers](https://docs.astro.build/en/reference/modules/astro-i18n/).
+
+Named-page URLs are owned by each language's
+`src/i18n/dictionaries/<locale>/routes.ts`. The shared names/types live in
+`src/config/routes.ts`; null marks an unavailable translation. Edit these tables
+instead of adding a second URL list in the component.

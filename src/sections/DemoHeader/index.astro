@@ -8,7 +8,8 @@ import LanguagePicker from '@/components/LanguagePicker/index.astro'
 import astroLogo from '@/assets/astro.svg'
 import { getDictionary, resolveLocale } from '@/i18n'
 import Navigation from './Navigation.astro'
-import type { PageRoute } from '@/i18n/routes'
+import { routePath, resolveRoutePaths, type PageRoute } from '@/i18n/routes'
+import { routeNames } from '@/config/routes'
 
 interface Props {
   pageRoute?: PageRoute
@@ -17,23 +18,34 @@ const { pageRoute } = Astro.props
 
 const locale = resolveLocale(Astro.currentLocale)
 const { navigation, welcome } = getDictionary(locale)
+const homePath = routePath({ routeName: routeNames.home }, locale)
 const links = [
-  { path: '/', label: navigation.home },
-  { path: '/demo', label: navigation.demo }
-].map((item) => {
-  const href = getRelativeLocaleUrl(locale, item.path)
-  return {
-    ...item,
-    href,
-    current: currentDestination(new URL(href, Astro.url), Astro.url) === 'page'
-  }
+  { routeName: routeNames.home, label: navigation.home },
+  { routeName: routeNames.demo, label: navigation.demo }
+].flatMap((item) => {
+  const path = resolveRoutePaths({ routeName: item.routeName })[locale]
+  if (path === undefined) return []
+  const href = getRelativeLocaleUrl(locale, path)
+  return [
+    {
+      ...item,
+      path,
+      href,
+      current:
+        currentDestination(new URL(href, Astro.url), Astro.url) === 'page'
+    }
+  ]
 })
-const path = links.find((item) => item.current)?.path ?? '/'
+const path = links.find((item) => item.current)?.path ?? homePath
 ---
 
 <header class='border-b border-black/10 dark:border-white/15' data-demo-header>
   <Box class='flex flex-wrap items-center justify-between gap-x-8 gap-y-4 py-5'>
-    <Link href={links[0].href} localize={false} class='shrink-0'>
+    <Link
+      href={getRelativeLocaleUrl(locale, homePath)}
+      localize={false}
+      class='shrink-0'
+    >
       <img
         src={astroLogo.src}
         width='96'

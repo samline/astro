@@ -123,13 +123,15 @@ not connect it to a live service or deploy the project.
 
 ## Named and translated routes
 
-Every project includes `src/config/routes.ts` with `routeNames.home`. Add the
-stable names and actual locale-free destinations of your pages there. Link and
+Every language has `src/i18n/dictionaries/<locale>/routes.ts` listing stable page
+names and actual locale-free paths. Declare shared names in `src/config/routes.ts`;
+edit URLs in the locale tables and use null for unavailable translations. Link and
 Button accept `routeName` instead of `href`; optional `currentMatch` handles exact
 pages or segment-bounded children. Main, SEO and LanguagePicker share `path`,
 `routeName` or an actual `localizedPaths` map for translated content. Main forwards
 that context to its default header; custom headers must forward it explicitly.
-Missing translations are omitted. Astro still owns page generation.
+Missing translations are omitted. `routeEntries(locale)` exposes the named page
+inventory for navigation or an HTML sitemap. Astro still owns page generation.
 See [localized routes](./src/i18n/localized-content.md) for complete examples and
 [Link](./src/components/Link/README.md) for active navigation behavior.
 
@@ -277,18 +279,18 @@ bun run verify
 bun run kit:pack
 ```
 
-The current archive is `artifacts/samline-astro-7.23.0.tgz`. From the folder where
+The current archive is `artifacts/samline-astro-7.24.0.tgz`. From the folder where
 you want the test project, run the following with an absolute archive path:
 
 ```sh
-npm exec --yes --package /absolute/path/to/astro/artifacts/samline-astro-7.23.0.tgz -- samline-astro my-site
+npm exec --yes --package /absolute/path/to/astro/artifacts/samline-astro-7.24.0.tgz -- samline-astro my-site
 ```
 
 The repository root is the maintained starter. `packages/cli/template` is
 regenerated from explicit allowlists; edit the original source, then run
 `bun run kit:prepare`. Never maintain the generated template by hand.
 
-Root and CLI versions are `7.23.0`. Distribution releases stay on major 7 while
+Root and CLI versions are `7.24.0`. Distribution releases stay on major 7 while
 supporting Astro 7; minor versions evolve independently of Astro's minor number.
 `bun run kit:version 7.x.y` advances both manifests for a future release.
 Packaging, publishing and deployment are separate operations.

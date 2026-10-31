@@ -93,17 +93,17 @@ pnpm install
 bun run kit:pack
 ```
 
-Use the archive filename printed by `kit:pack`. For version 7.23.0,
+Use the archive filename printed by `kit:pack`. For version 7.24.0,
 create a project next to the checkout with:
 
 ```sh
-npm exec --yes --package ./artifacts/samline-astro-7.23.0.tgz -- samline-astro ../my-site --minimal --deploy static --no-install
+npm exec --yes --package ./artifacts/samline-astro-7.24.0.tgz -- samline-astro ../my-site --minimal --deploy static --no-install
 ```
 
 While still in the checkout, the same archive can add a feature to that project:
 
 ```sh
-npm exec --yes --package ./artifacts/samline-astro-7.23.0.tgz -- samline-astro add themes --cwd ../my-site --no-install
+npm exec --yes --package ./artifacts/samline-astro-7.24.0.tgz -- samline-astro add themes --cwd ../my-site --no-install
 ```
 
 Then enter `../my-site`, install dependencies using its generated instructions,

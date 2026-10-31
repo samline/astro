@@ -75,7 +75,13 @@ test(
     const files = list.stdout.trim().split('\n')
     assert.ok(files.includes('package/template/_gitignore'))
     assert.ok(files.includes('package/template/.env.example'))
-    for (const file of ['src/config/routes.ts', 'src/i18n/routes.ts'])
+    for (const file of [
+      'src/config/routes.ts',
+      'src/i18n/routes.ts',
+      'src/i18n/route-tables.ts',
+      'src/i18n/dictionaries/en-us/routes.ts',
+      'src/i18n/dictionaries/es-mx/routes.ts'
+    ])
       assert.ok(files.includes(`package/template/${file}`), file)
     for (const file of [
       'LICENSE',

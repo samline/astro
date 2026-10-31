@@ -55,7 +55,13 @@ with the dynamic page that requires it. Pass locale-free paths to URL helpers.
 Before consuming an API/CMS with localized content or translated slugs, read
 src/i18n/localized-content.md. Resolve equivalent destinations from an explicit
 translation relationship; never substitute the locale prefix on the current slug.
-Use src/config/routes.ts for stable named pages. Main, SEO and LanguagePicker
+Declare stable names/types in src/config/routes.ts. Each locale owns its real
+locale-free URLs in src/i18n/dictionaries/<locale>/routes.ts beside its index;
+null records unavailable translations. Keep these structural tables outside UI
+copy domains and client payloads. route-tables.ts registers them without duplicate
+URLs; routeEntries exposes the active public-page inventory for navigation/site
+maps, without creating pages or authorizing/indexing every destination.
+Main, SEO and LanguagePicker
 share exactly one of path, routeName or localizedPaths; Link/Button accept
 routeName instead of href. Resolve actual dynamic translation maps at the
 build/request boundary, forward page identity into custom headers and document

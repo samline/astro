@@ -242,3 +242,44 @@ test('Vercel security policy follows the selected installer in all four tool com
       )
   }
 })
+
+test('adding Welcome rejects occupied route identities and paths without writing any project file', async (t) => {
+  for (const conflict of ['name', 'path']) {
+    const directory = await fixture(t, 'static')
+    if (conflict === 'name') {
+      const file = 'src/config/routes.ts'
+      const source = await read(directory, file)
+      await writeFile(
+        path.join(directory, file),
+        appendExport(source, 'routeNames', { demo: "'project.demo'" })
+      )
+    } else {
+      const file = 'src/i18n/dictionaries/en-us/routes.ts'
+      const source = await read(directory, file)
+      await writeFile(
+        path.join(directory, file),
+        source.replace(
+          '"home.index": "/"',
+          '"home.index": "/", "demo.index": "/custom-demo"'
+        )
+      )
+    }
+    const before = await snapshot(directory)
+    await assert.rejects(
+      add(directory, ['welcome']),
+      /Route registration conflict/
+    )
+    assert.deepEqual(await snapshot(directory), before)
+  }
+})
+
+test('adding the current Welcome to an older copied route contract requests a manual merge before writes', async (t) => {
+  const directory = await fixture(t, 'static')
+  await rm(path.join(directory, 'src/i18n/route-tables.ts'))
+  const before = await snapshot(directory)
+  await assert.rejects(
+    add(directory, ['welcome']),
+    /per-locale route-table contract/
+  )
+  assert.deepEqual(await snapshot(directory), before)
+})

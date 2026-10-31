@@ -110,6 +110,7 @@ export const coreFiles = [
   'src/config/routes.ts',
   'src/styles',
   'src/i18n/routes.ts',
+  'src/i18n/route-tables.ts',
   'src/i18n/README.md',
   'src/i18n/localized-content.md',
   'astro.config.mjs',

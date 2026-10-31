@@ -151,3 +151,8 @@ Dynamic route generation, URL helpers and layouts belong to Astro. Refer to
 [Astro i18n](https://docs.astro.build/en/guides/internationalization/) and
 [Astro layouts](https://docs.astro.build/en/basics/layouts/) for those APIs. This
 README documents the metadata decisions added by the distribution.
+
+Named-page URLs are owned by each language's
+`src/i18n/dictionaries/<locale>/routes.ts`. The shared names/types live in
+`src/config/routes.ts`; null marks an unavailable translation. Edit these tables
+instead of adding a second URL list in the component.

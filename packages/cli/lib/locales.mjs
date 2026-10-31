@@ -12,7 +12,7 @@ import {
   importSource,
   appendProperties
 } from './syntax.mjs'
-import { read } from './files.mjs'
+import { read, exists } from './files.mjs'
 
 export const presets = {
   'en-us': { name: 'English (United States)', direction: 'ltr' },
@@ -90,6 +90,19 @@ export const getDictionary = (locale?: string): Dictionary => dictionaries[resol
 const domainIndex = (domains) =>
   `import type { Dictionary } from '../../types'\n${domains.map((domain) => `import ${domain} from './${domain}'`).join('\n')}\nexport default { ${domains.join(', ')} } satisfies Dictionary\n`
 
+const routeTablesSource = (entries) => `import type { Locale } from './config'
+import type { RouteTable } from '../config/routes'
+${entries.map((entry) => `import ${alias(entry.code)} from './dictionaries/${entry.code}/routes'`).join('\n')}
+export const localeRoutes = { ${entries.map((entry) => `${JSON.stringify(entry.code)}: ${alias(entry.code)}`).join(',\n')} } satisfies Record<Locale, RouteTable>
+`
+const routeTableSource = (
+  table
+) => `import type { RouteTable } from '../../../config/routes'
+
+// Locale-free paths for actual pages. null means unavailable; never guess translated slugs.
+export default ${JSON.stringify(table, null, 2)} satisfies RouteTable
+`
+
 export const initialLocales = async (
   template,
   entries,
@@ -97,6 +110,20 @@ export const initialLocales = async (
   domains
 ) => {
   const files = new Map()
+  let routeConfig = await read(template, 'src/config/routes.ts')
+  const routeTree = parse(routeConfig)
+  const routeNode = variable(routeTree, 'routeNames')
+  const routeNames = readLiteral(routeNode)
+  if (!domains.includes('welcome')) delete routeNames.demo
+  routeConfig = edits(routeConfig, [
+    {
+      start: routeNode.getStart(),
+      end: routeNode.end,
+      text: JSON.stringify(routeNames)
+    }
+  ])
+  files.set('src/config/routes.ts', routeConfig)
+  files.set('src/i18n/route-tables.ts', routeTablesSource(entries))
   files.set('src/i18n/config.ts', localeConfig(entries, defaultLocale))
   files.set('src/i18n/index.ts', localeIndex(entries))
   files.set(
@@ -104,6 +131,21 @@ export const initialLocales = async (
     `import type { Locale } from './config'\n${domains.map((domain) => `import type { ${typeName(domain)} } from './dictionaries/${defaultLocale}/${domain}/types'`).join('\n')}\nexport interface Dictionary {\n${domains.map((domain) => `${domain}: ${typeName(domain)}`).join('\n')}\n}\nexport type ClientTranslations<Domain extends keyof Dictionary> = { locale: Locale; translations: Pick<Dictionary, Domain> }\n`
   )
   for (const entry of entries) {
+    const templateRoutes = dictionary(
+      await read(
+        template,
+        `src/i18n/dictionaries/${presets[entry.code] ? entry.code : 'en-us'}/routes.ts`
+      ),
+      'routes'
+    )
+    files.set(
+      `src/i18n/dictionaries/${entry.code}/routes.ts`,
+      routeTableSource(
+        Object.fromEntries(
+          Object.values(routeNames).map((name) => [name, templateRoutes[name]])
+        )
+      )
+    )
     files.set(
       `src/i18n/dictionaries/${entry.code}/index.ts`,
       domainIndex(domains)
@@ -279,7 +321,78 @@ export const addLocale = async (
     [entry.code]: alias(entry.code)
   })
   files.set('src/i18n/index.ts', index)
+  // Older copied projects may not have per-locale route tables; do not migrate them implicitly.
+  if (await exists(root, 'src/i18n/route-tables.ts')) {
+    const originalRoutes = dictionary(
+      await readCurrent(`${base}/routes.ts`),
+      'routes'
+    )
+    files.set(
+      `src/i18n/dictionaries/${entry.code}/routes.ts`,
+      routeTableSource(
+        Object.fromEntries(
+          Object.keys(originalRoutes).map((name) => [name, null])
+        )
+      )
+    )
+    const registry = importSource(
+      await readCurrent('src/i18n/route-tables.ts'),
+      alias(entry.code),
+      `./dictionaries/${entry.code}/routes`
+    )
+    files.set(
+      'src/i18n/route-tables.ts',
+      appendExport(
+        registry,
+        'localeRoutes',
+        { [entry.code]: alias(entry.code) },
+        { rejectExisting: true }
+      )
+    )
+  }
   metadata.locales.push({ ...entry, ready: false })
+  return files
+}
+
+/** Register the optional demo without replacing project-owned names or paths. */
+export const addDemoRoutes = async (root, readCurrent) => {
+  const files = new Map()
+  if (!(await exists(root, 'src/i18n/route-tables.ts'))) return files
+  const routeConfig = await readCurrent('src/config/routes.ts')
+  const names = readLiteral(variable(parse(routeConfig), 'routeNames'))
+  if (
+    Object.hasOwn(names, 'demo') ||
+    Object.values(names).includes('demo.index')
+  )
+    throw new Error(
+      'Route registration conflict: demo.index is already project-owned.'
+    )
+  files.set(
+    'src/config/routes.ts',
+    appendExport(
+      routeConfig,
+      'routeNames',
+      { demo: "'demo.index'" },
+      { rejectExisting: true }
+    )
+  )
+  const config = readLocaleConfig(await readCurrent('src/i18n/config.ts'))
+  for (const locale of config.available) {
+    const file = `src/i18n/dictionaries/${locale}/routes.ts`
+    const source = await readCurrent(file)
+    const table = dictionary(source, file)
+    if (Object.hasOwn(table, 'demo.index'))
+      throw new Error(
+        `Route registration conflict: ${file} already defines demo.index.`
+      )
+    const exported = parse(source).statements.find(ts.isExportAssignment)
+    files.set(
+      file,
+      appendProperties(source, unwrapDefault(exported.expression), {
+        'demo.index': "'/demo'"
+      })
+    )
+  }
   return files
 }
 

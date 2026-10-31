@@ -55,9 +55,13 @@ prefer this scoped payload when the section only needs a few domains.
 Before integrating API/CMS content or language-dependent slugs, read
 [Localized content routes](./localized-content.md). It defines translation-group
 identity, provider normalization, SSG/SSR/live/browser resolution, missing
-translations, caching and consistent navigation/SEO. The installed `src/config/routes.ts` catalog and `src/i18n/routes.ts` resolver
+translations, caching and consistent navigation/SEO. Each locale owns `dictionaries/<locale>/routes.ts` beside its dictionary index.
+Shared names/types live in `src/config/routes.ts`; `route-tables.ts` registers the
+tables without duplicating URLs. Use null for unavailable pages. These structural
+files stay outside UI domains and browser translation payloads. The resolver
 share `path`, `routeName` or `localizedPaths` between Main, SEO and LanguagePicker.
-Link/Button also accept `routeName`; Astro still owns actual route generation.
+Link/Button also accept `routeName`; `routeEntries(locale)` exposes real named
+destinations for navigation or an HTML sitemap. Astro still owns route generation.
 
 ## Language scaffolding and validation
 

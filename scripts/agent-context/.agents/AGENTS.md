@@ -137,7 +137,11 @@ Keep API credentials private at the correct build/runtime boundary.
 Before consuming an API/CMS with localized pages, read
 src/i18n/localized-content.md. Resolve equivalent destinations through explicit
 translation relationships, never by reusing a slug with another locale prefix.
-Use src/config/routes.ts for stable named pages. Main, SEO and LanguagePicker
+Declare stable names in src/config/routes.ts; each language owns its actual
+URLs in src/i18n/dictionaries/<locale>/routes.ts beside its dictionary index.
+Use null for unavailable translations. Keep these structural tables separate from
+UI copy domains. route-tables.ts registers them; routeEntries exposes the public
+page inventory for navigation/site maps without creating pages or granting access. Main, SEO and LanguagePicker
 share exactly one of path, routeName or localizedPaths; Link/Button accept
 routeName instead of href. Pass actual translation maps for dynamic records and
 forward page context into custom headers. Missing translations are omitted;

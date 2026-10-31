@@ -34,7 +34,11 @@ is a starting point rather than the final architecture for a customized site.
 Before adding API/CMS content or translated slugs, follow
 src/i18n/localized-content.md. Astro handles URL formatting; equivalent content
 must be identified through a stable translation group or explicit provider
-relation. src/config/routes.ts owns stable names and locale-free static paths;
+relation. src/config/routes.ts owns shared names/types; editable paths belong in
+each src/i18n/dictionaries/<locale>/routes.ts with null for unavailable pages.
+route-tables.ts registers tables without duplicate URLs; routeEntries exposes the
+active public-page inventory for navigation/site maps. Route data is separate from
+UI copy domains and client payloads;
 src/i18n/routes.ts resolves active destinations for Main, SEO and LanguagePicker.
 Use localizedPaths for actual dynamic translations. Custom headers forward page
 identity explicitly; missing destinations are omitted, never guessed. Native

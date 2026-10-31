@@ -78,7 +78,10 @@ cannot replace a dependency's internally bundled code; reassess bundled code whe
 changing the parent dependency. Bun-managed Vercel dependencies require Bun >=1.4.
 Cloudflare tooling retains Node execution.
 
-src/config/routes.ts owns typed static route names and locale-free paths.
+src/config/routes.ts owns shared typed route names. Each locale owns editable
+paths in src/i18n/dictionaries/<locale>/routes.ts beside its index, with null for
+unavailable translations. route-tables.ts registers tables without duplicate URLs;
+routeEntries exposes active public-page destinations for navigation/site maps.
 src/i18n/routes.ts shares path, routeName or localizedPaths across Main, SEO and
 LanguagePicker; Link/Button accept routeName instead of href. Astro still creates
 routes. Dynamic content requires real translation relations; follow

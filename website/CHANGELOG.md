@@ -1,5 +1,14 @@
 # Changelog
 
+## 7.24.0
+
+- Move editable named-page URLs into each locale's dictionaries/<locale>/routes.ts table,
+  with shared names/types, explicit null availability and one import registry.
+- Scaffold route keys without invented URLs when adding languages; preserve
+  existing tables and register optional demo routes transactionally.
+- Reuse the tables for demo navigation and expose routeEntries for public-page
+  inventories; document navigation, real URLs, sitemap boundaries and dynamic content.
+
 ## 7.23.0
 
 - Add optional exact/descendant route matching to Link with a shared pure resolver,

@@ -1,17 +1,25 @@
 ---
 import type { GetStaticPaths } from 'astro'
 import Main from '@/layouts/Main.astro'
+import { routeNames } from '@/config/routes'
 import DemoPage from '@/sections/DemoPage/index.astro'
 import { getDictionary } from '@/i18n'
-import { defaultLocale, locales } from '@/i18n/config'
+import { defaultLocale } from '@/i18n/config'
+import { resolveRoutePaths } from '@/i18n/routes'
 
 export const getStaticPaths = (() =>
-  locales.map((locale) => ({
-    params: { locale: locale === defaultLocale ? undefined : locale }
-  }))) satisfies GetStaticPaths
+  Object.keys(resolveRoutePaths({ routeName: routeNames.demo })).map(
+    (locale) => ({
+      params: { locale: locale === defaultLocale ? undefined : locale }
+    })
+  )) satisfies GetStaticPaths
 const { demo } = getDictionary(Astro.currentLocale).welcome
 ---
 
-<Main path='/demo' title={demo.title} description={demo.description}>
+<Main
+  routeName={routeNames.demo}
+  title={demo.title}
+  description={demo.description}
+>
   <DemoPage />
 </Main>

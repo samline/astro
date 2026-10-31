@@ -52,3 +52,13 @@ export const routePath = (page: PageRoute, locale: Locale): string => {
     throw new Error(`Route has no active translation for ${locale}.`)
   return path
 }
+
+/** Public named-page inventory for navigation or an HTML sitemap in one locale. */
+export const routeEntries = (
+  locale: Locale
+): { routeName: RouteName; path: string }[] =>
+  Object.keys(routes).flatMap((name) => {
+    const routeName = name as RouteName
+    const path = resolveRoutePaths({ routeName })[locale]
+    return path === undefined ? [] : [{ routeName, path }]
+  })

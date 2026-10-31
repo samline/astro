@@ -2,10 +2,18 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { routeNames } from '../src/config/routes.ts'
 import { defaultLocale } from '../src/i18n/config.ts'
-import { resolveRoutePaths, routePath } from '../src/i18n/routes.ts'
+import {
+  resolveRoutePaths,
+  routePath,
+  routeEntries
+} from '../src/i18n/routes.ts'
 
 test('route identities resolve named/shared paths and only explicit active translations', () => {
   assert.equal(routePath({ routeName: routeNames.home }, defaultLocale), '/')
+  assert.deepEqual(routeEntries(defaultLocale), [
+    { routeName: routeNames.home, path: '/' },
+    { routeName: routeNames.demo, path: '/demo' }
+  ])
   assert.equal(
     routePath({ path: '/company?campaign=1#team' }, defaultLocale),
     '/company'

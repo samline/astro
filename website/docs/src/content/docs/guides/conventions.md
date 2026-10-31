@@ -64,8 +64,10 @@ page's locale. Before connecting translated CMS slugs, read
 `src/i18n/localized-content.md` and share the real destination mapping between
 language navigation and SEO.
 
-For known static pages, the installed `src/config/routes.ts` catalog identifies equivalent
-paths by a stable name such as `company.about` across languages. Keep the names separate from
+For known static pages, declare stable names in `src/config/routes.ts` and put
+actual URLs in each `src/i18n/dictionaries/<locale>/routes.ts`. These tables are the
+shared page inventory; `route-tables.ts` registers them and `routeEntries(locale)`
+exposes available destinations. Use null for unavailable translations. Keep the names separate from
 translated labels and use Astro's URL helpers for formatting. Dynamic records
 still need real translation relationships; do not infer translated slugs by
 replacing prefixes or appending the old slug to another language's section URL.

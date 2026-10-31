@@ -6,30 +6,73 @@ Use it for navigation, language switching and SEO. Astro still owns route files,
 
 ## Named static routes
 
-Every generated project includes `src/config/routes.ts`, initially with only
-`routeNames.home` mapped to `/`. Add the stable identities of your real pages:
+The project convention is **one `routes.ts` beside each locale's dictionary
+index**. This is the editable inventory of public page names and their real,
+locale-free URLs. Keep route data outside UI dictionary domains: it must not be
+translated as copy or bundled in a client translation payload.
+
+| File                                       | Owns                                                                   |
+| ------------------------------------------ | ---------------------------------------------------------------------- |
+| `src/config/routes.ts`                     | Stable `routeNames`, shared types and the derived cross-language view. |
+| `src/i18n/dictionaries/<locale>/routes.ts` | That language's page names and actual paths; `null` means unavailable. |
+| `src/i18n/route-tables.ts`                 | Locale-to-table imports only; no duplicate URLs.                       |
+| `src/i18n/routes.ts`                       | Shared resolution and inventory helpers used by consumers.             |
+
+A minimal project includes `home.index`; selecting Welcome also includes
+`demo.index`. To add a real about page, extend **only the routeNames declaration**
+in `src/config/routes.ts`, preserving its imports, types and derived `routes`:
 
 ```ts
-// src/config/routes.ts — example for a project with these configured locales
-import type { Locale } from '@/i18n/config'
-
 export const routeNames = {
   home: 'home.index',
   about: 'company.about'
 } as const
-export type RouteName = (typeof routeNames)[keyof typeof routeNames]
-export type LocalizedPaths = Partial<Record<Locale, string>>
-export const routes: Record<RouteName, string | LocalizedPaths> = {
-  [routeNames.home]: '/',
-  [routeNames.about]: { 'en-us': '/about', 'es-mx': '/nosotros' }
-}
 ```
 
-A string means the same locale-free path exists in all active locales. A map
-lists only available translations; it supports any number of configured locales.
-When activating a new language, add its translated paths where those pages exist.
-The locale-add command preserves this catalog and does not invent URLs.
-Names and paths are structural data; visible navigation labels stay in dictionaries.
+Preserve any other names already present, including the optional demo. Declare
+the same keys in each configured locale's table. For a minimal two-language site:
+
+```ts
+// src/i18n/dictionaries/en-us/routes.ts
+import type { RouteTable } from '../../../config/routes'
+
+export default {
+  'home.index': '/',
+  'company.about': '/about'
+} satisfies RouteTable
+```
+
+```ts
+// src/i18n/dictionaries/es-mx/routes.ts
+import type { RouteTable } from '../../../config/routes'
+
+export default {
+  'home.index': '/',
+  'company.about': '/nosotros'
+} satisfies RouteTable
+```
+
+`RouteTable` requires every declared name and rejects unknown names. Use `null`
+when that page has no translation, including unfinished languages. Do not copy
+the default language's URL as a placeholder. Each table is a static default object
+with literal route-name keys and string/null values; installer operations inspect
+syntax without executing these modules. Keep path builders and CMS queries outside
+these files. The same path in two languages is written explicitly in both tables.
+
+The installer emits only selected languages and registers their tables. Later
+`locale add` reads the current default table's keys, creates a new routes.ts with
+all values set to null, and registers it without touching existing URLs. It leaves
+the language inactive. Fill dictionary copy, language labels and actual route paths,
+then verify pages before activation. Older copied projects without this structure
+are preserved; locale add is not a source migration command. New Welcome additions
+require this route-table contract and report a no-write conflict if it is missing;
+merge the documented source changes before retrying.
+
+Names and paths are structural data; visible labels stay in UI dictionaries.
+Changing a path here does not move an Astro page, create a redirect or rename a
+CMS record. Update the owning route generation and any intentional redirects too.
+Do not duplicate absolute URLs or locale prefixes here: Astro's helpers add the
+configured site/base, default-language policy and trailing-slash behavior.
 
 Inside a section, link to a known page by its name:
 
@@ -99,6 +142,47 @@ have one owner; avoid another route producing the same URLs. The catalog does
 not replace Astro's route priority rules or parameter generation. Do not
 reverse-match the current URL or inspect route-builder function source to guess
 page identity. Active matching controls navigation, not route generation.
+
+## Navigation inventories and sitemaps
+
+`routeEntries(locale)` from `@/i18n/routes` returns `{ routeName, path }` entries
+for that active locale, omitting null/absent translations. Use it to inspect the
+public static-page inventory or compose an HTML sitemap. For a curated header or
+footer, keep a small list of route names and translated labels in the owner;
+look up destinations from the tables instead of maintaining another URL list.
+The demo follows this pattern. Do not automatically display every catalog entry
+in primary navigation or use route names as visitor-facing labels.
+
+Inside a section, real URLs can be inspected with the native helper:
+
+```ts
+import { getRelativeLocaleUrl, getAbsoluteLocaleUrl } from 'astro:i18n'
+import { routeEntries } from '@/i18n/routes'
+import { resolveLocale } from '@/i18n'
+
+const locale = resolveLocale(Astro.currentLocale)
+const pages = routeEntries(locale).map(({ routeName, path }) => ({
+  routeName,
+  href: getRelativeLocaleUrl(locale, path),
+  url: getAbsoluteLocaleUrl(locale, path)
+}))
+```
+
+For an HTML sitemap, render those destinations using translated labels and Link
+with `localize={false}`. Apply the site's public/indexability policy separately.
+A route's presence is not an authorization rule or proof it should be indexed.
+Keep endpoints, status pages and private operation URLs out of this public page
+inventory; auth and noindex remain with their existing owners.
+
+The installed XML sitemap integration discovers generated pages. It does not
+create pages from these tables or automatically group different translated paths
+by route name. For such alternates, use the same name-to-destination mapping in
+its documented `serialize` configuration and include only generated or explicitly
+verified public destinations. Preserve noindex filtering. Do not blindly turn the
+whole catalog into customPages: that can publish unbuilt/private URLs. Dynamic
+records require their provider's actual translation groups and discovery policy,
+not placeholder paths or a new build-time crawl of the whole API.
+See [Astro sitemap configuration](https://docs.astro.build/en/guides/integrations-guide/sitemap/).
 
 ## Dynamic translated records
 

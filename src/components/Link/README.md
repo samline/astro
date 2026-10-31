@@ -156,3 +156,8 @@ current translation is unavailable. They compose with `variant` and `currentMatc
 `localize={false}` only affects explicit hrefs. Do not supply both destination props.
 See [localized routes](../../i18n/localized-content.md) for translated static paths,
 Main/SEO/LanguagePicker context, and actual CMS translation maps.
+
+Named-page URLs are owned by each language's
+`src/i18n/dictionaries/<locale>/routes.ts`. The shared names/types live in
+`src/config/routes.ts`; null marks an unavailable translation. Edit these tables
+instead of adding a second URL list in the component.

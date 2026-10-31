@@ -51,6 +51,14 @@ check:i18n validates active translations; deliberate empty keys use explicit
 optionalTranslationKeys policy. Adding a feature never activates a draft locale.
 Localized API destinations follow src/i18n/localized-content.md.
 
+Each locale has a structural routes.ts beside its dictionary index. Shared names
+and types live in src/config/routes.ts; route-tables.ts registers selected tables.
+Later locale addition statically reads current route keys, creates null values
+and registers the draft table while preserving existing URLs. These files are
+not UI dictionary domains. Optional Welcome adds its named demo registration in
+the same transactional plan, rejecting occupied names/paths. Older copied projects
+without route tables are not implicitly migrated.
+
 ## Tools and metadata
 
 The Node CLI supports npm/pnpm/Bun dependencies independently of Node/Bun scripts.

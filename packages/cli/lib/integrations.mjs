@@ -15,7 +15,12 @@ import {
   actionRegistrations
 } from './features/composition.mjs'
 import { contentFiles } from './features/content.mjs'
-import { addDomains, addLocale, readLocaleConfig } from './locales.mjs'
+import {
+  addDomains,
+  addLocale,
+  readLocaleConfig,
+  addDemoRoutes
+} from './locales.mjs'
 import { environmentExample, mergeEnvironment } from './environment.mjs'
 import { appendProperties, envSchema, parse, variable } from './syntax.mjs'
 import { integrationSummary } from './agents.mjs'
@@ -192,6 +197,10 @@ export const addIntegrations = async ({
     metadata.deployment
   )
   if (added.includes('welcome')) {
+    if (!(await exists(root, 'src/i18n/route-tables.ts')))
+      throw new Error(
+        'Welcome requires the per-locale route-table contract. Merge the documented routing source manually before retrying; no project files were changed.'
+      )
     const layout = await readCurrent('src/layouts/Main.astro')
     const markup = layout
       .replace(/^---\r?\n[\s\S]*?\r?\n---/, '')
@@ -236,6 +245,9 @@ export const addIntegrations = async ({
       throw new Error(
         `File conflict: ${file}. Review the existing file; add never overwrites feature source.`
       )
+  if (added.includes('welcome'))
+    for (const [file, value] of await addDemoRoutes(root, readCurrent))
+      files.set(file, value)
   for (const [file, value] of await addDomains(
     root,
     template,

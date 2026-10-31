@@ -44,7 +44,11 @@ translation relationships and one result shared by navigation and SEO. Do not
 infer translated slugs or publication availability from locale prefixes. See
 src/i18n/localized-content.md.
 
-src/config/routes.ts owns stable typed names and locale-free static paths.
+src/config/routes.ts owns stable typed names. Each locale owns actual paths in
+src/i18n/dictionaries/<locale>/routes.ts beside its dictionary index. Tables require
+every name and use null for unavailable translations. They are structural data,
+separate from UI domains and browser payloads; route-tables.ts only registers them.
+routeEntries exposes active public-page destinations for navigation/site maps.
 Main/SEO/LanguagePicker share path, routeName or actual localizedPaths through
 src/i18n/routes.ts. Main passes page context to its default header; custom headers
 must forward it explicitly. Missing destinations are omitted, and missing current

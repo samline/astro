@@ -143,12 +143,22 @@ const dictionary=getDictionary(Astro.currentLocale)
     await edit(
       'src/config/routes.ts',
       "home: 'home.index'",
-      "home: 'home.index', about: 'company.about'"
+      "home: 'home.index', about: 'company.about', regional: 'regional.index'"
     )
+    for (const [language, route] of Object.entries({
+      'en-us': '/company',
+      'es-mx': '/nosotros',
+      'es-es': '/acerca'
+    }))
+      await edit(
+        `src/i18n/dictionaries/${language}/routes.ts`,
+        "'home.index': '/'",
+        ` 'regional.index': ${language === 'en-us' ? 'null' : "'/translated'"}, 'company.about': '${route}', 'home.index': '/'`
+      )
     await edit(
-      'src/config/routes.ts',
-      "[routeNames.home]: '/'",
-      "[routeNames.home]: '/', [routeNames.about]: { 'en-us': '/company', 'es-mx': '/nosotros', 'es-es': '/acerca' }"
+      'src/i18n/dictionaries/es-es/routes.ts',
+      "'demo.index': '/demo'",
+      "'demo.index': null"
     )
     await mkdir(path.join(fixture, 'src/sections/Named'), { recursive: true })
     await writeFile(
@@ -178,9 +188,10 @@ const pageRoute = Astro.props.child ? { localizedPaths: { 'en-us': '/company/tea
       path.join(fixture, 'src/pages/[...locale]/translated.astro'),
       `---
 import Main from '@/layouts/Main.astro'
+import { routeNames } from '@/config/routes'
 export const getStaticPaths = () => ['es-mx', 'es-es'].map(locale => ({params:{locale}}))
 ---
-<Main localizedPaths={{'es-mx':'/translated','es-es':'/translated'}}>Item</Main>`
+<Main routeName={routeNames.regional}>Item</Main>`
     )
     const png = Buffer.from(
       'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=',
@@ -303,6 +314,8 @@ export const getStaticPaths = () => ['es-mx', 'es-es'].map(locale => ({params:{l
         )
         assert.doesNotMatch(parent, /routeName=|currentMatch=/)
         assert.ok(html.includes(`lang="${language}"`))
+        if (language === 'es-es')
+          assert.doesNotMatch(html, /href="\/es-es\/demo"/)
       }
     }
     for (const language of ['es-mx', 'es-es']) {
