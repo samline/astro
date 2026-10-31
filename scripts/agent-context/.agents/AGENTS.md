@@ -137,8 +137,10 @@ Keep API credentials private at the correct build/runtime boundary.
 Before consuming an API/CMS with localized pages, read
 src/i18n/localized-content.md. Resolve equivalent destinations through explicit
 translation relationships, never by reusing a slug with another locale prefix.
-Adapt the current path-based LanguagePicker and SEO contracts when paths or
-publication availability differ. Share one validated result across both;
+Use src/config/routes.ts for stable named pages. Main, SEO and LanguagePicker
+share exactly one of path, routeName or localizedPaths; Link/Button accept
+routeName instead of href. Pass actual translation maps for dynamic records and
+forward page context into custom headers. Missing translations are omitted;
 resolve at build time for SSG and request time for on-demand content. Record the
 provider mapping and missing-translation/cache policy in project memory.
 

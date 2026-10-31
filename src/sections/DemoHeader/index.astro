@@ -2,16 +2,21 @@
 import { getRelativeLocaleUrl } from 'astro:i18n'
 import Box from '@/components/Box/index.astro'
 import Link from '@/components/Link/index.astro'
+import { currentDestination } from '@/components/Link/current'
 import ThemeSwitch from '@/components/Theme/Switch.astro'
 import LanguagePicker from '@/components/LanguagePicker/index.astro'
 import astroLogo from '@/assets/astro.svg'
 import { getDictionary, resolveLocale } from '@/i18n'
 import Navigation from './Navigation.astro'
+import type { PageRoute } from '@/i18n/routes'
+
+interface Props {
+  pageRoute?: PageRoute
+}
+const { pageRoute } = Astro.props
 
 const locale = resolveLocale(Astro.currentLocale)
 const { navigation, welcome } = getDictionary(locale)
-const normalizePath = (value: string) => value.replace(/\/+$/, '') || '/'
-const currentPath = normalizePath(Astro.url.pathname)
 const links = [
   { path: '/', label: navigation.home },
   { path: '/demo', label: navigation.demo }
@@ -20,7 +25,7 @@ const links = [
   return {
     ...item,
     href,
-    current: normalizePath(new URL(href, Astro.url).pathname) === currentPath
+    current: currentDestination(new URL(href, Astro.url), Astro.url) === 'page'
   }
 })
 const path = links.find((item) => item.current)?.path ?? '/'
@@ -40,7 +45,7 @@ const path = links.find((item) => item.current)?.path ?? '/'
     <div class='flex flex-wrap items-center gap-x-8 gap-y-4'>
       <Navigation {links} />
       <div class='flex flex-wrap items-center gap-5 text-sm [&_a]:underline [&_a]:underline-offset-4 [&_a[aria-current=page]]:font-semibold [&_nav_ul]:flex [&_nav_ul]:flex-wrap [&_nav_ul]:gap-3'>
-        <LanguagePicker path={path} />
+        <LanguagePicker {...(pageRoute ?? { path })} />
         <ThemeSwitch />
       </div>
     </div>

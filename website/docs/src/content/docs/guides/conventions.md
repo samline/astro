@@ -24,6 +24,14 @@ README together in one folder.
 
 ## Keep behavior with its owner
 
+Route identity and link appearance are separate. Link's optional `currentMatch`
+can mark an exact page or a parent section on descendant routes, even for a plain
+link with a custom design. It preserves explicit `aria-current` and adds no
+browser controller. Localized home roots stay exact-only. Use the most specific
+current entry in a navigation set and reuse the
+[Link resolver](../../reference/components/link/) in an existing browser owner
+when dynamic navigation needs updates.
+
 Use arrow functions by default. Keep client setup, listeners and cleanup beside
 the component or section that needs them. Prefer Astro's native APIs and the
 installed packages before adding another abstraction. An exception to arrow
@@ -56,6 +64,12 @@ page's locale. Before connecting translated CMS slugs, read
 `src/i18n/localized-content.md` and share the real destination mapping between
 language navigation and SEO.
 
+For known static pages, the installed `src/config/routes.ts` catalog identifies equivalent
+paths by a stable name such as `company.about` across languages. Keep the names separate from
+translated labels and use Astro's URL helpers for formatting. Dynamic records
+still need real translation relationships; do not infer translated slugs by
+replacing prefixes or appending the old slug to another language's section URL.
+
 ## Let card content determine the layout
 
 Comparable cards start their editorial stack at the top. In a stacked image and
@@ -71,6 +85,28 @@ wrapped authors, long buttons and delayed provider data at 320, 390, 768 and
 1440 CSS viewport widths, in both themes and at 200% text zoom. Check first rows,
 action insets, image boundaries, focus, overflow and any carousel loop seam.
 The generated `.agents/memory/frontend-conventions.md` contains the CSS recipe.
+
+When the main card link represents the complete item, the card owner can reflect
+its `:focus-visible` state on the card with `:has()`. Keep the native link as the
+tab stop and secondary controls independently focused; do not add wrapper
+`tabindex` or nest controls. Check outline contrast/clipping for initial,
+appended, cloned and history-restored cards.
+
+## Keep incremental lists under one owner
+
+For simple DOM cards added after an Action or API read, the owning Astro component
+can also render a native `<template>` for the browser to clone and fill with
+validated text/attributes. Keep one markup and formatting owner. Preserve scoped
+attributes, unique IDs and labels; cloning does not copy event listeners or mount
+client components. Use the existing controller's delegation or setup/cleanup
+instead of building a second string renderer or a parallel fetch path.
+
+Prefer native history and BFCache for list-detail returns. If a paginated list
+requires reconstruction, keep it as a list-owned enhancement with stable item
+identity, bounded/expiring navigation intent and allowlisted query context. Reuse
+retained DOM first, limit replay requests/time, and support cancellation, disabled
+storage and retry after errors. Restore focus and scroll without overriding user
+interaction. The starter installs no catalogue cache or restoration controller.
 
 ## Add reveal only where the section needs it
 

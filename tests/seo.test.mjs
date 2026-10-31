@@ -3,6 +3,7 @@ import { test } from 'node:test'
 import {
   cp,
   mkdtemp,
+  mkdir,
   readFile,
   readdir,
   rm,
@@ -133,6 +134,54 @@ const dictionary=getDictionary(Astro.currentLocale)
       path.join(fixture, 'src/pages/[...locale]/private.astro'),
       about.replace("path='/about?campaign=test#section'", "path='/private'")
     )
+    // One named page with three different paths, plus an item lacking a default translation.
+    await edit(
+      'src/i18n/config.ts',
+      "locales.push('es-mx')",
+      "locales.push('es-mx', 'es-es')"
+    )
+    await edit(
+      'src/config/routes.ts',
+      "home: 'home.index'",
+      "home: 'home.index', about: 'company.about'"
+    )
+    await edit(
+      'src/config/routes.ts',
+      "[routeNames.home]: '/'",
+      "[routeNames.home]: '/', [routeNames.about]: { 'en-us': '/company', 'es-mx': '/nosotros', 'es-es': '/acerca' }"
+    )
+    await mkdir(path.join(fixture, 'src/sections/Named'), { recursive: true })
+    await writeFile(
+      path.join(fixture, 'src/sections/Named/index.astro'),
+      `---
+import Link from '@/components/Link/index.astro'
+import Button from '@/components/Button/index.astro'
+import { routeNames } from '@/config/routes'
+---
+<Link id='named-parent' routeName={routeNames.about} currentMatch='descendants'>About</Link>
+<Button id='named-button' routeName={routeNames.about}>About</Button>`
+    )
+    await writeFile(
+      path.join(fixture, 'src/pages/[...named].astro'),
+      `---
+import Main from '@/layouts/Main.astro'
+import Named from '@/sections/Named/index.astro'
+import { routeNames } from '@/config/routes'
+import { resolveRoutePaths } from '@/i18n/routes'
+import { defaultLocale } from '@/i18n/config'
+export const getStaticPaths = () => Object.entries(resolveRoutePaths({routeName:routeNames.about})).flatMap(([locale,path]) => [false,true].map(child => ({params:{named:[locale === defaultLocale ? '' : locale, path.slice(1), child ? 'team' : ''].filter(Boolean).join('/')},props:{child}})))
+const pageRoute = Astro.props.child ? { localizedPaths: { 'en-us': '/company/team', 'es-mx': '/nosotros/team', 'es-es': '/acerca/team' } } : { routeName: routeNames.about }
+---
+<Main {...pageRoute}><Named /></Main>`
+    )
+    await writeFile(
+      path.join(fixture, 'src/pages/[...locale]/translated.astro'),
+      `---
+import Main from '@/layouts/Main.astro'
+export const getStaticPaths = () => ['es-mx', 'es-es'].map(locale => ({params:{locale}}))
+---
+<Main localizedPaths={{'es-mx':'/translated','es-es':'/translated'}}>Item</Main>`
+    )
     const png = Buffer.from(
       'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=',
       'base64'
@@ -217,6 +266,55 @@ const dictionary=getDictionary(Astro.currentLocale)
     assert.ok(
       regional.includes('hreflang="x-default" href="https://seo.example/about"')
     )
+    const namedPaths = {
+      'en-us': '/company',
+      'es-mx': '/es-mx/nosotros',
+      'es-es': '/es-es/acerca'
+    }
+    for (const [language, route] of Object.entries(namedPaths)) {
+      for (const child of ['', '/team']) {
+        const html = await output(`${route.slice(1)}${child}/index.html`)
+        assert.ok(
+          html.includes(
+            `rel="canonical" href="https://seo.example${route}${child}"`
+          )
+        )
+        for (const [alternate, target] of Object.entries(namedPaths)) {
+          assert.ok(
+            html.includes(
+              `hreflang="${alternate}" href="https://seo.example${target}${child}"`
+            )
+          )
+          assert.match(
+            html,
+            new RegExp(
+              `<a[^>]*href="${target}${child}"[^>]*lang="${alternate}"[^>]*hreflang="${alternate}"`
+            )
+          )
+        }
+        const parent = html.match(/<a[^>]*id="named-parent"[^>]*>/)?.[0] ?? ''
+        assert.ok(parent.includes(`href="${route}"`))
+        assert.ok(
+          parent.includes(`aria-current="${child ? 'location' : 'page'}"`)
+        )
+        assert.match(
+          html,
+          new RegExp(`<a[^>]*href="${route}"[^>]*id="named-button"`)
+        )
+        assert.doesNotMatch(parent, /routeName=|currentMatch=/)
+        assert.ok(html.includes(`lang="${language}"`))
+      }
+    }
+    for (const language of ['es-mx', 'es-es']) {
+      const html = await output(`${language}/translated/index.html`)
+      assert.ok(!html.includes('hreflang="en-us"'))
+      assert.ok(!html.includes('hreflang="x-default"'))
+      assert.ok(
+        html.includes(
+          `rel="canonical" href="https://seo.example/${language}/translated"`
+        )
+      )
+    }
     const robots = await output('robots.txt')
     assert.equal(
       robots,

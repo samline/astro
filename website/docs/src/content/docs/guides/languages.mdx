@@ -65,11 +65,23 @@ direction metadata and review the actual layout, controls and icons in RTL.
 
 ## Match translated pages correctly
 
-For pages with the same path in every language, LanguagePicker can use that shared
-locale-free path. API/CMS articles with different slugs need an explicit relation
-between their translations. Resolve their real destinations once and share them
-between the picker and SEO; the installed
-`src/i18n/localized-content.md` explains the contract.
+Every generated project includes `src/config/routes.ts` with `routeNames.home`.
+Add stable names and the real locale-free paths of your pages there. A shared
+string works across all active languages; a locale map handles translated paths
+and missing translations. The catalog supports any number of configured locales.
+
+Use `<Link routeName={routeNames.home} currentMatch='descendants'>` in a section
+and `<Main routeName={routeNames.home}>` in the page. Main shares the identity with
+SEO and its default header, so the language selector uses the same destinations.
+Button accepts routeName too. Exact page links receive aria-current='page'; parent
+links can opt into segment-bounded child matching. Home remains exact-only.
+
+For a CMS item, resolve its actual published translation relation and pass
+`localizedPaths` to Main. Custom headers forward that context to LanguagePicker.
+Absent translations are omitted rather than guessed. Adding a locale preserves
+your route catalog; complete its paths and actual pages before activation.
+See the [localized route API](../../reference/localized-content/) for working
+catalog examples, typed helpers, Astro route generation and dynamic content limits.
 
 Astro provides [internationalized routing](https://docs.astro.build/en/guides/internationalization/)
 and the [locale URL helpers](https://docs.astro.build/en/reference/modules/astro-i18n/).

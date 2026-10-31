@@ -57,7 +57,7 @@ const clientCopy = JSON.stringify({ locale, translations }).replace(
     <PageLoader />
     {GTM_ENABLED && GTM_ID?.trim() && <GTMConsent />}
     <slot name='header'>
-      <DemoHeader />
+      <DemoHeader pageRoute={seo} />
     </slot>
     <main class='flex-1'>
       <slot />

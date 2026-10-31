@@ -75,6 +75,8 @@ test(
     const files = list.stdout.trim().split('\n')
     assert.ok(files.includes('package/template/_gitignore'))
     assert.ok(files.includes('package/template/.env.example'))
+    for (const file of ['src/config/routes.ts', 'src/i18n/routes.ts'])
+      assert.ok(files.includes(`package/template/${file}`), file)
     for (const file of [
       'LICENSE',
       'THIRD_PARTY_NOTICES.md',
@@ -150,6 +152,7 @@ test(
       'src/content/live/api.ts',
       'src/content/live/README.md',
       'src/i18n/README.md',
+      'src/components/Link/current.ts',
       'src/live.config.ts.example',
       'src/server/content-api/client.ts',
       'src/server/content-api/README.md',

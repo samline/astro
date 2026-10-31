@@ -3,17 +3,26 @@ import type { HTMLAttributes } from 'astro/types'
 import { getRelativeLocaleUrl } from 'astro:i18n'
 import { resolveLocale } from '@/i18n'
 import { locales } from '@/i18n/config'
+import { routePath, type RouteName } from '@/i18n/routes'
+import { currentDestination, type CurrentMatch } from './current'
 
-export interface Props extends HTMLAttributes<'a'> {
-  href: string
-  localize?: boolean
-  variant?: 'plain' | 'text' | 'nav'
-}
+export type LinkDestination =
+  { href: string; routeName?: never } | { routeName: RouteName; href?: never }
+
+export type Props = Omit<HTMLAttributes<'a'>, 'href'> &
+  LinkDestination & {
+    localize?: boolean
+    variant?: 'plain' | 'text' | 'nav'
+    currentMatch?: CurrentMatch
+  }
 
 const {
-  href,
+  href: suppliedHref,
+  routeName,
   localize = true,
   variant = 'plain',
+  currentMatch,
+  'aria-current': ariaCurrent,
   target,
   rel,
   download,
@@ -27,8 +36,16 @@ const appearances = {
   nav: 'text-inherit no-underline underline-offset-4 hover:underline [&[aria-current]:not([aria-current=false])]:underline [&[aria-current]:not([aria-current=false])]:font-semibold active:opacity-80'
 }
 
+const href =
+  routeName !== undefined
+    ? getRelativeLocaleUrl(
+        resolveLocale(Astro.currentLocale),
+        routePath({ routeName }, resolveLocale(Astro.currentLocale))
+      )
+    : suppliedHref!
 let destination = href
 if (
+  routeName === undefined &&
   localize &&
   (download === undefined || download === false) &&
   href.startsWith('/') &&
@@ -48,6 +65,16 @@ if (
 }
 
 const relationships = rel?.split(/\s+/).filter(Boolean) ?? []
+const current =
+  ariaCurrent ??
+  (currentMatch
+    ? currentDestination(
+        new URL(destination, Astro.url),
+        Astro.url,
+        currentMatch,
+        getRelativeLocaleUrl(resolveLocale(Astro.currentLocale), '/')
+      )
+    : undefined)
 if (
   target?.toLowerCase() === '_blank' &&
   !relationships.some((value) => value.toLowerCase() === 'noopener')
@@ -61,6 +88,7 @@ if (
   target={target}
   rel={relationships.length ? relationships.join(' ') : undefined}
   download={download}
+  aria-current={current}
   class:list={[
     appearances[variant],
     variant !== 'plain' &&

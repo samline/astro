@@ -118,6 +118,10 @@ test(
       'src/components/FaIcon'
     ])
       assert.equal(await exists(directory, folder), false, folder)
+    const routeCatalog = await read(directory, 'src/config/routes.ts')
+    assert.doesNotMatch(routeCatalog, /en-us|demo|company\.about/)
+    assert.match(routeCatalog, /home\.index/)
+    assert.equal(await exists(directory, 'src/i18n/routes.ts'), true)
     const types = await read(directory, 'src/i18n/types.ts')
     assert.doesNotMatch(types, /themes|cookies|auth|forms|en-us/)
     assert.equal(manifest.scripts['auth:migrate'], undefined)
@@ -347,8 +351,10 @@ test(
     const content = await readdir(
       path.join(directory, 'src/content/posts/data')
     )
+    const routeCatalog = await read(directory, 'src/config/routes.ts')
     const entry = localeDetails('fr-fr', 'Français')
     await addProjectLocale({ root: directory, kitVersion, entry })
+    assert.equal(await read(directory, 'src/config/routes.ts'), routeCatalog)
     const added = dictionary(
       await read(directory, 'src/i18n/dictionaries/fr-fr/checkout/index.ts'),
       'checkout'

@@ -17,8 +17,8 @@
   },
   {
     "id": "reference/localized-content",
-    "title": "Translated destinations",
-    "description": "Connect translated records and URLs so language links and SEO point to the matching page, including API and CMS content.",
+    "title": "Named and translated routes",
+    "description": "Use routeNames, active child links and shared translated destinations for navigation, language switching and SEO.",
     "source": "src/i18n/localized-content.md",
     "group": "reference",
     "order": 4

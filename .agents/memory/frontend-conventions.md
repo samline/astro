@@ -161,6 +161,14 @@ switch must resolve a real translated-content relationship, not replace a prefix
 
 ## Content drives the interface
 
+Route matching is independent of a link's visual variant. Use Link's opt-in
+currentMatch for exact or segment-bounded descendant matching; explicit
+aria-current remains caller-owned. Reuse its pure currentDestination resolver in
+an existing browser navigation owner when needed, without introducing a global
+controller. Keep localized home roots exact-only. Select the most specific
+current entry per navigation set and use real translation relationships for
+language changes, rather than inferring them from the active parent route.
+
 Every visitor-facing string, including errors, loading text, alt text and ARIA
 labels, belongs to a locale/domain dictionary. Each domain owns index.ts and
 types.ts; locale indexes compose them. A new language copies current keys with
@@ -241,6 +249,26 @@ Do not duplicate raw hidden values, masks or event handlers owned by those
 packages. Auth/Actions/Server Islands authorize their actual operation; a route
 rule does not protect every downstream action automatically.
 
+## Incremental lists and return navigation
+
+When a list mixes server-rendered and browser-added items, keep one markup owner
+and shared formatting. For simple DOM cards, a native template rendered by that
+component can provide cloneable markup; fill validated data with textContent and
+appropriate attributes. Preserve Astro-scoped attributes, unique IDs, labels and
+media geometry. Cloning does not copy event listeners or initialize client
+components: use the existing owner's delegation or explicit setup/cleanup.
+Do not build a second string renderer or add another endpoint solely to duplicate
+the same card. Choose the transport for the actual response and consumer needs.
+
+Prefer native history/BFCache behavior for list-detail navigation. If a project
+needs to reconstruct paginated results, keep the enhancement with that list.
+Store only bounded navigation intent with stable item identity, an allowlisted
+query context and expiry; handle unavailable storage. Reuse retained DOM before
+fetching, bound replay requests/time, and provide cancellation and retry behavior.
+Restore by identity before falling back to position, coordinate focus without
+extra scroll, and do not override user interaction. This is not a base-wide cache
+or a reason to rewrite canonical URLs or enable filters a project does not have.
+
 ## Examples are part of the API
 
 An example teaches a real task in this order:
@@ -265,6 +293,13 @@ README files live beside reusable components and ship with them. Keep source,
 types, dictionaries, examples, documentation and meaningful checks in sync.
 
 ## Cards with variable-length content
+
+For a card whose main link represents the whole item, its owner may draw the
+focus-visible outline around the card using :has() on that link. Preserve the
+native link as the tab stop and keep secondary controls independently focused;
+do not add tabindex to the wrapper or nest interactive elements. Check the
+outline's contrast and clipping on initial, appended and cloned cards, including
+focus restored after returning from a detail page.
 
 Keep this layout with the section or its private card. Comparable cards start
 with the editorial stack at the top; vertically centering a whole variable-length

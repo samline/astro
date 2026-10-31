@@ -121,6 +121,18 @@ Integrations include source and setup instructions. Add your own credentials,
 provider mappings and application UI as required. Installing an integration does
 not connect it to a live service or deploy the project.
 
+## Named and translated routes
+
+Every project includes `src/config/routes.ts` with `routeNames.home`. Add the
+stable names and actual locale-free destinations of your pages there. Link and
+Button accept `routeName` instead of `href`; optional `currentMatch` handles exact
+pages or segment-bounded children. Main, SEO and LanguagePicker share `path`,
+`routeName` or an actual `localizedPaths` map for translated content. Main forwards
+that context to its default header; custom headers must forward it explicitly.
+Missing translations are omitted. Astro still owns page generation.
+See [localized routes](./src/i18n/localized-content.md) for complete examples and
+[Link](./src/components/Link/README.md) for active navigation behavior.
+
 ## Add integrations later
 
 Run these commands **inside a project created by this installer**:
@@ -265,18 +277,18 @@ bun run verify
 bun run kit:pack
 ```
 
-The current archive is `artifacts/samline-astro-7.22.1.tgz`. From the folder where
+The current archive is `artifacts/samline-astro-7.23.0.tgz`. From the folder where
 you want the test project, run the following with an absolute archive path:
 
 ```sh
-npm exec --yes --package /absolute/path/to/astro/artifacts/samline-astro-7.22.1.tgz -- samline-astro my-site
+npm exec --yes --package /absolute/path/to/astro/artifacts/samline-astro-7.23.0.tgz -- samline-astro my-site
 ```
 
 The repository root is the maintained starter. `packages/cli/template` is
 regenerated from explicit allowlists; edit the original source, then run
 `bun run kit:prepare`. Never maintain the generated template by hand.
 
-Root and CLI versions are `7.22.1`. Distribution releases stay on major 7 while
+Root and CLI versions are `7.23.0`. Distribution releases stay on major 7 while
 supporting Astro 7; minor versions evolve independently of Astro's minor number.
 `bun run kit:version 7.x.y` advances both manifests for a future release.
 Packaging, publishing and deployment are separate operations.

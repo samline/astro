@@ -3,6 +3,7 @@ import { SITE_INDEXABLE } from 'astro:env/server'
 import { getAbsoluteLocaleUrl } from 'astro:i18n'
 import { getDictionary, resolveLocale } from '@/i18n'
 import { defaultLocale, locales, type Locale } from '@/i18n/config'
+import { resolveRoutePaths, type PageRoute } from '@/i18n/routes'
 import {
   seoConfig,
   isNoindexPath,
@@ -10,9 +11,7 @@ import {
   type StructuredData
 } from '@/config/seo'
 
-export interface Props {
-  /** Route without its locale prefix, query string or hash. */
-  path: string
+export type Props = PageRoute & {
   /** Translated page title. The site name is appended automatically. */
   title?: string
   /** Already complete translated title, without the title template. */
@@ -30,7 +29,6 @@ export interface Props {
 }
 
 const {
-  path,
   title,
   titleAbsolute,
   description,
@@ -45,7 +43,10 @@ const {
 const locale = resolveLocale(Astro.currentLocale)
 const dictionary = getDictionary(locale)
 const origin = Astro.site!
-const route = path.split(/[?#]/)[0] || '/'
+const paths = resolveRoutePaths(Astro.props)
+const route = paths[locale]
+if (route === undefined)
+  throw new Error(`Page has no translation for ${locale}.`)
 const absoluteURL = (value: string | URL) => {
   const url = new URL(value, origin)
   if (!['http:', 'https:'].includes(url.protocol))
@@ -68,8 +69,8 @@ const robots = [
   nofollow ? 'nofollow' : 'follow',
   ...(indexable ? ['max-image-preview:large'] : [])
 ].join(', ')
-const translations = [...new Set(alternateLocales)].filter((language) =>
-  locales.includes(language)
+const translations = [...new Set(alternateLocales)].filter(
+  (language) => locales.includes(language) && paths[language] !== undefined
 )
 const ogLocale = (language: string) => {
   const locale = new Intl.Locale(language)
@@ -137,14 +138,14 @@ const jsonLD = JSON.stringify({
     <link
       rel='alternate'
       hreflang={language}
-      href={getAbsoluteLocaleUrl(language, route)}
+      href={getAbsoluteLocaleUrl(language, paths[language]!)}
     />
   ))}
 {indexable && translations.includes(defaultLocale) && (
   <link
     rel='alternate'
     hreflang='x-default'
-    href={getAbsoluteLocaleUrl(defaultLocale, route)}
+    href={getAbsoluteLocaleUrl(defaultLocale, paths[defaultLocale]!)}
   />
 )}
 {SITE_INDEXABLE && (

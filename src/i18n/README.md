@@ -10,7 +10,7 @@ explicitly because their request is isolated. This feature adds no custom router
 When a section needs several translated browser messages, configure Main:
 
 ```astro
-<Main clientTranslations={['common', 'buttons']}>
+<Main path='/' clientTranslations={['common', 'buttons']}>
   <ContentSection />
 </Main>
 ```
@@ -55,8 +55,9 @@ prefer this scoped payload when the section only needs a few domains.
 Before integrating API/CMS content or language-dependent slugs, read
 [Localized content routes](./localized-content.md). It defines translation-group
 identity, provider normalization, SSG/SSR/live/browser resolution, missing
-translations, caching and consistent navigation/SEO. This is integration guidance;
-the starter's current path-based selector does not resolve translated slugs yet.
+translations, caching and consistent navigation/SEO. The installed `src/config/routes.ts` catalog and `src/i18n/routes.ts` resolver
+share `path`, `routeName` or `localizedPaths` between Main, SEO and LanguagePicker.
+Link/Button also accept `routeName`; Astro still owns actual route generation.
 
 ## Language scaffolding and validation
 

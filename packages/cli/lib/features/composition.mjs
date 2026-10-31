@@ -47,7 +47,7 @@ export const coreLayout = async (template, selected) => {
     ])
       source = replaceOnce(
         source,
-        `    <slot name='${name}'>\n      <${component} />\n    </slot>`,
+        `    <slot name='${name}'>\n      <${component}${name === 'header' ? ' pageRoute={seo}' : ''} />\n    </slot>`,
         `    <slot name='${name}' />`
       )
   }
@@ -150,7 +150,7 @@ export const demoHeader = async (template, selected) => {
       source,
       name === 'ThemeSwitch'
         ? '<ThemeSwitch />'
-        : '<LanguagePicker path={path} />',
+        : '<LanguagePicker {...(pageRoute ?? { path })} />',
       ''
     )
   }
@@ -187,7 +187,7 @@ type Props = ComponentProps<typeof Main>
 
 <Main {...Astro.props}>
   <slot name='head' slot='head' />
-  <DemoHeader slot='header' />
+  <DemoHeader slot='header' pageRoute={Astro.props} />
   <slot />
   <DemoFooter slot='footer' />
   <slot name='body-end' slot='body-end' />

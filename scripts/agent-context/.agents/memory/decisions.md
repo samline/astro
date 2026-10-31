@@ -12,6 +12,11 @@ Section provides semantics and vertical spacing; Box constrains content width.
 Link uses native navigation and Astro localization helpers. Components read the
 current locale themselves, except across isolated server boundaries.
 
+Link's optional currentMatch can mark exact pages or descendant locations,
+independently of appearance. Its pure resolver adds no browser controller;
+explicit aria-current values stay caller-owned. See its README before adapting
+navigation or cloned menus.
+
 Tailwind owns design tokens. Theme initialization runs before paint. GTM is
 optional and starts with denied consent signals; analytics and advertising are
 independent. PageLoader retains ldrs to make animation changes straightforward.
@@ -29,9 +34,11 @@ is a starting point rather than the final architecture for a customized site.
 Before adding API/CMS content or translated slugs, follow
 src/i18n/localized-content.md. Astro handles URL formatting; equivalent content
 must be identified through a stable translation group or explicit provider
-relation. If LanguagePicker is installed, coordinate its path contract with SEO when
-actual localized destinations differ. This guidance
-does not mean translated-slug resolution is already implemented.
+relation. src/config/routes.ts owns stable names and locale-free static paths;
+src/i18n/routes.ts resolves active destinations for Main, SEO and LanguagePicker.
+Use localizedPaths for actual dynamic translations. Custom headers forward page
+identity explicitly; missing destinations are omitted, never guessed. Native
+Astro routing still generates pages; the catalog performs no provider lookup.
 
 ## Authentication boundary
 

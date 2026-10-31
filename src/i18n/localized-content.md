@@ -1,25 +1,125 @@
 # Localized routes when integrating an API or CMS
 
-Read this guide before connecting API/CMS content, adding translated slugs or
-changing language navigation. It describes the integration contract to implement
-in the consuming project; it is not an already installed route resolver.
+The starter includes a typed named-route catalog and a shared destination resolver.
+Use it for navigation, language switching and SEO. Astro still owns route files,
+`getStaticPaths` and URL formatting; declaring a name does not create a page.
 
-## Current starter limitation
+## Named static routes
 
-LanguagePicker accepts one locale-free `path` and applies it to every active
-locale. SEO similarly accepts one `path` and `alternateLocales`. These APIs are
-suitable only when the page exists at the same path in those locales. Neither
-currently resolves translated slugs or checks that alternate pages exist.
+Every generated project includes `src/config/routes.ts`, initially with only
+`routeNames.home` mapped to `/`. Add the stable identities of your real pages:
 
-Before rendering content with different paths or availability, adapt both
-consumers to share actual equivalent destinations. Do not pass the current slug
-to every locale or claim the current starter handles that case automatically.
+```ts
+// src/config/routes.ts — example for a project with these configured locales
+import type { Locale } from '@/i18n/config'
 
-Keep Astro routing and `astro:i18n` URL helpers. They format localized URLs using
-project settings; they do not discover which API records are translations of
-one another. No new router or automatic translation of slug text is required.
+export const routeNames = {
+  home: 'home.index',
+  about: 'company.about'
+} as const
+export type RouteName = (typeof routeNames)[keyof typeof routeNames]
+export type LocalizedPaths = Partial<Record<Locale, string>>
+export const routes: Record<RouteName, string | LocalizedPaths> = {
+  [routeNames.home]: '/',
+  [routeNames.about]: { 'en-us': '/about', 'es-mx': '/nosotros' }
+}
+```
+
+A string means the same locale-free path exists in all active locales. A map
+lists only available translations; it supports any number of configured locales.
+When activating a new language, add its translated paths where those pages exist.
+The locale-add command preserves this catalog and does not invent URLs.
+Names and paths are structural data; visible navigation labels stay in dictionaries.
+
+Inside a section, link to a known page by its name:
+
+```astro
+---
+import Link from '@/components/Link/index.astro'
+import { routeNames } from '@/config/routes'
+import { getDictionary } from '@/i18n'
+const dictionary = getDictionary(Astro.currentLocale)
+---
+
+<Link routeName={routeNames.home} variant='nav' currentMatch='descendants'>
+  {dictionary.site.name}
+</Link>
+```
+
+Use the same identity in the page's layout: `<Main routeName={routeNames.about}>`.
+Main forwards it to SEO and its default DemoHeader, whose LanguagePicker receives
+the same context. A custom header should receive the page identity explicitly and
+pass it to `<LanguagePicker {...pageRoute} />`. For custom navigation URL data,
+use `routePath({ routeName: routeNames.about }, locale)` from `@/i18n/routes`, then
+format it with `getRelativeLocaleUrl`. A missing current-locale path throws rather
+than linking to an invented destination; omit unavailable navigation items using
+`resolveRoutePaths({ routeName: routeNames.about })[locale]` first.
+
+`Link` and `Button` accept **either** `href` or `routeName`. `Main`, `SEO` and
+`LanguagePicker` accept exactly one of `path`, `routeName` or `localizedPaths`.
+Existing `href` and shared `path` usages continue to work. Named links use the
+current locale and Astro's configured base/prefix rules without browser JavaScript.
+`currentMatch='exact'` marks the destination page; `'descendants'` also marks
+segment-bounded child paths as a current location. Home remains exact-only.
+See [Link](../components/Link/README.md) for explicit overrides and client lifecycle.
+
+The route file must generate the paths declared in the catalog. For the about
+example above, create `src/pages/[...route].astro` and a real About section with
+its translated copy before using this complete page composition:
+
+```astro
+---
+import Main from '@/layouts/Main.astro'
+import About from '@/sections/About/index.astro'
+import { routeNames } from '@/config/routes'
+import { resolveRoutePaths } from '@/i18n/routes'
+import { defaultLocale } from '@/i18n/config'
+
+export const getStaticPaths = () =>
+  Object.entries(resolveRoutePaths({ routeName: routeNames.about })).map(
+    ([locale, path]) => ({
+      params: {
+        route:
+          [locale === defaultLocale ? '' : locale, path.slice(1)]
+            .filter(Boolean)
+            .join('/') || undefined
+      }
+    })
+  )
+---
+
+<Main routeName={routeNames.about}>
+  <About />
+</Main>
+```
+
+This example follows the starter's default unprefixed language configuration.
+Use route parameters matching your own file structure. A real page's route must
+have one owner; avoid another route producing the same URLs. The catalog does
+not replace Astro's route priority rules or parameter generation. Do not
+reverse-match the current URL or inspect route-builder function source to guess
+page identity. Active matching controls navigation, not route generation.
+
+## Dynamic translated records
+
+For API/CMS records, normalize their actual translation relation to
+`LocalizedPaths`, then pass `<Main localizedPaths={paths}>`. This sets canonical,
+self/cross-language alternates and the default header's language destinations from
+the same map. A standalone picker uses `<LanguagePicker localizedPaths={paths} />`.
+Inactive and absent translations are omitted; the picker renders only when at
+least two destinations are available. SEO throws if the current page has no path.
+`alternateLocales` may further restrict SEO destinations; `x-default` requires an
+available, permitted default-language destination.
+
+The resolver validates locale-free site paths and uses only active locales. It
+performs no fetch, publication/access validation or automatic slug translation.
+The content boundary must provide only real, published, accessible equivalents.
+Neither a route name nor a common parent path identifies a dynamic record's
+translations. Do not append the old slug to another language's section URL.
 
 ## Inspect the source contract first
+
+### API and CMS records
 
 When asked to consume an API, determine:
 
@@ -42,12 +142,14 @@ add an explicit mapping when its provider lacks localization relations.
 ## Normalize destinations once
 
 At the content boundary, validate provider data and produce a small, typed
-representation such as this conceptual shape:
+representation using the installed `LocalizedPaths` type:
 
 ```ts
+import type { LocalizedPaths } from '@/i18n/routes'
+
 type LocalizedContentRoutes = {
   translationKey: string
-  paths: Partial<Record<Locale, string>>
+  paths: LocalizedPaths
 }
 ```
 
@@ -141,9 +243,17 @@ Exercise the actual routes and rendered navigation/metadata:
   a fallback listing or missing translation.
 - Browser navigation races and allowed query/hash behavior when relevant.
 
+Also test newly added informational/legal routes through the project's locale
+route structure, and validate locale inputs for Action feedback. Pass the parent
+locale explicitly across isolated requests, including when building their links.
+Keep the technical root 404 entry discoverable by the selected adapter; verify
+its actual fallback language and status rather than moving it into a locale
+folder or making it on-demand for every deployment profile. A purely static
+deployment must retain a static-compatible error page.
+
 Record the provider mapping, rendering mode, freshness policy, missing-translation
 behavior and performed verification in the consuming project's `.agents` memory.
-Do not claim the integration is complete based only on this guide.
+Verify the real provider mapping and generated routes; the shared resolver cannot establish that upstream content exists.
 
 Official references:
 [Astro internationalization](https://docs.astro.build/en/guides/internationalization/),

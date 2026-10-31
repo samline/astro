@@ -1,7 +1,10 @@
 ---
 import type { HTMLAttributes } from 'astro/types'
 import Link from '@/components/Link/index.astro'
-import type { Props as LinkProps } from '@/components/Link/index.astro'
+import type {
+  Props as LinkProps,
+  LinkDestination
+} from '@/components/Link/index.astro'
 
 type Appearance = {
   variant?: 'primary' | 'secondary' | 'text'
@@ -10,8 +13,14 @@ type Appearance = {
 
 export type Props = Appearance &
   (
-    | (HTMLAttributes<'button'> & { href?: never; localize?: never })
-    | (Omit<LinkProps, 'variant'> & { disabled?: never })
+    | (HTMLAttributes<'button'> & {
+        href?: never
+        routeName?: never
+        currentMatch?: never
+        localize?: never
+      })
+    | (Omit<LinkProps, 'variant' | 'href' | 'routeName'> &
+        LinkDestination & { disabled?: never })
   )
 
 const {
@@ -47,7 +56,7 @@ const classes = [
 ]
 ---
 
-{typeof attributes.href === 'string' ? (
+{typeof attributes.href === 'string' || attributes.routeName !== undefined ? (
   <Link {...attributes} class:list={classes}>
     <slot />
   </Link>

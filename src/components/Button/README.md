@@ -81,3 +81,8 @@ outline. All variants include active feedback and style explicit `aria-pressed`
 state; the owning section must update that attribute and implement its behavior.
 The resolved native `type` is rendered once after forwarded attributes so submit
 and reset controls retain their requested operation.
+
+For a named page, pass `routeName={routeNames.home}` instead of `href`. This renders
+Link with the same typed catalog, localization and optional `currentMatch` API.
+Import `routeNames` from `@/config/routes`; never pass both destination props.
+See [localized routes](../../i18n/localized-content.md).

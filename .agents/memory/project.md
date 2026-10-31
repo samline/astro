@@ -78,6 +78,8 @@ cannot replace a dependency's internally bundled code; reassess bundled code whe
 changing the parent dependency. Bun-managed Vercel dependencies require Bun >=1.4.
 Cloudflare tooling retains Node execution.
 
-LanguagePicker and SEO share a path-based contract. Translated content with
-different slugs requires a shared destination resolver; follow
+src/config/routes.ts owns typed static route names and locale-free paths.
+src/i18n/routes.ts shares path, routeName or localizedPaths across Main, SEO and
+LanguagePicker; Link/Button accept routeName instead of href. Astro still creates
+routes. Dynamic content requires real translation relations; follow
 src/i18n/localized-content.md before connecting a localized API/CMS.

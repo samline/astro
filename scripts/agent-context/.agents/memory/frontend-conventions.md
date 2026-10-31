@@ -81,7 +81,13 @@ functions by default; use another form only when an actual API requires it.
 Regular Astro components read Astro.currentLocale. Pass locale explicitly across
 isolated requests such as Server Islands. Keep stable IDs and destination paths
 separate from translated labels. Mark the active navigation link from the actual
-route and set aria-current="page"; the home URL must not match every other route.
+route. Link's optional currentMatch supports exact and segment-bounded descendant
+matching independently of appearance; exact pages use aria-current="page" and
+ancestor locations use "location". Keep localized home roots exact-only and
+preserve caller-supplied overrides. Reuse Link/current's pure resolver from an
+existing browser owner when needed, without adding a global navigation manager.
+Prefer the most specific current entry within one navigation set. Language
+changes need an explicit equivalent destination, not just an active parent path.
 
 ## Copy, data and styling
 
@@ -113,7 +119,25 @@ Update the owning README and persistent project memory as APIs or conventions
 change. Verify the affected behavior using the project's actual scripts; report
 what was checked and the remaining limits.
 
+For incremental lists, keep server and browser-added items under one markup and
+formatting owner. A native template can supply simple cloneable cards; preserve
+scope attributes, unique IDs and accessible labels. Cloning does not copy event
+listeners or mount client components. Use the owner's delegation/setup rather
+than adding a duplicate string renderer or parallel fetch path.
+
+Prefer native history/BFCache for list-detail returns. Add list-owned restoration
+only when required: preserve stable item identity and allowlisted query context,
+use bounded/expiring navigation intent with a storage fallback, reuse retained
+DOM, limit replay work and allow cancellation/retry. Restore focus and scroll
+without fighting user input. Do not introduce a global cache or invent filters.
+
 ## Cards with variable-length content
+
+When a main card link represents the whole item, its owner may reflect that
+link's focus-visible state on the card with :has(). Keep the link as the native
+tab stop and preserve separate focus for secondary controls. Do not add wrapper
+tabindex or nest interactive elements. Check outline clipping and contrast on
+initial, appended, cloned and history-restored cards.
 
 Keep this layout with the section or its private card. Comparable cards start
 with the editorial stack at the top; vertically centering a whole variable-length

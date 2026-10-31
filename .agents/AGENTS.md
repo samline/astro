@@ -55,9 +55,11 @@ with the dynamic page that requires it. Pass locale-free paths to URL helpers.
 Before consuming an API/CMS with localized content or translated slugs, read
 src/i18n/localized-content.md. Resolve equivalent destinations from an explicit
 translation relationship; never substitute the locale prefix on the current slug.
-The current LanguagePicker and SEO reuse one path and need coordinated adaptation
-when actual localized destinations differ. Resolve once for both navigation and
-SEO at the appropriate build/request boundary and document the provider mapping.
+Use src/config/routes.ts for stable named pages. Main, SEO and LanguagePicker
+share exactly one of path, routeName or localizedPaths; Link/Button accept
+routeName instead of href. Resolve actual dynamic translation maps at the
+build/request boundary, forward page identity into custom headers and document
+the provider mapping. Missing translations are omitted, never guessed.
 
 `src/i18n/config.ts` is the source of truth for active locales. Default: en-us;
 es-mx/es-es are prepared; additional routes are activated explicitly. The

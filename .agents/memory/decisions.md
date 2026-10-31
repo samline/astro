@@ -20,6 +20,12 @@ The optional welcome feature owns Home/demo sections and private navigation.
 Only exact normalized localized paths receive aria-current. Adding the feature
 preserves an existing homepage and requires compatible layout slots.
 
+Link's currentMatch is an optional route-matching API independent of its visual
+variant. Its pure resolver can be shared with an existing browser owner, while
+the default keeps aria-current caller-owned and installs no client controller.
+The demo retains exact page matching. See the component README for descendant,
+localized-root, fragment and explicit-override behavior.
+
 Site chrome has explicit Main, Head, Header, Navigation, NavItems and Footer
 owners, with private mobile navigation and announcement parts when present.
 See frontend-conventions.md for composition and verification; the compact demo
@@ -37,6 +43,13 @@ Native Astro helpers format URLs. API/CMS equivalence requires explicit
 translation relationships and one result shared by navigation and SEO. Do not
 infer translated slugs or publication availability from locale prefixes. See
 src/i18n/localized-content.md.
+
+src/config/routes.ts owns stable typed names and locale-free static paths.
+Main/SEO/LanguagePicker share path, routeName or actual localizedPaths through
+src/i18n/routes.ts. Main passes page context to its default header; custom headers
+must forward it explicitly. Missing destinations are omitted, and missing current
+page/link translations fail clearly. Link/Button accept named destinations.
+The catalog does not create Astro routes, discover records or rewrite sitemaps.
 
 ## Styling and browser behavior
 

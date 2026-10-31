@@ -63,19 +63,19 @@ variables. This component has no browser methods or client JavaScript.
 
 ## Props
 
-| Prop                                                  | Default                 | Purpose                                                                          |
-| ----------------------------------------------------- | ----------------------- | -------------------------------------------------------------------------------- |
-| `path: string`                                        | Required                | Route without locale prefix, query, or hash. Astro resolves URLs for the locale. |
-| `title?: string`                                      | site.title              | Title; applies seo.titleTemplate when appropriate.                               |
-| `titleAbsolute?: string`                              | —                       | Complete title overriding title and bypassing the template.                      |
-| `description?: string`                                | site.description        | Page description.                                                                |
-| `type?: 'website' \| 'article'`                       | `'website'`             | Open Graph type.                                                                 |
-| `noindex?: boolean`                                   | false                   | Excludes this page from indexing; cannot override disabled global indexing.      |
-| `nofollow?: boolean`                                  | false                   | Adds nofollow to robots.                                                         |
-| `alternateLocales?: Locale[]`                         | Active locales          | Only locales where this page exists, filtered against active configuration.      |
-| `image?: SocialImage \| null`                         | Configured global image | Omit to use the global image; null disables it for this page.                    |
-| `canonical?: string \| URL`                           | Localized path URL      | Overrides the main URL; use HTTP(S).                                             |
-| `structuredData?: StructuredData \| StructuredData[]` | []                      | Additional nodes for the JSON-LD graph.                                          |
+| Prop                                                  | Default                 | Purpose                                                                     |
+| ----------------------------------------------------- | ----------------------- | --------------------------------------------------------------------------- |
+| `path?: string`                                       | One route identity      | Shared locale-free route; alternative to routeName/localizedPaths.          |
+| `title?: string`                                      | site.title              | Title; applies seo.titleTemplate when appropriate.                          |
+| `titleAbsolute?: string`                              | —                       | Complete title overriding title and bypassing the template.                 |
+| `description?: string`                                | site.description        | Page description.                                                           |
+| `type?: 'website' \| 'article'`                       | `'website'`             | Open Graph type.                                                            |
+| `noindex?: boolean`                                   | false                   | Excludes this page from indexing; cannot override disabled global indexing. |
+| `nofollow?: boolean`                                  | false                   | Adds nofollow to robots.                                                    |
+| `alternateLocales?: Locale[]`                         | Active locales          | Only locales where this page exists, filtered against active configuration. |
+| `image?: SocialImage \| null`                         | Configured global image | Omit to use the global image; null disables it for this page.               |
+| `canonical?: string \| URL`                           | Localized path URL      | Overrides the main URL; use HTTP(S).                                        |
+| `structuredData?: StructuredData \| StructuredData[]` | []                      | Additional nodes for the JSON-LD graph.                                     |
 
 `Props` is exported from index.astro. SocialImage, StructuredData, and JsonValue
 are exported from src/config/seo.ts.
@@ -130,12 +130,21 @@ must exist. Theme-color belongs to Main and should match Tailwind's main accent.
 
 ## Localized content and framework boundaries
 
-The default `path`/`alternateLocales` contract assumes the same locale-free path
-exists in every listed language. Passing `alternateLocales` filters locales; it
-does not supply their different slugs. For translated API/CMS routes, adapt SEO
-and LanguagePicker together using the real destination mapping described in
-[localized content](../../i18n/localized-content.md). Do not advertise invented
-alternates or listing fallbacks as equivalent articles.
+Pass exactly one of `path`, `routeName` or `localizedPaths` through Main.
+`routeName: RouteName` selects a static page from `src/config/routes.ts`;
+`localizedPaths: LocalizedPaths` supplies a record's actual translated paths.
+The shared resolver selects the current canonical and available alternates.
+Missing/inactive translations are omitted; a missing current translation throws.
+`alternateLocales` can further restrict alternates, and x-default is emitted only
+when the default destination is both available and permitted. A plain `path`
+continues to mean that the same path exists in every active language.
+
+Main shares that identity with its default header. Custom headers must forward it
+to LanguagePicker. Read [localized routes](../../i18n/localized-content.md) for
+complete examples and provider mapping. Do not advertise invented alternates or
+listing fallbacks as equivalent articles. The sitemap's native same-path grouping
+does not discover translated slugs; configure its alternates from your real
+mapping when needed. The page resolver does not modify the sitemap automatically.
 
 Dynamic route generation, URL helpers and layouts belong to Astro. Refer to
 [Astro routing](https://docs.astro.build/en/guides/routing/),

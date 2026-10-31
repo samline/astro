@@ -84,6 +84,25 @@ The generated collection README includes the appropriate read example. Keep
 content UI in its section and use real translation relationships when content
 slugs differ between languages.
 
+Choose the rendering boundary per route and block. A static listing with a live
+Server Island can coexist with an on-demand detail route when that detail needs
+current data and individual metadata in its initial HTML. With a compatible
+adapter, the project's detail route can opt out of prerendering while other pages
+stay static. Resolve one validated result for both metadata and visible content;
+reuse related data already returned rather than issuing duplicate reads.
+
+Choose Actions, Live Collections or a private server function for the actual
+consumer/transport contract; none is mandatory for every API. Define missing,
+unavailable and partial-data behavior with real status codes and cache policies.
+Keep identity in the canonical URL while excluding incidental navigation context,
+and explicitly provide discoverable detail URLs/sitemap entries where required.
+Do not assume a static sitemap enumerates runtime records or that a large
+catalogue alone requires changing the entire site's rendering mode.
+
+See Astro's [on-demand rendering guide](https://docs.astro.build/en/guides/on-demand-rendering/)
+for the framework configuration. This is a project decision, not a change to the
+starter's static default.
+
 For the framework APIs, continue with Astro's
 [Content Collections](https://docs.astro.build/en/guides/content-collections/)
 and [Content Loader API](https://docs.astro.build/en/reference/content-loader-reference/).

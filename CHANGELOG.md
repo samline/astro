@@ -1,5 +1,17 @@
 # Changelog
 
+## 7.23.0
+
+- Add optional exact/descendant route matching to Link with a shared pure resolver,
+  localized home handling and explicit overrides, without a client controller.
+- Include a typed routeNames catalog and shared path/routeName/localizedPaths
+  resolution for Main, SEO and LanguagePicker; Link/Button accept named destinations.
+- Forward page route identity to the default header; omit missing translations and
+  fail clearly for missing current destinations. Preserve existing href/path APIs.
+- Document three-language translated paths, Astro route generation, real CMS
+  translation maps and per-route rendering choices in English.
+- Expand reusable guidance for card focus and incremental list ownership.
+
 ## 7.22.1
 
 - Update the maintained starter and website to Astro 7.4.4 and refresh their

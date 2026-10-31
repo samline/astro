@@ -11,11 +11,11 @@ labels; it does not automatically activate another language or add a header.
 The implementation is `src/components/LanguagePicker/index.astro`.
 
 On initial creation with both `welcome` and `language-picker`, the starter demo
-mounts it in `src/sections/DemoHeader`. The header passes the current demo path
-so switching languages preserves Home or `/demo`. Adding the feature later
+mounts it in `src/sections/DemoHeader`. Main passes the page route identity to the header, so switching languages uses
+the same destinations as SEO. Adding the feature later
 makes it available for your own section; it preserves existing header source.
 
-**With one active locale, the component intentionally renders nothing.**
+**With fewer than two available destinations, the component renders nothing.**
 Selecting the feature and selecting active languages are separate decisions.
 
 ## Complete section example
@@ -36,13 +36,17 @@ Expected result: one link per active locale, pointing to that language's
 homepage, with the current language marked `aria-current='page'`. With the default
 single-language configuration there is no nav element, which is not an error.
 
-| Prop           | Purpose                                             |
-| -------------- | --------------------------------------------------- |
-| `path: string` | Required. Locale-free route, such as / or /contact. |
+Pass exactly one route identity:
 
-There is no locale prop, callable method API, slot, or arbitrary attribute
-forwarding. Path must exist in the active locales. The component generates URLs
-with Astro helpers; it does not create pages or translate slugs.
+| Prop                             | Purpose                                                   |
+| -------------------------------- | --------------------------------------------------------- |
+| `path: string`                   | One locale-free path that exists in all active languages. |
+| `routeName: RouteName`           | Stable page identity from `src/config/routes.ts`.         |
+| `localizedPaths: LocalizedPaths` | Actual locale-free destinations for a translated record.  |
+
+The shared resolver uses only declared active translations and omits missing ones.
+There is no locale prop, method API, slot or arbitrary attribute forwarding.
+The component creates native URLs; it does not create pages or translate slugs.
 
 ## Locales and labels
 
@@ -70,13 +74,11 @@ explicitly extend its contract in the project.
 
 ## Translated content and limits
 
-Use `path='/contact'` only if `/contact` exists in every active language.
-A post at `/posts/hello` and its Spanish translation at `/posts/hola` **cannot**
-share the single `path` contract. Before using this component for that content,
-implement the provider mapping described in
-[localized content](../../i18n/localized-content.md), and adapt LanguagePicker and
-SEO together to consume the real available destinations. The current component
-does not make that mapping, hide missing translations, or probe URLs.
+Use `path='/contact'` only when that path exists in every active language.
+Use `routeName` for a named static page or `localizedPaths` for actual translated
+content. Both also work on Main/SEO, keeping navigation and metadata aligned.
+See [localized routes](../../i18n/localized-content.md) for the catalog, custom
+headers, missing translations and provider mapping.
 
 URL prefixes and trailing-slash behavior belong to
 [Astro i18n](https://docs.astro.build/en/guides/internationalization/) and

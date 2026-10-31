@@ -3,23 +3,23 @@ import Link from '@/components/Link/index.astro'
 import { getRelativeLocaleUrl } from 'astro:i18n'
 import { getDictionary, resolveLocale } from '@/i18n'
 import { locales } from '@/i18n/config'
+import { resolveRoutePaths, type PageRoute } from '@/i18n/routes'
 
-interface Props {
-  path: string
-}
+type Props = PageRoute
 
-const { path } = Astro.props
+const paths = resolveRoutePaths(Astro.props)
+const translations = locales.filter((language) => paths[language] !== undefined)
 const locale = resolveLocale(Astro.currentLocale)
 const dictionary = getDictionary(locale)
 ---
 
-{locales.length > 1 && (
+{translations.length > 1 && (
   <nav aria-label={dictionary.common.language}>
     <ul>
-      {locales.map((language) => (
+      {translations.map((language) => (
         <li>
           <Link
-            href={getRelativeLocaleUrl(language, path)}
+            href={getRelativeLocaleUrl(language, paths[language]!)}
             localize={false}
             lang={language}
             hreflang={language}
