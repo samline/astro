@@ -118,7 +118,8 @@ A newer generator executable does not replace previously copied source.
 
 Update English component/integration docs when the API changes. A complete
 example includes real imports, available dictionary keys, prerequisites and
-expected behavior. Run the project's formatter and relevant checks/build;
+expected behavior. For UI changes, run the rendered-result checklist in
+frontend-conventions.md. Run the project's formatter and relevant checks/build;
 record actual evidence and limits in .agents. Preserve original and third-party
 license notices when distributing source. Skills do not authorize deployment,
 publication or external communications.

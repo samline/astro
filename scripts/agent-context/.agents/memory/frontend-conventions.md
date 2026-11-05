@@ -121,6 +121,36 @@ for authored CSS lengths and unitless zero; preserve native asset dimensions and
 library-required numeric values. Keep focus visible and respect reduced motion.
 Document a token change when it also requires a concrete head theme-color value.
 
+## Verify the rendered result
+
+Before calling UI work finished, check the rendered page at 320px and at each
+configured breakpoint. Code that intends a result is not evidence of it.
+
+- Contrast: body and placeholder text at least 4.5:1; large text and control
+  boundaries at least 3:1, in every theme and state. On colored surfaces derive
+  secondary text from that surface or the foreground, not a generic gray.
+- Type: body measure about 65-75ch; at least a 1.25x size step between heading
+  and body roles; letter-spacing no tighter than -0.04em; more space above a
+  heading than below it; no justified body text.
+- States: hover, focus-visible, active, disabled, loading, empty, error and
+  success exist wherever the control or data can reach them, with dictionary
+  copy. Controls name their action; errors name the problem and the recovery.
+- Content stress: the longest active locale, long names, single characters,
+  large numbers, and empty or many-item lists neither overflow nor overlap.
+- Browser surfaces: global.css themes selection, caret, native control accents,
+  link underline offset and table numerals. Keep them aligned with token and
+  dark-theme changes.
+- Depth and motion: give an element a border or an offset shadow, not both by
+  default; avoid zero-offset colored glows. Prefer one purposeful motion moment
+  over identical entrances on every section, within reduced-motion rules.
+- Fonts: the starter's Inter is a provisional default. Confirm the brand face
+  before treating typography as final.
+
+Triage findings in order: broken tasks and inaccessible paths, missing states,
+hierarchy/responsive/system drift, visual details, then cleanup. Fix drift at its
+owner: add a missing token in tailwind.css, replace a one-off with the existing
+component, and correct a local defect in place.
+
 ## Behavior and examples
 
 Keep form state, validation and formatting in the selected Forms/Formatter

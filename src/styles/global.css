@@ -9,6 +9,9 @@
     background-color: var(--color-white);
     color: var(--color-black);
     color-scheme: light;
+    /* Native controls, the text caret and form accents follow the palette. */
+    accent-color: var(--color-accent);
+    caret-color: var(--color-accent);
   }
 
   body {
@@ -19,8 +22,22 @@
     text-wrap: balance;
   }
 
+  :where(p, li, dd, blockquote, figcaption) {
+    text-wrap: pretty;
+  }
+
   :where(h1, h2, h3, h4, h5, h6, p) {
     overflow-wrap: anywhere;
+  }
+
+  :where(a) {
+    text-underline-offset: 0.18em;
+    text-decoration-thickness: from-font;
+  }
+
+  /* Aligned digits in tables; use the tabular-nums utility for other figures. */
+  :where(table) {
+    font-variant-numeric: tabular-nums;
   }
 
   svg {
