@@ -115,6 +115,7 @@ Portable `.agents` guidance and relevant skills are included for future work.
 | SMTP mail            | A private mail service and contact Action example.                                                                         |
 | PageLoader           | An optional loading overlay with swappable ldrs animations.                                                                |
 | Font Awesome         | An SVG icon component and selected free icon packages.                                                                     |
+| Impeccable (beta)    | The pinned `impeccable` CLI, a `design:detect` script and agent rules; you install its skills and hooks yourself.          |
 | Welcome              | A two-page demo with header, active navigation, welcome content and footer; selected by default in the interactive wizard. |
 
 Integrations include source and setup instructions. Add your own credentials,

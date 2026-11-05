@@ -766,3 +766,53 @@ test(
     }
   }
 )
+
+test('Impeccable pins its CLI and agent rules without copying skills; add is idempotent', async (t) => {
+  const source = await json(root)
+  const created = await fixture(t, { features: ['impeccable'] })
+  let manifest = await json(created)
+  assert.equal(
+    manifest.devDependencies.impeccable,
+    source.devDependencies.impeccable
+  )
+  assert.equal(manifest.scripts['design:detect'], 'impeccable detect src')
+  assert.match(await read(created, '.gitignore'), /# impeccable-ignore-start/)
+  assert.match(
+    await read(created, '.agents/AGENTS.md'),
+    /## Impeccable design tooling/
+  )
+  assert.doesNotMatch(await read(created, '.agents/AGENTS.md'), /\{\{RUN\}\}/)
+  assert.equal(await exists(created, '.agents/skills/frontend-design'), false)
+  assert.equal(
+    (await json(created, 'skills-lock.json')).skills['frontend-design'],
+    undefined
+  )
+  for (const file of ['PRODUCT.md', 'DESIGN.md', '.impeccable'])
+    assert.equal(await exists(created, file), false)
+
+  const minimal = await fixture(t)
+  manifest = await json(minimal)
+  assert.equal(manifest.devDependencies.impeccable, undefined)
+  assert.equal(manifest.scripts['design:detect'], undefined)
+  assert.doesNotMatch(await read(minimal, '.gitignore'), /impeccable/)
+  assert.doesNotMatch(await read(minimal, '.agents/AGENTS.md'), /Impeccable/)
+  assert.equal(await exists(minimal, '.agents/skills/frontend-design'), true)
+
+  await add(minimal, ['impeccable'])
+  manifest = await json(minimal)
+  assert.equal(
+    manifest.devDependencies.impeccable,
+    source.devDependencies.impeccable
+  )
+  assert.equal(manifest.scripts['design:detect'], 'impeccable detect src')
+  const agents = await read(minimal, '.agents/AGENTS.md')
+  assert.equal(agents.match(/## Impeccable design tooling/g).length, 1)
+  assert.match(agents, new RegExp(`${tools.runner} run design:detect`))
+  assert.equal(await exists(minimal, '.agents/skills/frontend-design'), true)
+  assert.deepEqual((await add(minimal, ['impeccable'])).files, [])
+  assert.equal(
+    (await read(minimal, '.gitignore')).match(/impeccable-ignore-start/g)
+      .length,
+    1
+  )
+})

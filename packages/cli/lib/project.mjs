@@ -33,6 +33,10 @@ import {
   actionRegistrations
 } from './features/composition.mjs'
 import { contentFiles } from './features/content.mjs'
+import {
+  addImpeccableScripts,
+  withImpeccableIgnore
+} from './features/impeccable.mjs'
 import { initialLocales, localeDetails } from './locales.mjs'
 import { environmentExample, withoutTrackingImport } from './environment.mjs'
 import {
@@ -80,6 +84,7 @@ export const projectManifest = (
   const devDependencies = { ...source.devDependencies }
   delete devDependencies['@types/pg']
   delete devDependencies['@types/nodemailer']
+  delete devDependencies.impeccable
   for (const name of selected.flatMap(
     (feature) => features[feature].devDependencies ?? []
   ))
@@ -261,6 +266,11 @@ export const createProject = async ({
     )
     if (section === 'Home')
       payload.set('src/pages/[...locale]/index.astro', minimalPage)
+    if (selected.includes('impeccable'))
+      payload.set(
+        '.gitignore',
+        withImpeccableIgnore(String(payload.get('.gitignore') ?? ''))
+      )
     let config = selectEnvironment(
       await read(template, 'astro.config.mjs'),
       new Set(environmentNames(selected, options))
@@ -273,6 +283,7 @@ export const createProject = async ({
       deployment,
       tools
     )
+    if (selected.includes('impeccable')) addImpeccableScripts(manifest)
     Object.assign(manifest.samlineAstro, {
       locales: entries,
       options,

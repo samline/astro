@@ -27,7 +27,8 @@ need configuration, credentials or an active registration.
   follow the update boundary below. Re-running `add` is not a source updater.
 
 Supported optional feature IDs are themes, auth, captcha, gtm, language-picker,
-forms, fields, actions, content, mail, pageloader, faicon and welcome. Forms adds
+forms, fields, actions, content, mail, pageloader, faicon, impeccable (beta) and
+welcome. Forms adds
 Formatter; Fields requires both packages; Mail includes its contact Action.
 Read the current CLI help for flags and supported profiles instead of inventing
 commands. Initial creation and later addition share the same feature ownership.
@@ -94,6 +95,11 @@ operations. Keep private credentials and upstream tokens server-side. Protected
 operations authorize their own request/resource; a route guard alone is not an
 operation permission check. Do not infer external connectivity from installation
 or mocked tests.
+
+When package.json lists the `impeccable` devDependency, read the Impeccable
+section of .agents/AGENTS.md before design work. Its proposals follow this
+project's dictionaries, ownership, tokens and reduced-motion contracts. Its
+skills and hooks are user-installed; installing or approving them is the user's call.
 
 ## Keep updates deliberate
 

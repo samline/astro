@@ -91,17 +91,23 @@ export const configureAgents = async (
     ).replaceAll('{{INTEGRATIONS}}', integrationSummary(manifest.samlineAstro))
     await writeFile(target, text.replace(/\n{3,}/g, '\n\n').trimEnd() + '\n')
   }
-  const names = agentSkillNames.filter(
-    (skill) => skill !== 'deploy-to-vercel' || deployment === 'vercel'
-  )
+  const selected = manifest.samlineAstro.features
+  // Impeccable derives from and supersedes frontend-design; shipping both gives
+  // agents competing design guidance.
+  const omitted = [
+    ...(deployment === 'vercel' ? [] : ['deploy-to-vercel']),
+    ...(selected.includes('impeccable') ? ['frontend-design'] : [])
+  ]
+  const names = agentSkillNames.filter((skill) => !omitted.includes(skill))
   const lockPath = path.join(destination, 'skills-lock.json')
   const lock = JSON.parse(await readFile(lockPath, 'utf8'))
   lock.skills = Object.fromEntries(
     Object.entries(lock.skills).filter(([skill]) => names.includes(skill))
   )
-  if (deployment !== 'vercel')
-    await rm(path.join(destination, '.agents/skills/deploy-to-vercel'), {
-      recursive: true
+  for (const skill of omitted)
+    await rm(path.join(destination, '.agents/skills', skill), {
+      recursive: true,
+      force: true
     })
   await writeFile(lockPath, `${JSON.stringify(lock, null, 2)}\n`)
   await writeFile(
@@ -131,7 +137,8 @@ const selectedGuidance = (text, file, selected) => {
     for (const [feature, heading] of [
       ['mail', 'Server mail'],
       ['content', 'Content and API examples'],
-      ['auth', 'Optional authentication']
+      ['auth', 'Optional authentication'],
+      ['impeccable', 'Impeccable design tooling']
     ])
       if (!selected.includes(feature)) text = removeSection(text, heading)
     const start = text.indexOf('Keep ldrs in PageLoader')

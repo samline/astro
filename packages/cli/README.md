@@ -36,7 +36,8 @@ npx @samline/astro shop --yes --deploy vercel --features content --source shopif
 ```
 
 Optional features: themes, auth, captcha, gtm (including CookieConsent),
-language-picker, forms, fields, actions, content, mail, pageloader, faicon, welcome.
+language-picker, forms, fields, actions, content, mail, pageloader, faicon,
+impeccable (beta), welcome.
 Core includes Astro/TypeScript, Tailwind, local typography, SEO/robots/sitemap,
 layout/section primitives, a minimal homepage and NotFound, resource folders,
 selected-language dictionaries and portable agent guidance/skills. Every new

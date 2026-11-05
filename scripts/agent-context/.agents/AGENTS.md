@@ -161,6 +161,27 @@ shells can contain guarded Server Islands with private, no-store responses.
 Database migrations are an explicit command, never an install/build side effect.
 Read the documented stateless revocation, token size and renewal limitations.
 
+## Impeccable design tooling
+
+Impeccable (beta integration, Apache-2.0) is a pinned devDependency. The kit
+does not ship its skills or configure agent clients: the user installs skills,
+hooks and subagents with `npx impeccable install` and updates them with
+`npx impeccable update`. Its hooks run outside model approval; never run the
+installer, approve hooks or change telemetry without the user's explicit request.
+
+Project contracts take precedence over Impeccable proposals. Copy changes from
+clarify, onboard or harden go to src/i18n/dictionaries, never markup. Keep
+layout -> section -> component ownership, Section rhythm and Box widths, tokens
+in src/styles/tailwind.css, focus indicators and reduced motion. Use Impeccable
+instead of the generic frontend-design skill when both are present.
+
+PRODUCT.md comes from the `/impeccable init` interview and DESIGN.md from
+`/impeccable document` scanning the real tokens; do not fabricate either file.
+`{{RUN}} run design:detect` scans src with regex rules only for .astro files.
+For element rules such as contrast, scan built HTML or the running dev server
+URL. Fix findings or record a deliberate exception with a reason through
+`npx impeccable ignores`; do not silence rules to pass a check.
+
 ## Engineering and example discipline
 
 Inventory current owners before creating new markup, controllers or helpers.

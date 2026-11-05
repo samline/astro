@@ -347,6 +347,10 @@ export const main = async (args = process.argv.slice(2)) => {
     console.log(
       'Mail includes the contact Action example; configure SMTP before sending.'
     )
+  if (resolved.includes('impeccable'))
+    console.log(
+      'Impeccable (beta) adds the pinned CLI and design:detect only. Install its skills and hooks yourself with npx impeccable install, then run /impeccable init in your agent.'
+    )
   if (resolved.includes('content'))
     console.log(
       `Content: ${options.contentSource}, ${options.contentMode ?? 'build'}; remote examples require explicit configuration and activation.`

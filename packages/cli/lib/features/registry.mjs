@@ -78,6 +78,12 @@ export const features = {
       '@fortawesome/free-solid-svg-icons'
     ]
   },
+  impeccable: {
+    label: 'Impeccable design tooling (beta)',
+    files: [],
+    domains: [],
+    devDependencies: ['impeccable']
+  },
   welcome: {
     label: 'Starter demo: header, navigation and two pages',
     files: [

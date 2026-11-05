@@ -10,13 +10,22 @@ const manifests = await Promise.all(
   )
 )
 const version = process.argv[2]
-if (!/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(version ?? ''))
-  throw new Error('Uso: bun run kit:version <major.minor.patch>')
+const pattern =
+  /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-beta\.(0|[1-9]\d*))?$/
+if (!pattern.test(version ?? ''))
+  throw new Error(
+    'Uso: bun run kit:version <major.minor.patch> | <major.minor.patch-beta.n>'
+  )
 const major = manifests[0].dependencies.astro.match(/\d+/)?.[0]
 if (version.split('.')[0] !== major)
   throw new Error(`La versión debe pertenecer a la serie ${major}.x de Astro.`)
-const next = version.split('.').map(Number)
-const previous = manifests[0].version.split('.').map(Number)
+// A stable release ranks above its betas: 7.26.0-beta.1 < 7.26.0.
+const rank = (value) => {
+  const [, a, b, c, beta] = value.match(pattern)
+  return [a, b, c, beta ?? Infinity].map(Number)
+}
+const next = rank(version)
+const previous = rank(manifests[0].version)
 const changed = next.findIndex((part, index) => part !== previous[index])
 if (changed === -1 || next[changed] < previous[changed])
   throw new Error('La nueva versión debe ser mayor que la actual.')
@@ -28,5 +37,8 @@ for (let i = 0; i < files.length; i++) {
   )
 }
 console.log(
-  `@samline/astro actualizado a ${version}. Ejecuta bun run verify y bun run kit:pack.`
+  `@samline/astro actualizado a ${version}. Ejecuta bun run verify y bun run kit:pack.` +
+    (version.includes('-beta.')
+      ? ' Publica la beta con --tag beta para conservar latest.'
+      : '')
 )

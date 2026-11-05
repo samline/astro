@@ -23,6 +23,13 @@ their unrelated files, imports, dependencies or domains in a generated project.
   Creation mounts shared demo chrome as Main's defaults. Later addition preserves
   Main and the current homepage, uses a feature-owned Demo layout for its chrome,
   and requires compatible slots for those exceptional overrides.
+- Impeccable (beta) pins the `impeccable` devDependency from the root manifest,
+  adds `design:detect`, its documented runtime-state .gitignore block and the
+  portable guidance section. It never copies Impeccable skills, runs its
+  installer, configures hooks or seeds PRODUCT.md/DESIGN.md: those require the
+  user's harness choice and Impeccable's own interview/scan. Creation omits
+  frontend-design because Impeccable supersedes it; later addition keeps
+  existing skills and appends the guidance section only when missing.
 
 Installed, configured and enabled are separate states. Server Actions, live
 collections and local auth require an adapter; build-time local content does not.

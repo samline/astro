@@ -16,6 +16,12 @@ import {
 } from './features/composition.mjs'
 import { contentFiles } from './features/content.mjs'
 import {
+  addImpeccableScripts,
+  guidanceSection,
+  impeccableGuidanceHeading,
+  withImpeccableIgnore
+} from './features/impeccable.mjs'
+import {
   addDomains,
   addLocale,
   readLocaleConfig,
@@ -257,6 +263,31 @@ export const addIntegrations = async ({
   ))
     files.set(file, value)
   addDependencies(manifest, await json(template), added, effective)
+  if (added.includes('impeccable')) {
+    addImpeccableScripts(manifest)
+    files.set(
+      '.gitignore',
+      withImpeccableIgnore(
+        (await exists(root, '.gitignore'))
+          ? await readCurrent('.gitignore')
+          : ''
+      )
+    )
+    const agents = '.agents/AGENTS.md'
+    const heading = `## ${impeccableGuidanceHeading}\n`
+    if (await exists(root, agents)) {
+      const current = await readCurrent(agents)
+      const section = guidanceSection(
+        await read(template, agents),
+        impeccableGuidanceHeading
+      )
+      if (section && !current.includes(heading))
+        files.set(
+          agents,
+          `${current.trimEnd()}\n\n${section.replaceAll('{{RUN}}', metadata.tools.runner)}\n`
+        )
+    }
+  }
   let config = await mergeEnvironment(
     await readCurrent('astro.config.mjs'),
     template,
