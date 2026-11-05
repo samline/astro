@@ -217,8 +217,10 @@ test('Vercel security policy follows the selected installer in all four tool com
           /@vercel\/routing-utils>path-to-regexp@>=6\.0\.0 <6\.3\.0/
         )
         assert.match(workspace, /@vercel\/cli-config>zod@>=4\.0\.0 <4\.6\.6/)
+        assert.match(workspace, /@vercel\/nft>glob@>=9\.0\.0 <14\.0\.2/)
         assert.match(workspace, /6\.3\.0/)
         assert.match(workspace, /4\.6\.7/)
+        assert.match(workspace, /14\.0\.3/)
       } else {
         assert.deepEqual(manifest.overrides, source.overrides)
         assert.equal(await exists(destination, 'pnpm-workspace.yaml'), false)

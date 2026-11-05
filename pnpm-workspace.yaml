@@ -4,6 +4,7 @@ packages:
 overrides:
   '@vercel/routing-utils>path-to-regexp@>=6.0.0 <6.3.0': 6.3.0
   '@vercel/cli-config>zod@>=4.0.0 <4.6.6': 4.6.7
+  '@vercel/nft>glob@>=9.0.0 <14.0.2': 14.0.3
 
 minimumReleaseAgeExclude:
   - '@astrojs/markdown-satteri@0.4.5'

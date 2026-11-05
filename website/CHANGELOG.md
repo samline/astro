@@ -1,5 +1,10 @@
 # Changelog
 
+## 7.25.1
+
+- Override @vercel/nft glob to 14.0.3 (minimatch 11) for root and generated Vercel
+  projects, resolving GHSA-3g3m-2fjr-6pw4 and GHSA-g3hv-75wg-m249.
+
 ## 7.25.0
 
 - Adapt the bundled Codebase Memory skill with CLI availability checks, explicit
