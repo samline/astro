@@ -2,3 +2,5 @@ packages:
   - landing
   - docs
   - shared
+minimumReleaseAgeExclude:
+  - '@samline/drawer@5.1.2'
