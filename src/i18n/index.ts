@@ -3,6 +3,7 @@ import enUS from './dictionaries/en-us'
 import esMX from './dictionaries/es-mx'
 import esES from './dictionaries/es-es'
 import type { Dictionary } from './types'
+import { withPseudoLocale } from './pseudo'
 
 const dictionaries = {
   'en-us': enUS,
@@ -19,4 +20,4 @@ export const resolveLocale = (value?: string): Locale => {
 }
 
 export const getDictionary = (locale?: string): Dictionary =>
-  dictionaries[resolveLocale(locale)]
+  withPseudoLocale(dictionaries[resolveLocale(locale)])

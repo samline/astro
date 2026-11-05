@@ -11,6 +11,9 @@
   gradient text, one-sided accent borders, zero-offset glows, ping/bounce
   indicators, justified text and crushed tracking, with reasoned
   `design-ignore` exceptions and an opt-in `--strict` mode.
+- Add a development-only pseudo-locale (`PUBLIC_I18N_PSEUDO=true`) that brackets,
+  accents and lengthens dictionary copy in `astro dev` to stress layouts and
+  reveal text outside dictionaries; builds are never transformed.
 
 ## 7.25.1
 

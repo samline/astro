@@ -248,6 +248,8 @@ configured breakpoint. Code that intends a result is not evidence of it.
   copy. Controls name their action; errors name the problem and the recovery.
 - Content stress: the longest active locale, long names, single characters,
   large numbers, and empty or many-item lists neither overflow nor overlap.
+  Use the dev pseudo-locale (PUBLIC_I18N_PSEUDO=true, see src/i18n/README.md)
+  to lengthen every dictionary string and expose copy outside dictionaries.
 - Browser surfaces: global.css themes selection, caret, native control accents,
   link underline offset and table numerals. Keep them aligned with token and
   dark-theme changes.

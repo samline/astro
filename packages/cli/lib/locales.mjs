@@ -82,10 +82,11 @@ const localeIndex = (
   entries
 ) => `import { defaultLocale, locales, type Locale } from './config'
 import type { Dictionary } from './types'
+import { withPseudoLocale } from './pseudo'
 ${entries.map((item) => `import ${alias(item.code)} from './dictionaries/${item.code}'`).join('\n')}
 const dictionaries = { ${entries.map((item) => `${JSON.stringify(item.code)}: ${alias(item.code)}`).join(',\n')} } satisfies Record<Locale, Dictionary>
 export const resolveLocale = (value?: string): Locale => locales.find((locale) => locale === value?.toLowerCase()) ?? defaultLocale
-export const getDictionary = (locale?: string): Dictionary => dictionaries[resolveLocale(locale)]
+export const getDictionary = (locale?: string): Dictionary => withPseudoLocale(dictionaries[resolveLocale(locale)])
 `
 const domainIndex = (domains) =>
   `import type { Dictionary } from '../../types'\n${domains.map((domain) => `import ${domain} from './${domain}'`).join('\n')}\nexport default { ${domains.join(', ')} } satisfies Dictionary\n`

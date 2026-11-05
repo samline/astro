@@ -89,3 +89,22 @@ strings fail. If a key is intentionally empty, document it explicitly in an
 optionalTranslationKeys array in config.ts using domain.path keys. Do not use
 that exception to disguise untranslated content. Dynamic dictionaries and
 string-literal type constraints require review rather than execution or guessing.
+
+## Pseudo-locale stress test
+
+Start the dev server with `PUBLIC_I18N_PSEUDO=true` to render every dictionary
+string bracketed, accented and lengthened (short labels grow about 80%, long
+copy about 35%, like real translations). `{placeholder}` tokens are kept.
+
+```sh
+# Use the project's runner: bun, npm or pnpm.
+PUBLIC_I18N_PSEUDO=true bun run dev
+```
+
+In PowerShell, set `$env:PUBLIC_I18N_PSEUDO = 'true'` before running the dev script.
+
+Check each page at 320px and the configured breakpoints: nothing should
+overflow, overlap or truncate meaning. Visible text without brackets did not come
+from a dictionary. The transform runs only in `astro dev`; builds and previews
+always render the real copy. The variable must be set in the shell that starts
+the server; restart the server to toggle it.

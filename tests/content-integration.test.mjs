@@ -177,9 +177,11 @@ export const POST = () => { throw new Error('Write authorization must reject bef
     }
     // Initial content synchronization can trigger a Vite restart just after
     // the process starts. Retry only a refused startup connection, never an HTTP
-    // response or a content/schema error.
+    // response or a content/schema error. Cold startup can approach 5s, so allow
+    // about 20s before reporting that the fixture never listened.
+    const startupAttempts = 200
     let snapshotResponse
-    for (let attempt = 0; attempt < 50; attempt++) {
+    for (let attempt = 0; attempt < startupAttempts; attempt++) {
       if (startupError) throw startupError
       assert.equal(child.exitCode, null, diagnostics)
       try {
@@ -191,7 +193,7 @@ export const POST = () => { throw new Error('Write authorization must reject bef
         const code = error.code ?? error.cause?.code
         if (
           !['ConnectionRefused', 'ECONNREFUSED'].includes(code) ||
-          attempt === 49
+          attempt === startupAttempts - 1
         )
           throw error
         await new Promise((resolve) => setTimeout(resolve, 100))

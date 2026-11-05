@@ -467,3 +467,19 @@ export const getStaticPaths = () => locales.map((locale) => ({
     assert.ok(!sitemap.includes('/404'))
   }
 )
+
+test('dev pseudo-locale lengthens copy, keeps placeholders and never applies by default', async () => {
+  const { pseudoText, withPseudoLocale } = await import('../src/i18n/pseudo.ts')
+  const short = pseudoText('Send')
+  assert.match(short, /^\[Séñd ŵ+\]$/)
+  assert.ok(short.length >= 'Send'.length * 1.8)
+  const template = pseudoText(enUS.seo.titleTemplate)
+  for (const token of ['{title}', '{siteName}'])
+    assert.ok(template.includes(token))
+  assert.equal(pseudoText('  '), '  ')
+  assert.equal(withPseudoLocale(enUS, false), enUS)
+  const pseudo = withPseudoLocale(enUS, true)
+  assert.equal(withPseudoLocale(enUS, true), pseudo)
+  assert.match(pseudo.common.loading, /^\[.+\]$/)
+  assert.equal(getDictionary(defaultLocale), enUS)
+})
