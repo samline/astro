@@ -44,7 +44,7 @@ real CLI recipe tabs. The source-backed API articles remain plain references;
 no irrelevant browser-framework or CDN examples are published.
 
 The human requested a new personal-package section. Its three decorative
-illustrations identify Drawer, Ticker and Forms within the existing card, type
+illustrations identify Drawer, Ticker, Notify and Forms within the existing card, type
 and token system. They do not duplicate package runtimes or pretend to be demos.
 Forms deliberately links to npm until a real website is provided.
 

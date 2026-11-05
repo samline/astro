@@ -231,7 +231,7 @@ working starter; never include website source/tools/dependencies in generated
 projects or the CLI archive. Preserve portable .agents. Document our installer,
 recipes, defaults and APIs; refer to official Astro docs for framework behavior.
 Keep the independent installer identity clear. The curated package section
-contains Drawer/Ticker/Forms.
+contains Drawer/Ticker/Notify/Forms.
 
 ## Frontend and updates
 
