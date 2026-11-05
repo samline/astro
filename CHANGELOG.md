@@ -1,5 +1,21 @@
 # Changelog
 
+## 7.27.0-beta.0
+
+Beta release published under the `beta` dist-tag; `latest` stays on 7.26.0.
+
+- Add the opt-in `impeccable` integration: a pinned `impeccable` devDependency,
+  a `design:detect` script, Impeccable's runtime-state .gitignore block and
+  portable agent rules that keep its proposals inside dictionaries, ownership,
+  tokens and reduced motion. Creation omits frontend-design when selected.
+- The kit never copies Impeccable skills, runs its installer, configures hooks or
+  seeds PRODUCT.md/DESIGN.md; users run `npx impeccable install` and
+  `/impeccable init` themselves.
+- Accept `<major.minor.patch>-beta.<n>` in kit:version, ranking a stable release
+  above its betas.
+- Projects created with this beta cannot run `add` from 7.26.0 or older, which
+  do not know the `impeccable` integration.
+
 ## 7.26.0
 
 - Theme native control accents, the text caret, link underline offset, paragraph
