@@ -93,6 +93,10 @@ test('personal packages use curated destinations and make Forms availability exp
     'href',
     'https://samline.github.io/ticker/'
   )
+  await expect(section.getByRole('link', { name: /Notify/ })).toHaveAttribute(
+    'href',
+    'https://samline.github.io/notify/'
+  )
   await expect(section.getByRole('link', { name: /Forms/ })).toHaveAttribute(
     'href',
     'https://www.npmjs.com/package/@samline/forms'

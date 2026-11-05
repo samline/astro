@@ -71,7 +71,7 @@ actual output and the next step. Do not present a file tree as an executable
 snippet or use hidden optional dictionary dependencies. Source-backed references
 come from their owning README; website catalogs own public UI copy.
 
-Preserve the approved website presentation and curated Drawer/Ticker/Forms
+Preserve the approved website presentation and curated Drawer/Ticker/Notify/Forms
 section. Update the design reference only for a bounded, reviewed design change;
 do not refresh hashes merely to silence a failed check.
 

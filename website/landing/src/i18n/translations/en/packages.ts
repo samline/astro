@@ -3,7 +3,7 @@ export default {
   title: 'More for your site.',
   accent: 'Made by samline.',
   description:
-    'Explore my packages for sliding panels, moving content and forms. Each has its own API and documentation; use them in this starter or another project.',
+    'Explore my packages for sliding panels, moving content, notifications and forms. Each has its own API and documentation; use them in this starter or another project.',
   visit: 'Explore the website',
   package: 'Explore the package',
   items: [
@@ -28,6 +28,17 @@ export default {
       href: 'https://samline.github.io/ticker/',
       status: 'Website & docs',
       preview: ['Ideas in motion', 'Made for the web']
+    },
+    {
+      id: 'notify',
+      name: 'Notify',
+      npm: '@samline/notify',
+      category: 'Toasts and feedback',
+      description:
+        'Accessible, dependency-free toast notifications for JavaScript and TypeScript. Mount one toaster and emit semantic, promise-driven or custom messages from anywhere.',
+      href: 'https://samline.github.io/notify/',
+      status: 'Website & docs',
+      preview: ['Saved', 'Changes published']
     },
     {
       id: 'forms',
