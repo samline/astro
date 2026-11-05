@@ -357,6 +357,7 @@ for (const deployment of [
           adapter ? [adapter] : []
         )
         assert.equal(pkg.samlineAstro.deployment, deployment)
+        assert.equal(Boolean(pkg.dependencies.sharp), deployment === 'vercel')
         const envExample = await readFile(
           path.join(destination, '.env.example'),
           'utf8'

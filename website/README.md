@@ -15,7 +15,9 @@ The asset preparation step derives the kickoff prompt and standalone skill ZIP
 in `docs/public/downloads/` from `.agents/skills/samline-project-kickoff/` at the
 repository root. Edit that source rather than the generated downloads. Building
 requires the `zip` command; the download integrity test also uses `unzip`.
-The downloads belong to website output; the CLI ships the original skill
+It also derives a Codebase Memory ZIP from .agents/skills/codebase-memory,
+including its retained upstream MIT license. Neither archive bundles a runtime
+executable or installs agent configuration. The downloads belong to website output; the CLI ships the original skill
 directly and continues to exclude website source and tools.
 
 Landing dev: http://127.0.0.1:4330/astro/ . Docs uses its own compiler on 4331.

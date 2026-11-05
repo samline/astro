@@ -1,5 +1,20 @@
 # Changelog
 
+## 7.25.0
+
+- Adapt the bundled Codebase Memory skill with CLI availability checks, explicit
+  installation consent and required graph-first codebase inspection when installed.
+- Add its standalone licensed ZIP to agent-workflow downloads, generated context
+  and archive/browser validation without bundling or auto-installing an executable.
+
+- Fix reproduced Vercel request-time Image failures by installing Sharp explicitly
+  and externalizing it for native dependency tracing; leave other profiles unchanged.
+- Test static, SSR, island and template images with a relocated generated Function.
+- Ship an image-boundary guide and clarify semantic dictionary ownership, staged
+  filter state, preview social assets and focused design/interaction QA.
+- Refine the portable project/kickoff skills and retain maintainer learning decisions
+  separately from generated project context.
+
 ## 7.24.0
 
 - Move editable named-page URLs into each locale's dictionaries/<locale>/routes.ts table,

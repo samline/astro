@@ -131,7 +131,7 @@ test(
         await read(directory, 'src/i18n/dictionaries/es-mx/routes.ts'),
         'routes'
       ),
-      { 'home.index': '/' }
+      Object.assign(Object.create(null), { 'home.index': '/' })
     )
     const types = await read(directory, 'src/i18n/types.ts')
     assert.doesNotMatch(types, /themes|cookies|auth|forms|en-us/)
@@ -391,7 +391,10 @@ test(
         await read(directory, 'src/i18n/dictionaries/fr-fr/routes.ts'),
         'routes'
       ),
-      { 'home.index': null, 'checkout.index': null }
+      Object.assign(Object.create(null), {
+        'home.index': null,
+        'checkout.index': null
+      })
     )
     assert.match(
       await read(directory, 'src/i18n/route-tables.ts'),

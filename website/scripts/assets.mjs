@@ -18,6 +18,16 @@ execFileSync('zip', ['-X', '-r', fileURLToPath(archive), skill], {
   cwd: fileURLToPath(repository),
   stdio: 'pipe'
 })
+const graphArchive = new URL('codebase-memory.zip', downloads)
+await rm(graphArchive, { force: true })
+execFileSync(
+  'zip',
+  ['-X', '-r', fileURLToPath(graphArchive), '.agents/skills/codebase-memory'],
+  {
+    cwd: fileURLToPath(repository),
+    stdio: 'pipe'
+  }
+)
 for (const app of ['landing', 'docs']) {
   const target = new URL(`../${app}/public/`, import.meta.url)
   await mkdir(target, { recursive: true })

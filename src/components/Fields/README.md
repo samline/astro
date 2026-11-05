@@ -461,6 +461,36 @@ when the results are rendered inside a Server Island.
 
 ## Reusing a form for different entry contexts
 
+### Draft filters versus applied URL state
+
+For a staged filter interface, the URL identifies applied results and controls
+hold a draft. Opening a picker, typing or selecting draft criteria should not
+request results unless the product deliberately uses live filtering. With SAM,
+keep `autoSubmit: false` for explicit submission; use prefill/setValue/getData and
+reset instead of a second form-state controller. A native GET form remains valid
+without SAM when it meets the interaction contract.
+
+| Operation                      | State to use                                                   | Expected behavior                                                                            |
+| ------------------------------ | -------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| Open                           | Validated applied URL criteria or an explicitly retained draft | Initialize after insertion; do not submit just to populate controls.                         |
+| Apply                          | Validated draft                                                | Navigate/submit the criteria together; reset pagination when criteria change.                |
+| Clear with no applied criteria | Draft only                                                     | Reset through the existing controller; keep the panel open and avoid a redundant navigation. |
+| Clear with applied criteria    | Applied URL state                                              | Navigate to the clean named listing destination under the project's explicit query policy.   |
+
+Do not infer "applied" from dirty controls or a selected-but-unsubmitted option.
+Keep unrelated workflow/storage state separate from a filter reset. Result totals,
+selected-criterion counts and loaded-item counts are different values; unknown
+totals stay unknown. Query parsing, allowed keys and canonical/indexing rules
+belong to the receiving route. Do not silently carry every query parameter into
+another language or destination.
+
+In subscriptions, write derived DOM only when its value changes. Repeated
+textContent/child-list changes can feed a form observer back into its subscriber.
+Use the existing Fields adapter for field errors, and scope guards/unsubscribe
+cleanup to the owning form when coordinating mutually exclusive controls.
+
+### Reset before prefilling
+
 Opening a general enquiry after a contextual enquiry must start a new draft.
 Reset through the owning SAM controller **before** applying optional values:
 

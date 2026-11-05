@@ -77,6 +77,7 @@ test(
     assert.ok(files.includes('package/template/.env.example'))
     for (const file of [
       'src/config/routes.ts',
+      'src/assets/README.md',
       'src/i18n/routes.ts',
       'src/i18n/route-tables.ts',
       'src/i18n/dictionaries/en-us/routes.ts',

@@ -91,6 +91,24 @@ changes need an explicit equivalent destination, not just an active parent path.
 
 ## Copy, data and styling
 
+Shared fields/errors/actions/navigation copy belongs to semantic dictionary
+owners; page editorial text stays with its page. Reuse keys by meaning, not merely
+matching words. Keep dictionaries statically inspectable for locale tooling.
+For staged filters, URL state is applied and control state is draft. Use native
+GET or existing form APIs; draft reset should not trigger unnecessary navigation
+or erase unrelated workflow state. Read the installed Fields README if selected.
+
+Before adding decoration, inspect the original artwork for embedded text/numbers.
+Test real long labels and visible whitespace across styled fragments at 320px and
+the actual configured breakpoint boundaries; do not assume an xs token exists.
+
+Choose modal initial focus for its task without opening an unwanted text keyboard.
+Keep focus containment and package-owned cleanup. Check close/Escape/backdrop and
+nested focus return against actual scroll positions. A z-index cannot out-rank a
+native top-layer dialog, and viewport simulation is not physical keyboard evidence.
+For runtime images, follow src/assets/README.md and verify the built/deployed
+endpoint separately from static build output.
+
 Every visitor string, including metadata, labels, errors and loading text, belongs
 in typed locale/domain dictionaries. Each domain owns index.ts and types.ts.
 API/CMS editorial data is validated at its boundary and rendered as content;

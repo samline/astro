@@ -176,6 +176,18 @@ empty translations and stays inactive until ready. Provider editorial content is
 separate from reusable UI copy. Do not add a global/full dictionary browser blob
 when one controller needs only a few messages.
 
+Choose translation ownership by meaning, not the first page that introduced a
+field. Shared labels/placeholders, errors, actions, navigation and legal document
+names use their semantic domain; editorial copy stays with the page. Equal words
+need not share a meaning. Keep static dictionary data inspectable and resolve
+typed key references at the consumer rather than importing runtime copy into data.
+
+For staged search, applied URL criteria and draft form values are separate states.
+Use native GET or the installed form APIs according to the interaction contract.
+Draft-only clearing resets controls without redundant navigation; clearing applied
+criteria follows the route's explicit clean-URL policy. Keep unrelated saved
+workflow state separate. See Fields' README for the optional controller lifecycle.
+
 Navigation, CTAs and editable lists should be data-driven where that makes them
 clearer; do not hardcode repeated content into component internals. Keep technical
 identifiers, route IDs, icon paths and class strings as structural data rather
@@ -203,6 +215,11 @@ where appropriate. Preserve approved Box widths, gutters, tokens and font loadin
 Responsive changes follow the content: grids/flex may change shape, headings and
 controls wrap, code scrolls in its own region. Test 320–1440, both themes and 200%
 text. Never hide document overflow or shrink the typography to mask a problem.
+
+Test actual configured breakpoints just below/at/above their boundary, including
+long real labels and styled text joins. Do not assume an xs token exists. Inspect
+delivered artwork before adding numbered labels or decoration that may already
+be embedded in it; filenames alone do not establish editorial order.
 Keep keyboard focus visible, native semantics, reduced-motion paths and readable
 no-JavaScript content. The current base does not include a SkipLink component.
 
@@ -250,6 +267,14 @@ packages. Auth/Actions/Server Islands authorize their actual operation; a route
 rule does not protect every downstream action automatically.
 
 ## Incremental lists and return navigation
+
+For a modal, choose initial accessible focus according to its task; avoid opening
+a text keyboard when editing is not the immediate action. Check close, Escape,
+backdrop and nested-panel return at the actual document scroll position. Use the
+modal package's lifecycle/focus APIs instead of a competing scroll-restoration
+engine. Simulated viewport resizing does not prove physical keyboard behavior.
+An overlay's z-index cannot outrank a native top-layer dialog; test that composition
+before claiming the global loader covers every modal.
 
 When a list mixes server-rendered and browser-added items, keep one markup owner
 and shared formatting. For simple DOM cards, a native template rendered by that

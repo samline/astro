@@ -46,9 +46,11 @@ skills is retained in the root skills-lock.json. Preserve upstream files.
 
 ${rows.join('\n')}
 
-Codebase-memory uses its MCP service when configured. Otherwise inspect source
-directly and state coverage limits. Skills do not install or authorize external
-services. Deployment guidance does not itself deploy the project.
+Codebase-memory checks for its CLI before project work. If missing, ask whether
+the user wants to install it and wait before installing. When installed, always
+use the skill for codebase inspection through MCP or its documented CLI, with
+source reads for coverage gaps. Copying skills installs no external executable
+or client configuration. Deployment guidance does not itself deploy the project.
 
 For a new project or design handoff, use samline-project-kickoff and its
 [copyable prompt](./samline-project-kickoff/references/kickoff-prompt.md).

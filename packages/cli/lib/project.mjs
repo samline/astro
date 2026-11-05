@@ -73,6 +73,7 @@ export const projectManifest = (
       'astro',
       '@astrojs/sitemap',
       '@fontsource-variable/inter',
+      ...(deployment === 'vercel' ? ['sharp'] : []),
       ...selected.flatMap((name) => features[name].dependencies ?? [])
     ].map((name) => [name, source.dependencies[name]])
   )

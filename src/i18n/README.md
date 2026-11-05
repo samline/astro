@@ -7,6 +7,18 @@ explicitly because their request is isolated. This feature adds no custom router
 
 ## Optional browser payload
 
+Choose a dictionary owner by meaning: shared control labels/placeholders belong
+to forms, reusable actions to buttons, menu labels to navigation, legal document
+names to their legal owner, and general failures to an existing error domain.
+Keep page editorial text with its page domain. Reuse a canonical semantic key
+instead of copying a shared field label into each page. Equal words can have
+different meanings; do not add a global string deduplicator.
+
+Keep modules statically inspectable by locale tooling. Store typed keys in UI
+configuration and resolve them in the consuming component rather than importing
+runtime dictionary values into another domain's data. Provider validation
+messages project the shared owners; they are not a second copy of UI translations.
+
 When a section needs several translated browser messages, configure Main:
 
 ```astro

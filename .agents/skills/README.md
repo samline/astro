@@ -16,8 +16,10 @@ Read the relevant SKILL.md before applying a workflow.
 | [vite](./vite/SKILL.md)                                           | antfu/skills                        |
 | [codebase-memory](./codebase-memory/SKILL.md)                     | DeusData/codebase-memory-mcp        |
 
-The graph skill requires the configured codebase-memory MCP tools. If the
-service is unavailable, inspect source directly and state the coverage limit.
+Codebase-memory checks the CLI first. If missing, ask whether the user wants to
+install it; no install or client configuration occurs without approval. When
+installed, always use this skill for codebase inspection through MCP or its
+documented CLI. Read source for coverage gaps and state runtime limits.
 
 The root skills-lock.json belongs to autoskills and retains source hashes.
 The local codebase-memory copy is separate from registry-managed entries. Preserve upstream skill files when formatting project docs.

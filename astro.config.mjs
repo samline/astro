@@ -29,7 +29,8 @@ export default defineConfig({
   site,
   trailingSlash: 'never',
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    ssr: { external: ['sharp'] }
   },
   integrations: [
     ...(indexable

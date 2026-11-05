@@ -85,6 +85,12 @@ are exported from src/config/seo.ts.
 SocialImage requires src and alt; width, height, and type are optional. Src may
 be site-relative or an HTTP(S) URL. Alt must be translated.
 
+Canonical identity and image serving origin are independent. A preview may keep
+the production canonical while using an explicit absolute image.src on its own
+public deployment. Verify that URL separately in SSG and SSR; do not derive it
+from an untrusted request Host, or change canonicals to repair a missing asset.
+No additional image-origin environment variable is required by this API.
+
 ```astro
 <Main
   path='/'

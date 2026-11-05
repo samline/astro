@@ -96,6 +96,7 @@ export const coreFiles = [
   'licenses',
   'THIRD_PARTY_NOTICES.md',
   'public',
+  'src/assets/README.md',
   'src/components/Box',
   'src/components/Section',
   'src/components/Link',

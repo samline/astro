@@ -193,6 +193,15 @@ export const getStaticPaths = () => ['es-mx', 'es-es'].map(locale => ({params:{l
 ---
 <Main routeName={routeNames.regional}>Item</Main>`
     )
+    await writeFile(
+      path.join(fixture, 'src/pages/[...locale]/preview-media.astro'),
+      about
+        .replace("path='/about?campaign=test#section'", "path='/preview-media'")
+        .replace(
+          "src:'/img/share.png'",
+          "src:'https://preview-images.example/share.png'"
+        )
+    )
     const png = Buffer.from(
       'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=',
       'base64'
@@ -328,6 +337,22 @@ export const getStaticPaths = () => ['es-mx', 'es-es'].map(locale => ({params:{l
         )
       )
     }
+    const previewMedia = await output('preview-media/index.html')
+    assert.ok(
+      previewMedia.includes(
+        'rel="canonical" href="https://seo.example/preview-media"'
+      )
+    )
+    assert.ok(
+      previewMedia.includes(
+        'property="og:image" content="https://preview-images.example/share.png"'
+      )
+    )
+    assert.ok(
+      previewMedia.includes(
+        'name="twitter:image" content="https://preview-images.example/share.png"'
+      )
+    )
     const robots = await output('robots.txt')
     assert.equal(
       robots,

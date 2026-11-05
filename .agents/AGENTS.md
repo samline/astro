@@ -128,6 +128,11 @@ The status label uses common.loading from the current locale's dictionary.
 
 ## JavaScript and TypeScript style
 
+For codebase inspection, always apply the bundled codebase-memory skill when its
+CLI is installed. If absent, ask whether the user wants to install it before any
+installation; retain source fallback if declined or runtime access fails. Use
+matching-root discovery and coverage checks rather than a guessed index.
+
 Use arrow functions by default for all new or modified code, including callbacks
 and object methods. Avoid classes and `this`. Use `function` only when a required
 API depends on behavior an arrow cannot provide, such as its own `arguments`.

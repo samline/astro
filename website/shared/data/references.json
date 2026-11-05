@@ -32,6 +32,14 @@
     "order": 5
   },
   {
+    "id": "reference/images",
+    "title": "Images and runtime delivery",
+    "description": "Use Astro image APIs across SSG, SSR, Server Islands and templates, and verify the Vercel native runtime boundary.",
+    "source": "src/assets/README.md",
+    "group": "reference",
+    "order": 18
+  },
+  {
     "id": "reference/auth-client",
     "title": "Authentication client",
     "description": "Call authentication methods in the browser, refresh user data and handle session changes without exposing server credentials.",

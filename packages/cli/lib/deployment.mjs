@@ -71,6 +71,8 @@ const replace = (source, previous, next) => {
 
 const astroDeploymentConfig = (source, deployment) => {
   const profile = deploymentProfile(deployment)
+  if (deployment !== 'vercel')
+    source = replace(source, "    ssr: { external: ['sharp'] }\n", '')
   let config = replace(
     source,
     "import vercel from '@astrojs/vercel'\n",

@@ -85,6 +85,11 @@ already authorized implementation, complete that scope without asking again.
 Preserve the approved identity and hierarchy; label new interactions and inferred
 mobile layouts as proposals. Never invent legal text, endorsements or metrics.
 
+Establish which source owns editorial copy before implementing it. Inspect actual
+artwork for embedded numbers/decorations and check visible whitespace where styled
+text fragments meet. Test real long labels at configured breakpoint boundaries;
+do not assume an xs breakpoint exists or that a device preset covers it.
+
 For implemented UI, compare the real browser against the reference. Check narrow
 and wide layouts (typically 320–1440 CSS pixels), actual breakpoints and their
 boundaries, long copy, enlarged text, keyboard, overlays and overflow. Preserve
@@ -98,6 +103,13 @@ prove responsive behavior; mocks do not prove a live provider connection. During
 authorized provider integration, use only necessary private configuration, keep
 secrets out of browser output/evidence/Git, and report real authentication errors
 instead of masking them with fixtures.
+
+Match evidence to the boundary: SSG image output, request-rendered image delivery,
+modal focus/scroll and physical mobile keyboard behavior need different checks.
+Avoid opening a text keyboard unless the intended task needs editing immediately;
+preserve accessible dialog focus containment. Verify actual scroll position rather
+than treating focus as proof of movement. Keep local, simulated-viewport and
+deployed/physical-device findings distinct.
 
 ## Leave usable continuity
 

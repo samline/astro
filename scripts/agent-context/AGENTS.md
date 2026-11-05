@@ -6,5 +6,8 @@ Keep .agents focused on current project facts and technical contracts. Remove
 stale tasks; do not store conversations, personal attribution or test-run logs.
 Preserve required legal notices.
 
-Use the bundled codebase-memory skill for structural exploration when its MCP
-service is configured. Otherwise inspect source directly and state coverage limits.
+Check the bundled codebase-memory skill's CLI availability at the start of work.
+If missing, ask whether the user wants to install it; never install automatically.
+When installed, always use that skill for codebase inspection through MCP or its
+documented CLI. Read source for coverage gaps and state runtime limits. Extracting
+a skill ZIP does not install the CLI or configure agent clients.

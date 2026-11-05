@@ -61,6 +61,17 @@ locale/domain dictionaries. API/CMS editorial data remains at its validated data
 boundary. Before connecting translated content, read src/i18n/localized-content.md
 and resolve real equivalent destinations for navigation and SEO.
 
+Choose translation owners by meaning: shared fields/errors/actions stay in their
+semantic domains; page editorial text stays with the page. Keep modules statically
+inspectable and resolve typed key references in the consumer instead of copying
+generic labels into every page or importing runtime values into static data.
+
+For staged filters, distinguish applied URL criteria from draft form values.
+Use the installed form APIs for prefill, reset and serialization; do not fetch on
+every draft edit unless that interaction is intended. Read Fields' draft/apply
+contract when using the optional templates. Native GET navigation remains valid;
+SAM or an Action is not mandatory for every form.
+
 Follow the current CSS-first Tailwind tokens and rem conventions. Keep behavior
 inside the selected package or owning section. Do not recreate Forms/Formatter,
 modal or other package controllers merely to wrap them in a component.
@@ -71,6 +82,12 @@ Public pages default to SSG. Server Islands, active Actions, private routes and
 live collections require the selected adapter and a suitable request-time
 consumer. A pure static target cannot execute them on its own. Do not change the
 whole site to SSR just to add one server feature.
+
+Choose freshness and metadata requirements per route. An SSR page can share one
+validated read between head and body; missing, failed and genuinely empty data
+need distinct statuses. Actions and Collections are contract choices. Read
+src/assets/README.md before connecting runtime images: an SSG image build does
+not verify a Function's native image dependencies.
 
 Read the installed auth, SMTP, CAPTCHA or content README before enabling its
 operations. Keep private credentials and upstream tokens server-side. Protected

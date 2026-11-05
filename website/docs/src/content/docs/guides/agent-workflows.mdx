@@ -73,6 +73,41 @@ Existing generated projects do not automatically receive new skill files when
 you update or rerun the generator. Download and review the workflow separately.
 The archive contains this original workflow, not the third-party skill catalog.
 
+## Codebase Memory: included and downloadable
+
+Every generated project already includes `.agents/skills/codebase-memory/`, even
+with a minimal installation. It contains the adapted English workflow and its
+upstream MIT license. Download it only when an older project lacks the skill or
+you want to review and update its existing copy:
+
+- <a href={`${import.meta.env.BASE_URL}downloads/codebase-memory.zip`} download>
+    Download the Codebase Memory skill and MIT license
+  </a>
+
+Extract at the project root to obtain `.agents/skills/codebase-memory/`. Compare
+existing instructions before replacing them. This ZIP contains no executable,
+index database, private project name or agent configuration.
+
+The agent first checks whether `codebase-memory-mcp` is installed. If it is
+missing, it must ask whether you want to install the external CLI and wait for
+your answer before installation. You can decline and continue with source-based
+inspection. Approval applies to the agreed executable/client setup, not every
+agent integration. Consult the [upstream installation instructions](https://github.com/DeusData/codebase-memory-mcp#quick-start)
+for the current platform-specific method; this CLI is not an Astro npm dependency.
+
+When the CLI is installed, the project instructions require the agent to use this
+skill for codebase inspection through MCP or the documented CLI. It discovers
+the matching repository index and checks evidence coverage; incomplete/stale
+graphs still need source reads. A permission/runtime failure is reported as such,
+not treated as permission to reinstall or delete an index. Installing a skill and
+installing its runtime are separate actions. Pure prose tasks need no unrelated
+graph query, and a runtime failure does not block other authorized work.
+
+The bundled AGENTS entry point establishes this convention for new projects.
+For an older project, reconcile the same rule with its current agent instructions
+when adopting the downloaded skill. No particular agent's automatic skill discovery
+is assumed.
+
 ## What the design review produces
 
 The workflow separates visual presentation, developer inspection and interactive
@@ -99,17 +134,17 @@ provider connection works.
 Read `.agents/README.md` first, then `.agents/skills/README.md` for the generated
 project's actual catalog and provenance. Bundled guidance serves different tasks:
 
-| Skill                               | Purpose                                                                                                                |
-| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `samline-project-kickoff`           | Setup, design evidence, asset inventory and staged handoff.                                                            |
-| `samline-astro`                     | This distribution's ownership, dictionaries, installed features and maintenance boundaries.                            |
-| `astro`                             | Astro framework workflows and APIs.                                                                                    |
-| `frontend-design`                   | Visual direction when the task calls for design decisions.                                                             |
-| `tailwind-css-patterns`             | Styling and responsive composition.                                                                                    |
-| `accessibility`, `seo`              | Accessibility and search visibility work.                                                                              |
-| `typescript-advanced-types`, `vite` | Relevant type-system and build-tool work.                                                                              |
-| `codebase-memory`                   | Structural source exploration when its MCP service is configured; otherwise inspect source directly and report limits. |
-| `deploy-to-vercel`                  | Vercel workflows; included only when Vercel is selected.                                                               |
+| Skill                               | Purpose                                                                                            |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `samline-project-kickoff`           | Setup, design evidence, asset inventory and staged handoff.                                        |
+| `samline-astro`                     | This distribution's ownership, dictionaries, installed features and maintenance boundaries.        |
+| `astro`                             | Astro framework workflows and APIs.                                                                |
+| `frontend-design`                   | Visual direction when the task calls for design decisions.                                         |
+| `tailwind-css-patterns`             | Styling and responsive composition.                                                                |
+| `accessibility`, `seo`              | Accessibility and search visibility work.                                                          |
+| `typescript-advanced-types`, `vite` | Relevant type-system and build-tool work.                                                          |
+| `codebase-memory`                   | Required codebase inspection when the CLI is installed; asks before installation if it is missing. |
+| `deploy-to-vercel`                  | Vercel workflows; included only when Vercel is selected.                                           |
 
 Skills guide the agent; they do not install the named tools, connect services or
 authorize external actions. Use only those relevant to your task. Current user

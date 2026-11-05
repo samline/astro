@@ -66,6 +66,18 @@ test('kickoff guide copies the canonical prompt and serves standalone downloads'
       )
     )
   )
+  const graphLink = page.getByRole('link', {
+    name: 'Download the Codebase Memory skill and MIT license'
+  })
+  const graphArchive = await request.get(
+    (await graphLink.getAttribute('href')) as string
+  )
+  expect(graphArchive.ok()).toBe(true)
+  expect(await graphArchive.body()).toEqual(
+    await readFile(
+      new URL('../docs/public/downloads/codebase-memory.zip', import.meta.url)
+    )
+  )
 })
 
 test('personal packages use curated destinations and make Forms availability explicit', async ({

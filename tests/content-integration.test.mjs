@@ -12,9 +12,8 @@ import {
 } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
-import { fileURLToPath, pathToFileURL } from 'node:url'
-import { spawnSync } from 'node:child_process'
-import { dev } from 'astro'
+import { fileURLToPath } from 'node:url'
+import { spawn, spawnSync } from 'node:child_process'
 import { deserializeActionResult } from '../node_modules/astro/dist/actions/runtime/client.js'
 import { getDictionary } from '../src/i18n/index.ts'
 
@@ -72,7 +71,7 @@ test(
     )
     await writeFile(
       path.join(fixture, 'astro.config.mjs'),
-      "import { defineConfig } from 'astro/config'; import vercel from '@astrojs/vercel'; export default defineConfig({ adapter: vercel({ imageService: false }) })"
+      "import { defineConfig } from 'astro/config'; import vercel from '@astrojs/vercel'; export default defineConfig({ adapter: vercel({ imageService: false }), server: { host: '127.0.0.1', port: 47322, strictPort: true } })"
     )
     await writeFile(
       path.join(fixture, 'src/actions/index.ts'),
@@ -128,11 +127,41 @@ export const POST = () => { throw new Error('Write authorization must reject bef
       path.join(fixture, 'src/pages/upstream/posts/[id].ts'),
       upstream
     )
-    server = await dev({
-      root: pathToFileURL(fixture + '/'),
-      logLevel: 'silent',
-      server: { host: '127.0.0.1', port: 47322, strictPort: true }
+    // Programmatic dev instances share Astro's content-store singleton. A separate
+    // process prevents this fixture from reusing a previous fixture's removed cache.
+    // --ignore-lock keeps the server in the foreground: under an AI agent, Astro
+    // otherwise detaches a background server that outlives this child and the test.
+    const child = spawn(
+      process.execPath,
+      [
+        path.join(root, 'node_modules/astro/bin/astro.mjs'),
+        'dev',
+        '--ignore-lock'
+      ],
+      {
+        cwd: fixture,
+        env: { ...process.env },
+        stdio: ['ignore', 'pipe', 'pipe']
+      }
+    )
+    let startupError
+    let diagnostics = ''
+    child.once('error', (error) => {
+      startupError = error
     })
+    for (const stream of [child.stdout, child.stderr])
+      stream.on('data', (chunk) => {
+        diagnostics = (diagnostics + chunk).slice(-8000)
+      })
+    server = {
+      stop: async () => {
+        if (child.exitCode !== null || child.signalCode !== null) return
+        await new Promise((resolve) => {
+          child.once('exit', resolve)
+          child.kill('SIGTERM')
+        })
+      }
+    }
     const request = async (route, input) => {
       const response = await fetch(`${origin}/_actions/contentDemo.${route}`, {
         method: 'POST',
@@ -147,10 +176,12 @@ export const POST = () => { throw new Error('Write authorization must reject bef
       return { status: response.status, body: result.data ?? result.error }
     }
     // Initial content synchronization can trigger a Vite restart just after
-    // dev() resolves. Retry only a refused startup connection, never an HTTP
+    // the process starts. Retry only a refused startup connection, never an HTTP
     // response or a content/schema error.
     let snapshotResponse
     for (let attempt = 0; attempt < 50; attempt++) {
+      if (startupError) throw startupError
+      assert.equal(child.exitCode, null, diagnostics)
       try {
         snapshotResponse = await fetch(`${origin}/snapshot.json`, {
           signal: AbortSignal.timeout(10000)
