@@ -61,8 +61,10 @@ mandatory or introduce parallel state/validation engines.
 
 ## Analyze references and preserve evidence
 
-Apply the three passes and evidence contract in
-[design-inventory.md](references/design-inventory.md). Review visual structure,
+Start with the product context in
+[design-inventory.md](references/design-inventory.md): the evidence on hand and
+each page's mode (persuade, operate, read or experience). Then apply its three
+passes and evidence contract. Review visual structure,
 inspectable properties and interactive flows separately. An inaccessible mode is
 a coverage limit; screenshots do not establish exact font or spacing properties.
 Distinguish observed, inferred, proposed and unresolved information throughout.

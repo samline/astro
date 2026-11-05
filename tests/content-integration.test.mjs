@@ -136,7 +136,13 @@ export const POST = () => { throw new Error('Write authorization must reject bef
       [
         path.join(root, 'node_modules/astro/bin/astro.mjs'),
         'dev',
-        '--ignore-lock'
+        '--ignore-lock',
+        // Inline CLI config survives Astro's occasional startup restart; the
+        // file-based port alone can be lost, leaving the server on 5173.
+        '--host',
+        '127.0.0.1',
+        '--port',
+        '47322'
       ],
       {
         cwd: fixture,
@@ -195,7 +201,10 @@ export const POST = () => { throw new Error('Write authorization must reject bef
           !['ConnectionRefused', 'ECONNREFUSED'].includes(code) ||
           attempt === startupAttempts - 1
         )
-          throw error
+          throw new Error(
+            `Content fixture did not listen: ${error.message}\n${diagnostics}`,
+            { cause: error }
+          )
         await new Promise((resolve) => setTimeout(resolve, 100))
       }
     }

@@ -19,6 +19,8 @@ Project brief:
 - Operation: [NEW PROJECT / REDESIGN / RESUME / REVISED DESIGN DELIVERY]
 - Design reference and available access: [FIGMA / XD / PROTOTYPE / EXPORTS]
 - Assets and delivery status: [PATH / PROVISIONAL OR FINAL]
+- Real proof available: [TESTIMONIALS / METRICS / CASE STUDIES / LOGOS / NONE YET]
+- Brand typography: [APPROVED FONTS / TO BE DEFINED]
 - Existing site or source reference: [URL / REPOSITORY / NONE]
 - Desired branch: [NAME / KEEP CURRENT / PROPOSE ONE]
 - Package manager: [npm / pnpm / Bun / ASK]
@@ -43,6 +45,8 @@ integrations as separate choices. Ask about unresolved choices that change the
 result and continue independent work. Do not reinstall an existing project or
 assume the latest generator updates its copied source.
 
+Record the evidence on hand (real proof and its approval status, plus what is
+missing) and classify each page as persuade, operate, read or experience.
 Review the design in three passes: visual presentation, developer inspection
 where accessible, and interactive navigation. Record pages, sections, reusable
 pieces, visible copy, variants, responsive references, flows and assets. Separate

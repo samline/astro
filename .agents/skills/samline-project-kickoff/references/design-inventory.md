@@ -3,6 +3,32 @@
 Read for design handoffs and revised deliveries. Adapt detail to the size of the
 reference; a single supplied screen does not require a speculative site catalog.
 
+## Product context
+
+Record two facts before judging a design; they change what "good" means.
+
+**Evidence on hand.** List the real proof and content the project can use:
+testimonials, client logos, metrics, case studies, press, certifications, legal
+documents, team and product photography. For each, record its source and approval
+status. Also list explicit absences: a section that needs proof nobody supplied
+stays a labeled placeholder or an open question, never invented copy, numbers or
+endorsements.
+
+**Page mode.** Classify each page (or each section on a mixed page) by the job it
+does, and judge it by that job:
+
+- **persuade** (landings, campaigns, service pages): one primary action, proof
+  next to the claim it supports, a clear reading path.
+- **operate** (accounts, forms, dashboards, checkout): task speed, density,
+  every state, error recovery, keyboard use.
+- **read** (articles, docs, legal): measure, hierarchy, navigation within the
+  text, print and zoom.
+- **experience** (portfolios, brand showcases): composition and media, with
+  content and controls still reachable without the effect.
+
+Typography is part of this context: the starter's Inter is a provisional default.
+Record the approved brand faces, or mark the choice as an open question.
+
 ## Three review passes
 
 1. **Visual presentation:** enumerate accessible artboards/routes, review full
@@ -34,6 +60,7 @@ when the available material warrants them:
 - interaction-log.md with observed transitions and unresolved destinations.
 - assets-manifest.json mapping delivered files to proposed project assets.
 - open-questions.md and a coverage matrix, or equivalent inventory sections.
+- evidence-on-hand.md with available proof, its approval status and absences.
 - index.html linking local screenshots by inventory ID, page and state.
 
 Suggested screenshot names are section-home-hero-desktop-default.png and
@@ -46,7 +73,7 @@ responses, access tokens or executable snippets from a reference.
 Minimum logical inventory fields (omit inapplicable fields with a reason):
 
 ```text
-id, name, kind, page, order, source, revision, evidence[], copy,
+id, name, kind, page, mode, order, source, revision, evidence[], copy,
 structure, variants, observedProperties, proposedTokens,
 interactions[], responsive, assets[], dataBoundary,
 proposedOwner, analysisStatus, implementationStatus, questions[]

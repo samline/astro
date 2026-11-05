@@ -14,6 +14,9 @@
 - Add a development-only pseudo-locale (`PUBLIC_I18N_PSEUDO=true`) that brackets,
   accents and lengthens dictionary copy in `astro dev` to stress layouts and
   reveal text outside dictionaries; builds are never transformed.
+- The kickoff design inventory records product context first: evidence on hand
+  (approved proof and explicit absences) and each page's mode (persuade, operate,
+  read, experience), plus a provisional-font check; the prompt asks for both.
 
 ## 7.25.1
 
