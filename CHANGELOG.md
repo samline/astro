@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 7.26.0
 
 - Theme native control accents, the text caret, link underline offset, paragraph
   wrapping and table numerals from the starter's base styles.

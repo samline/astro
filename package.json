@@ -1,7 +1,7 @@
 {
   "name": "@samline/astro",
   "type": "module",
-  "version": "7.25.1",
+  "version": "7.26.0",
   "private": true,
   "license": "MIT",
   "packageManager": "pnpm@12.9.1",
