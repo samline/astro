@@ -17,6 +17,7 @@
     "astro": "bun --bun ./node_modules/astro/bin/astro.mjs",
     "check": "bun --bun ./node_modules/astro/bin/astro.mjs check",
     "check:i18n": "bun scripts/check-i18n.mjs",
+    "check:design": "bun scripts/check-design.mjs",
     "format": "bun --bun ./node_modules/prettier/bin/prettier.cjs . --write",
     "format:check": "bun --bun ./node_modules/prettier/bin/prettier.cjs . --check",
     "verify": "bun run format:check && bun run check:i18n && bun run check && bun run test && bun run build",

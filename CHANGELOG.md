@@ -7,6 +7,10 @@
 - Add a rendered-result checklist (contrast, type measure/scale, states, locale
   stress, browser surfaces, depth/motion, provisional fonts) with a fix triage
   order to the frontend conventions and the samline-astro finish step.
+- Add the advisory `check:design` source scan (root and generated projects) for
+  gradient text, one-sided accent borders, zero-offset glows, ping/bounce
+  indicators, justified text and crushed tracking, with reasoned
+  `design-ignore` exceptions and an opt-in `--strict` mode.
 
 ## 7.25.1
 

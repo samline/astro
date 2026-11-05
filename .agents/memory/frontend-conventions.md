@@ -257,6 +257,13 @@ configured breakpoint. Code that intends a result is not evidence of it.
 - Fonts: the starter's Inter is a provisional default. Confirm the brand face
   before treating typography as final.
 
+Run `check:design` for an advisory source scan of default decoration patterns:
+gradient text, thick one-sided accent borders, zero-offset glows, pinging or
+bouncing indicators, justified text and crushed tracking. Fix a finding or keep
+a deliberate use with `design-ignore: <rule> <reason>` on the same or previous
+line. It reads source text only; contrast, measure and states still need the
+rendered checks above. `--strict` makes findings fail, for teams that want it.
+
 Triage findings in order: broken tasks and inaccessible paths, missing states,
 hierarchy/responsive/system drift, visual details, then cleanup. Fix drift at its
 owner: add a missing token in tailwind.css, replace a one-off with the existing

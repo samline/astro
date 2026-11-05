@@ -106,6 +106,7 @@ export const projectManifest = (
       astro,
       check: `${astro} check`,
       'check:i18n': `${bun ? 'bun' : 'node'} scripts/check-i18n.mjs`,
+      'check:design': `${bun ? 'bun' : 'node'} scripts/check-design.mjs`,
       format: `${prettier} . --write`,
       'format:check': `${prettier} . --check`,
       verify: `${tools.runner} run format:check && ${buildCommand(tools)}`

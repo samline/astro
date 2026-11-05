@@ -126,6 +126,7 @@ export const coreFiles = [
   '.prettierignore',
   '.vscode',
   'scripts/check-i18n.mjs',
+  'scripts/check-design.mjs',
   'scripts/check-translations.mjs',
   'scripts/dictionary.mjs'
 ]

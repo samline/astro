@@ -79,6 +79,10 @@ await cp(
   path.join(template, 'scripts/check-i18n.mjs')
 )
 await cp(
+  path.join(root, 'scripts/check-design.mjs'),
+  path.join(template, 'scripts/check-design.mjs')
+)
+await cp(
   path.join(root, 'packages/cli/lib/dictionary.mjs'),
   path.join(template, 'scripts/dictionary.mjs')
 )

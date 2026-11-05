@@ -68,6 +68,7 @@
     @apply mt-2 text-sm text-black/70 dark:text-white/75;
   }
   .field-error {
+    /* design-ignore: side-accent-border Error-state marker paired with its message. */
     @apply mt-2 border-s-[0.125rem] border-state-error ps-2 text-sm font-medium text-black dark:text-white;
   }
   .field[data-kind='choice'] .field-body {
