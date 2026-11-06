@@ -1,5 +1,14 @@
 # Changelog
 
+## 7.27.1
+
+- Tighten the finish criteria in the conventions and skills: result indicators
+  must reflect real outcomes, state sequences and the user's actual width are
+  checked, demos state what they show and what is simulated, review verdicts name
+  their scope, and captures are labelled.
+- Add an editorial rule for technical portfolio copy: concrete explanations
+  instead of interchangeable slogans.
+
 ## 7.27.0
 
 - Generated projects expose their skills to Claude Code: the installer creates a
