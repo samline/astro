@@ -47,7 +47,7 @@ const add = (directory, requested, options = {}) =>
   })
 const snapshot = async (directory) =>
   Promise.all(
-    (await listFiles(directory))
+    (await listFiles(directory, '', ['.claude']))
       .sort()
       .map(async (file) => [file, await readFile(path.join(directory, file))])
   )

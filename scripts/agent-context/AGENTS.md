@@ -11,3 +11,8 @@ If missing, ask whether the user wants to install it; never install automaticall
 When installed, always use that skill for codebase inspection through MCP or its
 documented CLI. Read source for coverage gaps and state runtime limits. Extracting
 a skill ZIP does not install the CLI or configure agent clients.
+
+Skills and project memory live in .agents/. Create and edit skills only in
+.agents/skills/; .claude/skills is a symlink to it so Claude Code reads the same
+copy. Keep .claude tracked in git. On Windows, clone with
+`git config core.symlinks true`.

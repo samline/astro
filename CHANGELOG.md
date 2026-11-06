@@ -1,8 +1,8 @@
 # Changelog
 
-## 7.27.0-beta.0
+## 7.28.0-beta.0
 
-Beta release published under the `beta` dist-tag; `latest` stays on 7.26.0.
+Beta release published under the `beta` dist-tag; `latest` stays on 7.27.0.
 
 - Add the opt-in `impeccable` integration: a pinned `impeccable` devDependency,
   a `design:detect` script, Impeccable's runtime-state .gitignore block and
@@ -13,8 +13,16 @@ Beta release published under the `beta` dist-tag; `latest` stays on 7.26.0.
   `/impeccable init` themselves.
 - Accept `<major.minor.patch>-beta.<n>` in kit:version, ranking a stable release
   above its betas.
-- Projects created with this beta cannot run `add` from 7.26.0 or older, which
+- Projects created with this beta cannot run `add` from 7.27.0 or older, which
   do not know the `impeccable` integration.
+
+## 7.27.0
+
+- Generated projects expose their skills to Claude Code: the installer creates a
+  `.claude/skills` symlink to `.agents/skills` (a junction on Windows, a copy with
+  a notice when the platform refuses links), keeping a single skill library.
+- The portable agent context states that skills are created and edited only in
+  `.agents/skills/` and that `.claude` stays tracked.
 
 ## 7.26.0
 
