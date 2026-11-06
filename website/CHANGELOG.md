@@ -1,5 +1,13 @@
 # Changelog
 
+## 7.27.0
+
+- Generated projects expose their skills to Claude Code: the installer creates a
+  `.claude/skills` symlink to `.agents/skills` (a junction on Windows, a copy with
+  a notice when the platform refuses links), keeping a single skill library.
+- The portable agent context states that skills are created and edited only in
+  `.agents/skills/` and that `.claude` stays tracked.
+
 ## 7.26.0
 
 - Theme native control accents, the text caret, link underline offset, paragraph

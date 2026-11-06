@@ -23,15 +23,16 @@ export const exists = async (root, file) =>
     })
   )
 
-export const listFiles = async (root, prefix = '') => {
+export const listFiles = async (root, prefix = '', skip = []) => {
   const result = []
   for (const entry of await readdir(path.join(root, prefix), {
     withFileTypes: true
   })) {
     const file = path.posix.join(prefix, entry.name)
+    if (skip.includes(file)) continue
     if (entry.isSymbolicLink())
       throw new Error(`Symlink is not supported: ${file}`)
-    if (entry.isDirectory()) result.push(...(await listFiles(root, file)))
+    if (entry.isDirectory()) result.push(...(await listFiles(root, file, skip)))
     else result.push(file)
   }
   return result

@@ -499,3 +499,20 @@ test('CLI requires a deployment without a TTY and rejects invalid choices before
     assert.deepEqual(await readdir(directory), [])
   }
 })
+
+test('generated project exposes skills to Claude through .claude/skills', async (t) => {
+  const directory = await temporary(t)
+  const destination = path.join(directory, 'claude-skills')
+  const result = await createProject({
+    template,
+    destination,
+    tools: selectTools({ npm: '11.2.0' }),
+    kitVersion
+  })
+  assert.match(result.claudeSkills, /^(symlink|copy)$/)
+  const skill = await readFile(
+    path.join(destination, '.claude/skills/samline-astro/SKILL.md'),
+    'utf8'
+  )
+  assert.match(skill, /^---\nname: samline-astro/)
+})

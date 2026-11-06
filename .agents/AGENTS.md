@@ -248,3 +248,12 @@ Use skills/samline-astro for generated-site conventions and
 skills/samline-astro-maintainer for this repository's installer/distribution work.
 The portable skill ships with generated projects; the maintainer skill stays repository-only. Keep original skill metadata separate from upstream
 registry records and retain third-party notices when changing the skill catalog.
+
+## Skill library location
+
+Agents (including Claude) store and read skills and project memory in `.agents/`.
+Create and edit skills only in `.agents/skills/`. `.claude/skills` is a tracked relative
+symlink to `../.agents/skills` so Claude Code, which only loads project skills
+from `.claude/`, reads the same single copy. Never add files under `.claude/skills`
+directly. On Windows, clone with `git config core.symlinks true` (and Developer
+Mode or an elevated shell) so the link is materialized.

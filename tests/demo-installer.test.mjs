@@ -262,7 +262,7 @@ test('adding welcome refuses missing layout slots without changing any project f
     await writeFile(file, layout)
     const snapshot = async () =>
       Promise.all(
-        (await listFiles(directory)).map(async (name) => [
+        (await listFiles(directory, '', ['.claude'])).map(async (name) => [
           name,
           await readFile(path.join(directory, name))
         ])

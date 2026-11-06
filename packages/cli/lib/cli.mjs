@@ -69,6 +69,10 @@ const finish = async (
     `\n${dryRun ? 'Planned' : 'Applied'} ${result.files.length} files.${dryRun ? '\n' + result.files.map((file) => '  ' + file).join('\n') : ''}`
   )
   if (dryRun) return
+  if (result.claudeSkills === 'copy')
+    console.log(
+      '\nCould not create the .claude/skills symlink; copied .agents/skills instead. Edit skills only in .agents/skills and recreate the link (ln -s ../.agents/skills .claude/skills, or enable git core.symlinks / Windows Developer Mode).'
+    )
   if (skipInstall) {
     console.log(
       `\nDependencies were not installed. Run ${tools.manager} install, then format the changed files with the project's Prettier. See status and installed feature READMEs for configuration/activation.`

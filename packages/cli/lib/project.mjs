@@ -1,4 +1,13 @@
-import { lstat, readFile, readdir, mkdtemp, rm } from 'node:fs/promises'
+import {
+  cp,
+  lstat,
+  mkdir,
+  mkdtemp,
+  readFile,
+  readdir,
+  rm,
+  symlink
+} from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import {
@@ -443,9 +452,33 @@ export const createProject = async ({
       dryRun,
       expected: new Map([...finalFiles.keys()].map((file) => [file, null]))
     })
-    return { name, destination, files: changed, manifest }
+    const claudeSkills = dryRun
+      ? 'skipped'
+      : await linkClaudeSkills(destination)
+    return { name, destination, files: changed, manifest, claudeSkills }
   } finally {
     await rm(stage, { recursive: true, force: true })
+  }
+}
+
+/**
+ * Claude Code only loads project skills from .claude/skills. npm tarballs drop
+ * symlinks, so the link is created here instead of shipping it in the template.
+ * Falls back to a copy when the platform refuses symlinks (e.g. Windows without
+ * Developer Mode) so the skills stay readable.
+ */
+export const linkClaudeSkills = async (destination) => {
+  const link = path.join(destination, '.claude/skills')
+  const source = path.join(destination, '.agents/skills')
+  if (await lstat(link).catch(() => null)) return 'skipped'
+  await mkdir(path.dirname(link), { recursive: true })
+  try {
+    if (process.platform === 'win32') await symlink(source, link, 'junction')
+    else await symlink('../.agents/skills', link, 'dir')
+    return 'symlink'
+  } catch {
+    await cp(source, link, { recursive: true })
+    return 'copy'
   }
 }
 
