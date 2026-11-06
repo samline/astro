@@ -92,7 +92,7 @@ artwork for embedded numbers/decorations and check visible whitespace where styl
 text fragments meet. Test real long labels at configured breakpoint boundaries;
 do not assume an xs breakpoint exists or that a device preset covers it.
 
-For implemented UI, compare the real browser against the reference. Check narrow
+For implemented UI, compare the real browser against the reference; a match establishes fidelity only, not the quality of copy, examples or interactions. Check narrow
 and wide layouts (typically 320–1440 CSS pixels), actual breakpoints and their
 boundaries, long copy, enlarged text, keyboard, overlays and overflow. Preserve
 content without JS, reduced motion and owned lifecycle cleanup. Keep card text
