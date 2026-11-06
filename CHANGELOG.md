@@ -2,7 +2,7 @@
 
 ## 7.28.0-beta.0
 
-Beta release published under the `beta` dist-tag; `latest` stays on 7.27.0.
+Beta release published under the `beta` dist-tag; `latest` stays on 7.27.1.
 
 - Add the opt-in `impeccable` integration: a pinned `impeccable` devDependency,
   a `design:detect` script, Impeccable's runtime-state .gitignore block and
@@ -11,14 +11,22 @@ Beta release published under the `beta` dist-tag; `latest` stays on 7.27.0.
 - The kit never copies Impeccable skills, runs its installer, configures hooks or
   seeds PRODUCT.md/DESIGN.md; users run `npx impeccable install` and
   `/impeccable init` themselves.
+- Document how agents complete Impeccable's DESIGN.md type sizes from the CSS,
+  keep observed and derived tokens apart, and treat its critique and shape
+  verdicts as contract fidelity only.
+- Accept `<major.minor.patch>-beta.<n>` in kit:version, ranking a stable release
+  above its betas.
+- Projects created with this beta cannot run `add` from 7.27.1 or older, which
+  do not know the `impeccable` integration.
+
+## 7.27.1
+
 - Tighten the finish criteria in the conventions and skills: result indicators
   must reflect real outcomes, state sequences and the user's actual width are
   checked, demos state what they show and what is simulated, review verdicts name
-  their scope, and Impeccable's DESIGN.md must list the sizes the CSS uses.
-- Accept `<major.minor.patch>-beta.<n>` in kit:version, ranking a stable release
-  above its betas.
-- Projects created with this beta cannot run `add` from 7.27.0 or older, which
-  do not know the `impeccable` integration.
+  their scope, and captures are labelled.
+- Add an editorial rule for technical portfolio copy: concrete explanations
+  instead of interchangeable slogans.
 
 ## 7.27.0
 
