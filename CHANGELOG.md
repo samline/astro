@@ -11,6 +11,10 @@ Beta release published under the `beta` dist-tag; `latest` stays on 7.27.0.
 - The kit never copies Impeccable skills, runs its installer, configures hooks or
   seeds PRODUCT.md/DESIGN.md; users run `npx impeccable install` and
   `/impeccable init` themselves.
+- Tighten the finish criteria in the conventions and skills: result indicators
+  must reflect real outcomes, state sequences and the user's actual width are
+  checked, demos state what they show and what is simulated, review verdicts name
+  their scope, and Impeccable's DESIGN.md must list the sizes the CSS uses.
 - Accept `<major.minor.patch>-beta.<n>` in kit:version, ranking a stable release
   above its betas.
 - Projects created with this beta cannot run `add` from 7.27.0 or older, which

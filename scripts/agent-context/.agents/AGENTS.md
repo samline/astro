@@ -182,6 +182,19 @@ For element rules such as contrast, scan built HTML or the running dev server
 URL. Fix findings or record a deliberate exception with a reason through
 `npx impeccable ignores`; do not silence rules to pass a check.
 
+After `/impeccable document`, run `design:detect` and read the output. Complete the
+DESIGN.md frontmatter with every size the CSS actually uses (auxiliary, fluid and
+responsive variants included) rather than ignoring the warning. Keep tokens that
+are observed in the code apart from derived values and recommendations: a tonal
+ramp the CSS never uses is a suggestion, not an implemented scale. Keep DESIGN.md
+and .impeccable/design.json consistent with the code, update patterns and states
+when demos change, and leave unrelated configuration alone.
+
+Impeccable's critique and shape verdicts cover fidelity to the contract. They do
+not certify working journeys or editorial quality (copy, example usefulness,
+interaction polish); check those with the rendered checks in
+memory/frontend-conventions.md and say what the verdict did not cover.
+
 ## Engineering and example discipline
 
 Inventory current owners before creating new markup, controllers or helpers.
