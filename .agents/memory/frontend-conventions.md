@@ -188,6 +188,11 @@ Draft-only clearing resets controls without redundant navigation; clearing appli
 criteria follows the route's explicit clean-URL policy. Keep unrelated saved
 workflow state separate. See Fields' README for the optional controller lifecycle.
 
+Technical portfolio and product copy says what each tool does and when it is
+useful. Replace slogans that fit any product with concrete explanations of the
+action and its result. Keep personality without inventing experience, benefits or
+results, and keep facts and public strings in their typed dictionaries.
+
 Navigation, CTAs and editable lists should be data-driven where that makes them
 clearer; do not hardcode repeated content into component internals. Keep technical
 identifiers, route IDs, icon paths and class strings as structural data rather
@@ -246,6 +251,15 @@ configured breakpoint. Code that intends a result is not evidence of it.
 - States: hover, focus-visible, active, disabled, loading, empty, error and
   success exist wherever the control or data can reach them, with dictionary
   copy. Controls name their action; errors name the problem and the recovery.
+  An indicator inside a result area (a check, badge or color) must come from the
+  real outcome, never sit there as decoration. Walk initial, empty, invalid,
+  corrected and valid, and confirm indicator, message, field and result agree.
+- Journeys: states are also visited in sequence, not only captured one by one.
+  Switch mode and come back, repeat an action, close and reopen, and correct an
+  input; then confirm controls, results, displayed code and links still agree.
+- Widths: include the user's actual browser width and the sizes just around each
+  point where columns change. No overflow is not the same as a comfortable,
+  readable composition; judge density, not only fit.
 - Content stress: the longest active locale, long names, single characters,
   large numbers, and empty or many-item lists neither overflow nor overlap.
   Use the dev pseudo-locale (PUBLIC_I18N_PSEUDO=true, see src/i18n/README.md)
@@ -258,6 +272,16 @@ configured breakpoint. Code that intends a result is not evidence of it.
   over identical entrances on every section, within reduced-motion rules.
 - Fonts: the starter's Inter is a provisional default. Confirm the brand face
   before treating typography as final.
+
+Captures are evidence only when labelled: record viewport, scroll position, mode
+and state, open the file before sending it, and clear focus (the skip link) before
+a composition capture. A capture artifact is not automatically a design defect.
+
+A review verdict states its scope. Contract fidelity, working behavior and editorial
+quality (copy, example usefulness, interaction polish) are separate judgments;
+matching the direction does not mean finished. Without a quality reference, say
+the verdict covers fidelity and behavior only, and do not present it as general
+certification.
 
 Run `check:design` for an advisory source scan of default decoration patterns:
 gradient text, thick one-sided accent borders, zero-offset glows, pinging or
@@ -342,6 +366,11 @@ An example teaches a real task in this order:
 3. The smallest complete source using actual imports, props and dictionary keys.
 4. What appears/changes and what the example deliberately leaves to the project.
 5. A practical variation, activation requirement and relevant official reference.
+
+A live demo states what capability it shows, what the visitor does, what result
+to expect and which alternative cases are worth trying, including empty and
+invalid input. It says which part is simulated and which real API runs. Results
+explain the rule that applies; a generic "try it" is not enough.
 
 Distinguish terminal commands, illustrative output and source files. Only expose
 copy controls for content intended to be copied. Do not present a file tree as an

@@ -120,6 +120,6 @@ Update English component/integration docs when the API changes. A complete
 example includes real imports, available dictionary keys, prerequisites and
 expected behavior. For UI changes, run the rendered-result checklist in
 frontend-conventions.md and the advisory `check:design` scan. Run the project's formatter and relevant checks/build;
-record actual evidence and limits in .agents. Preserve original and third-party
+record actual evidence and limits in .agents. Report changes, evidence and relevant limits; a review verdict covers only what it examined (fidelity is not editorial quality). Keep unrelated preferences and maintenance notes out of the delivery. Preserve original and third-party
 license notices when distributing source. Skills do not authorize deployment,
 publication or external communications.
