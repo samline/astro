@@ -1,7 +1,8 @@
 # Release @samline/astro
 
-The current version is **7.27.1**, targeting Astro 7. Use this workflow for npm
-releases and GitHub Pages deployments. Keep the package major aligned with
+The current beta version is **7.28.0-beta.1**, targeting Astro 7. Use this workflow for npm
+beta releases. Publish with --tag beta to preserve the stable latest channel.
+GitHub Pages continues to deploy main; a beta branch push does not replace it. Keep the package major aligned with
 Astro’s major; the package minor and patch versions evolve independently.
 
 ## Validate the release
@@ -24,14 +25,16 @@ license notices. Website source, maintainer history, secrets, dependencies and
 build output must stay outside the package. Execute create/add/locale operations
 from that archive in a disposable project before release.
 
-The version command `bun run kit:version 7.x.y` synchronizes root and CLI versions;
-review website metadata, current examples and both changelogs for the same release.
+The version command synchronizes root/CLI versions: use
+`bun run kit:version 7.x.y-beta.n` for beta and `7.x.y` for stable. Always pass
+`--tag beta` explicitly when publishing the beta archive;
+review website metadata, current examples and the single root changelog and its source-backed website view for the same release.
 Do not rewrite historical validation records as if they covered a new archive.
 
 ## Review publication without publishing
 
 ```sh
-npm publish ./artifacts/samline-astro-7.27.1.tgz --dry-run --access public
+npm publish ./artifacts/samline-astro-7.28.0-beta.1.tgz --dry-run --tag beta --access public
 ```
 
 A successful dry run validates packaging, not npm account permissions, scope
@@ -42,7 +45,7 @@ requirements. Never commit credentials. See npm's
 [scoped public packages guide](https://docs.npmjs.com/creating-and-publishing-scoped-public-packages/).
 
 Only after explicit publication authorization, publish the reviewed archive with
-`npm publish ./artifacts/samline-astro-7.27.1.tgz --access public`. Confirm the
+`npm publish ./artifacts/samline-astro-7.28.0-beta.1.tgz --tag beta --access public`. Confirm the
 registry version and integrity afterward. A published version cannot be reused.
 Keep public documentation written as the standard installation and usage flow.
 Do not add publication-pending banners or make local tarball testing a prerequisite
@@ -61,3 +64,9 @@ a queued workflow is not deployment evidence.
 
 Report deployment verification and remaining limitations in the release or change
 description. Keep project memory focused on current technical contracts.
+
+## Beta validation
+
+The Verify Impeccable beta workflow runs root verification, website verification,
+release checks and package creation on this beta branch. It has no Pages deploy
+or npm publication step. The main workflow continues to own the stable website.

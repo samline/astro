@@ -1,5 +1,17 @@
 # Changelog
 
+## 7.28.0-beta.1
+
+- Validate beta pushes without deploying over the stable website. Publish this
+  prerelease with an explicit beta tag to preserve the stable latest channel.
+
+- Integrate stable 7.27.2: latest Forms/Formatter selection, compatible compiler
+  peers, package README conventions, document/social titles, samline footer,
+  responsive header, shared setup isolation and source-backed release notes.
+- Preserve the optional pinned Impeccable integration and its portable rules.
+  Use the beta CLI for projects selecting Impeccable; stable 7.27.2 does not
+  include that integration. The beta dist-tag is separate from latest.
+
 ## 7.28.0-beta.0
 
 Beta release published under the `beta` dist-tag; `latest` stays on 7.27.1.
@@ -18,6 +30,21 @@ Beta release published under the `beta` dist-tag; `latest` stays on 7.27.1.
   above its betas.
 - Projects created with this beta cannot run `add` from 7.27.1 or older, which
   do not know the `impeccable` integration.
+
+## 7.27.2
+
+- Declare the compatible stable compiler WASM peers so fresh installations do
+  not pair Astro's tools with an incompatible auto-selected beta runtime.
+
+- First installation of Forms and Formatter uses npm's latest tag, including
+  major releases. Existing lockfiles remain reproducible. Later additions accept
+  matching latest tags and report explicit existing versions without replacing
+  customized dependencies or failing with an invalid version comparison.
+- Align the package README structure, document/social titles, samline footer and
+  responsive header with the package website convention. Link the published
+  Forms website and render the root changelog instead of maintaining a second copy.
+- Isolate a failed website setup so later shared instances can still mount, and
+  prepare the real CLI template before website recipe tests on a clean checkout.
 
 ## 7.27.1
 

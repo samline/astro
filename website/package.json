@@ -13,12 +13,13 @@
     "check": "bun scripts/check-config.mjs && bun scripts/check-design.mjs && pnpm --dir landing run check && pnpm --dir docs run check",
     "format": "bun --bun ./node_modules/prettier/bin/prettier.cjs . --write",
     "format:check": "bun --bun ./node_modules/prettier/bin/prettier.cjs . --check",
-    "test": "bun test tests",
+    "test": "bun run --cwd .. kit:prepare && bun test tests",
     "test:browser": "bun --bun ./node_modules/@playwright/test/cli.js test",
-    "verify": "bun run check && bun run format:check && bun run test && bun run build && bun run test:browser",
+    "verify": "bun run check && bun run format:check && bun run test && bun run build && bun run check:identity && bun run test:browser",
     "postinstall": "bun scripts/assets.mjs",
-    "check:release": "node scripts/check-release.mjs",
-    "check:design": "node scripts/check-design.mjs"
+    "check:release": "bun run check:identity && node scripts/check-release.mjs",
+    "check:design": "node scripts/check-design.mjs",
+    "check:identity": "bun scripts/check-identity.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.62.1",

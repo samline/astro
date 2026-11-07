@@ -45,8 +45,7 @@ published reference inventory. The package version is read from the CLI manifest
 
 `landing/src/i18n/translations/en/packages.ts` owns the curated personal-package
 section. Add only human-requested packages with real descriptions and URLs.
-Drawer and Ticker link to their websites; Forms links to npm and explicitly says
-its website is coming next. The card illustrations are decorative, not runnable
+Drawer, Ticker, Notify and Forms link to their published websites and documentation. The card illustrations are decorative, not runnable
 package demos. Do not auto-discover packages or add unsupported promotion.
 
 ## Distribution and validation
@@ -72,3 +71,26 @@ components and their orphaned helper were removed after checking current source
 imports and authored articles. Reference provenance and required licenses remain.
 The style inventory records these omissions; source-backed README examples and
 all currently rendered controls are preserved.
+
+## Shared identity convention
+
+The canonical package-landing-docs identity policy owns the common README roles,
+`<subject> — <npm name>` document/social title composition and explicit footer
+credit. site.credit is samline; npm author/license attribution remains separate.
+check:identity runs during verify and release on the combined artifact, including
+source-backed articles and their copyright footer. Home and Examples share all
+footer resources, with the Astro framework reference retained as a local addition.
+The Astro skill link opens the workflow guide and its canonical ZIP downloads.
+
+The root and published CLI READMEs follow the same section/table roles as sibling packages. Its
+Installation uses npx/pnpm dlx/bunx, API describes the CLI, skills have real source
+and download destinations, and License links the actual LICENSE filename. It has
+no fictitious CDN build. Contributor workflows live in CONTRIBUTING.md. The
+README scaffold retained under scripts/ is checker test evidence; the website
+has no restored generic importer. Keep these intentional installer differences
+when porting template checks. Docs recipes already display their real commands
+inline; the website has no neutral Field component to patch.
+
+The curated-package destination makes this header a seven-item menu. Its 64rem–80rem
+desktop range uses scoped 0.375rem link insets and 0.125rem gaps alongside the canonical compact
+version/GitHub treatment; preserve all destinations and test the actual name.

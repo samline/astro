@@ -45,6 +45,14 @@ test('release version advances both manifests within the supported Astro major',
       '7.1.0'
     )
   }
+  for (const version of ['7.2.0-beta.0', '7.2.0-beta.1', '7.2.0']) {
+    assert.equal(spawnSync(process.execPath, [script, version]).status, 0)
+    const manifest = JSON.parse(
+      await readFile(path.join(directory, files[1]), 'utf8')
+    )
+    assert.equal(manifest.version, version)
+  }
+  assert.equal(spawnSync(process.execPath, [script, '7.2.0-beta.2']).status, 1)
   assert.equal(spawnSync(process.execPath, [script, '7.0.9']).status, 1)
 })
 

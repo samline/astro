@@ -13,3 +13,5 @@ minimumReleaseAgeExclude:
   - astro@7.4.4
   - '@astrojs/check@0.9.12'
   - '@astrojs/language-server@2.17.3'
+  - '@samline/forms@2.8.0'
+  - '@samline/formatter@2.1.0'

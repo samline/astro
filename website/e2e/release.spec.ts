@@ -39,7 +39,7 @@ test('landing, Examples and Docs share the current copyright credit', async ({
   for (const route of ['./', 'examples/', 'docs/']) {
     await page.goto(route)
     await expect(page.locator('footer')).toContainText(
-      `© ${new Date().getFullYear()} Samuel Olvera · Made for the open web.`
+      `© ${new Date().getFullYear()} samline · Made for the open web.`
     )
   }
 })

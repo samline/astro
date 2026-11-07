@@ -147,7 +147,7 @@
     {
       "path": "landing/src/layouts/Header.astro",
       "sourcePath": "landing/src/layouts/Header.astro",
-      "styleSha256": "bae5a8d381bd151046b487018fb94f805d53be8d97757a0cd9a88573c06dd11f",
+      "styleSha256": "8b97b027cb2bd3bbc5065e011f1878b5fbf1a68b5805259e2615056f20e47711",
       "upstreamStyleSha256": "bae5a8d381bd151046b487018fb94f805d53be8d97757a0cd9a88573c06dd11f"
     },
     {
@@ -278,7 +278,7 @@
     {
       "path": "shared/lib/mount-elements.ts",
       "sourcePath": "shared/lib/mount-elements.ts",
-      "styleSha256": "1f38bfcd180b49b0ffc52588888031743e364da0fd232356fedc9c26e988018e",
+      "styleSha256": "71504303b7c8328afa451f4aa46f2d5547f4e515e4f7281573ed6552bf710b9c",
       "kind": "source",
       "upstreamStyleSha256": "01faf79964e5348685b64d6bc65553425fe98b8f5e89d597981c31152c6c555c"
     },

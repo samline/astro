@@ -3,10 +3,17 @@ import type { HTMLAttributes } from 'astro/types'
 import { format } from '../i18n/format'
 import { getI18n } from '../i18n/utils'
 interface Props extends HTMLAttributes<'a'> {
+  compactVersion?: boolean
   version?: string
   href?: string
 }
-const { version, href = '#top', class: className, ...attributes } = Astro.props
+const {
+  version,
+  compactVersion = false,
+  href = '#top',
+  class: className,
+  ...attributes
+} = Astro.props
 const i18n = getI18n(Astro)
 ---
 
@@ -26,7 +33,8 @@ const i18n = getI18n(Astro)
   {version && (
     <span
       class:list={[
-        'ml-1 hidden rounded-full border-[0.0625rem] border-border bg-surface px-2 py-0.5 font-mono text-[0.65rem] text-text-muted sm:inline-block'
+        'ml-1 hidden rounded-full border-[0.0625rem] border-border bg-surface px-2 py-0.5 font-mono text-[0.65rem] text-text-muted sm:inline-block',
+        { 'lg:hidden xl:inline-block': compactVersion }
       ]}
     >
       {format(i18n.common.versionLabel, { version })}

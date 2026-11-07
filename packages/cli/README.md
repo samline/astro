@@ -1,21 +1,52 @@
-# @samline/astro installer
+# @samline/astro
 
 Creates Astro 7 projects from the maintained base and adds optional integrations
 later.
 The CLI runs on Node and uses the TypeScript parser for static dictionary analysis
 and targeted configuration edits. It does not require Bun or pnpm to start.
 
-[Website](https://samline.github.io/astro/) ·
+[Demo](https://samline.github.io/astro/) ·
 [Examples](https://samline.github.io/astro/examples/) ·
 [Documentation](https://samline.github.io/astro/docs/) ·
 [Changelog](CHANGELOG.md)
 
-## Create a project
+## Table of contents
 
-Run from the folder that will contain your new project:
+- [Installation](#installation)
+- [Quick start](#quick-start)
+- [Capabilities](#capabilities)
+- [API at a glance](#api-at-a-glance)
+- [Documentation](#documentation)
+- [Changelog](#changelog)
+- [AI agent skill](#ai-agent-skill)
+- [License](#license)
+
+## Installation
+
+This branch includes the optional Impeccable beta integration. Select the beta
+channel for that feature and for later additions to a project using it:
 
 ```sh
-npx @samline/astro my-site
+npx @samline/astro@beta my-site --yes --features impeccable
+```
+
+The standard commands below select the stable channel. Publishing this beta uses
+`--tag beta` and does not move `latest`.
+
+<a id="create-a-project"></a>
+
+Requires Node.js 22.23.4 or newer. Run from the folder that will contain your new project:
+
+```sh
+npx @samline/astro@latest my-site
+```
+
+```sh
+pnpm dlx @samline/astro@latest my-site
+```
+
+```sh
+bunx @samline/astro@latest my-site
 ```
 
 The wizard asks for languages, deployment and optional integrations. Supplying a
@@ -35,6 +66,24 @@ npx @samline/astro my-site --yes --deploy static --features content --source loc
 npx @samline/astro shop --yes --deploy vercel --features content --source shopify --collection products
 ```
 
+## Quick start
+
+Enter the generated directory and use the tools selected during creation:
+
+```sh
+cd my-site
+```
+
+| Task              | npm              | pnpm          | Bun              |
+| ----------------- | ---------------- | ------------- | ---------------- |
+| Start development | `npm run dev`    | `pnpm dev`    | `bun run dev`    |
+| Check and build   | `npm run verify` | `pnpm verify` | `bun run verify` |
+
+Open the local URL printed by the server. Pages compose sections from `src/sections`;
+components and integrations document their APIs beside their selected source.
+
+## Capabilities
+
 Optional features: themes, auth, captcha, gtm (including CookieConsent),
 language-picker, forms, fields, actions, content, mail, pageloader, faicon,
 impeccable (beta), welcome.
@@ -52,17 +101,45 @@ for installation approval; if installed, the project requires this skill for
 codebase inspection through MCP or the CLI. It does not silently install tools.
 Existing projects can obtain the licensed skill ZIP from the agent-workflow docs.
 
-Forms always installs @samline/forms and @samline/formatter. Fields is a separate
-Astro template choice. Mail always includes the contact Action; it does not force
+Forms always installs @samline/forms and @samline/formatter using `latest`,
+including new major versions. The package manager resolves npm's current `latest`
+tag on a fresh install; an existing lockfile keeps its resolution until updated.
+Review the installed APIs after a major update. Later additions preserve existing
+explicit versions and report a conflict instead of silently replacing them.
+
+Fields is a separate Astro template choice. Mail always includes the contact Action; it does not force
 Forms, Fields or CAPTCHA. Explicit Actions includes an independent basic example.
 
-## Choose project tools
+Selected pnpm projects exempt only Forms and Formatter from the release-age delay
+so a fresh latest release is eligible immediately. Other dependencies retain the
+manager's policy. Lockfiles still hold installed versions until explicitly updated.
+
+## API at a glance
+
+| API                                             | Purpose                                                      |
+| ----------------------------------------------- | ------------------------------------------------------------ |
+| `npx @samline/astro@latest <directory>`         | Create a project from selected features and tools.           |
+| `npx @samline/astro@latest add [feature]`       | Add a missing integration to a compatible generated project. |
+| `npx @samline/astro@latest status`              | Inspect installed choices without exposing secrets.          |
+| `npx @samline/astro@latest locale add <locale>` | Prepare empty translations from the current project keys.    |
+
+### Entrypoints
+
+| Entrypoint                             | When to use                                                    |
+| -------------------------------------- | -------------------------------------------------------------- |
+| `@samline/astro` CLI                   | Run the generator with Node through npx, pnpm dlx or bunx.     |
+| Generated `src/` and component READMEs | Import the selected components and customize the owned source. |
+
+### Choose project tools
 
 ```sh
 npx @samline/astro my-site --package-manager npm --runtime node
 pnpm dlx @samline/astro my-site --package-manager pnpm --runtime node
 bunx @samline/astro my-site --package-manager bun --runtime bun
 ```
+
+The source catalog declares compatible stable compiler WASM peers so a fresh
+installation does not pair the tooling with an incompatible beta runtime.
 
 The selected tools must already be installed. Bun dependency management with
 the Vercel profile requires Bun 1.4.0 or newer for scoped dependency overrides.
@@ -73,7 +150,7 @@ The generated manifest, install guard, README, lockfile and provider commands
 follow the selection. Switching tools in an existing project is a deliberate
 project change, not an effect of adding an integration.
 
-## Add to an existing generated project
+### Add to an existing generated project
 
 Run from the project or provide --cwd:
 
@@ -111,7 +188,7 @@ in Main around its main content. Older or customized layouts without these slots
 need a deliberate layout edit first; the installer reports the missing slot and
 changes no files rather than silently rendering an incomplete demo.
 
-## Add languages
+### Add languages
 
 ```sh
 npx @samline/astro locale add es-es
@@ -131,7 +208,7 @@ to that list deliberately. Review provider locale maps and actual translated URL
 relationships before publishing. Locale inventory, direction and typed access
 are prepared; RTL styling and provider translations are project responsibilities.
 
-## Content sources
+### Content sources
 
 Choose local files, a generic REST/GraphQL API, Strapi 5, Shopify Storefront, or
 another named custom service. Each source includes its schema, loader/query,
@@ -148,7 +225,7 @@ No CMS/store is contacted during installation. Shopify starts with a read-only
 products query, not Admin API, checkout or account infrastructure. Other services
 get an explicit custom scaffold, not an invented native integration.
 
-## Compatibility and recovery
+### Compatibility and recovery
 
 Choose npm, pnpm or Bun for installation and Node.js or Bun for scripts. The
 wizard lists available tools; `--package-manager` and `--runtime` set explicit
@@ -175,22 +252,18 @@ Installed, configured and validated are different states. Status reports file
 and locale state; it never prints secret environment contents or claims provider
 connectivity. Follow each installed README before enabling real operations.
 
-## Local distribution checks
+## Documentation
 
-From the repository root:
+Read the [documentation](https://samline.github.io/astro/docs/) for the full guides and installer contracts, and explore [working examples](https://samline.github.io/astro/examples/) with real commands and their generated files.
 
-```sh
-bun run verify
-bun run kit:pack
-npm exec --yes --package ./artifacts/samline-astro-7.27.1.tgz -- samline-astro my-site --minimal --deploy static --no-install
-```
+| Guide                                                                     | What it covers                                    |
+| ------------------------------------------------------------------------- | ------------------------------------------------- |
+| [Getting started](https://samline.github.io/astro/docs/getting-started/)  | Requirements, selections and the first local run. |
+| [Integrations](https://samline.github.io/astro/docs/guides/integrations/) | The available features and what each installs.    |
+| [Deployment](https://samline.github.io/astro/docs/guides/deployment/)     | Static and supported server profiles.             |
+| [Updates](https://samline.github.io/astro/docs/guides/updating/)          | Dependencies and the boundary of copied source.   |
 
-The root is the source of truth. packages/cli/template is generated by the
-allowlist; never edit it manually. Selection copies only declared core/feature
-paths. Maintainer memory is excluded; selected portable skills and fresh agent
-context are included. Test the actual tarball and consumer generation/add flows.
-
-## Updates and documentation
+### Updates and documentation
 
 The generated source belongs to its project. Executing a newer generator can
 create a new project or add a missing feature; it does not merge changes into
@@ -203,10 +276,35 @@ This reference documents our installer. Framework behavior is documented by
 [Astro](https://docs.astro.build/); installed component and integration READMEs
 document the source supplied by this distribution.
 
+### Local distribution checks
+
+From the repository root:
+
+```sh
+bun run verify
+bun run kit:pack
+npm exec --yes --package ./artifacts/samline-astro-7.28.0-beta.1.tgz -- samline-astro my-site --minimal --deploy static --no-install
+```
+
+The root is the source of truth. packages/cli/template is generated by the
+allowlist; never edit it manually. Selection copies only declared core/feature
+paths. Maintainer memory is excluded; selected portable skills and fresh agent
+context are included. Test the actual tarball and consumer generation/add flows.
+
+## Changelog
+
+Read [CHANGELOG.md](CHANGELOG.md) or the [published changelog](https://samline.github.io/astro/docs/changelog/) for release history and explicitly marked breaking and behavior changes. Review the notes before upgrading.
+
+## AI agent skill
+
+Generated projects include the maintained [Astro project skill source](https://github.com/samline/astro/blob/main/.agents/skills/samline-astro/SKILL.md) and [project kickoff skill source](https://github.com/samline/astro/blob/main/.agents/skills/samline-project-kickoff/SKILL.md). They describe installed features, ownership and the optional design workflow.
+
+The [agent workflow guide](https://samline.github.io/astro/docs/guides/agent-workflows/) provides matching standalone downloads and usage. Generated projects receive the selected skills automatically; agents discover and activate skills differently. Follow the agent's supported project/user directory. Maintainer-only context is excluded and upstream licenses remain intact.
+
 ## License
 
 Original installer and starter source is MIT licensed. The CLI archive includes
-`LICENSE`, `THIRD_PARTY_NOTICES.md` and the retained upstream notices in `licenses/`.
+[LICENSE](LICENSE), `THIRD_PARTY_NOTICES.md` and the retained upstream notices in `licenses/`.
 Generated projects retain original-source and upstream notices without choosing
 a license for the consumer's own application. Dependencies and bundled skills
 keep their respective terms.

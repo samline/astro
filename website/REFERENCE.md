@@ -100,3 +100,22 @@ now scrolls its native Drawer body independently, reserving 3rem below the
 existing close control so it stays reachable when a deep active link is revealed.
 This is a bounded mobile interaction correction; no protected style fingerprint
 was replaced. The menu delegates focus and dismissal to Drawer as before.
+
+## Shared lifecycle and identity ports
+
+The canonical package-landing-docs repair in 61cc0d8 isolates a failed setup in
+mountElements, so later menus, tabs and previews can still initialize. This
+bounded runtime port is recorded in that helper's source fingerprint; all CSS
+fingerprints and the pinned visual reference remain unchanged. The same template
+header repair adds a compact version badge and icon-only GitHub from 64rem to
+75rem, preserving desktop actions. The shared identity helper composes npm-name
+titles once and keeps explicit public footer credit separate from legal authors.
+These ports do not import a neutral counter/Field, an adaptation importer or a
+new design system into this installer website.
+
+The Astro header retains a seventh destination for the curated personal-package
+section. From 64rem to 80rem its desktop links use 0.375rem inline padding and 0.125rem gaps, retaining
+the original type size, vertical hit area and all actions. This scoped spacing
+exception keeps the actual name and longest sibling on one row. The Header style
+fingerprint records this reviewed local addition; other shared component styles
+remain pinned. Test actual navigation content instead of assuming six items.

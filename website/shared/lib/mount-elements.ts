@@ -17,8 +17,13 @@ const mount = (root: ParentNode) => {
     for (const element of elements) {
       if (!element.isConnected || mounted.has(element)) continue
       mounted.set(element, undefined)
-      mounted.set(element, setup(element))
-      element.dataset.mounted = 'true'
+      // A failing preview must not prevent later menus, tabs or previews from mounting.
+      try {
+        mounted.set(element, setup(element))
+        element.dataset.mounted = 'true'
+      } catch (error) {
+        console.error(`mountElements(${selector}) setup failed`, element, error)
+      }
     }
   }
 }

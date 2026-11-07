@@ -16,8 +16,7 @@ source READMEs listed in shared/data/references.json; update the owner instead
 of duplicating prose. Guide articles and catalogs are English. All UI copy stays
 in catalogs; article prose/frontmatter stays in the content collection.
 
-Public npm commands are upcoming until publication is explicitly authorized.
-Do not publish/deploy/push as part of a content update. The adapted distribution site is indexable. The human requested normal public
+Publication, deployment and pushes follow the current user-authorized scope. The adapted distribution site is indexable. The human requested normal public
 installation copy without pending-publication notices; do not reintroduce them. Unadapted templates use site.template=true. No automatic remove, upgrade or arbitrary-project
 adoption is supported by the installer. Do not invent those commands.
 
@@ -31,8 +30,7 @@ shared mountElements owns integration cleanup, and Drawer owns modal behavior.
 
 The human requested a prominent personal-package section with Drawer, Ticker,
 Notify and Forms only. Its catalog is landing/src/i18n/translations/en/packages.ts.
-Keep real website links for Drawer/Ticker/Notify; Forms links to npm until its landing
-is supplied. The illustrations are decorative, not package demos. Add packages
+Keep real website links for Drawer/Ticker/Notify/Forms. The illustrations are decorative, not package demos. Add packages
 only when requested. Do not auto-discover, invent products or claim the links
 are verified live merely because a local link check passed.
 
@@ -86,3 +84,14 @@ Performance is a shared site requirement for Home, Examples and Docs. Preserve r
 5. After an authorized commit/push, confirm the deployment's exact head and successful publication, then verify the live artifact/assets before re-running PageSpeed mobile and desktop. A queued workflow or a local green build is not a published improvement. Check job logs, environment approvals, concurrency and GitHub Status when publication stalls; do not change application code or repeatedly restart workflows without evidence.
 
 Ticker measurements belong to the upstream repository and are not a score for this template or another package. Preserve this contract when embedding the theme, merge it with project instructions and link the app/shared contracts to one policy. Record fresh evidence per adapted project; do not copy benchmark numbers or claim an untested deployment.
+
+## Shared package identity
+
+Follow the canonical package-landing-docs .agents/identity.md and the local
+README's explicit installer differences. Document/social titles add the npm name
+once through shared/lib/site-identity.mjs; catalogs provide unbranded subjects.
+Examples and Docs index use Examples and Documentation. site.credit owns samline
+footer credit independently of npm author metadata. Keep the root README roles,
+CLI commands and real source/download links aligned. Run check:identity as part
+of verify/release and retain real-name header and enlarged-text regressions.
+One failed shared setup must not prevent the remaining instances from mounting.
