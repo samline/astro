@@ -40,7 +40,7 @@ const docs = defineCollection({
           id: 'changelog',
           title: en.changelog.title,
           description: en.changelog.description,
-          source: 'website/CHANGELOG.md',
+          source: 'CHANGELOG.md',
           group: 'guides',
           order: 7
         }

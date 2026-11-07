@@ -193,11 +193,11 @@ importers:
         specifier: ^7.3.1
         version: 7.3.1
       '@samline/formatter':
-        specifier: ^2.0.3
-        version: 2.0.3
+        specifier: latest
+        version: 2.1.0
       '@samline/forms':
-        specifier: ^2.7.2
-        version: 2.7.2(@samline/formatter@2.0.3)
+        specifier: latest
+        version: 2.8.0(@samline/formatter@2.1.0)
       astro:
         specifier: ^7.4.4
         version: 7.4.4(@types/node@24.19.2)(@vercel/functions@3.10.2)(jiti@2.7.0)(yaml@2.9.1)
@@ -223,6 +223,12 @@ importers:
       '@astrojs/check':
         specifier: 0.9.12
         version: 0.9.12(@emnapi/runtime@1.11.3)(prettier-plugin-astro@1.1.1(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)(prettier@3.9.10))(prettier@3.9.10)(typescript@6.0.3)
+      '@emnapi/core':
+        specifier: 1.11.3
+        version: 1.11.3
+      '@emnapi/runtime':
+        specifier: 1.11.3
+        version: 1.11.3
       '@tailwindcss/vite':
         specifier: ^4.3.3
         version: 4.3.3(vite@8.3.4(@types/node@24.19.2)(jiti@2.7.0)(yaml@2.9.1))
@@ -992,15 +998,15 @@ packages:
       rollup:
         optional: true
 
-  '@samline/formatter@2.0.3':
-    resolution: {integrity: sha512-Sv8pxdkuk0wcRk4W8yJplgACnhIGCknJCOGBZpyCFK/ZdvBmFMoJf68OJxV8Iq/m3qHsEOdiN+NrUkYbW79qRg==}
+  '@samline/formatter@2.1.0':
+    resolution: {integrity: sha512-zpk8rEqthDKIt/ciYPog3+/aiGDPCe9bJNxTDEuw3ZtCxBoBwdPB0Guldv5jelQwkD3JVeAqcTu68N9eKlvwJA==}
     engines: {node: '>=20'}
 
-  '@samline/forms@2.7.2':
-    resolution: {integrity: sha512-6xz/WkIBlBS0DsrNWd6eGW2Kb7NcPeNwzihv1Yu+4PPjb+dB5wHu/wjxRIXfODg91J9+NIpyt+Ffp26PS3H/IQ==}
+  '@samline/forms@2.8.0':
+    resolution: {integrity: sha512-pliHQQY0wQiWhLYbs6lJrO2FUIWAtbuiLQ7erLC70UZlE/Lt2TNwg6Wxb+RPwbl3HELW8FL1UIF8WyzS+zpmxg==}
     engines: {node: '>=20'}
     peerDependencies:
-      '@samline/formatter': ^2.0.3
+      '@samline/formatter': ^2.1.0
     peerDependenciesMeta:
       '@samline/formatter':
         optional: true
@@ -3426,14 +3432,14 @@ snapshots:
       estree-walker: 2.0.2
       picomatch: 4.0.7
 
-  '@samline/formatter@2.0.3':
+  '@samline/formatter@2.1.0':
     dependencies:
       cleave-zen: 0.0.17
       libphonenumber-js: 1.13.15
 
-  '@samline/forms@2.7.2(@samline/formatter@2.0.3)':
+  '@samline/forms@2.8.0(@samline/formatter@2.1.0)':
     optionalDependencies:
-      '@samline/formatter': 2.0.3
+      '@samline/formatter': 2.1.0
 
   '@shikijs/core@4.5.0':
     dependencies:

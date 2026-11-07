@@ -8,6 +8,7 @@ import {
   rm,
   symlink
 } from 'node:fs/promises'
+import { withLatestFormsPolicy } from './dependency-policy.mjs'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
 import {
@@ -50,7 +51,14 @@ import {
   envSchema,
   removeImports
 } from './syntax.mjs'
-import { applyFiles, listFiles, read, json, serialize } from './files.mjs'
+import {
+  applyFiles,
+  listFiles,
+  read,
+  json,
+  serialize,
+  exists
+} from './files.mjs'
 
 export const projectName = (destination) => {
   const name = path.basename(destination).toLowerCase().replace(/\s+/g, '-')
@@ -398,6 +406,14 @@ export const createProject = async ({
           ]
         ])
       )
+    if (
+      tools.manager === 'pnpm' &&
+      manifest.dependencies['@samline/forms'] === 'latest'
+    ) {
+      const file = 'pnpm-workspace.yaml'
+      const current = (await exists(stage, file)) ? await read(stage, file) : ''
+      await applyFiles(stage, new Map([[file, withLatestFormsPolicy(current)]]))
+    }
     let env = await environmentExample(
       template,
       selected,

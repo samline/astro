@@ -80,7 +80,7 @@ test('kickoff guide copies the canonical prompt and serves standalone downloads'
   )
 })
 
-test('personal packages use curated destinations and make Forms availability explicit', async ({
+test('personal packages use their curated published websites', async ({
   page
 }) => {
   await page.goto('./')
@@ -99,7 +99,7 @@ test('personal packages use curated destinations and make Forms availability exp
   )
   await expect(section.getByRole('link', { name: /Forms/ })).toHaveAttribute(
     'href',
-    'https://www.npmjs.com/package/@samline/forms'
+    'https://samline.github.io/forms/'
   )
-  await expect(section).toContainText('Website coming next')
+  await expect(section).not.toContainText('Website coming next')
 })

@@ -86,3 +86,8 @@ src/i18n/routes.ts shares path, routeName or localizedPaths across Main, SEO and
 LanguagePicker; Link/Button accept routeName instead of href. Astro still creates
 routes. Dynamic content requires real translation relations; follow
 src/i18n/localized-content.md before connecting a localized API/CMS.
+
+The distribution website composes document/social titles once through its shared
+identity helper, uses explicit samline footer credit and checks the root public
+README roles before release. Root CHANGELOG.md supplies release notes everywhere;
+CONTRIBUTING.md owns repository and website development instructions.

@@ -1,5 +1,20 @@
 # Changelog
 
+## 7.27.2
+
+- Declare the compatible stable compiler WASM peers so fresh installations do
+  not pair Astro's tools with an incompatible auto-selected beta runtime.
+
+- First installation of Forms and Formatter uses npm's latest tag, including
+  major releases. Existing lockfiles remain reproducible. Later additions accept
+  matching latest tags and report explicit existing versions without replacing
+  customized dependencies or failing with an invalid version comparison.
+- Align the package README structure, document/social titles, samline footer and
+  responsive header with the package website convention. Link the published
+  Forms website and render the root changelog instead of maintaining a second copy.
+- Isolate a failed website setup so later shared instances can still mount, and
+  prepare the real CLI template before website recipe tests on a clean checkout.
+
 ## 7.27.1
 
 - Tighten the finish criteria in the conventions and skills: result indicators

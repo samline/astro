@@ -25,7 +25,8 @@ export default {
       explore: 'Explore',
       project: 'Project',
       setup: 'Installation guide',
-      examples: 'Setup examples',
+      examples: 'Working examples',
+      skill: 'Astro skills for AI agents',
       astro: 'Astro documentation',
       changelog: 'Changelog',
       backToTop: 'Back to top',
@@ -75,6 +76,9 @@ export default {
     recipeEyebrow: '01 / Three setup tasks',
     eyebrow: 'Examples',
     title: 'Choose a task. See what changes.',
+    seoTitle: 'Examples',
+    seoDescription:
+      'Choose an Astro project setup, add form controls or register local content. Copy real CLI commands and follow the generated files and next steps.',
     accent: 'See what changes.',
     description:
       'Create the static project first. Then add form controls or local content from the generated project root. Each example gives you the command, generated files and next step.',

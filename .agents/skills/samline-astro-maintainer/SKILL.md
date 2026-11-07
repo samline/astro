@@ -65,7 +65,9 @@ Display name: Astro. Package identity: @samline/astro. Do not invent a separate
 framework brand or imply Astro affiliation. Explain what our distribution adds;
 link official Astro docs for framework and adapter behavior.
 
-Keep READMEs and developer docs in English. Give each title and description a
+Keep READMEs and developer docs in English. Preserve the shared package README
+roles and installer-specific commands/license/skills; website/README.md records
+the local identity contract and check:identity gate. Give each title and description a
 specific purpose. Examples state where to run the command, required features,
 actual output and the next step. Do not present a file tree as an executable
 snippet or use hidden optional dictionary dependencies. Source-backed references
@@ -90,12 +92,15 @@ skill licenses before shipping them. Original MIT terms do not replace upstream
 licenses; the noncommercial Bun skill is intentionally excluded.
 
 Use focused tests for the behavior changed, then the required root verification
-and actual local tarball checks. Changes to website code/configuration require
+and actual local tarball checks. After dependency-policy changes, install a
+fresh project from that archive and run its verification; a frozen maintainer
+lockfile cannot establish fresh peer resolution. Changes to website code/configuration require
 its verification as well. Useful commands are `bun run verify`, `bun run kit:pack`
 and `bun run site:verify`. Check archive contents and generation from the actual
 archive, including selected skills and excluded maintainer-only content.
 
-Record evidence, decisions and remaining limits in persistent memory. Distinguish
+Keep current contracts and useful technical limits in their owning memory; report
+validation results in the change description rather than appending a session log. Distinguish
 localhost/build/mock checks from deployment, real service and performance
 measurements. Creating a package archive does not publish it. Publication,
 deployment, commit or push follow the current user's authorized scope.

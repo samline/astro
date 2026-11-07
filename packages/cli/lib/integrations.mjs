@@ -1,3 +1,4 @@
+import { withLatestFormsPolicy } from './dependency-policy.mjs'
 import { projectTools } from './process.mjs'
 import {
   features,
@@ -81,6 +82,11 @@ const addDependencies = (manifest, source, selected, options) => {
       const current = manifest[field][name]
       const target = source[field][name]
       if (current) {
+        if (current === target) continue
+        if (target === 'latest')
+          throw new Error(
+            `Review existing ${name}@${current} against recipe latest; update it explicitly with your package manager if you want the latest release. It will not be silently replaced.`
+          )
         const old = current
           .match(/\d+\.\d+\.\d+/)?.[0]
           ?.split('.')
@@ -91,6 +97,7 @@ const addDependencies = (manifest, source, selected, options) => {
           .map(Number)
         if (
           !old ||
+          !next ||
           old[0] !== next[0] ||
           old[1] < next[1] ||
           (old[1] === next[1] && old[2] < next[2])
@@ -361,6 +368,11 @@ export const addIntegrations = async ({
       '.dev.vars.example',
       mergeEnvExample(await readCurrent('.dev.vars.example'), env)
     )
+  if (metadata.tools.manager === 'pnpm' && added.includes('forms')) {
+    const file = 'pnpm-workspace.yaml'
+    const current = (await exists(root, file)) ? await readCurrent(file) : ''
+    files.set(file, withLatestFormsPolicy(current))
+  }
   metadata.features = total
   metadata.options = effective
   metadata.dependenciesInstalled = false

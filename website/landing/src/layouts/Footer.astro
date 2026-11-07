@@ -32,6 +32,16 @@ const t = i18n.navigation.footer
         </div>
         <div class:list={['footer-group']}>
           <h2>{t.project}</h2>
+          <a href={`${project.docsBase}guides/agent-workflows/`}>{t.skill}</a>
+          <a
+            href="https://www.npmjs.com/package/@samline/astro"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {i18n.common.links.npm}
+            <span aria-hidden="true">↗</span>
+            <span class:list={['sr-only']}>{i18n.common.externalLinkHint}</span>
+          </a>
           <a href="https://docs.astro.build/">{t.astro}</a>
           <a
             href={project.repository}
@@ -42,15 +52,7 @@ const t = i18n.navigation.footer
             <span aria-hidden="true">↗</span>
             <span class:list={['sr-only']}>{i18n.common.externalLinkHint}</span>
           </a>
-          <a
-            href={`${project.docsBase}changelog/`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {t.changelog}
-            <span aria-hidden="true">↗</span>
-            <span class:list={['sr-only']}>{i18n.common.externalLinkHint}</span>
-          </a>
+          <a href={`${project.docsBase}changelog/`}>{t.changelog}</a>
           <a
             href={`${project.repository}/blob/main/THIRD_PARTY_NOTICES.md`}
             target="_blank"

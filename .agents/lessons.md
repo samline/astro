@@ -17,5 +17,10 @@
   Preserve article position and manual scrolling; do not add artificial trailing
   space to force final links upward. Keep mobile close controls reachable.
 
+- The compiler toolchain needs compatible @emnapi/core and @emnapi/runtime peers.
+  Keep their explicit stable declarations with the catalog: a fresh peer resolver
+  can otherwise select a v2 beta runtime for a v1 bridge. A passing maintainer
+  lock does not validate a fresh generated project; test the packed CLI too.
+
 Keep this file limited to applicable technical pitfalls. Move general conventions
 into their owning contract and remove entries when they no longer apply.

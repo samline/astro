@@ -5,7 +5,7 @@ collections validate them; Pagefind indexes the built article content. Reference
 entries are rendered directly from parent-repository READMEs listed in
 ../shared/data/references.json. Keep one authoritative API document per owner.
 Relative source links are mapped to GitHub; local article links are checked in
-the combined static artifact. The website changelog is rendered from website/CHANGELOG.md.
+the combined static artifact. The website changelog is rendered from the repository root CHANGELOG.md.
 
 The shell, search and ToC reuse shared controls; Drawer owns gestures, focus,
 modal dismissal and locking. Native article code and CopyButton remain readable

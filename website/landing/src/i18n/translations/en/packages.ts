@@ -47,8 +47,8 @@ export default {
       category: 'Form state and validation',
       description:
         'Manage form state and validation in your interface. Selecting Forms in @samline/astro also installs @samline/formatter; Fields adds optional Astro control templates.',
-      href: 'https://www.npmjs.com/package/@samline/forms',
-      status: 'Website coming next',
+      href: 'https://samline.github.io/forms/',
+      status: 'Website & docs',
       preview: ['Your name', 'Your next idea', 'Send message']
     }
   ]

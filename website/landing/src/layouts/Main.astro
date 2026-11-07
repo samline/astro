@@ -1,5 +1,5 @@
 ---
-import { getLocale } from '../i18n/utils'
+import { getI18n, getLocale } from '../i18n/utils'
 import '../styles/theme.css'
 import SEO from '../../../shared/components/SEO.astro'
 import SiteHead from '../../../shared/components/SiteHead.astro'
@@ -11,7 +11,10 @@ interface Props {
   title?: string
   description?: string
 }
-const { title = project.name, description = project.description } = Astro.props
+const {
+  title = getI18n(Astro).sections.hero.seoTitle,
+  description = project.description
+} = Astro.props
 ---
 
 <!doctype html>

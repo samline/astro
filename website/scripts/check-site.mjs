@@ -3,6 +3,6 @@ import { project } from '../shared/lib/project.mjs'
 const result = await checkLinks({
   directory: new URL('../landing/dist/', import.meta.url),
   site: new URL(project.url),
-  externalPaths: ['/drawer/', '/ticker/', '/notify/']
+  externalPaths: ['/drawer/', '/ticker/', '/notify/', '/forms/']
 })
 console.log(`Verified ${result.links} links across ${result.pages} pages.`)

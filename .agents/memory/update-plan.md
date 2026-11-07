@@ -36,3 +36,21 @@ paths alone never establish overwrite permission. Preserve deliberate deletions.
 
 The official guide/tool is the authority for framework upgrades. Recheck it when
 implementing; this record is not a frozen guarantee about future CLI behavior.
+
+## Forms and Formatter resolution
+
+The Forms feature declares both @samline/forms and @samline/formatter. New projects
+receive `latest` for both packages from the catalog manifest; the generator does not
+pin or copy this repository's pnpm lockfile. A fresh package-manager installation
+resolves npm's current latest tag, including majors, under that manager's own release policies.
+The maintained starter has its own frozen lockfile, so update and verify that
+lock separately. The maintainer lock uses exact reviewed-version release-age exceptions. Generated
+pnpm projects selecting Forms explicitly exempt only Forms and Formatter from
+the age delay so their latest tags resolve current releases; other dependencies
+keep the package manager's policy. Preserve custom workspace settings, merge a
+supported block list, and report unsupported YAML shapes before writes.
+
+Later additions accept matching latest tags but stop with an actionable conflict
+for a pre-existing explicit pin/range; the installer never chooses a breaking
+upgrade for an already customized project. Locked installs are reproducible, not
+a command to refresh latest. Read installed package APIs after a major change.

@@ -766,3 +766,38 @@ test(
     }
   }
 )
+
+test('Forms creation and later additions keep latest tags, and explicit existing versions conflict without writes', async (t) => {
+  const created = await fixture(t, { features: ['forms'] })
+  for (const name of ['@samline/forms', '@samline/formatter'])
+    assert.equal((await json(created)).dependencies[name], 'latest')
+  assert.match(
+    await read(created, 'pnpm-workspace.yaml'),
+    /minimumReleaseAgeExclude:[\s\S]*@samline\/forms[\s\S]*@samline\/formatter/
+  )
+  // Adding Fields to a project that already has Forms must accept matching tags.
+  await add(created, ['fields'])
+  assert.ok(await exists(created, 'src/components/Fields/Form.astro'))
+  const core = await fixture(t, { features: [] })
+  await add(core, ['fields'])
+  for (const name of ['@samline/forms', '@samline/formatter'])
+    assert.equal((await json(core)).dependencies[name], 'latest')
+  assert.match(
+    await read(core, 'pnpm-workspace.yaml'),
+    /minimumReleaseAgeExclude:/
+  )
+  const customized = await fixture(t, { features: [] })
+  const manifest = await json(customized)
+  manifest.dependencies['@samline/forms'] = '^2.8.0'
+  await writeFile(
+    path.join(customized, 'package.json'),
+    JSON.stringify(manifest)
+  )
+  const before = await read(customized, 'package.json')
+  await assert.rejects(
+    add(customized, ['fields']),
+    /update it explicitly.*not be silently replaced/
+  )
+  assert.equal(await read(customized, 'package.json'), before)
+  assert.equal(await exists(customized, 'src/components/Fields'), false)
+})

@@ -11,7 +11,7 @@ Each recipe owns files, dependencies, dictionary domains, environment examples,
 scripts, prerequisites and compatibility. Omitted integrations leave none of
 their unrelated files, imports, dependencies or domains in a generated project.
 
-- Forms includes @samline/forms and @samline/formatter; Fields is optional.
+- Forms includes @samline/forms and @samline/formatter with latest tags for first installation, including majors; lockfiles and existing explicit versions remain project-owned. Fields is optional.
 - Mail includes its contact Action. Independent Actions has a harmless example.
 - Content selects local/API/Strapi/Shopify/other and build/live timing separately.
   Emit only the selected source's example; distinct named collections coexist.
