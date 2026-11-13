@@ -194,10 +194,10 @@ importers:
         version: 7.3.1
       '@samline/formatter':
         specifier: latest
-        version: 3.0.0
+        version: 3.1.0
       '@samline/forms':
         specifier: latest
-        version: 2.10.0(@samline/formatter@3.0.0)
+        version: 2.11.0(@samline/formatter@3.1.0)
       astro:
         specifier: ^7.4.4
         version: 7.4.4(@types/node@24.19.2)(@vercel/functions@3.10.2)(jiti@2.7.0)(yaml@2.9.1)
@@ -998,12 +998,12 @@ packages:
       rollup:
         optional: true
 
-  '@samline/formatter@3.0.0':
-    resolution: {integrity: sha512-lGPc5tU1h2TZbuFOgZX4A2P1ZMRt3CKJ4rK+xdWOhnHxAoVtjtnF6URTI9u8Mr7ue+MqaJTyCV43vciwSfeGGg==}
+  '@samline/formatter@3.1.0':
+    resolution: {integrity: sha512-yKg1v+Nv0XyASX6QFdda7HYyuN7XoITgpxPy+z71GB2Dv8u78NgEcejUgmCux/usV/gyYY735pAgYd0Q6aK4iA==}
     engines: {node: '>=20'}
 
-  '@samline/forms@2.10.0':
-    resolution: {integrity: sha512-Rt81FGB3bGAoDRfAgby5q8KOCx8L49pjZLz6qxi+2DTzMF0ddtPU8JEydpcFY+CpduVt1eCx4KySebqWsSky3g==}
+  '@samline/forms@2.11.0':
+    resolution: {integrity: sha512-BCVrDR055wNnjRouyftEsHeO0Jek7uGmr031PSp9heKi4GLCEG9KEwcTJhPfcPAZrgNSP5WJN/QsiY50URa+iw==}
     engines: {node: '>=20'}
     peerDependencies:
       '@samline/formatter': ^2.1.0 || ^3.0.0
@@ -3429,13 +3429,13 @@ snapshots:
       estree-walker: 2.0.2
       picomatch: 4.0.7
 
-  '@samline/formatter@3.0.0':
+  '@samline/formatter@3.1.0':
     dependencies:
       libphonenumber-js: 1.13.15
 
-  '@samline/forms@2.10.0(@samline/formatter@3.0.0)':
+  '@samline/forms@2.11.0(@samline/formatter@3.1.0)':
     optionalDependencies:
-      '@samline/formatter': 3.0.0
+      '@samline/formatter': 3.1.0
 
   '@shikijs/core@4.5.0':
     dependencies:
