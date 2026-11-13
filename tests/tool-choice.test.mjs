@@ -14,71 +14,81 @@ const template = path.join(root, 'packages/cli/template')
 const kitVersion = (await json(root)).version
 const versions = { npm: '11.2.0', pnpm: '12.9.1', bun: '1.4.4' }
 
-test('consumer manager and runtime choices configure all adapters and survive later additions', async (t) => {
-  const parent = await mkdtemp(path.join(tmpdir(), 'samline-tool-choice-'))
-  t.after(() => rm(parent, { recursive: true, force: true }))
-  for (const manager of ['npm', 'pnpm', 'bun']) {
-    for (const runtime of ['node', 'bun']) {
-      for (const deployment of [
-        'static',
-        'vercel',
-        'netlify',
-        'cloudflare',
-        'custom'
-      ]) {
-        const tools = selectTools(versions, { manager, runtime })
-        const destination = path.join(
-          parent,
-          `${manager}-${runtime}-${deployment}`
-        )
-        await createProject({
-          template,
-          destination,
-          kitVersion,
-          tools,
-          deployment
-        })
-        const manifest = await json(destination)
-        assert.equal(manifest.packageManager, `${manager}@${versions[manager]}`)
-        assert.equal(manifest.samlineAstro.tools.runtime, runtime)
-        assert.equal(projectTools(manifest).manager, manager)
-        assert.equal(projectTools(manifest).runtime, runtime)
-        assert.match(
-          await read(destination, 'scripts/check-package-manager.mjs'),
-          new RegExp(`${manager}/`)
-        )
-        if (runtime === 'node')
-          assert.match(await read(destination, 'bunfig.toml'), /bun = false/)
-        if (deployment === 'vercel') {
-          const config = JSON.parse(await read(destination, 'vercel.json'))
-          assert.equal(
-            config.installCommand,
-            manager === 'npm'
-              ? 'npm ci'
-              : `${manager} install --frozen-lockfile`
+test(
+  'consumer manager and runtime choices configure all adapters and survive later additions',
+  { timeout: 60000 },
+  async (t) => {
+    const parent = await mkdtemp(path.join(tmpdir(), 'samline-tool-choice-'))
+    t.after(() => rm(parent, { recursive: true, force: true }))
+    for (const manager of ['npm', 'pnpm', 'bun']) {
+      for (const runtime of ['node', 'bun']) {
+        for (const deployment of [
+          'static',
+          'vercel',
+          'netlify',
+          'cloudflare',
+          'custom'
+        ]) {
+          const tools = selectTools(versions, { manager, runtime })
+          const destination = path.join(
+            parent,
+            `${manager}-${runtime}-${deployment}`
           )
-          if (manager === 'bun')
-            assert.deepEqual(manifest.overrides, (await json(root)).overrides)
-        }
-        if (manager === 'bun' && deployment === 'cloudflare')
-          assert.deepEqual(manifest.trustedDependencies, ['esbuild', 'workerd'])
-        if (deployment === 'static') {
-          await addIntegrations({
-            root: destination,
+          await createProject({
             template,
+            destination,
             kitVersion,
-            requested: ['themes']
+            tools,
+            deployment
           })
+          const manifest = await json(destination)
           assert.equal(
-            (await json(destination)).packageManager,
-            manifest.packageManager
+            manifest.packageManager,
+            `${manager}@${versions[manager]}`
           )
-          assert.equal(projectTools(await json(destination)).runtime, runtime)
+          assert.equal(manifest.samlineAstro.tools.runtime, runtime)
+          assert.equal(projectTools(manifest).manager, manager)
+          assert.equal(projectTools(manifest).runtime, runtime)
+          assert.match(
+            await read(destination, 'scripts/check-package-manager.mjs'),
+            new RegExp(`${manager}/`)
+          )
+          if (runtime === 'node')
+            assert.match(await read(destination, 'bunfig.toml'), /bun = false/)
+          if (deployment === 'vercel') {
+            const config = JSON.parse(await read(destination, 'vercel.json'))
+            assert.equal(
+              config.installCommand,
+              manager === 'npm'
+                ? 'npm ci'
+                : `${manager} install --frozen-lockfile`
+            )
+            if (manager === 'bun')
+              assert.deepEqual(manifest.overrides, (await json(root)).overrides)
+          }
+          if (manager === 'bun' && deployment === 'cloudflare')
+            assert.deepEqual(manifest.trustedDependencies, [
+              'esbuild',
+              'workerd'
+            ])
+          if (deployment === 'static') {
+            await addIntegrations({
+              root: destination,
+              template,
+              kitVersion,
+              requested: ['themes']
+            })
+            assert.equal(
+              (await json(destination)).packageManager,
+              manifest.packageManager
+            )
+            assert.equal(projectTools(await json(destination)).runtime, runtime)
+          }
         }
       }
     }
   }
-})
+)
 
 test('explicit unavailable or unsupported tools fail instead of silently falling back', () => {
   assert.throws(
