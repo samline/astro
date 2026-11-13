@@ -29,6 +29,7 @@ export default {
     'guides/examples': 'Installation examples',
     'guides/accessibility': 'Review accessibility',
     'guides/updating': 'Update a project',
+    'guides/view-transitions': 'Use view transitions',
     'reference/configuration': 'Configuration and recovery',
     changelog: 'Changelog',
     ...Object.fromEntries(references.map((entry) => [entry.id, entry.title]))

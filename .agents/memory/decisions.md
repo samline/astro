@@ -109,8 +109,10 @@ CLI and generated projects. Drawer/Ticker/Notify/Forms comprise the curated pack
 section; template and dependency licenses retain required notices.
 
 Portable guidance comes from scripts/agent-context plus selected skills.
-samline-astro and samline-project-kickoff are portable;
+samline-astro, samline-project-kickoff and view-transitions are portable;
 samline-astro-maintainer stays repository-only. The optional kickoff workflow
 owns its English prompt and design inventory reference. Website downloads and
-the copyable prompt are derived from that same skill source.
+the copyable prompt are derived from that same skill source. The view-transitions
+skill carries the website guide's lessons and effect dictionary for agents; keep the
+guide and the skill's reference in agreement.
 Context contains applicable project contracts rather than development history.

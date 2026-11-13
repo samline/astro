@@ -112,9 +112,12 @@ skillLock.skills = Object.fromEntries(
 )
 for (const name of agentSkillNames) {
   if (
-    !['codebase-memory', 'samline-astro', 'samline-project-kickoff'].includes(
-      name
-    ) &&
+    ![
+      'codebase-memory',
+      'samline-astro',
+      'samline-project-kickoff',
+      'view-transitions'
+    ].includes(name) &&
     !skillLock.skills[name]
   )
     throw new Error(`Missing skill provenance: ${name}`)

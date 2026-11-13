@@ -1,5 +1,20 @@
 # Changelog
 
+## 7.28.0
+
+- Add the "Use view transitions" guide: how to add Astro's ClientRouter to a
+  generated project, the lifecycle contract scripts must follow, how to design one
+  shared transition vocabulary instead of per-page effects, and a dictionary of
+  thirteen effects with CSS-only previews and copyable keyframes (lift, fade, zoom,
+  three wipes, center opening, diagonal, iris, step, brand curtain and a mask-based
+  paw stamp). It also covers shared-element morphs, card reordering, the mistakes
+  found in production use (third-party widgets bound to the replaced body, styles
+  lost in development only, duplicate names, viewport-unit and mask-position errors,
+  scroll order) and a headless recipe for testing animations reliably.
+- Ship a `view-transitions` skill with generated projects so agents can read the
+  same lessons and effect dictionary before adding ClientRouter.
+- Verify against the current Forms 2.11.0 and Formatter 3.1.0 releases.
+
 ## 7.27.2
 
 - Declare the compatible stable compiler WASM peers so fresh installations do

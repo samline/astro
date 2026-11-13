@@ -1,0 +1,673 @@
+---
+title: 'Use view transitions'
+description: 'Add Astro ClientRouter and native view transitions to a generated project, with a dictionary of effects and the mistakes to avoid.'
+locale: en
+sidebar:
+  group: guides
+  order: 10
+---
+
+import EffectPreview from '../../../components/EffectPreview.astro'
+
+The generated project loads each page normally. View transitions let the browser
+animate between pages instead, using Astro's
+[ClientRouter](https://docs.astro.build/en/guides/view-transitions/). This guide
+collects what a real site learned while adopting them: how to add the router, which
+effects work well, and the mistakes that cost the most time. ClientRouter is not part
+of the generated starter; add it when the project benefits from continuity between
+pages and accept that every page change becomes a client navigation.
+
+## Decide whether the project needs them
+
+Use them for brand sites, portfolios, catalogues and anywhere an intentional
+transition adds meaning. Keep native navigation for simple sites, and review third-party
+widgets and forms before adopting: they bind to the page, and ClientRouter replaces the
+whole `<body>`. Reduced motion and browsers without view transitions are handled by
+the router, but test both.
+
+## Add ClientRouter
+
+Import it once in the `<head>` of the layout every page uses:
+
+```astro
+---
+import { ClientRouter } from 'astro:transitions'
+---
+
+<head>
+  <ClientRouter />
+</head>
+```
+
+The starter components that keep state in the page already follow the router's
+lifecycle: Fields, Captcha, the theme script, consent and PageLoader react to
+`astro:page-load` and clean up on `astro:before-swap`. PageLoader also wraps
+`astro:before-preparation`, so it needs no extra wiring. Your own scripts must do the
+same, because a module script runs once while the DOM it initialized is replaced:
+
+```ts
+const mounted = new Map<HTMLElement, () => void>()
+const setup = () =>
+  document.querySelectorAll<HTMLElement>('[data-widget]').forEach((root) => {
+    if (!mounted.has(root)) mounted.set(root, initialize(root))
+  })
+const cleanup = () => {
+  mounted.forEach((dispose) => dispose())
+  mounted.clear()
+}
+setup()
+document.addEventListener('astro:page-load', setup)
+document.addEventListener('astro:before-swap', cleanup)
+```
+
+Make setup idempotent and always remove listeners, timers and observers in cleanup.
+A link that must load natively takes `data-astro-reload`; a link or button handled by
+your own script should call `preventDefault()` first, because ClientRouter ignores
+clicks that are already default-prevented.
+
+## Design a vocabulary, not a per-page effect
+
+The most common mistake is giving every route its own effect. It reads like a demo, not
+like an identity. Choose one default effect for every page change, one or two
+exceptions with a reason (a wizard that steps sideways, a legal page that barely moves)
+and keep durations near 450 ms for ordinary links. The effects below are a dictionary
+to pick from, not a set to use together.
+
+Keep the header and footer still: name them only while a transition runs, so they
+never become containing blocks outside navigations.
+
+```css
+:root[data-astro-transition] .site-header {
+  view-transition-name: site-header;
+}
+:root[data-astro-transition] .site-footer {
+  view-transition-name: site-footer;
+}
+::view-transition-group(site-header),
+::view-transition-group(site-footer),
+::view-transition-old(site-header),
+::view-transition-new(site-header),
+::view-transition-old(site-footer),
+::view-transition-new(site-footer) {
+  animation: none;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+```
+
+Choose the destination's effect with `:root:has(main[data-page-route='...'])` when the
+layout exposes a route name, and override exceptions with a flag attribute such as
+`:root[data-vt-step]:has(main)`; the `:has(main)` keeps the specificity above the
+default rules. Turn everything off for reduced motion:
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+```
+
+## Effect dictionary
+
+Each entry applies to the whole page between the header and footer. Hover, focus or tap
+a preview to replay it. The previews are plain CSS with the same keyframes as the
+snippet, so what you see is what you copy; copy only the entries you need and keep the
+`vt-fade-out` rule they share. Adapt colours and shapes to the project.
+
+### Lift
+
+The default for ordinary pages: a short breath that never competes with content. Duration 340ms.
+
+<EffectPreview effect="lift" label="Preview: Lift" />
+
+```css
+::view-transition-old(root) {
+  animation: vt-fade-out 120ms ease-in both;
+}
+::view-transition-new(root) {
+  animation: vt-lift 340ms cubic-bezier(0.22, 1, 0.36, 1) 60ms both;
+}
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes vt-lift {
+  from {
+    opacity: 0;
+    translate: 0 1rem;
+  }
+}
+```
+
+### Quiet fade
+
+Legal pages, settings and anything that should feel almost like a plain navigation. Duration 200ms.
+
+<EffectPreview effect="fade" label="Preview: Quiet fade" />
+
+```css
+::view-transition-old(root) {
+  animation: vt-fade-out 120ms ease-in both;
+}
+::view-transition-new(root) {
+  animation: vt-fade 200ms ease-out 0ms both;
+}
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes vt-fade {
+  from {
+    opacity: 0;
+  }
+}
+```
+
+### Gentle zoom
+
+Directories and listings: the page settles in from slightly smaller. Duration 620ms.
+
+<EffectPreview effect="zoom" label="Preview: Gentle zoom" />
+
+```css
+::view-transition-old(root) {
+  animation: vt-fade-out 120ms ease-in both;
+}
+::view-transition-new(root) {
+  animation: vt-zoom 620ms cubic-bezier(0.22, 1, 0.36, 1) 0ms both;
+}
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes vt-zoom {
+  from {
+    opacity: 0;
+    scale: 0.94;
+    translate: 0 1.5rem;
+  }
+}
+```
+
+### Wipe, left to right
+
+Editorial or story pages: content is uncovered in reading direction. Duration 660ms.
+
+<EffectPreview effect="wipe-right" label="Preview: Wipe, left to right" />
+
+```css
+::view-transition-old(root) {
+  animation: vt-fade-out 120ms ease-in both;
+}
+::view-transition-new(root) {
+  animation: vt-wipe-right 660ms cubic-bezier(0.22, 1, 0.36, 1) 0ms both;
+}
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes vt-wipe-right {
+  from {
+    opacity: 0;
+    translate: 2rem 0;
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    clip-path: inset(0);
+  }
+}
+```
+
+### Wipe, right to left
+
+The opposite direction; pair it with the previous one for related sections. Duration 660ms.
+
+<EffectPreview effect="wipe-left" label="Preview: Wipe, right to left" />
+
+```css
+::view-transition-old(root) {
+  animation: vt-fade-out 120ms ease-in both;
+}
+::view-transition-new(root) {
+  animation: vt-wipe-left 660ms cubic-bezier(0.22, 1, 0.36, 1) 0ms both;
+}
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes vt-wipe-left {
+  from {
+    opacity: 0;
+    translate: -2rem 0;
+    clip-path: inset(0 0 0 100%);
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    clip-path: inset(0);
+  }
+}
+```
+
+### Vertical wipe
+
+Reference material or catalogues: the page unrolls from the top. Duration 580ms.
+
+<EffectPreview effect="wipe-down" label="Preview: Vertical wipe" />
+
+```css
+::view-transition-old(root) {
+  animation: vt-fade-out 120ms ease-in both;
+}
+::view-transition-new(root) {
+  animation: vt-wipe-down 580ms cubic-bezier(0.22, 1, 0.36, 1) 0ms both;
+}
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes vt-wipe-down {
+  from {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0);
+  }
+}
+```
+
+### Center opening
+
+Contact or conversion pages: content opens outward from the middle. Duration 680ms.
+
+<EffectPreview effect="center-open" label="Preview: Center opening" />
+
+```css
+::view-transition-old(root) {
+  animation: vt-fade-out 120ms ease-in both;
+}
+::view-transition-new(root) {
+  animation: vt-center-open 680ms cubic-bezier(0.22, 1, 0.36, 1) 0ms both;
+}
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes vt-center-open {
+  from {
+    opacity: 0;
+    clip-path: inset(0 50% 0 50%);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0);
+  }
+}
+```
+
+### Diagonal reveal
+
+Brand or showcase pages that can afford a sharper gesture. Duration 720ms.
+
+<EffectPreview effect="diagonal" label="Preview: Diagonal reveal" />
+
+```css
+::view-transition-old(root) {
+  animation: vt-fade-out 120ms ease-in both;
+}
+::view-transition-new(root) {
+  animation: vt-diagonal 720ms cubic-bezier(0.22, 1, 0.36, 1) 0ms both;
+}
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes vt-diagonal {
+  from {
+    opacity: 0.6;
+    clip-path: polygon(0 0, 0 0, 0 0, 0 100%);
+  }
+  45% {
+    opacity: 1;
+    clip-path: polygon(0 0, 70% 0, 15% 100%, 0 100%);
+  }
+  to {
+    opacity: 1;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+```
+
+### Iris
+
+A home page or a hero: the new page opens like an aperture from a point. Set `--vt-x` and `--vt-y` to the click or to a fixed spot. Duration 640ms.
+
+<EffectPreview effect="iris" label="Preview: Iris" x="50%" y="20%" />
+
+```css
+::view-transition-old(root) {
+  animation: vt-fade-out 120ms ease-in both;
+}
+::view-transition-new(root) {
+  animation: vt-iris 640ms cubic-bezier(0.22, 1, 0.36, 1) 0ms both;
+}
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes vt-iris {
+  from {
+    opacity: 0.5;
+    clip-path: circle(0vmax at var(--vt-x, 50%) var(--vt-y, 8rem));
+  }
+  to {
+    opacity: 1;
+    clip-path: circle(150vmax at var(--vt-x, 50%) var(--vt-y, 8rem));
+  }
+}
+```
+
+### Iris from a corner
+
+The same keyframes with another origin: an offset aperture reads as a different scene. Duration 640ms.
+
+<EffectPreview
+  effect="iris-offset"
+  label="Preview: Iris from a corner"
+  x="20%"
+  y="30%"
+/>
+
+```css
+::view-transition-old(root) {
+  animation: vt-fade-out 120ms ease-in both;
+}
+::view-transition-new(root) {
+  animation: vt-iris 640ms cubic-bezier(0.22, 1, 0.36, 1) 0ms both;
+}
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes vt-iris {
+  from {
+    opacity: 0.5;
+    clip-path: circle(0vmax at var(--vt-x, 50%) var(--vt-y, 8rem));
+  }
+  to {
+    opacity: 1;
+    clip-path: circle(150vmax at var(--vt-x, 50%) var(--vt-y, 8rem));
+  }
+}
+/* Set the origin from script or per route. */
+:root {
+  --vt-x: 20%;
+  --vt-y: 12rem;
+}
+```
+
+### Step
+
+Wizards, quizzes and carousels: content moves sideways and reverses on Back. Duration 380ms.
+
+<EffectPreview effect="step" label="Preview: Step" />
+
+```css
+::view-transition-old(root) {
+  animation: vt-step-out 200ms ease-in both;
+}
+::view-transition-new(root) {
+  animation: vt-step-in 380ms cubic-bezier(0.22, 1, 0.36, 1) 80ms both;
+}
+:root {
+  --vt-step: 3rem;
+}
+:root[data-astro-transition='back'] {
+  --vt-step: -3rem;
+}
+@keyframes vt-step-out {
+  to {
+    opacity: 0;
+    translate: calc(var(--vt-step) * -1) 0;
+  }
+}
+@keyframes vt-step-in {
+  from {
+    opacity: 0;
+    translate: var(--vt-step, 3rem) 0;
+  }
+}
+```
+
+### Brand curtain
+
+A full-width panel of brand colour sweeps across; the new page follows it in. Duration 400ms.
+
+<EffectPreview effect="curtain" label="Preview: Brand curtain" />
+
+```css
+/* The group paints the brand colour; the old page leaves, the new one follows. */
+::view-transition-group(root) {
+  background: var(--color-primary);
+}
+::view-transition-old(root) {
+  animation: vt-curtain-out 280ms cubic-bezier(0.7, 0, 0.2, 1) both;
+}
+::view-transition-new(root) {
+  animation: vt-curtain-in 400ms cubic-bezier(0.7, 0, 0.2, 1) 160ms both;
+}
+@keyframes vt-curtain-out {
+  to {
+    translate: 100% 0;
+  }
+}
+@keyframes vt-curtain-in {
+  from {
+    translate: -100% 0;
+  }
+}
+```
+
+### Paw stamp
+
+A signature effect: a shape grows at the click point, lingers long enough to read,
+then floods the page while the old page recedes underneath. Because the old page
+stays visible below the mask, no background colour of the next page can show through
+or clash with a fixed header. Any SVG shape works as the mask: a logo, a heart, a star.
+
+<EffectPreview effect="paw" label="Preview: Paw stamp" />
+
+```css
+::view-transition-old(root) {
+  animation: vt-recede 780ms cubic-bezier(0.7, 0, 0.2, 1) both;
+}
+::view-transition-new(root) {
+  animation: vt-stamp 780ms linear both;
+  mask-image:
+    var(--shape),
+    radial-gradient(
+      circle at var(--vt-x, 50vw) var(--vt-y, 50vh),
+      #000 var(--vt-reach),
+      transparent calc(var(--vt-reach) + 1px)
+    );
+  mask-repeat: no-repeat;
+}
+@property --vt-reach {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+@keyframes vt-recede {
+  to {
+    scale: 0.97;
+    filter: brightness(0.7);
+  }
+}
+/* mask-size is in viewport units: 30vmax is 30% of the larger side, not 3000px.
+   Positions must be absolute (px or vw/vh): a percentage is relative to the free
+   space, which is negative for a mask larger than the page. */
+@keyframes vt-stamp {
+  from {
+    --vt-reach: 0px;
+    mask-size:
+      0 0,
+      100% 100%;
+    mask-position:
+      var(--vt-x) var(--vt-y),
+      0 0;
+  }
+  30% {
+    --vt-reach: 0px;
+    mask-size:
+      30vmax 30vmax,
+      100% 100%;
+    mask-position:
+      calc(var(--vt-x) - 15vmax) calc(var(--vt-y) - 15vmax),
+      0 0;
+  }
+  46% {
+    --vt-reach: 0px;
+    mask-size:
+      34vmax 34vmax,
+      100% 100%;
+    mask-position:
+      calc(var(--vt-x) - 17vmax) calc(var(--vt-y) - 17vmax),
+      0 0;
+  }
+  to {
+    --vt-reach: 160vmax;
+    mask-size:
+      260vmax 260vmax,
+      100% 100%;
+    mask-position:
+      calc(var(--vt-x) - 130vmax) calc(var(--vt-y) - 130vmax),
+      0 0;
+  }
+}
+```
+
+Set `--shape` to `url("data:image/svg+xml,...")` with an SVG of your shape, and set
+`--vt-x` and `--vt-y` in pixels from the click (`pointerdown`) or from a fixed spot.
+The second mask layer, a growing circle, guarantees the page is fully revealed after
+the shape leaves the screen. A very large mask costs memory on low-end phones: keep
+the final size as small as the flood allows.
+
+## Animate shared elements and reordered cards
+
+Name an element in both pages and the browser morphs it. The name must be unique in
+each page state, so set it from script only on the element involved and clear it first
+on every navigation. A name set permanently on a layout element also makes that element
+the containing block of its fixed descendants.
+
+```ts
+document.addEventListener('astro:before-preparation', (event) => {
+  document.querySelectorAll('[data-vt-named]').forEach((el) => {
+    el.style.removeProperty('view-transition-name')
+    delete el.dataset.vtNamed
+  })
+  const photo = event.sourceElement?.closest('.card')?.querySelector('img')
+  if (photo) {
+    photo.style.viewTransitionName = 'hero-photo'
+    photo.dataset.vtNamed = ''
+  }
+})
+```
+
+```css
+/* The destination names its own image statically. */
+.profile .portrait {
+  view-transition-name: hero-photo;
+}
+::view-transition-group(hero-photo) {
+  animation-duration: 600ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+::view-transition-old(hero-photo),
+::view-transition-new(hero-photo) {
+  block-size: 100%;
+  object-fit: cover;
+}
+```
+
+Going back works the same way if the card exists in the new document when
+`astro:after-swap` fires. Content restored asynchronously after the swap cannot be a
+morph target; it fades in instead. To let the browser move cards when a filter changes
+the same page, give every visible card a unique name and the same
+`view-transition-class`, then tune them all with
+`::view-transition-group(*.card) { animation-duration: 560ms; }`. Cards that exist in
+both states glide to their new position and the rest fade.
+
+Warm the incoming image during preparation so the morph does not start from a blank
+frame: wrap `event.loader` and decode the destination image with
+`new Image().decode()` before the swap.
+
+## Mistakes to avoid
+
+- **Third-party widgets that observe `<body>`.** ClientRouter swaps the body, so an SDK
+  that started in the first body never sees the next one. Reset the SDK and load it
+  again after the body changes, or load pages with such widgets natively with
+  `data-astro-reload`. Forms inside drawers cannot be detected by querying the new
+  document when they live in a `<template>`.
+- **Styles that disappear in development only.** Vite injects CSS imported by scripts
+  as `<style data-vite-dev-id>` in the head; the head swap removes them and animated
+  widgets stop. Copy those tags into the incoming head in `astro:before-swap` during
+  development. Production bundles are not affected.
+- **Duplicate names.** Two elements with the same `view-transition-name` in one state
+  cancel the whole transition. Clear every dynamic name before naming the next ones.
+- **Unit mistakes.** `1vmax` is 1% of the larger side: `2.6vmax` is about 33 px.
+  Percentage mask positions are relative to the free space; use px or viewport units.
+- **A flash of the old scroll.** Astro resets scroll before `astro:after-swap`, and the
+  new snapshot is taken afterwards. Adjust scroll in that event, not later, so the page
+  does not jump once the transition ends.
+- **Awaiting async work in the swap.** The swap is synchronous. Prepare data and images
+  in `astro:before-preparation` by wrapping `event.loader`.
+- **Click origins from a fixed header.** A header click has no meaningful vertical
+  position; place origin effects below it or at a fixed spot chosen at build time.
+
+## Test effects reliably
+
+Animations that depend on rendering frames do not advance in a throttled or hidden
+preview. Use a headless browser, start the navigation and scrub the pseudo-element
+animations to fixed times before taking screenshots:
+
+```ts
+await page.waitForFunction(() =>
+  document
+    .getAnimations()
+    .some((a) => a.effect?.pseudoElement?.startsWith('::view-transition'))
+)
+await page.evaluate((ms) => {
+  document
+    .getAnimations()
+    .filter((a) => a.effect?.pseudoElement?.startsWith('::view-transition'))
+    .forEach((a) => {
+      a.pause()
+      a.currentTime = ms
+    })
+}, 380)
+await page.screenshot({ path: 'transition-380.png' })
+```
+
+Also compare a page loaded directly with the same page reached by navigation:
+tickers, carousels, drawers, forms, consent and reveal animations must behave the same.
+Check production output as well as development, since some problems exist in only one.

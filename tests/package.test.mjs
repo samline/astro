@@ -175,6 +175,7 @@ test(
       'typescript-advanced-types',
       'samline-astro',
       'samline-project-kickoff',
+      'view-transitions',
       'vite',
       'seo',
       'accessibility',
@@ -396,6 +397,7 @@ test(
     assert.ok(!skillLock.skills.bun)
     assert.ok(!skillLock.skills['samline-astro'])
     assert.ok(!skillLock.skills['samline-project-kickoff'])
+    assert.ok(!skillLock.skills['view-transitions'])
     for (const file of [
       'SKILL.md',
       'references/kickoff-prompt.md',

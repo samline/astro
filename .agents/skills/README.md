@@ -35,7 +35,9 @@ docs and component ownership.
 
 - [samline-project-kickoff](./samline-project-kickoff/SKILL.md): prepare a project and an evidence-backed design inventory. Includes an English prompt and inventory contract; shipped with generated projects.
 
-These three skills are original MIT-licensed project source. They are not registry
+- [view-transitions](./view-transitions/SKILL.md): add and design Astro ClientRouter page transitions with an effect dictionary and the mistakes found in production use. Shipped with generated projects.
+
+These four skills are original MIT-licensed project source. They are not registry
 entries and must not receive fabricated autoskills hashes. Third-party licenses
 and notices are retained in ../../licenses/skills and THIRD_PARTY_NOTICES.md.
 Runtime conventions live in project instructions and the project workflow skills.

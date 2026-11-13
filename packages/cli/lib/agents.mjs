@@ -7,6 +7,7 @@ export const agentSkillNames = [
   'astro',
   'samline-astro',
   'samline-project-kickoff',
+  'view-transitions',
   'codebase-memory',
   'deploy-to-vercel',
   'frontend-design',
@@ -33,7 +34,11 @@ export const agentSkillIndex = (names, registry) => {
   const rows = names.map((name) => {
     const source =
       registry[name]?.source ??
-      (['samline-astro', 'samline-project-kickoff'].includes(name)
+      ([
+        'samline-astro',
+        'samline-project-kickoff',
+        'view-transitions'
+      ].includes(name)
         ? 'Original @samline/astro project workflow (MIT)'
         : 'DeusData/codebase-memory-mcp (MIT; local workflow additions)')
     return `- [${name}](./${name}/SKILL.md): ${source}.`

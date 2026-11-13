@@ -1,0 +1,279 @@
+---
+// Pure CSS preview of an effect: hover, focus or tap the stage to replay it.
+// The documentation snippets use the same keyframes on ::view-transition-new(root).
+interface Props {
+  effect: string
+  label: string
+  x?: string
+  y?: string
+}
+const { effect, label, x = '50%', y = '30%' } = Astro.props
+---
+
+<button
+  type="button"
+  class="fx"
+  data-effect={effect}
+  aria-label={label}
+  style={`--vt-x: ${x}; --vt-y: ${y};`}
+>
+  <span class="fx-old"></span>
+  <span class="fx-new"></span>
+</button>
+
+<style is:global>
+  .fx {
+    --fx-name: fx-fade;
+    --fx-dur: 400ms;
+    --fx-ease: ease-out;
+    --fx-delay: 0ms;
+    container-type: size;
+    position: relative;
+    display: block;
+    inline-size: min(100%, 16rem);
+    aspect-ratio: 16 / 10;
+    margin-block: 0.75rem 1rem;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    background: var(--color-bg-soft);
+    cursor: pointer;
+  }
+  .fx-old,
+  .fx-new {
+    position: absolute;
+    inset: 0;
+    display: block;
+  }
+  .fx-old {
+    background: linear-gradient(
+      var(--color-bg-soft) 0 16%,
+      var(--color-surface) 16% 100%
+    );
+  }
+  .fx-new {
+    background: linear-gradient(
+      var(--color-accent) 0 16%,
+      color-mix(in oklab, var(--color-accent) 22%, var(--color-surface)) 16%
+        100%
+    );
+  }
+  .fx:is(:hover, :focus-visible) .fx-new {
+    animation: var(--fx-name) var(--fx-dur) var(--fx-ease) var(--fx-delay) both;
+  }
+  .fx[data-effect='lift'] {
+    --fx-name: fx-lift;
+    --fx-dur: 340ms;
+    --fx-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --fx-delay: 60ms;
+  }
+  .fx[data-effect='fade'] {
+    --fx-name: fx-fade;
+    --fx-dur: 200ms;
+    --fx-ease: ease-out;
+    --fx-delay: 0ms;
+  }
+  .fx[data-effect='zoom'] {
+    --fx-name: fx-zoom;
+    --fx-dur: 620ms;
+    --fx-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --fx-delay: 0ms;
+  }
+  .fx[data-effect='wipe-right'] {
+    --fx-name: fx-wipe-right;
+    --fx-dur: 660ms;
+    --fx-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --fx-delay: 0ms;
+  }
+  .fx[data-effect='wipe-left'] {
+    --fx-name: fx-wipe-left;
+    --fx-dur: 660ms;
+    --fx-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --fx-delay: 0ms;
+  }
+  .fx[data-effect='wipe-down'] {
+    --fx-name: fx-wipe-down;
+    --fx-dur: 580ms;
+    --fx-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --fx-delay: 0ms;
+  }
+  .fx[data-effect='center-open'] {
+    --fx-name: fx-center-open;
+    --fx-dur: 680ms;
+    --fx-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --fx-delay: 0ms;
+  }
+  .fx[data-effect='diagonal'] {
+    --fx-name: fx-diagonal;
+    --fx-dur: 720ms;
+    --fx-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --fx-delay: 0ms;
+  }
+  .fx[data-effect='iris'] {
+    --fx-name: fx-iris;
+    --fx-dur: 640ms;
+    --fx-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --fx-delay: 0ms;
+  }
+  .fx[data-effect='iris-offset'] {
+    --fx-name: fx-iris;
+    --fx-dur: 640ms;
+    --fx-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --fx-delay: 0ms;
+  }
+  .fx[data-effect='step'] {
+    --fx-name: fx-step;
+    --fx-dur: 380ms;
+    --fx-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --fx-delay: 80ms;
+  }
+  .fx[data-effect='curtain'] {
+    --fx-name: fx-curtain;
+    --fx-dur: 400ms;
+    --fx-ease: cubic-bezier(0.7, 0, 0.2, 1);
+    --fx-delay: 160ms;
+    background: var(--color-text);
+  }
+  .fx[data-effect='curtain']:is(:hover, :focus-visible) .fx-old {
+    animation: fx-curtain-out 280ms cubic-bezier(0.7, 0, 0.2, 1) both;
+  }
+  .fx[data-effect='paw'] {
+    --fx-name: fx-paw;
+    --fx-dur: 900ms;
+    --fx-ease: linear;
+    --fx-delay: 0ms;
+  }
+  .fx[data-effect='paw'] .fx-new {
+    --paw: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cellipse cx='19' cy='42' rx='9' ry='13' transform='rotate(-22 19 42)'/%3E%3Cellipse cx='39' cy='22' rx='9.5' ry='14' transform='rotate(-8 39 22)'/%3E%3Cellipse cx='62' cy='22' rx='9.5' ry='14' transform='rotate(8 62 22)'/%3E%3Cellipse cx='82' cy='42' rx='9' ry='13' transform='rotate(22 82 42)'/%3E%3Cpath d='M50 46c-14 0-30 15-30 29 0 9 7 14 15 14 6 0 9-3 15-3s9 3 15 3c8 0 15-5 15-14 0-14-16-29-30-29z'/%3E%3C/svg%3E");
+    -webkit-mask-image: var(--paw);
+    mask-image: var(--paw);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: 50% 50%;
+    mask-position: 50% 50%;
+  }
+  @keyframes fx-lift {
+    from {
+      opacity: 0;
+      translate: 0 1rem;
+    }
+  }
+  @keyframes fx-fade {
+    from {
+      opacity: 0;
+    }
+  }
+  @keyframes fx-zoom {
+    from {
+      opacity: 0;
+      scale: 0.94;
+      translate: 0 1.5rem;
+    }
+  }
+  @keyframes fx-wipe-right {
+    from {
+      opacity: 0;
+      translate: 2rem 0;
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+      clip-path: inset(0);
+    }
+  }
+  @keyframes fx-wipe-left {
+    from {
+      opacity: 0;
+      translate: -2rem 0;
+      clip-path: inset(0 0 0 100%);
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+      clip-path: inset(0);
+    }
+  }
+  @keyframes fx-wipe-down {
+    from {
+      opacity: 0;
+      clip-path: inset(0 0 100% 0);
+    }
+    to {
+      opacity: 1;
+      clip-path: inset(0);
+    }
+  }
+  @keyframes fx-center-open {
+    from {
+      opacity: 0;
+      clip-path: inset(0 50% 0 50%);
+    }
+    to {
+      opacity: 1;
+      clip-path: inset(0);
+    }
+  }
+  @keyframes fx-diagonal {
+    from {
+      opacity: 0.6;
+      clip-path: polygon(0 0, 0 0, 0 0, 0 100%);
+    }
+    45% {
+      opacity: 1;
+      clip-path: polygon(0 0, 70% 0, 15% 100%, 0 100%);
+    }
+    to {
+      opacity: 1;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+  }
+  @keyframes fx-iris {
+    from {
+      opacity: 0.5;
+      clip-path: circle(0vmax at var(--vt-x, 50%) var(--vt-y, 8rem));
+    }
+    to {
+      opacity: 1;
+      clip-path: circle(150vmax at var(--vt-x, 50%) var(--vt-y, 8rem));
+    }
+  }
+  @keyframes fx-step {
+    from {
+      opacity: 0;
+      translate: 3rem 0;
+    }
+  }
+  @keyframes fx-curtain {
+    from {
+      translate: -100% 0;
+    }
+  }
+  @keyframes fx-curtain-out {
+    to {
+      translate: 100% 0;
+    }
+  }
+  /* Container units keep the paw inside the small stage; the guide uses vmax. */
+  @keyframes fx-paw {
+    from {
+      -webkit-mask-size: 0 0;
+      mask-size: 0 0;
+    }
+    35% {
+      -webkit-mask-size: 55cqmin 55cqmin;
+      mask-size: 55cqmin 55cqmin;
+    }
+    to {
+      -webkit-mask-size: 420cqmin 420cqmin;
+      mask-size: 420cqmin 420cqmin;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fx .fx-old,
+    .fx .fx-new {
+      animation: none !important;
+    }
+  }
+</style>

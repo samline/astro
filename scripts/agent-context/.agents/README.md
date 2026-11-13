@@ -41,3 +41,7 @@ For new projects and design handoffs, use the bundled
 [samline-project-kickoff skill](./skills/samline-project-kickoff/SKILL.md) and
 [copyable kickoff prompt](./skills/samline-project-kickoff/references/kickoff-prompt.md).
 These are optional workflows; generation does not run them automatically.
+
+Before adding Astro ClientRouter or writing page-transition CSS, read the bundled
+[view-transitions skill](./skills/view-transitions/SKILL.md) and its
+[effect dictionary](./skills/view-transitions/references/effects.md).
