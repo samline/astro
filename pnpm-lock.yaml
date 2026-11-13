@@ -194,10 +194,10 @@ importers:
         version: 7.3.1
       '@samline/formatter':
         specifier: latest
-        version: 2.1.0
+        version: 3.0.0
       '@samline/forms':
         specifier: latest
-        version: 2.8.0(@samline/formatter@2.1.0)
+        version: 2.10.0(@samline/formatter@3.0.0)
       astro:
         specifier: ^7.4.4
         version: 7.4.4(@types/node@24.19.2)(@vercel/functions@3.10.2)(jiti@2.7.0)(yaml@2.9.1)
@@ -998,15 +998,15 @@ packages:
       rollup:
         optional: true
 
-  '@samline/formatter@2.1.0':
-    resolution: {integrity: sha512-zpk8rEqthDKIt/ciYPog3+/aiGDPCe9bJNxTDEuw3ZtCxBoBwdPB0Guldv5jelQwkD3JVeAqcTu68N9eKlvwJA==}
+  '@samline/formatter@3.0.0':
+    resolution: {integrity: sha512-lGPc5tU1h2TZbuFOgZX4A2P1ZMRt3CKJ4rK+xdWOhnHxAoVtjtnF6URTI9u8Mr7ue+MqaJTyCV43vciwSfeGGg==}
     engines: {node: '>=20'}
 
-  '@samline/forms@2.8.0':
-    resolution: {integrity: sha512-pliHQQY0wQiWhLYbs6lJrO2FUIWAtbuiLQ7erLC70UZlE/Lt2TNwg6Wxb+RPwbl3HELW8FL1UIF8WyzS+zpmxg==}
+  '@samline/forms@2.10.0':
+    resolution: {integrity: sha512-Rt81FGB3bGAoDRfAgby5q8KOCx8L49pjZLz6qxi+2DTzMF0ddtPU8JEydpcFY+CpduVt1eCx4KySebqWsSky3g==}
     engines: {node: '>=20'}
     peerDependencies:
-      '@samline/formatter': ^2.1.0
+      '@samline/formatter': ^2.1.0 || ^3.0.0
     peerDependenciesMeta:
       '@samline/formatter':
         optional: true
@@ -1457,9 +1457,6 @@ packages:
   ci-info@4.4.0:
     resolution: {integrity: sha512-77PSwercCZU2Fc4sX94eF8k8Pxte6JAwL4/ICZLFjJLqegs7kCuAsqqj/70NQF6TvDpgFjkubQB2FW2ZZddvQg==}
     engines: {node: '>=8'}
-
-  cleave-zen@0.0.17:
-    resolution: {integrity: sha512-SLuad6RaACsONu3Fr4F3sE9YXxMlMv6AiaZ8qkwfdV9Ex+TJ+ip3rLFsdrqvnp0YGlslfzAfw8q8MwQJW3yHdg==}
 
   cliui@9.0.1:
     resolution: {integrity: sha512-k7ndgKhwoQveBL+/1tqGJYNz097I7WOvwbmmU2AR5+magtbjPWQTS1C5vzGkBC8Ym8UWRzfKUzUUqFLypY4Q+w==}
@@ -3432,14 +3429,13 @@ snapshots:
       estree-walker: 2.0.2
       picomatch: 4.0.7
 
-  '@samline/formatter@2.1.0':
+  '@samline/formatter@3.0.0':
     dependencies:
-      cleave-zen: 0.0.17
       libphonenumber-js: 1.13.15
 
-  '@samline/forms@2.8.0(@samline/formatter@2.1.0)':
+  '@samline/forms@2.10.0(@samline/formatter@3.0.0)':
     optionalDependencies:
-      '@samline/formatter': 2.1.0
+      '@samline/formatter': 3.0.0
 
   '@shikijs/core@4.5.0':
     dependencies:
@@ -3901,8 +3897,6 @@ snapshots:
   chownr@3.0.0: {}
 
   ci-info@4.4.0: {}
-
-  cleave-zen@0.0.17: {}
 
   cliui@9.0.1:
     dependencies:
