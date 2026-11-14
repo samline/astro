@@ -51,7 +51,7 @@ export default {
       {
         href: '#packages',
         label: 'By samline',
-        description: 'Explore Drawer, Ticker, Notify and Forms.'
+        description: 'Explore interface packages, forms, motion and utilities.'
       },
       {
         href: '#faq',

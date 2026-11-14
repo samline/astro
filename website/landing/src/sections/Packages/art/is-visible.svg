@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 132">
+  <rect class="f" x="40" y="6" width="96" height="20" rx="5"/>
+  <rect class="al as" x="40" y="40" width="96" height="20" rx="5"/>
+  <rect class="al as" x="40" y="70" width="96" height="20" rx="5"/>
+  <rect class="f" x="40" y="104" width="96" height="20" rx="5"/>
+  <rect class="as dash" x="28" y="32" width="120" height="66" rx="8"/>
+  <path class="as" d="M168 65s10-17 26-17 26 17 26 17-10 17-26 17-26-17-26-17z"/>
+  <circle class="a" cx="194" cy="65" r="6"/>
+</svg>

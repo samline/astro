@@ -230,8 +230,8 @@ Read website/AGENTS.md and README.md before editing it. The root remains the
 working starter; never include website source/tools/dependencies in generated
 projects or the CLI archive. Preserve portable .agents. Document our installer,
 recipes, defaults and APIs; refer to official Astro docs for framework behavior.
-Keep the independent installer identity clear. The curated package section
-contains Drawer/Ticker/Notify/Forms.
+Keep the independent installer identity clear. The explicit personal-package catalog uses Utils-style cards and includes
+interface packages, forms, formatting, dates and individual Utils packages.
 
 ## Frontend and updates
 

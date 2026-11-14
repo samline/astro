@@ -45,7 +45,9 @@ published reference inventory. The package version is read from the CLI manifest
 
 `landing/src/i18n/translations/en/packages.ts` owns the curated personal-package
 section. Add only human-requested packages with real descriptions and URLs.
-Drawer, Ticker, Notify and Forms link to their published websites and documentation. The card illustrations are decorative, not runnable
+The catalog includes interface packages, Forms, Formatter, Date and individual
+Utils packages. Cards follow the Utils catalog presentation and link to their
+websites/documentation; Date links to its repository. The card illustrations are decorative, not runnable
 package demos. Do not auto-discover packages or add unsupported promotion.
 
 ## Distribution and validation

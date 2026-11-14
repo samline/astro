@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 132">
+  <rect class="f" x="28" y="18" width="184" height="96" rx="12"/>
+  <text class="ghost num" x="120" y="44" text-anchor="middle">11,906</text>
+  <text class="num strong" x="120" y="78" text-anchor="middle">12,480</text>
+  <path class="s" d="M52 98h136"/>
+  <path class="as" d="M52 98h136"/>
+  <circle class="a" cx="188" cy="98" r="4"/>
+</svg>

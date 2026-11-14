@@ -1,10 +1,17 @@
 ---
 import Section from '../../../shared/components/Section.astro'
 import Box from '../../../shared/components/Box.astro'
+import '@samline/ticker/style.css'
+import Button from '../../../shared/components/Button.astro'
+import Surface from '../../../shared/components/Surface.astro'
 import SectionHeading from '../components/SectionHeading.astro'
-import Reveal from '../components/Reveal.astro'
 import { getI18n } from '../i18n/utils'
 const t = getI18n(Astro).packages
+const illustrations = import.meta.glob<string>('./Packages/art/*.svg', {
+  query: '?raw',
+  import: 'default',
+  eager: true
+})
 ---
 
 <Section
@@ -19,407 +26,394 @@ const t = getI18n(Astro).packages
       <span class:list={['serif']}>{t.accent}</span>
       <Fragment slot="description">{t.description}</Fragment>
     </SectionHeading>
-    <div class:list={['package-grid']}>
-      {t.items.map((item) => (
-        <Reveal>
-          <a href={item.href} class:list={['package-card', item.id]}>
-            <div class:list={['package-art']} aria-hidden="true">
-              {item.id === 'drawer' ? (
-                <div class:list={['window']}>
-                  <div class:list={['window-toolbar']}>
-                    <i />
-                    <i />
-                    <i />
-                  </div>
-                  <div class:list={['window-lines']}>
-                    <i />
-                    <i />
-                    <i />
-                  </div>
-                  <div class:list={['drawer-panel']}>
-                    <span />
-                    {item.preview[1]}
-                    <i />
-                    <i />
-                  </div>
+    <package-catalog class:list={['catalog']}>
+      <div class:list={['catalog-controls']} data-controls inert>
+        <Button
+          variant="secondary"
+          class="step-control"
+          data-previous
+          aria-label={t.previous}
+        >
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="m14 6-6 6 6 6" />
+          </svg>
+        </Button>
+        <Button
+          variant="secondary"
+          data-playback
+          data-play={t.play}
+          data-pause={t.pause}
+        >
+          {t.pause}
+        </Button>
+        <Button
+          variant="secondary"
+          class="step-control"
+          data-next
+          aria-label={t.next}
+        >
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="m10 6 6 6-6 6" />
+          </svg>
+        </Button>
+      </div>
+      <div class:list={['catalog-viewport']}>
+        <ul class:list={['grid']} data-packages>
+          {t.items.map((item) => (
+            <li>
+              <Surface as="article" interactive class:list={['card']}>
+                <div class:list={['art']} aria-hidden="true">
+                  <Fragment
+                    set:html={illustrations[`./Packages/art/${item.id}.svg`]}
+                  />
                 </div>
-              ) : item.id === 'ticker' ? (
-                <div class:list={['ticker-lines']}>
-                  <span>
-                    {item.preview[0]} <i /> {item.preview[1]} <i />{' '}
-                    {item.preview[0]}
-                  </span>
-                  <span>
-                    {item.preview[1]} <i /> {item.preview[0]} <i />{' '}
-                    {item.preview[1]}
-                  </span>
-                </div>
-              ) : item.id === 'notify' ? (
-                <div class:list={['toast-stack']}>
-                  <div class:list={['toast']}>
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="1.8"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path d="m6 12 4 4 8-8" />
-                    </svg>
-                    <span>{item.preview[0]}</span>
-                    <small>{item.preview[1]}</small>
-                  </div>
-                  <div class:list={['toast', 'toast-back']}>
-                    <i />
-                    <i />
-                  </div>
-                </div>
-              ) : (
-                <div class:list={['form-lines']}>
-                  <span>{item.preview[0]}</span>
-                  <i />
-                  <span>{item.preview[1]}</span>
-                  <i />
-                  <b>
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="1.8"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    >
-                      <path d="m6 12 4 4 8-8" />
-                    </svg>
-                    {item.preview[2]}
-                  </b>
-                </div>
-              )}
-            </div>
-            <div class:list={['package-copy']}>
-              <p class:list={['package-category']}>{item.category}</p>
-              <h3>{item.name}</h3>
-              <p class:list={['package-description']}>{item.description}</p>
-              <div class:list={['package-meta']}>
-                <code>{item.npm}</code>
-                <span>{item.status}</span>
-              </div>
-              <span class:list={['package-action']}>
-                {item.id === 'forms' ? t.package : t.visit}{' '}
-                <svg
-                  aria-hidden="true"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.6"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                <p class:list={['meta']}>{item.category}</p>
+                <h3 class:list={['name']}>
+                  <a href={item.href}>{item.name}</a>
+                </h3>
+                <p class:list={['summary']}>{item.description}</p>
+                <ul
+                  class:list={['highlights']}
+                  aria-label={`${item.name}: ${t.highlights}`}
                 >
-                  <path d="M7 17 17 7M7 7h10v10" />
-                </svg>
-              </span>
-            </div>
-          </a>
-        </Reveal>
-      ))}
-    </div>
+                  {item.highlights.map((highlight) => (
+                    <li>{highlight}</li>
+                  ))}
+                </ul>
+                <div class:list={['footer']}>
+                  <code class:list={['npm']}>{item.npm}</code>
+                  <p class:list={['links']}>
+                    <a href={item.docs} aria-label={`${item.name}: ${t.docs}`}>
+                      {item.id === 'date' ? t.source : t.docs}
+                    </a>
+                  </p>
+                </div>
+              </Surface>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </package-catalog>
   </Box>
 </Section>
+
+<script>
+  import { ticker } from '@samline/ticker'
+  import { mountElements } from '../../../shared/lib/mount-elements'
+
+  mountElements('package-catalog', (root) => {
+    const source = root.querySelector<HTMLElement>('[data-packages]')!
+    const controls = root.querySelector<HTMLElement>('[data-controls]')!
+    const playback = root.querySelector<HTMLButtonElement>('[data-playback]')!
+    const controller = ticker(source, {
+      speed: 28,
+      direction: 'left',
+      pauseOnHover: true,
+      pauseOnFocus: true,
+      navigation: true,
+      interactiveClones: true,
+      class: 'packages-viewport'
+    })
+    if (!controller) return
+    const disconnect = controller.connectControls({
+      previous: root.querySelector<HTMLButtonElement>('[data-previous]')!,
+      next: root.querySelector<HTMLButtonElement>('[data-next]')!
+    })
+    const render = () => {
+      playback.textContent = controller.state.requested
+        ? playback.dataset.pause!
+        : playback.dataset.play!
+    }
+    const unsubscribe = controller.on('playback', render)
+    const events = new AbortController()
+    playback.addEventListener(
+      'click',
+      () => {
+        if (controller.state.requested) controller.pause()
+        else controller.play()
+      },
+      { signal: events.signal }
+    )
+    render()
+    controls.inert = false
+    return () => {
+      events.abort()
+      unsubscribe()
+      disconnect()
+      controller.destroy()
+      controls.inert = true
+    }
+  })
+</script>
+
 <style>
-  .package-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.25rem;
+  .catalog {
+    display: block;
     margin-top: 2.5rem;
   }
-  .package-card {
+  .catalog-controls {
     display: flex;
-    height: 100%;
-    flex-direction: column;
-    border: 0.0625rem solid var(--color-border);
-    border-radius: 1rem;
-    background: var(--color-surface);
-    overflow: hidden;
-    color: var(--color-text);
-    transition: border-color var(--duration-ui) var(--ease-ui);
+    flex-wrap: wrap;
+    justify-content: end;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
   }
-  .package-card:hover {
-    border-color: var(--color-accent);
+  .catalog-controls :global(.step-control) {
+    padding-inline: 0.75rem;
   }
-  .package-card:focus-visible {
-    outline: 0.125rem solid var(--color-accent);
-    outline-offset: 0.25rem;
+  .step-control svg {
+    width: 1.25rem;
+    height: 1.25rem;
   }
-  .package-art {
-    min-height: 14rem;
-    height: 14rem;
-    overflow: hidden;
-    display: grid;
-    place-items: center;
-    background: var(--color-accent-soft);
-    border-bottom: 0.0625rem solid var(--color-border-soft);
-    color: var(--color-accent);
-    padding: 1.5rem;
+  .catalog-controls[inert] {
+    visibility: hidden;
   }
-  .package-copy {
-    overflow-wrap: anywhere;
-    padding: 1.5rem;
+  .catalog-viewport {
+    overflow-x: auto;
+    padding: 0.375rem;
+  }
+  .catalog-viewport :global(.packages-viewport) {
+    padding-block: 0.375rem;
+  }
+  .catalog-viewport :global(.ticker-track),
+  .catalog-viewport :global(.ticker-content) {
+    gap: var(--space-md);
+  }
+  .grid {
+    display: flex;
+    gap: var(--space-md);
+    width: max-content;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .grid > li {
+    display: flex;
+    flex: 0 0 auto;
+    width: min(20rem, calc(100vw - 4rem));
+    min-width: 0;
+  }
+  .card {
+    position: relative;
     display: flex;
     flex: 1;
     flex-direction: column;
-    gap: 1rem;
-    min-width: 0;
+    gap: 0.75rem;
+    padding: 0.75rem 0.75rem var(--space-lg);
+    transition: border-color var(--duration-ui) var(--ease-ui);
   }
-  .package-category {
-    font-family: var(--font-mono);
-    font-size: 0.625rem;
-    letter-spacing: 0.06em;
-    color: var(--color-text-subtle);
+  .card > :not(.art) {
+    margin-inline: 0.75rem;
   }
-  h3 {
-    font-size: 2rem;
-    line-height: 1.2;
-    letter-spacing: -0.05em;
-    font-weight: 500;
-  }
-  .package-description {
-    color: var(--color-text-muted);
-    line-height: 1.75;
-    font-size: 0.875rem;
-  }
-  .package-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1rem;
-    margin-top: auto;
-    padding-top: 0.5rem;
-    font-size: 0.625rem;
-    color: var(--color-text-subtle);
-  }
-  .package-meta code {
-    font-family: var(--font-mono);
-    overflow-wrap: anywhere;
-  }
-  .package-action {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    border-top: 0.0625rem solid var(--color-border-soft);
-    padding-top: 1rem;
-    font-size: 0.75rem;
-  }
-  .window {
-    width: 100%;
-    max-width: 16rem;
-    height: 9rem;
-    position: relative;
-    border: 0.0625rem solid currentColor;
-    border-radius: 0.625rem;
+  .art {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 240 / 132;
+    margin: 0 0 0.25rem;
+    border-radius: calc(var(--radius-panel) - 0.375rem);
+    background:
+      radial-gradient(
+        circle at 50% 120%,
+        color-mix(in oklab, var(--color-accent) 16%, transparent),
+        transparent 70%
+      ),
+      color-mix(in oklab, var(--color-text) 4%, transparent);
+    color: var(--color-text);
     overflow: hidden;
   }
-  .window-toolbar {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    height: 1.5rem;
-    padding-inline: 0.625rem;
-    border-bottom: 0.0625rem solid
-      color-mix(in srgb, currentColor 20%, transparent);
-  }
-  .window-toolbar i {
-    width: 0.1875rem;
-    height: 0.1875rem;
-    border-radius: 50%;
-    background: currentColor;
-    opacity: 0.5;
-  }
-  .window-lines {
-    display: grid;
-    gap: 1rem;
-    width: 40%;
-    padding: 1rem 0.75rem;
-    opacity: 0.35;
-  }
-  .window-lines i {
-    height: 0.1875rem;
-    background: currentColor;
-  }
-  .drawer-panel {
-    position: absolute;
-    inset: 1.5rem 0 0 auto;
-    width: 64%;
-    background: var(--color-bg);
-    padding: 1rem;
-    border-left: 0.0625rem solid currentColor;
-    font-family: var(--font-serif);
-    font-style: italic;
-    font-size: 1.375rem;
-    line-height: 1.15;
-    display: grid;
-    align-content: center;
-    gap: 0.625rem;
-  }
-  .drawer-panel span {
-    width: 1rem;
-    height: 0.1875rem;
-    background: currentColor;
-    border-radius: 1rem;
-  }
-  .drawer-panel i {
-    height: 0.1875rem;
-    width: 80%;
-    background: currentColor;
-    opacity: 0.2;
-  }
-  .ticker-lines {
-    display: grid;
-    gap: 0.75rem;
+  .art :global(svg) {
     width: 100%;
-    transform: rotate(-5deg);
-    mask-image: linear-gradient(
-      to right,
-      transparent,
-      black 8%,
-      black 92%,
+    height: 100%;
+    transition: transform var(--duration-ui) var(--ease-ui);
+  }
+  /* Art classes for site/card.svg: neutral fills and lines, accent marks and text. */
+  .art :global(.f) {
+    fill: color-mix(in oklab, currentColor 9%, transparent);
+  }
+  .art :global(.f2) {
+    fill: color-mix(in oklab, currentColor 20%, transparent);
+  }
+  .art :global(.s) {
+    fill: none;
+    stroke: color-mix(in oklab, currentColor 30%, transparent);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+  }
+  .art :global(.a) {
+    fill: var(--color-accent);
+  }
+  .art :global(.al) {
+    fill: color-mix(in oklab, var(--color-accent) 16%, transparent);
+  }
+  .art :global(.as) {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .art :global(.al.as) {
+    fill: color-mix(in oklab, var(--color-accent) 16%, transparent);
+    stroke-width: 1.5;
+  }
+  .art :global(.dash) {
+    stroke-dasharray: 4 5;
+  }
+  .art :global(text) {
+    fill: var(--color-text-muted);
+    font: 500 11px var(--font-mono);
+  }
+  .art :global(.strong) {
+    fill: var(--color-text);
+    font-size: 13px;
+  }
+  .art :global(.accent) {
+    fill: var(--color-accent);
+  }
+  .art :global(.num) {
+    font: 600 30px var(--font-sans, inherit);
+    letter-spacing: -0.03em;
+  }
+  .art :global(.ghost) {
+    fill: currentColor;
+    opacity: 0.18;
+    font-size: 22px;
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+    margin-block: 0;
+    color: var(--color-text-subtle);
+    font: 0.65rem/1.6 var(--font-mono);
+  }
+  .name {
+    margin-block: 0;
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+  .name a {
+    color: var(--color-text);
+    text-decoration: none;
+    outline: none;
+  }
+  /* The title link covers the whole card; the footer links sit above it. */
+  .name a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+  }
+  .card:has(.name a:focus-visible) {
+    outline: var(--focus-width) solid var(--color-accent);
+    outline-offset: var(--focus-offset);
+  }
+  .summary {
+    flex: 1;
+    margin-block: 0;
+    color: var(--color-text-muted);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+  .highlights {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: start;
+    gap: 0.375rem;
+    margin-block: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .highlights li {
+    padding: 0.125rem 0.5rem;
+    border: 0.0625rem solid var(--color-border);
+    border-radius: 999rem;
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+  .footer {
+    display: grid;
+    align-content: end;
+    gap: 0.625rem;
+    padding-top: 0.875rem;
+    border-top: 0.0625rem solid var(--color-border-soft);
+  }
+  .npm {
+    font-size: var(--text-small);
+    color: var(--color-text-subtle);
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    margin: 0;
+  }
+  .links a {
+    position: relative;
+    z-index: 1;
+    color: var(--color-text);
+    font-size: var(--text-small);
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-color: color-mix(
+      in oklab,
+      var(--color-accent) 60%,
       transparent
     );
+    text-underline-offset: 0.2em;
   }
-  .ticker-lines span {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    white-space: nowrap;
-    font-size: 1.75rem;
-    font-weight: 500;
-    letter-spacing: -0.05em;
+  .links a:focus-visible {
+    outline: var(--focus-width) solid var(--color-accent);
+    outline-offset: var(--focus-offset);
+    border-radius: 0.125rem;
   }
-  .ticker-lines span:last-child {
-    font-family: var(--font-serif);
-    font-style: italic;
-    opacity: 0.55;
-  }
-  .ticker-lines i {
-    flex: none;
-    width: 0.3125rem;
-    height: 0.3125rem;
-    border-radius: 50%;
-    background: currentColor;
-    opacity: 0.45;
-  }
-  .toast-stack {
-    position: relative;
-    display: grid;
-    width: min(100%, 16rem);
-    gap: 0.5rem;
-  }
-  .toast {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    column-gap: 0.625rem;
-    row-gap: 0.125rem;
-    padding: 0.75rem 1rem;
-    border: 0.0625rem solid currentColor;
-    border-radius: 0.625rem;
-    background: var(--color-bg);
-  }
-  .toast svg {
-    grid-row: span 2;
-    width: 1rem;
-    height: 1rem;
-  }
-  .toast span {
-    font-size: 0.875rem;
-    font-weight: 500;
-  }
-  .toast small {
-    font-family: var(--font-mono);
-    font-size: 0.625rem;
-  }
-  .toast-back {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.375rem;
-    margin-inline: 1rem;
-    opacity: 0.45;
-  }
-  .toast-back i {
-    height: 0.1875rem;
-    width: 60%;
-    background: currentColor;
-    opacity: 0.5;
-  }
-  .form-lines {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0.5rem;
-    width: min(100%, 14rem);
-    font-size: 0.625rem;
-    font-family: var(--font-mono);
-  }
-  .form-lines i {
-    height: 1.75rem;
-    border: 0.0625rem solid currentColor;
-    border-radius: 0.375rem;
-    opacity: 0.6;
-  }
-  .form-lines b {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    justify-self: end;
-    gap: 0.375rem;
-    min-height: 1.75rem;
-    margin-top: 0.125rem;
-    padding: 0.375rem 0.625rem;
-    font-family: var(--font-sans);
-    font-size: 0.625rem;
-    font-weight: 500;
-    line-height: 1;
-    background: var(--color-accent);
-    color: var(--palette-on-accent);
-    border-radius: 0.25rem;
-  }
-  .package-action svg {
-    flex: none;
-    width: 1rem;
-    height: 1rem;
-    color: var(--color-accent);
-  }
-  .form-lines svg {
-    width: 0.875rem;
-    height: 0.875rem;
-    flex: none;
-  }
-  @media (width < 64rem) {
-    .package-grid {
-      grid-template-columns: minmax(0, 1fr);
+  @media (hover: hover) {
+    .card:hover {
+      border-color: color-mix(
+        in oklab,
+        var(--color-accent) 55%,
+        var(--palette-feature-border)
+      );
     }
-    .package-card {
-      display: grid;
-      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+    .card:hover .name a {
+      color: var(--color-accent);
     }
-    .package-art {
-      height: 100%;
-      border-bottom: 0;
-      border-right: 0.0625rem solid var(--color-border-soft);
+    .card:hover .art :global(svg) {
+      transform: scale(1.04);
     }
-  }
-  @media (width < 36rem) {
-    .package-card {
-      display: flex;
-    }
-    .package-art {
-      height: 12rem;
-      border-right: 0;
-      border-bottom: 0.0625rem solid var(--color-border-soft);
+    .links a:hover {
+      color: var(--color-accent);
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .package-card {
+    .card,
+    .art :global(svg) {
       transition: none;
+    }
+    .card:hover,
+    .card:hover .art :global(svg) {
+      transform: none;
     }
   }
 </style>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 132">
+  <text class="strong mono" x="22" y="30">Café y té: guía</text>
+  <path class="as" d="M32 40v12m-5-5 5 5 5-5"/>
+  <rect class="al" x="16" y="60" width="122" height="20" rx="5"/>
+  <text class="mono accent" x="22" y="74">cafe-y-te-guia</text>
+  <text class="t" x="22" y="100">caféYTéGuía</text>
+  <text class="t" x="22" y="120">CAFÉ_Y_TÉ_GUÍA</text>
+  <text class="t" x="150" y="74">slugify</text>
+  <text class="t" x="150" y="100">camelCase</text>
+  <text class="t" x="150" y="120">constantCase</text>
+</svg>

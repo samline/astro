@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 132">
+  <defs><clipPath id="catalog-theme-card"><rect x="36" y="16" width="168" height="100" rx="12"/></clipPath></defs>
+  <g clip-path="url(#catalog-theme-card)">
+    <rect x="36" y="16" width="84" height="100" fill="#fafafa"/>
+    <rect x="120" y="16" width="84" height="100" fill="#18181b"/>
+    <rect x="50" y="78" width="54" height="6" rx="3" fill="#d4d4d8"/>
+    <rect x="50" y="92" width="40" height="6" rx="3" fill="#e4e4e7"/>
+    <rect x="134" y="78" width="54" height="6" rx="3" fill="#3f3f46"/>
+    <rect x="134" y="92" width="40" height="6" rx="3" fill="#27272a"/>
+  </g>
+  <rect class="s" x="36" y="16" width="168" height="100" rx="12"/>
+  <circle class="a" cx="78" cy="48" r="9"/>
+  <path class="as" d="M78 30v-4m0 44v-4m18-18h4m-44 0h4m30.7-12.7 2.8-2.8m-31 31 2.8-2.8m0-25.4-2.8-2.8m31 31-2.8-2.8"/>
+  <path class="a" d="M168 38a12 12 0 1 0 8 20 10 10 0 0 1-8-20z"/>
+</svg>

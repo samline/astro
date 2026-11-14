@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 132">
+  <text class="t" x="12" y="40">#pricing</text>
+  <path class="as" d="M40 48c0 34 8 46 30 46m-7-6 7 6-7 6"/>
+  <rect class="s" x="78" y="12" width="98" height="110" rx="10"/>
+  <rect class="f2" x="78" y="12" width="98" height="18" rx="9"/>
+  <rect class="f" x="88" y="40" width="78" height="30" rx="5"/>
+  <rect class="al as" x="88" y="80" width="78" height="30" rx="5"/>
+  <path class="s" d="M188 30v50m-5-50h10m-10 50h10"/>
+  <text class="t" x="196" y="59">offset</text>
+</svg>

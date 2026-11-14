@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 132">
+  <rect class="f" x="10" y="44" width="44" height="40" rx="6"/>
+  <rect class="al as" x="64" y="44" width="52" height="40" rx="6"/>
+  <rect class="al as" x="124" y="44" width="52" height="40" rx="6"/>
+  <rect class="f" x="186" y="44" width="44" height="40" rx="6"/>
+  <rect class="s" x="58" y="16" width="124" height="100" rx="10"/>
+  <path class="as" d="M140 102h-40m8-6-8 6 8 6"/>
+  <path class="s" d="M196 22v88"/>
+  <rect class="a" x="193" y="44" width="6" height="28" rx="3"/>
+</svg>

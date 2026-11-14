@@ -28,9 +28,10 @@ rules. The website uses the existing approved Astro accent family with readable
 light/dark variants. Local source scripts use arrow functions and closure state;
 shared mountElements owns integration cleanup, and Drawer owns modal behavior.
 
-The human requested a prominent personal-package section with Drawer, Ticker,
-Notify and Forms only. Its catalog is landing/src/i18n/translations/en/packages.ts.
-Keep real website links for Drawer/Ticker/Notify/Forms. The illustrations are decorative, not package demos. Add packages
+The personal-package section uses the compact illustrated cards from Utils.
+Its explicit catalog includes Drawer, Ticker, Notify, Forms, Autocomplete,
+Formatter, Date and the nine individual Utils packages. Its catalog is landing/src/i18n/translations/en/packages.ts.
+Keep real website/documentation links; Date uses its repository documentation. The illustrations are decorative, not package demos. Add packages
 only when requested. Do not auto-discover, invent products or claim the links
 are verified live merely because a local link check passed.
 

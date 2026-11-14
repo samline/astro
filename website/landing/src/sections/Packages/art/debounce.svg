@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 132">
+  <text class="t" x="20" y="42">input</text>
+  <path class="s" d="M92 30v16"/><path class="s" d="M99 30v16"/><path class="s" d="M104 30v16"/><path class="s" d="M112 30v16"/><path class="s" d="M117 30v16"/><path class="s" d="M124 30v16"/><path class="s" d="M135 30v16"/><path class="s" d="M141 30v16"/><path class="s" d="M148 30v16"/><path class="s" d="M153 30v16"/>
+  <text class="t" x="20" y="76">debounce</text>
+  <path class="s dash" d="M153 72h44"/>
+  <circle class="a" cx="205" cy="72" r="6"/>
+  <text class="t" x="20" y="110">throttle</text>
+  <path class="s" d="M92 106h116"/>
+  <circle class="a" cx="92" cy="106" r="4.5"/><circle class="a" cx="131" cy="106" r="4.5"/><circle class="a" cx="170" cy="106" r="4.5"/><circle class="a" cx="208" cy="106" r="4.5"/>
+</svg>

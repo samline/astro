@@ -46,7 +46,7 @@ no irrelevant browser-framework or CDN examples are published.
 The human requested a new personal-package section. Its three decorative
 illustrations identify Drawer, Ticker, Notify and Forms within the existing card, type
 and token system. They do not duplicate package runtimes or pretend to be demos.
-Forms deliberately links to npm until a real website is provided.
+Forms links to its published website and documentation.
 
 Formatting baseline: protected upstream source was formatted in memory with
 the website Prettier configuration and compared to the adaptation. Fingerprints
@@ -119,3 +119,19 @@ the original type size, vertical hit area and all actions. This scoped spacing
 exception keeps the actual name and longest sibling on one row. The Header style
 fingerprint records this reviewed local addition; other shared component styles
 remain pinned. Test actual navigation content instead of assuming six items.
+
+## Personal package catalog cards
+
+The requested redesign replaces the former four large illustrations with the
+compact cards from Utils (`site/landing/src/sections/Catalog.astro`). The explicit
+local catalog now includes Autocomplete, Formatter, Date and the nine individual
+Utils packages alongside Drawer, Ticker, Notify and Forms. The section preserves
+Astro's semantic accent tokens, fonts, heading and Box, while adopting Utils'
+decorative SVGs, highlight tags, stretched title links and separate
+documentation links. The single horizontal row uses the published @samline/ticker with explicit
+playback and previous/next controls, hover/focus pauses and reduced-motion
+navigation. Without JavaScript it remains a scrollable row. No sibling checkout
+is required to build.
+Utils SVGs retain their MIT license in the local art directory; the additional
+illustrations use the same visual vocabulary. Protected upstream styles remain
+unchanged. Version and bundle-size badges are omitted to avoid stale metadata.

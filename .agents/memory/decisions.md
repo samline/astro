@@ -105,8 +105,7 @@ See update-plan.md.
 The private website workspace documents installer selections, recipes and local
 APIs; official Astro documentation owns framework behavior. Source-backed
 references render canonical READMEs. Website tools and dependencies stay outside
-CLI and generated projects. Drawer/Ticker/Notify/Forms comprise the curated package
-section; template and dependency licenses retain required notices.
+CLI and generated projects. The explicit personal-package catalog uses Utils-style illustrated cards; template and dependency licenses retain required notices.
 
 Portable guidance comes from scripts/agent-context plus selected skills.
 samline-astro, samline-project-kickoff and view-transitions are portable;

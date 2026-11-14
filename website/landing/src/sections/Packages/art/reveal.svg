@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 132">
+  <rect class="al as" x="56" y="16" width="128" height="26" rx="6"/>
+  <g class="rise" opacity="0.6"><rect class="f2" x="56" y="54" width="128" height="26" rx="6"/></g>
+  <g class="rise" opacity="0.28"><rect class="f2" x="56" y="98" width="128" height="26" rx="6"/></g>
+  <path class="as" d="M206 104V56m-8 8 8-8 8 8"/>
+</svg>
