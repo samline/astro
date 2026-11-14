@@ -48,11 +48,23 @@ const illustrations = import.meta.glob<string>('./Packages/art/*.svg', {
         </Button>
         <Button
           variant="secondary"
+          class="step-control"
           data-playback
           data-play={t.play}
           data-pause={t.pause}
+          aria-label={t.pause}
         >
-          {t.pause}
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path data-playback-icon d="M9 5v14M15 5v14" />
+          </svg>
         </Button>
         <Button
           variant="secondary"
@@ -100,7 +112,7 @@ const illustrations = import.meta.glob<string>('./Packages/art/*.svg', {
                   <code class:list={['npm']}>{item.npm}</code>
                   <p class:list={['links']}>
                     <a href={item.docs} aria-label={`${item.name}: ${t.docs}`}>
-                      {item.id === 'date' ? t.source : t.docs}
+                      {t.docs}
                     </a>
                   </p>
                 </div>
@@ -121,6 +133,9 @@ const illustrations = import.meta.glob<string>('./Packages/art/*.svg', {
     const source = root.querySelector<HTMLElement>('[data-packages]')!
     const controls = root.querySelector<HTMLElement>('[data-controls]')!
     const playback = root.querySelector<HTMLButtonElement>('[data-playback]')!
+    const playbackIcon = playback.querySelector<SVGPathElement>(
+      '[data-playback-icon]'
+    )!
     const controller = ticker(source, {
       speed: 28,
       direction: 'left',
@@ -136,9 +151,16 @@ const illustrations = import.meta.glob<string>('./Packages/art/*.svg', {
       next: root.querySelector<HTMLButtonElement>('[data-next]')!
     })
     const render = () => {
-      playback.textContent = controller.state.requested
-        ? playback.dataset.pause!
-        : playback.dataset.play!
+      playback.setAttribute(
+        'aria-label',
+        controller.state.requested
+          ? playback.dataset.pause!
+          : playback.dataset.play!
+      )
+      playbackIcon.setAttribute(
+        'd',
+        controller.state.requested ? 'M9 5v14M15 5v14' : 'm8 5 11 7-11 7Z'
+      )
     }
     const unsubscribe = controller.on('playback', render)
     const events = new AbortController()

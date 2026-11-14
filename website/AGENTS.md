@@ -30,8 +30,8 @@ shared mountElements owns integration cleanup, and Drawer owns modal behavior.
 
 The personal-package section uses the compact illustrated cards from Utils.
 Its explicit catalog includes Drawer, Ticker, Notify, Forms, Autocomplete,
-Formatter, Date and the nine individual Utils packages. Its catalog is landing/src/i18n/translations/en/packages.ts.
-Keep real website/documentation links; Date uses its repository documentation. The illustrations are decorative, not package demos. Add packages
+Formatter and the nine individual Utils packages. Its catalog is landing/src/i18n/translations/en/packages.ts.
+Keep real website/documentation links. The illustrations are decorative, not package demos. Add packages
 only when requested. Do not auto-discover, invent products or claim the links
 are verified live merely because a local link check passed.
 

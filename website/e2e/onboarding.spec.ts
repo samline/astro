@@ -86,6 +86,9 @@ test('personal packages use their curated published websites', async ({
   await page.goto('./')
   const section = page.locator('#packages [data-packages]').first()
   await expect(
+    section.getByRole('link', { name: 'Date', exact: true })
+  ).toHaveCount(0)
+  await expect(
     section.getByRole('link', { name: 'Drawer', exact: true })
   ).toHaveAttribute('href', 'https://samline.github.io/drawer/')
   await expect(
@@ -110,7 +113,7 @@ test('package ticker keeps one row and supports playback and manual navigation',
   await expect(viewport).toHaveAttribute('data-ready', 'true')
   await expect(
     catalog.locator('[data-packages]').first().locator(':scope > li')
-  ).toHaveCount(16)
+  ).toHaveCount(15)
   await catalog.getByRole('button', { name: 'Pause animation' }).click()
   await expect(viewport).toHaveAttribute('data-playing', 'false')
   await expect(
@@ -169,7 +172,7 @@ test('package catalog remains scrollable without JavaScript', async ({
   const page = await context.newPage()
   await page.goto(baseURL!)
   const catalog = page.locator('package-catalog')
-  await expect(catalog.locator('[data-packages] > li')).toHaveCount(16)
+  await expect(catalog.locator('[data-packages] > li')).toHaveCount(15)
   expect(
     await catalog
       .locator('.catalog-viewport')
@@ -213,7 +216,7 @@ test('package ticker reveals keyboard links and cleans up before remounting', as
   await expect(viewport).toHaveAttribute('data-ready', 'true')
   await expect(
     catalog.locator('[data-packages]').first().locator(':scope > li')
-  ).toHaveCount(16)
+  ).toHaveCount(15)
   await catalog.getByRole('button', { name: 'Pause animation' }).click()
   await expect(
     catalog.getByRole('button', { name: 'Play animation' })

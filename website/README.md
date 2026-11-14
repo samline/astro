@@ -45,9 +45,9 @@ published reference inventory. The package version is read from the CLI manifest
 
 `landing/src/i18n/translations/en/packages.ts` owns the curated personal-package
 section. Add only human-requested packages with real descriptions and URLs.
-The catalog includes interface packages, Forms, Formatter, Date and individual
+The catalog includes interface packages, Forms, Formatter and individual
 Utils packages. Cards follow the Utils catalog presentation and link to their
-websites/documentation; Date links to its repository. The card illustrations are decorative, not runnable
+websites/documentation. The card illustrations are decorative, not runnable
 package demos. Do not auto-discover packages or add unsupported promotion.
 
 ## Distribution and validation

@@ -9,7 +9,6 @@ export default {
   description:
     'Packages for interfaces, forms, motion and everyday utilities. Explore their documentation and use them in this starter or another project.',
   docs: 'Documentation',
-  source: 'Source & docs',
   highlights: 'Package highlights',
   items: [
     {
@@ -84,17 +83,6 @@ export default {
       highlights: ['Input formatting', 'Intl helpers', 'Date tools'],
       href: 'https://samline.github.io/formatter/',
       docs: 'https://samline.github.io/formatter/docs/'
-    },
-    {
-      id: 'date',
-      name: 'Date',
-      npm: '@samline/date',
-      category: 'Dates',
-      description:
-        'Format, parse and localize dates through a shared API built on Day.js.',
-      highlights: ['Strict parsing', 'Locale support', 'Framework adapters'],
-      href: 'https://github.com/samline/date',
-      docs: 'https://github.com/samline/date#documentation'
     },
     {
       id: 'counter',

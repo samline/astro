@@ -124,7 +124,7 @@ remain pinned. Test actual navigation content instead of assuming six items.
 
 The requested redesign replaces the former four large illustrations with the
 compact cards from Utils (`site/landing/src/sections/Catalog.astro`). The explicit
-local catalog now includes Autocomplete, Formatter, Date and the nine individual
+local catalog now includes Autocomplete, Formatter and the nine individual
 Utils packages alongside Drawer, Ticker, Notify and Forms. The section preserves
 Astro's semantic accent tokens, fonts, heading and Box, while adopting Utils'
 decorative SVGs, highlight tags, stretched title links and separate
@@ -137,7 +137,7 @@ illustrations use the same visual vocabulary. Protected upstream styles remain
 unchanged. Version and bundle-size badges are omitted to avoid stale metadata.
 
 Package artwork shares a 240 × 132 viewBox and the section-owned neutral/accent
-class vocabulary. Keep its diagrams semantically faithful (for example, seven
-calendar columns and event-aligned timing outputs). Avoid SVG IDs and fragment
+class vocabulary. Keep its diagrams semantically faithful (for example, event-aligned timing outputs and
+directional content tracks with playback controls). Avoid SVG IDs and fragment
 references: Ticker repeats inline artwork. Keep decorative SVGs under the existing
 aria-hidden wrapper and preserve the original Utils MIT notice.

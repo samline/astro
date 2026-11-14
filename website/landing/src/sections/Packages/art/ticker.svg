@@ -1,10 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 132">
-  <path class="s" d="M18 38h204M18 94h204"/>
-  <g transform="rotate(-5 120 66)">
-    <rect class="al" x="-20" y="45" width="88" height="20" rx="10"/>
-    <rect class="a" x="80" y="45" width="88" height="20" rx="10"/>
-    <rect class="al" x="180" y="45" width="88" height="20" rx="10"/>
-    <rect class="f2" x="28" y="77" width="88" height="12" rx="6"/>
-    <rect class="f2" x="128" y="77" width="88" height="12" rx="6"/>
-  </g>
+  <rect class="f" x="16" y="18" width="208" height="96" rx="10"/>
+  <path class="s" d="M16 38h208M16 82h208"/>
+  <rect class="s" x="30" y="45" width="48" height="30" rx="5"/>
+  <rect class="al as" x="96" y="45" width="48" height="30" rx="5"/>
+  <rect class="s" x="162" y="45" width="48" height="30" rx="5"/>
+  <text class="strong" x="54" y="65" text-anchor="middle">Aa</text>
+  <text class="strong accent" x="120" y="65" text-anchor="middle">Aa</text>
+  <text class="strong" x="186" y="65" text-anchor="middle">Aa</text>
+  <path class="as" d="M150 98H90m6-5-6 5 6 5"/>
+  <circle class="s" cx="192" cy="98" r="8"/>
+  <path class="as" d="M189 95v6m6-6v6"/>
 </svg>
