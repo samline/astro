@@ -21,7 +21,7 @@ const root = fileURLToPath(new URL('../', import.meta.url))
 
 test(
   'Astro 7 queries local and live collections, runs optional API Actions and rejects invalid build content',
-  { timeout: 25000 },
+  { timeout: 70000 },
   async (t) => {
     const fixture = await realpath(
       await mkdtemp(path.join(tmpdir(), 'astro-kit-content-'))
@@ -182,25 +182,26 @@ export const POST = () => { throw new Error('Write authorization must reject bef
       return { status: response.status, body: result.data ?? result.error }
     }
     // Initial content synchronization can trigger a Vite restart just after
-    // the process starts. Retry only a refused startup connection, never an HTTP
-    // response or a content/schema error. Cold startup can approach 5s, so allow
-    // about 20s before reporting that the fixture never listened.
-    const startupAttempts = 200
+    // the process starts. Retry only a refused or still-unanswered startup
+    // connection, never an HTTP response or a content/schema error. Loaded CI
+    // runners can take well over 10s to answer the first request, so keep
+    // retrying until a fixed deadline before reporting that it never listened.
+    const startupDeadline = Date.now() + 45000
     let snapshotResponse
-    for (let attempt = 0; attempt < startupAttempts; attempt++) {
+    for (;;) {
       if (startupError) throw startupError
       assert.equal(child.exitCode, null, diagnostics)
       try {
         snapshotResponse = await fetch(`${origin}/snapshot.json`, {
-          signal: AbortSignal.timeout(10000)
+          signal: AbortSignal.timeout(5000)
         })
         break
       } catch (error) {
         const code = error.code ?? error.cause?.code
-        if (
-          !['ConnectionRefused', 'ECONNREFUSED'].includes(code) ||
-          attempt === startupAttempts - 1
-        )
+        const retryable =
+          ['ConnectionRefused', 'ECONNREFUSED'].includes(code) ||
+          error.name === 'TimeoutError'
+        if (!retryable || Date.now() >= startupDeadline)
           throw new Error(
             `Content fixture did not listen: ${error.message}\n${diagnostics}`,
             { cause: error }
