@@ -13,7 +13,7 @@ export default {
   hero: {
     kicker: 'An independent distribution for Astro 7',
     availability: 'Create your project with npm, pnpm or Bun.',
-    title: 'Start with Astro.',
+    title: 'Astro',
     seoTitle: 'An Astro starter and modular installer',
     titleAccent: 'Add what you need.',
     description: 'A configured project, ready for your own source.',
