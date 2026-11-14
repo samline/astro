@@ -85,7 +85,7 @@ test(
     ])
       assert.ok(files.includes(`package/template/${file}`), file)
     for (const file of [
-      'LICENSE',
+      'LICENSE.md',
       'THIRD_PARTY_NOTICES.md',
       'licenses/astro-MIT.txt'
     ])

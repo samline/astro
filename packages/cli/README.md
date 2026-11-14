@@ -293,7 +293,7 @@ The [agent workflow guide](https://samline.github.io/astro/docs/guides/agent-wor
 ## License
 
 Original installer and starter source is MIT licensed. The CLI archive includes
-[LICENSE](LICENSE), `THIRD_PARTY_NOTICES.md` and the retained upstream notices in `licenses/`.
+[LICENSE.md](LICENSE.md), `THIRD_PARTY_NOTICES.md` and the retained upstream notices in `licenses/`.
 Generated projects retain original-source and upstream notices without choosing
 a license for the consumer's own application. Dependencies and bundled skills
 keep their respective terms.

@@ -34,7 +34,7 @@ const problems = checkReadme(
     siteUrl,
     credit,
     template: true, // Installer commands and multiple bundled skills, not a browser runtime.
-    licenseFile: 'LICENSE',
+    licenseFile: 'LICENSE.md',
     cdn: config
       ? !!config.delivery.cdnScript
       : !!manifest.exports?.['./browser/global']
@@ -57,7 +57,7 @@ problems.push(
     npmName,
     siteUrl,
     template: true,
-    licenseFile: 'LICENSE'
+    licenseFile: 'LICENSE.md'
   }).map((problem) => `packages/cli/${problem}`)
 )
 const dist = join(root, 'landing/dist')

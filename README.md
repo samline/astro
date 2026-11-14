@@ -313,7 +313,7 @@ Skills are discovered differently by each agent. Follow its supported project or
 
 ## License
 
-Original source is MIT licensed under [LICENSE](LICENSE), copyright Samuel Olvera (samline).
+Original source is MIT licensed under [LICENSE.md](LICENSE.md), copyright Samuel Olvera (samline).
 Astro and other upstream projects retain their own licenses and notices; see
 [third-party notices](THIRD_PARTY_NOTICES.md). Keep these notices when distributing
 included source. Astro names and marks identify the framework; this is an

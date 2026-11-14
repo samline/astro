@@ -57,11 +57,11 @@ for (const file of files) {
 await mkdir(path.join(template, 'scripts'))
 // Retain source attribution without choosing a license for the application.
 await cp(
-  path.join(root, 'LICENSE'),
+  path.join(root, 'LICENSE.md'),
   path.join(template, 'licenses/samline-astro-MIT.txt')
 )
 for (const file of [
-  'LICENSE',
+  'LICENSE.md',
   'THIRD_PARTY_NOTICES.md',
   'licenses',
   'CHANGELOG.md'

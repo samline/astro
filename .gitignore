@@ -10,7 +10,7 @@ worker-configuration.d.ts
 artifacts/
 packages/cli/template/
 packages/cli/licenses/
-packages/cli/LICENSE
+packages/cli/LICENSE.md
 packages/cli/CHANGELOG.md
 packages/cli/THIRD_PARTY_NOTICES.md
 
