@@ -1,8 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 132">
-  <defs><clipPath id="catalog-theme-card"><rect x="36" y="16" width="168" height="100" rx="12"/></clipPath></defs>
-  <g clip-path="url(#catalog-theme-card)">
-    <rect x="36" y="16" width="84" height="100" fill="#fafafa"/>
-    <rect x="120" y="16" width="84" height="100" fill="#18181b"/>
+  <g>
+    <path d="M48 16h72v100H48a12 12 0 0 1-12-12V28a12 12 0 0 1 12-12z" fill="#fafafa"/>
+    <path d="M120 16h72a12 12 0 0 1 12 12v76a12 12 0 0 1-12 12h-72z" fill="#18181b"/>
     <rect x="50" y="78" width="54" height="6" rx="3" fill="#d4d4d8"/>
     <rect x="50" y="92" width="40" height="6" rx="3" fill="#e4e4e7"/>
     <rect x="134" y="78" width="54" height="6" rx="3" fill="#3f3f46"/>

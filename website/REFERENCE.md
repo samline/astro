@@ -135,3 +135,9 @@ is required to build.
 Utils SVGs retain their MIT license in the local art directory; the additional
 illustrations use the same visual vocabulary. Protected upstream styles remain
 unchanged. Version and bundle-size badges are omitted to avoid stale metadata.
+
+Package artwork shares a 240 × 132 viewBox and the section-owned neutral/accent
+class vocabulary. Keep its diagrams semantically faithful (for example, seven
+calendar columns and event-aligned timing outputs). Avoid SVG IDs and fragment
+references: Ticker repeats inline artwork. Keep decorative SVGs under the existing
+aria-hidden wrapper and preserve the original Utils MIT notice.

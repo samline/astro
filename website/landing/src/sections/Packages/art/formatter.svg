@@ -1,1 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 132"><rect class="f" x="24" y="22" width="192" height="88" rx="10"/><path class="s" d="M42 44h28m5 0h22m5 0h18m5 0h28m5 0h22M42 54h146"/><path class="as" d="M120 62v14m-5-5 5 5 5-5"/><rect class="al" x="40" y="84" width="44" height="10" rx="3"/><rect class="a" x="94" y="84" width="44" height="10" rx="3"/><rect class="al" x="148" y="84" width="44" height="10" rx="3"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 132">
+  <rect class="f" x="24" y="18" width="192" height="96" rx="10"/>
+  <rect class="s" x="40" y="30" width="160" height="24" rx="5"/>
+  <text x="52" y="46">1234567.89</text>
+  <path class="as" d="M120 61v12m-5-5 5 5 5-5"/>
+  <rect class="al as" x="40" y="80" width="160" height="24" rx="5"/>
+  <text class="accent" x="52" y="96">1,234,567.89</text>
+</svg>
