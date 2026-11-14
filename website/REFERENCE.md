@@ -43,8 +43,8 @@ Playground selectors were removed after replacing the neutral counter with
 real CLI recipe tabs. The source-backed API articles remain plain references;
 no irrelevant browser-framework or CDN examples are published.
 
-The human requested a new personal-package section. Its three decorative
-illustrations identify Drawer, Ticker, Notify and Forms within the existing card, type
+The human requested a new personal-package section. Its decorative
+illustrations identify each package within the existing card, type
 and token system. They do not duplicate package runtimes or pretend to be demos.
 Forms links to its published website and documentation.
 
@@ -123,14 +123,15 @@ remain pinned. Test actual navigation content instead of assuming six items.
 ## Personal package catalog cards
 
 The requested redesign replaces the former four large illustrations with the
-compact cards from Utils (`site/landing/src/sections/Catalog.astro`). The explicit
+compact cards from the samline/utils repository (its `Catalog.astro` section). The explicit
 local catalog now includes Autocomplete, Formatter and the nine individual
 Utils packages alongside Drawer, Ticker, Notify and Forms. The section preserves
 Astro's semantic accent tokens, fonts, heading and Box, while adopting Utils'
 decorative SVGs, highlight tags, stretched title links and separate
 documentation links. The single horizontal row uses the published @samline/ticker with explicit
-playback and previous/next controls, hover/focus pauses and reduced-motion
-navigation. Without JavaScript it remains a scrollable row. No sibling checkout
+playback and previous/next controls, drag inertia, hover/focus pauses and reduced-motion
+navigation. Ticker clones stay inert and hidden from assistive technology
+(`interactiveClones: false`), so each package has one tab stop and one reading. Without JavaScript it remains a scrollable row. No sibling checkout
 is required to build.
 Utils SVGs retain their MIT license in the local art directory; the additional
 illustrations use the same visual vocabulary. Protected upstream styles remain

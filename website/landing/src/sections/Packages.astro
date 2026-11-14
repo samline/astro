@@ -142,7 +142,9 @@ const illustrations = import.meta.glob<string>('./Packages/art/*.svg', {
       pauseOnHover: true,
       pauseOnFocus: true,
       navigation: true,
-      interactiveClones: true,
+      inertia: true,
+      resumeAfterDrag: true,
+      interactiveClones: false,
       class: 'packages-viewport'
     })
     if (!controller) return
@@ -264,7 +266,7 @@ const illustrations = import.meta.glob<string>('./Packages/art/*.svg', {
     height: 100%;
     transition: transform var(--duration-ui) var(--ease-ui);
   }
-  /* Art classes for site/card.svg: neutral fills and lines, accent marks and text. */
+  /* Art classes for Packages/art/*.svg: neutral fills and lines, accent marks and text. */
   .art :global(.f) {
     fill: color-mix(in oklab, currentColor 9%, transparent);
   }
