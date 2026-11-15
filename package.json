@@ -43,7 +43,7 @@
     "@fortawesome/free-solid-svg-icons": "^7.3.1",
     "@samline/formatter": "latest",
     "@samline/forms": "latest",
-    "astro": "^7.4.4",
+    "astro": "^7.4.12",
     "better-auth": "^1.7.12",
     "ldrs": "^1.1.9",
     "nodemailer": "^10.2.1",
@@ -75,6 +75,6 @@
     "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^4.3.3",
     "typescript": "6.0.3",
-    "vite": "8.3.4"
+    "vite": "8.3.8"
   }
 }

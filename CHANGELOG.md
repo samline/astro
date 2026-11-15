@@ -6,6 +6,11 @@ All notable changes to `@samline/astro` are documented here. The format follows
 
 ## [Unreleased]
 
+### Security
+
+- Update Astro to 7.4.12 (GHSA-mh32-jxcr-mh9f, GHSA-r3h5-4585-7x3w) and Vite to 8.3.8, so the
+  project resolves a single Vite version.
+
 ## [7.28.0] - 2026-11-13
 
 - Add the "Use view transitions" guide: how to add Astro's ClientRouter to a
