@@ -4,3 +4,8 @@ packages:
   - shared
 minimumReleaseAgeExclude:
   - '@samline/drawer@5.1.2'
+# Keep emnapi on its stable line: peers otherwise resolve 2.0.0 betas mixed
+# with 1.11, which breaks `astro check` (bridge.setLastError).
+overrides:
+  '@emnapi/core': 1.11.3
+  '@emnapi/runtime': 1.11.3
