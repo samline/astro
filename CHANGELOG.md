@@ -6,6 +6,8 @@ All notable changes to `@samline/astro` are documented here. The format follows
 
 ## [Unreleased]
 
+## [7.29.0] - 2026-11-16
+
 ### Changed
 
 - Generated projects no longer carry the `samline` name in their runtime API:
