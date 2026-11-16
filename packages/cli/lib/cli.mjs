@@ -93,7 +93,7 @@ const finish = async (
         `Files were applied, but dependency installation failed. Retry ${tools.manager} install in ${destination}; no configuration is marked as validated.`
       )
     const installed = await json(destination)
-    installed.samlineAstro.dependenciesInstalled = true
+    installed.starter.dependenciesInstalled = true
     await applyFiles(
       destination,
       new Map([['package.json', serialize(installed)]])
@@ -204,7 +204,7 @@ export const main = async (args = process.argv.slice(2)) => {
       entry,
       dryRun
     })
-    await finish(destination, result, result.manifest.samlineAstro.tools, {
+    await finish(destination, result, result.manifest.starter.tools, {
       skipInstall: values['no-install'],
       dryRun,
       install: false
@@ -248,8 +248,8 @@ export const main = async (args = process.argv.slice(2)) => {
   const current =
     subcommand === 'add' ? await loadProject(destination, pkg.version) : null
   if (current) {
-    deployment = current.samlineAstro.deployment
-    options = { ...current.samlineAstro.options, ...options }
+    deployment = current.starter.deployment
+    options = { ...current.starter.options, ...options }
   }
   if (subcommand === 'add' && requested?.includes('content')) {
     options.contentSource = values.source
@@ -293,7 +293,7 @@ export const main = async (args = process.argv.slice(2)) => {
       deployment,
       locale,
       additionalLocales,
-      installed: current?.samlineAstro.features,
+      installed: current?.starter.features,
       availableTools,
       toolPreferences,
       defaultManager

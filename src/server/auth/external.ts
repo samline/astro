@@ -25,16 +25,14 @@ const credentialSchema = z.object({
   validUntil: z.number()
 })
 const cookieName = (url: string) =>
-  new URL(url).protocol === 'https:'
-    ? '__Host-samline-identity'
-    : 'samline-identity'
+  new URL(url).protocol === 'https:' ? '__Host-site-identity' : 'site-identity'
 const cookieOptions = (url: string) => ({
   path: '/',
   httpOnly: true,
   secure: new URL(url).protocol === 'https:',
   sameSite: 'lax' as const
 })
-const keyFor = (secret: string) => `${secret}:samline-external-identity:v1`
+const keyFor = (secret: string) => `${secret}:site-external-identity:v1`
 
 export const readCredential = async (
   headers: Headers,
@@ -82,7 +80,7 @@ export const externalIdentity = (options: {
   sessionSeconds: number
 }) => {
   const copyFor = (headers?: Headers) =>
-    getDictionary(headers?.get('x-samline-locale') ?? undefined).auth
+    getDictionary(headers?.get('x-site-locale') ?? undefined).auth
   const issue = (error: unknown, headers?: Headers): never => {
     const status = failureStatus(error),
       copy = copyFor(headers)
@@ -155,7 +153,7 @@ export const externalIdentity = (options: {
     return { user, session: { id: session.id, expiresAt } }
   }
   return {
-    id: 'samline-external-identity',
+    id: 'site-external-identity',
     endpoints: {
       externalSignIn: createAuthEndpoint(
         '/external/sign-in',

@@ -54,7 +54,7 @@ expiry or a refreshed user profile.
 The generator includes only the selected provider settings module. Changing an
 installed identity mode requires reviewing its source, dependencies and environment
 together; changing AUTH_MODE alone does not install another provider or migrate
-users. Check package.json samlineAstro.options for the initial selected mode.
+users. Check package.json starter.options for the initial selected mode.
 
 ### External REST
 

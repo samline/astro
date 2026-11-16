@@ -6,6 +6,20 @@ All notable changes to `@samline/astro` are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- Generated projects no longer carry the `samline` name in their runtime API:
+  `window.siteTheme` and `window.siteGTM` replace `window.samlineAstroTheme` and
+  `window.samlineAstroGTM`; the theme preference is stored under `site:theme`;
+  the external identity cookie is `__Host-site-identity` (`site-identity` over
+  HTTP), auth cookies use the `site` prefix, the auth headers are `x-site-locale`
+  and `x-site-client-ip`, and the CAPTCHA callbacks are `siteTurnstileReady` and
+  `siteRecaptchaReady`. Existing projects own their copied source and keep their
+  current names; `add` only copies the new names into features it installs.
+- The installer metadata in `package.json` moved from `samlineAstro` to `starter`.
+  `add`, `locale add` and `status` still read `samlineAstro` from existing projects
+  and rename it to `starter`, in place, the next time they write `package.json`.
+
 ### Security
 
 - Update Astro to 7.4.12 (GHSA-mh32-jxcr-mh9f, GHSA-r3h5-4585-7x3w) and Vite to 8.3.8, so the

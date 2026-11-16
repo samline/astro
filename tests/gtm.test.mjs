@@ -118,12 +118,12 @@ test('basic mode queues denied defaults before loading anything and separates an
     'ad_personalization'
   ])
     assert.equal(defaults[2][key], 'denied')
-  app.window.samlineAstroGTM.updateConsent({
+  app.window.siteGTM.updateConsent({
     analytics: false,
     marketing: false
   })
   assert.equal(app.requests.length, 0)
-  app.window.samlineAstroGTM.updateConsent({
+  app.window.siteGTM.updateConsent({
     analytics: true,
     marketing: false
   })
@@ -136,7 +136,7 @@ test('basic mode queues denied defaults before loading anything and separates an
     app.requests[0].src,
     'https://www.googletagmanager.com/gtm.js?id=GTM-TEST12345'
   )
-  app.window.samlineAstroGTM.updateConsent({ analytics: true, marketing: true })
+  app.window.siteGTM.updateConsent({ analytics: true, marketing: true })
   app.boot()
   assert.equal(app.requests.length, 1)
   assert.equal(
@@ -148,7 +148,7 @@ test('basic mode queues denied defaults before loading anything and separates an
 test('marketing consent does not imply analytics; revocation updates all signals and requests a clean reload', () => {
   const app = runtime()
   assert.equal(
-    app.window.samlineAstroGTM.updateConsent({
+    app.window.siteGTM.updateConsent({
       analytics: false,
       marketing: true
     }),
@@ -157,7 +157,7 @@ test('marketing consent does not imply analytics; revocation updates all signals
   assert.equal(lastConsent(app)[2].analytics_storage, 'denied')
   assert.equal(lastConsent(app)[2].ad_user_data, 'granted')
   assert.equal(
-    app.window.samlineAstroGTM.updateConsent({
+    app.window.siteGTM.updateConsent({
       analytics: false,
       marketing: false
     }),
@@ -185,7 +185,7 @@ test('advanced is explicit; Astro navigation avoids duplicate initial and hash p
   const app = runtime()
   app.navigate('https://example.com/not-consented')
   assert.equal(app.requests.length, 0)
-  app.window.samlineAstroGTM.updateConsent({
+  app.window.siteGTM.updateConsent({
     analytics: true,
     marketing: false
   })
@@ -346,7 +346,7 @@ test(
     assert.ok(home.includes('data-gtm-consent'))
     assert.ok(home.includes('data-cookie-preferences'))
     assert.ok(!home.includes('googletagmanager.com/ns.html'))
-    assert.ok(home.indexOf('window.samlineAstroGTM') < home.indexOf('<body'))
+    assert.ok(home.indexOf('window.siteGTM') < home.indexOf('<body'))
     assert.ok(home.includes('data-locale="en-us"'))
     const regional = await readFile(
       path.join(fixture, '.vercel/output/static/es-mx/index.html'),

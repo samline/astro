@@ -46,7 +46,7 @@ test(
             manifest.packageManager,
             `${manager}@${versions[manager]}`
           )
-          assert.equal(manifest.samlineAstro.tools.runtime, runtime)
+          assert.equal(manifest.starter.tools.runtime, runtime)
           assert.equal(projectTools(manifest).manager, manager)
           assert.equal(projectTools(manifest).runtime, runtime)
           assert.match(
@@ -149,11 +149,11 @@ test(
         assert.equal(result.status, 0, result.stdout + result.stderr)
         const manifest = await json(destination)
         assert.equal(
-          manifest.samlineAstro.tools.manager,
+          manifest.starter.tools.manager,
           explicit ? 'npm' : launcher
         )
         assert.equal(
-          manifest.samlineAstro.tools.runtime,
+          manifest.starter.tools.runtime,
           explicit || launcher === 'bun' ? 'bun' : 'node'
         )
       }
@@ -251,9 +251,6 @@ else if (process.argv[2] === 'install') {
     assert.deepEqual(JSON.parse(await readFile(agentLog, 'utf8')), {
       inherited: null
     })
-    assert.equal(
-      (await json(destination)).samlineAstro.dependenciesInstalled,
-      true
-    )
+    assert.equal((await json(destination)).starter.dependenciesInstalled, true)
   }
 )

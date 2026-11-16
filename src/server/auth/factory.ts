@@ -91,8 +91,8 @@ export const createAuthService = (options: AuthOptions) => {
       storeStateStrategy: options.mode === 'database' ? 'database' : 'cookie'
     },
     advanced: {
-      cookiePrefix: 'samline-astro',
-      ipAddress: { ipAddressHeaders: ['x-samline-client-ip'] }
+      cookiePrefix: 'site',
+      ipAddress: { ipAddressHeaders: ['x-site-client-ip'] }
     },
     rateLimit: {
       enabled: true,

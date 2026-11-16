@@ -22,8 +22,8 @@ declare global {
   interface Window {
     turnstile?: SDK
     grecaptcha?: SDK
-    samlineTurnstileReady?: () => void
-    samlineRecaptchaReady?: () => void
+    siteTurnstileReady?: () => void
+    siteRecaptchaReady?: () => void
   }
 }
 
@@ -37,7 +37,7 @@ const loadSDK = (provider: Provider, language: string): Promise<SDK> => {
   const existing = loads.get(provider)
   if (existing) return existing
   const callback =
-    provider === 'turnstile' ? 'samlineTurnstileReady' : 'samlineRecaptchaReady'
+    provider === 'turnstile' ? 'siteTurnstileReady' : 'siteRecaptchaReady'
   const promise = new Promise<SDK>((resolve, reject) => {
     const script = document.createElement('script')
     let settled = false

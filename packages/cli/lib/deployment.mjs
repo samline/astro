@@ -113,7 +113,7 @@ export const deploymentManifest = (manifest, deployment, tools) => {
     if (item.adapter) delete dependencies[item.adapter]
   if (profile.adapter) dependencies[profile.adapter] = profile.version
   manifest.dependencies = dependencies
-  manifest.samlineAstro.deployment = deployment
+  manifest.starter.deployment = deployment
   if (deployment === 'cloudflare') {
     manifest.devDependencies = {
       ...manifest.devDependencies,

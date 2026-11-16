@@ -73,7 +73,7 @@ export const projectTools = (manifest) => {
     (name) => /^\s*bun(?:\s|$)/.test(manifest.scripts?.[name] ?? '')
   )
   return {
-    ...manifest.samlineAstro.tools,
+    ...manifest.starter.tools,
     manager,
     managerVersion: manifest.packageManager.slice(manager.length + 1),
     runtime: bun ? 'bun' : 'node',

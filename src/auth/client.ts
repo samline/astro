@@ -14,7 +14,7 @@ const externalRequest = async <T>(path: string, body?: unknown): Promise<T> => {
     credentials: 'same-origin',
     cache: 'no-store',
     headers: {
-      'x-samline-locale': document.documentElement.lang,
+      'x-site-locale': document.documentElement.lang,
       ...(body !== undefined ? { 'Content-Type': 'application/json' } : {})
     },
     body: body === undefined ? undefined : JSON.stringify(body)

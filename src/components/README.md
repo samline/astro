@@ -10,7 +10,7 @@ its section folder rather than in this reusable component directory.
 | -------------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------- |
 | Fields         | [Fields/README.md](./Fields/README.md)                 | Native form controls, field presentation, password/file enhancements, and optional form controller. |
 | PageLoader     | [PageLoader/README.md](./PageLoader/README.md)         | showLoader, hideLoader, navigation, and ldrs animation selection.                                   |
-| Theme          | [Theme/README.md](./Theme/README.md)                   | Init, Switch, window.samlineAstroTheme, and themechange.                                            |
+| Theme          | [Theme/README.md](./Theme/README.md)                   | Init, Switch, window.siteTheme, and themechange.                                                    |
 | GTM            | [GTM/README.md](./GTM/README.md)                       | Consent, CookiePreferences, and container configuration.                                            |
 | Section        | [Section/README.md](./Section/README.md)               | id, padded, slots, and vertical spacing.                                                            |
 | Captcha        | [Captcha/README.md](./Captcha/README.md)               | Turnstile/reCAPTCHA v2 selection, client lifecycle and server verification.                         |

@@ -6,7 +6,7 @@ declare global {
   }
 
   interface Window {
-    samlineAstroTheme?: {
+    siteTheme?: {
       getTheme(): Theme
       getPreference(): ThemePreference
       setPreference(preference: ThemePreference): void

@@ -34,13 +34,30 @@ import {
   createReader
 } from './files.mjs'
 
+/**
+ * Projects created before 7.29.0 keep the installer metadata under
+ * `samlineAstro`. Read it as `starter`, in the same position, so the next write
+ * migrates package.json without reordering its fields.
+ */
+export const migrateManifest = (manifest) =>
+  manifest.samlineAstro === undefined || manifest.starter !== undefined
+    ? manifest
+    : Object.fromEntries(
+        Object.entries(manifest).map(([key, value]) => [
+          key === 'samlineAstro' ? 'starter' : key,
+          value
+        ])
+      )
+
 export const loadProject = async (
   root,
   kitVersion,
   readCurrent = (file) => read(root, file)
 ) => {
-  const manifest = JSON.parse(await readCurrent('package.json'))
-  const metadata = manifest.samlineAstro
+  const manifest = migrateManifest(
+    JSON.parse(await readCurrent('package.json'))
+  )
+  const metadata = manifest.starter
   if (
     metadata?.schema !== 1 ||
     metadata.recipeVersion !== 1 ||
@@ -163,7 +180,7 @@ export const addIntegrations = async ({
   const capture = createReader(root)
   const readCurrent = capture.read
   const manifest = await loadProject(root, kitVersion, readCurrent)
-  const metadata = manifest.samlineAstro
+  const metadata = manifest.starter
   const selected = resolveFeatures(requested)
   const added = selected.filter((name) => !metadata.features.includes(name))
   const effective = { ...metadata.options, ...options }
@@ -397,12 +414,7 @@ export const addProjectLocale = async ({
 }) => {
   const capture = createReader(root)
   const manifest = await loadProject(root, kitVersion, capture.read)
-  const files = await addLocale(
-    root,
-    entry,
-    manifest.samlineAstro,
-    capture.read
-  )
+  const files = await addLocale(root, entry, manifest.starter, capture.read)
   if (!files.size) return { files: [], manifest }
   for (const file of files.keys())
     if (
@@ -412,10 +424,10 @@ export const addProjectLocale = async ({
       throw new Error(`Locale file conflict: ${file}`)
   files.set(
     '.agents/memory/integrations.md',
-    '# Installed integrations\n\n' + integrationSummary(manifest.samlineAstro)
+    '# Installed integrations\n\n' + integrationSummary(manifest.starter)
   )
-  manifest.samlineAstro.files = [
-    ...new Set([...(manifest.samlineAstro.files ?? []), ...files.keys()])
+  manifest.starter.files = [
+    ...new Set([...(manifest.starter.files ?? []), ...files.keys()])
   ]
   files.set('package.json', serialize(manifest))
   return {
@@ -429,7 +441,7 @@ export const addProjectLocale = async ({
 
 export const projectStatus = async (root, kitVersion) => {
   const manifest = await loadProject(root, kitVersion)
-  const metadata = manifest.samlineAstro
+  const metadata = manifest.starter
   const missing = []
   for (const file of metadata.files ?? [])
     if (!(await exists(root, file))) missing.push(file)

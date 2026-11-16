@@ -56,7 +56,7 @@ test(
       headers: {
         origin,
         'content-type': 'application/json',
-        'x-samline-client-ip': 'untrusted-browser-address'
+        'x-site-client-ip': 'untrusted-browser-address'
       }
     })
     assert.equal(login.status, 200, await login.clone().text())

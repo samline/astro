@@ -67,7 +67,7 @@ recognized launcher, otherwise npm when available. Later additions inspect the
 current manifest/scripts rather than restoring stale metadata. Cloudflare tools
 execute with Node. Bun-managed Vercel dependencies require Bun >=1.4.
 
-package.json samlineAstro records schema/recipe versions, selected features,
+package.json starter records schema/recipe versions, selected features,
 locales and installation state. It is not runtime configuration or permission
 to overwrite source. Parser-independent package preflight uses a dependency-light
 registry; TypeScript syntax analysis supports configuration/dictionary edits.

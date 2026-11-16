@@ -139,10 +139,7 @@ test(
     await build(directory)
     const html = await read(directory, 'dist/index.html')
     assert.match(html, /lang="es-mx"/)
-    assert.doesNotMatch(
-      html,
-      /samlineAstroTheme|cookieconsent|data-theme-switch/
-    )
+    assert.doesNotMatch(html, /siteTheme|cookieconsent|data-theme-switch/)
     await add(directory, ['welcome'])
     assert.equal(
       dictionary(
@@ -244,7 +241,7 @@ test('Mail always includes contact without forcing Forms or CAPTCHA; CAPTCHA can
     let manifest = await json(directory)
     assert.ok(manifest.dependencies.nodemailer)
     assert.equal(manifest.dependencies['@samline/forms'], undefined)
-    assert.equal(manifest.samlineAstro.features.includes('actions'), false)
+    assert.equal(manifest.starter.features.includes('actions'), false)
     if (!captchaFirst) {
       assert.doesNotMatch(
         await read(directory, 'src/actions/contact/index.ts'),
@@ -497,13 +494,35 @@ test('dynamic dictionary expressions, key drift, symlinks and unsupported projec
   )
   const legacy = await fixture(t)
   const manifest = await json(legacy)
-  manifest.samlineAstro.schema = 0
+  manifest.starter.schema = 0
   await writeFile(path.join(legacy, 'package.json'), JSON.stringify(manifest))
   await assert.rejects(
     add(legacy, ['themes']),
     /predates modular installer metadata/
   )
   assert.equal(await exists(legacy, 'src/components/Theme'), false)
+})
+
+test('Projects created with the samlineAstro field keep working and migrate on the next write', async (t) => {
+  const directory = await fixture(t)
+  const manifest = await json(directory)
+  const legacy = Object.fromEntries(
+    Object.entries(manifest).map(([key, value]) => [
+      key === 'starter' ? 'samlineAstro' : key,
+      value
+    ])
+  )
+  await writeFile(
+    path.join(directory, 'package.json'),
+    JSON.stringify(legacy, null, 2) + '\n'
+  )
+  const status = await projectStatus(directory, kitVersion)
+  assert.deepEqual(status.features, manifest.starter.features)
+  await add(directory, ['themes'])
+  const migrated = await json(directory)
+  assert.equal(migrated.samlineAstro, undefined)
+  assert.ok(migrated.starter.features.includes('themes'))
+  assert.deepEqual(Object.keys(migrated), Object.keys(manifest))
 })
 
 test('Content includes only selected source examples and independent named providers can be added without network', async (t) => {
@@ -533,9 +552,7 @@ test('Content includes only selected source examples and independent named provi
         original
       )
       assert.deepEqual(
-        (await json(directory)).samlineAstro.collections.map(
-          (item) => item.name
-        ),
+        (await json(directory)).starter.collections.map((item) => item.name),
         ['posts', 'products']
       )
       for (const identifier of ['class', 'await', 'schema'])

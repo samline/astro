@@ -321,7 +321,7 @@ export const getStaticPaths = () => locales.map((locale) => ({
       /<button[^>]*role="switch"[^>]*aria-checked="false"[^>]*data-theme-switch[^>]*hidden/
     )
     assert.ok(home.includes('Dark mode'))
-    assert.ok(home.indexOf('window.samlineAstroTheme') < home.indexOf('<body'))
+    assert.ok(home.indexOf('window.siteTheme') < home.indexOf('<body'))
     assert.doesNotMatch(home, /aria-label="link"/)
     assert.match(home, /data-page-loader/)
     assert.match(home, /role="status" aria-live="polite" hidden/)

@@ -10,7 +10,7 @@ export const sourceLoader = (
   fetchEntries: FetchEntries,
   localeMap: Partial<Record<Locale, string>>
 ): Loader => ({
-  name: `samline-${name}`,
+  name: `site-${name}`,
   load: async (context) => {
     const env = {
       ...loadEnv(

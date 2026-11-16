@@ -47,7 +47,7 @@ test('Generic OAuth exchanges a code with a fake provider and the session surviv
       headers: {
         origin,
         'content-type': 'application/json',
-        'x-samline-client-ip': '192.0.2.44'
+        'x-site-client-ip': '192.0.2.44'
       },
       body: JSON.stringify({ provider: 'fixture', callbackURL: '/account' })
     })

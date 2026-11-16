@@ -8,6 +8,6 @@ export const ALL: APIRoute = async ({ request, clientAddress }) => {
   if (!service) return new Response(null, { status: 404 })
   const headers = new Headers(request.headers)
   // Replace the browser-supplied value with the address resolved by the adapter.
-  headers.set('x-samline-client-ip', clientAddress)
+  headers.set('x-site-client-ip', clientAddress)
   return service.handler(new Request(request, { headers }))
 }

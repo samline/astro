@@ -72,7 +72,7 @@ export const configureAgents = async (
   )
   const replacements = {
     '{{NAME}}': name,
-    '{{INTEGRATIONS}}': integrationSummary(manifest.samlineAstro),
+    '{{INTEGRATIONS}}': integrationSummary(manifest.starter),
     '{{VERSION}}': kitVersion,
     '{{ASTRO}}': manifest.dependencies.astro,
     '{{INSTALL}}': tools.manager,
@@ -89,11 +89,10 @@ export const configureAgents = async (
     let text = await readFile(target, 'utf8')
     for (const [key, value] of Object.entries(replacements))
       text = text.replaceAll(key, value)
-    text = selectedGuidance(
-      text,
-      file,
-      manifest.samlineAstro.features
-    ).replaceAll('{{INTEGRATIONS}}', integrationSummary(manifest.samlineAstro))
+    text = selectedGuidance(text, file, manifest.starter.features).replaceAll(
+      '{{INTEGRATIONS}}',
+      integrationSummary(manifest.starter)
+    )
     await writeFile(target, text.replace(/\n{3,}/g, '\n\n').trimEnd() + '\n')
   }
   const names = agentSkillNames.filter(
@@ -121,7 +120,7 @@ export const integrationSummary = (
 Locales: ${metadata.locales.map((item) => `${item.code}${item.ready ? '' : ' (translation pending)'}`).join(', ')}.
 Collections: ${metadata.collections.map((item) => `${item.name} (${item.source}, ${item.mode}${item.configuredAtInstall ? '' : ', configure and activate'})`).join(', ') || 'none'}.
 
-Use package.json samlineAstro metadata and actual source/configuration together.
+Use package.json starter metadata and actual source/configuration together.
 Installed is not proof of configured credentials, active routes or validation.
 `
 

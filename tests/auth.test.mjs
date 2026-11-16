@@ -33,7 +33,7 @@ const request = (path, { body, cookie, method, origin = baseURL } = {}) =>
     method: method ?? (body === undefined ? 'GET' : 'POST'),
     headers: {
       origin,
-      'x-samline-client-ip': `127.0.0.${address++}`,
+      'x-site-client-ip': `127.0.0.${address++}`,
       ...(body !== undefined ? { 'content-type': 'application/json' } : {}),
       ...(cookie ? { cookie } : {})
     },
@@ -83,8 +83,8 @@ test('REST Better Auth sessions survive another instance without a user database
     /private-api-token|private-refresh-token/
   )
   const payload = cookie.replace(
-    /samline-identity=([^;]+)/,
-    'samline-identity=invalid'
+    /site-identity=([^;]+)/,
+    'site-identity=invalid'
   )
   assert.equal(
     (await external().handler(request('/get-session', { cookie: payload })))
@@ -94,9 +94,9 @@ test('REST Better Auth sessions survive another instance without a user database
   const second = await signIn(first)
   const mixed = cookies(second)
     .split('; ')
-    .filter((entry) => !entry.startsWith('samline-identity='))
+    .filter((entry) => !entry.startsWith('site-identity='))
     .concat(
-      cookie.split('; ').find((entry) => entry.startsWith('samline-identity='))
+      cookie.split('; ').find((entry) => entry.startsWith('site-identity='))
     )
     .join('; ')
   assert.equal(
@@ -187,7 +187,7 @@ test('REST session refresh remains server-side, rejects identity changes and log
   assert.ok(
     logout.headers
       .getSetCookie()
-      .some((value) => /samline-identity=;.*max-age=0/i.test(value))
+      .some((value) => /site-identity=;.*max-age=0/i.test(value))
   )
 })
 
@@ -359,9 +359,9 @@ test('stateless external sessions expire with upstream credentials and refresh r
   const second = cookies(await signIn(service))
   const mixed = second
     .split('; ')
-    .filter((entry) => !entry.startsWith('samline-identity='))
+    .filter((entry) => !entry.startsWith('site-identity='))
     .concat(
-      first.split('; ').find((entry) => entry.startsWith('samline-identity='))
+      first.split('; ').find((entry) => entry.startsWith('site-identity='))
     )
     .join('; ')
   assert.equal(
@@ -390,7 +390,7 @@ test('authentication rate limiting applies to the trusted address instead of acc
     const attempt = request('/external/sign-in', {
       body: { email: user.email, password: 'password123' }
     })
-    attempt.headers.set('x-samline-client-ip', '192.0.2.99')
+    attempt.headers.set('x-site-client-ip', '192.0.2.99')
     response = await service.handler(attempt)
   }
   assert.equal(response.status, 429)

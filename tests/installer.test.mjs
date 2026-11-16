@@ -50,7 +50,7 @@ for (const pnpm of [true, false]) {
       assert.equal(pkg.name, 'my-project')
       assert.equal(pkg.version, '0.0.1')
       assert.equal(pkg.private, true)
-      assert.equal(pkg.samlineAstro.version, kitVersion)
+      assert.equal(pkg.starter.version, kitVersion)
       assert.equal(
         pkg.packageManager,
         `${manager}@${pnpm ? '12.9.1' : '11.2.0'}`
@@ -356,7 +356,7 @@ for (const deployment of [
           ),
           adapter ? [adapter] : []
         )
-        assert.equal(pkg.samlineAstro.deployment, deployment)
+        assert.equal(pkg.starter.deployment, deployment)
         assert.equal(Boolean(pkg.dependencies.sharp), deployment === 'vercel')
         const envExample = await readFile(
           path.join(destination, '.env.example'),

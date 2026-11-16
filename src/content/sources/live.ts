@@ -31,7 +31,7 @@ export const sourceLiveLoader = (
     return entries
   }
   return {
-    name: `samline-${prefix.toLowerCase()}-live`,
+    name: `site-${prefix.toLowerCase()}-live`,
     loadCollection: async ({ filter }) => {
       try {
         if (!filter) throw new Error('A locale filter is required.')
