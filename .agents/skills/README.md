@@ -8,6 +8,7 @@ Read the relevant SKILL.md before applying a workflow.
 | [astro](./astro/SKILL.md)                                         | astrolicious/agent-skills           |
 | [deploy-to-vercel](./deploy-to-vercel/SKILL.md)                   | vercel-labs/agent-skills            |
 | [frontend-design](./frontend-design/SKILL.md)                     | anthropics/skills                   |
+| [modern-web-guidance](./modern-web-guidance/SKILL.md)             | GoogleChrome/modern-web-guidance    |
 | [nodejs-backend-patterns](./nodejs-backend-patterns/SKILL.md)     | wshobson/agents                     |
 | [nodejs-best-practices](./nodejs-best-practices/SKILL.md)         | sickn33/antigravity-awesome-skills  |
 | [seo](./seo/SKILL.md)                                             | addyosmani/web-quality-skills       |
