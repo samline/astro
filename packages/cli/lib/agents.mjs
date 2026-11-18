@@ -11,6 +11,7 @@ export const agentSkillNames = [
   'codebase-memory',
   'deploy-to-vercel',
   'frontend-design',
+  'modern-web-guidance',
   'seo',
   'tailwind-css-patterns',
   'typescript-advanced-types',
