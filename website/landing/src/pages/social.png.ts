@@ -23,15 +23,25 @@ const colors = {
   body: '#c9c3d3',
   muted: '#a9a2b5',
   rule: '#2e2b36',
-  pill: '#4a4656',
+  pill: '#4a4656'
 }
-const fonts = ['Inter.ttf', 'InstrumentSerif-Italic.ttf'].map(file =>
+const fonts = ['Inter.ttf', 'InstrumentSerif-Italic.ttf'].map((file) =>
   resolve('../shared/assets/fonts', file)
 )
 const render = (svg: string) =>
-  new Resvg(svg, { font: { loadSystemFonts: false, fontFiles: fonts, defaultFontFamily: 'Inter' } })
+  new Resvg(svg, {
+    font: {
+      loadSystemFonts: false,
+      fontFiles: fonts,
+      defaultFontFamily: 'Inter'
+    }
+  })
 
-type Font = { family: 'Inter' | 'Instrument Serif'; size: number; spacing?: number }
+type Font = {
+  family: 'Inter' | 'Instrument Serif'
+  size: number
+  spacing?: number
+}
 const attrs = ({ family, size, spacing = 0 }: Font) =>
   `font-family="${family}" font-size="${size}"${family === 'Instrument Serif' ? ' font-style="italic"' : ''}${spacing ? ` letter-spacing="${spacing}"` : ''}`
 
@@ -63,7 +73,9 @@ const wrap = (text: string, font: Font, max: number) => {
     }
   }
   if (line) lines.push(line)
-  return lines.length <= max && lines.every(l => measure(l, font) <= MAX) ? lines : null
+  return lines.length <= max && lines.every((l) => measure(l, font) <= MAX)
+    ? lines
+    : null
 }
 
 /** Fits the description in `max` lines: whole sentences first, then words with an ellipsis. */
@@ -77,13 +89,27 @@ const fitDescription = (text: string, font: Font, max: number) => {
   }
   const words = text.split(/\s+/)
   for (let n = words.length - 1; n > 0; n--) {
-    const lines = wrap(words.slice(0, n).join(' ').replace(/[,;:.]+$/, '') + '…', font, max)
+    const lines = wrap(
+      words
+        .slice(0, n)
+        .join(' ')
+        .replace(/[,;:.]+$/, '') + '…',
+      font,
+      max
+    )
     if (lines) return lines
   }
   return []
 }
 
-const lineText = (lines: string[], x: number, y: number, step: number, font: Font, fill: string) =>
+const lineText = (
+  lines: string[],
+  x: number,
+  y: number,
+  step: number,
+  font: Font,
+  fill: string
+) =>
   lines
     .map(
       (line, i) =>
@@ -117,7 +143,10 @@ export function socialSvg(input: {
   }
   if (!taglineLines) {
     tagline = { ...tagline, size: 64 }
-    while (!(taglineLines = wrap(input.tagline, tagline, 2)) && tagline.size > 40)
+    while (
+      !(taglineLines = wrap(input.tagline, tagline, 2)) &&
+      tagline.size > 40
+    )
       tagline = { ...tagline, size: tagline.size - 2 }
   }
   taglineLines ??= [input.tagline]
@@ -129,7 +158,10 @@ export function socialSvg(input: {
   const bodyStep = 40
   const bodyY = taglineY + (taglineLines.length - 1) * taglineStep + 64
   const footerRule = 522
-  const room = Math.max(1, Math.min(3, Math.floor((footerRule - 36 - bodyY) / bodyStep) + 1))
+  const room = Math.max(
+    1,
+    Math.min(3, Math.floor((footerRule - 36 - bodyY) / bodyStep) + 1)
+  )
   const bodyLines = fitDescription(input.description, body, room)
 
   const small: Font = { family: 'Inter', size: 22 }
@@ -158,7 +190,7 @@ ${lineText(bodyLines, X, bodyY, bodyStep, body, colors.body)}
 }
 
 export const GET: APIRoute = () => {
-  if (!fonts.every(path => existsSync(path)))
+  if (!fonts.every((path) => existsSync(path)))
     throw new Error('Bundled social-image fonts are missing')
   const svg = socialSvg({
     name: project.name,
@@ -171,5 +203,7 @@ export const GET: APIRoute = () => {
     install: `npx ${project.npmName}@latest`
   })
   const bytes = render(svg).render().asPng()
-  return new Response(new Uint8Array(bytes), { headers: { 'Content-Type': 'image/png' } })
+  return new Response(new Uint8Array(bytes), {
+    headers: { 'Content-Type': 'image/png' }
+  })
 }
